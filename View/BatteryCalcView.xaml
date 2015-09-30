@@ -1,0 +1,93 @@
+﻿<Window x:Class="EscInstaller.View.BatteryCalcView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:UserControls="clr-namespace:EscInstaller.UserControls"
+        Title="Battery Calculate" 
+        Width="400"
+        Height="600"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:ViewModel="clr-namespace:EscInstaller.ViewModel"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" xmlns:viewModel="clr-namespace:EscInstaller.ViewModel"
+        mc:Ignorable="d"
+        DataContext="{Binding Path=BatteryCalcViewModel, Source={StaticResource Locator}}"
+        d:DataContext="{d:DesignInstance viewModel:BatteryCalcViewModel}"
+        ResxExtension.DefaultResxName="EscInstaller.View.BatteryCalc" Language="{UICulture}" 
+          Icon="../Icons/Chart-Bar-Table-32.png" 
+        >
+    <Window.Resources>
+        <DataTemplate x:Key="amploads">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{Resx AmpLoadValue}" Width="50" />
+                <xctk:DoubleUpDown Value="{Binding Path=Load}" Minimum="0" Maximum="1000" Increment="50" />
+                <Button Content="{Resx RemoveLoad}" Width="50"
+                            Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}},
+                                              Path=DataContext.DeleteCommand}"
+                            CommandParameter="{Binding}"/>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="amplifiers">
+            <GroupBox Header="{x:Static Panel.Title}">
+                <StackPanel Margin="5">
+                    <StackPanel Orientation="Horizontal" Margin="5">
+                        <TextBlock Text="{Resx Efficiency}" Width="70" />
+                        <TextBlock Text="{Binding Path=Efficiency}" Width="40" />
+
+                    </StackPanel>
+
+
+                    <ItemsControl ItemsSource="{Binding Path=Loads}" ItemTemplate="{StaticResource amploads}" />
+
+                    <StackPanel Orientation="Horizontal" Margin="5">
+                        <Button Content="{Resx AddNewLoadToAmplifier}" Width="150" Command="{Binding Path=AddCommand}" HorizontalAlignment="Left" />
+                        <Button Content="{Resx RemoveThisAmp}" Width="150" HorizontalAlignment="Left"
+                            Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}},
+                                              Path=DataContext.DeleteCommand}"
+                            CommandParameter="{Binding}"/>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+        </DataTemplate>
+    </Window.Resources>
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" >
+        <Grid>
+            <StackPanel>
+                <ItemsControl ItemsSource="{Binding Path=Amplifiers}" ItemTemplate="{StaticResource amplifiers}" />
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <ComboBox ItemsSource="{Binding Path=ComboChoose}" x:Name="combo" SelectedIndex="0" Width="170">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Path=Name}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+
+                    <Button Command="{Binding Path=AddCommand}" CommandParameter="{Binding ElementName=combo, Path=SelectedItem}" 
+                    Content="{Resx AddThisAmp}" Width="100"/>
+                </StackPanel>
+
+
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <TextBlock Text="{Resx TotalLoad}" Width="70" />
+                    <TextBox Text="{Binding Path=BatteryPowerNeeded, Mode=OneWay}" Width="50" />
+                    <Button Command="{Binding Path=Recalculate}" Width="70" Content="{Resx RecalculateLoad}" />
+                </StackPanel>
+
+                <GroupBox Header="{Resx AdditionalParams}">
+                    <UniformGrid Rows="4" Columns="2" Margin="5">
+                        <TextBlock Text="{Resx EscUnits}" />
+                        <xctk:DoubleUpDown Value="{Binding Path=EscUnits}" Minimum="0" Maximum="32" Increment="1" />
+                        <TextBlock Text="{Resx AgingFactor}" />
+                        <xctk:DoubleUpDown Value="{Binding Path=AgingFactor}" Minimum="0" Maximum="1" Increment=".2" />
+                        <TextBlock Text="{Resx OperatingTimeHours}" />
+                        <xctk:DoubleUpDown Value="{Binding Path=OperatingTime}" Minimum="0" Maximum="48" Increment="1" />
+
+
+                    </UniformGrid>
+                </GroupBox>
+
+
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
+
+</Window>

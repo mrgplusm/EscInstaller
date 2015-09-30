@@ -1,0 +1,103 @@
+﻿<UserControl x:Class="EscInstaller.View.IntervalSettingsView"
+                     
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+       
+              xmlns:settings="clr-namespace:EscInstaller.ViewModel.Settings"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:view="clr-namespace:EscInstaller.View"
+             mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance Type=settings:IntervalSettingsViewModel, IsDesignTimeCreatable=True}" >
+    <Grid >
+        <Grid.Resources>
+            <DataTemplate DataType="{x:Type settings:IntervalSettingsViewModel+AmountComboItem}">
+                <TextBlock Text="{Binding Path=Display}"></TextBlock>
+            </DataTemplate>
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80" />
+            
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            
+        </Grid.ColumnDefinitions>
+
+        <GroupBox Header="{x:Static view:IntervalSettings.Error220Header}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition  Height="Auto" />
+                    <RowDefinition  Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="140" />
+                    <ColumnDefinition Width="60" />
+                    <ColumnDefinition Width="60" />
+                </Grid.ColumnDefinitions
+            >
+                <TextBlock Grid.Column="0" Text="{x:Static view:IntervalSettings.ErrorValueAmount220}"></TextBlock>
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="{x:Static view:IntervalSettings.ErrorValueAmount220}"></TextBlock>
+
+                <ComboBox Grid.Row="0" Grid.Column="1" ItemsSource="{Binding Path=ErrorAmounts220}" SelectedItem="{Binding Path=Error220VAmount}" />
+
+                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Path=Error220VInterval}" IsEnabled="{Binding Path=CanUserManipulateInterval}"/>
+
+            </Grid>
+
+        </GroupBox>
+        <GroupBox Header="{x:Static view:IntervalSettings.Error48Header}" Grid.Column="1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="140" />
+                    <ColumnDefinition Width="60" />
+                </Grid.ColumnDefinitions
+            >
+                <TextBlock Grid.Column="0" Text="{x:Static view:IntervalSettings.ErrorValueAmount48}"></TextBlock>
+                <TextBlock Grid.Column="0" Grid.Row="1" Text="{x:Static view:IntervalSettings.InterValueInterval48}"></TextBlock>
+
+                <ComboBox Grid.Row="0" Grid.Column="1" ItemsSource="{Binding Path=ErrorAmounts48}" 
+                          SelectedItem="{Binding Path=Error48VAmount}" />
+
+                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Path=Error48VInterval}" IsEnabled="{Binding Path=CanUserManipulateInterval}"/>
+            </Grid>
+        </GroupBox>
+            
+        <GroupBox Header="Actions" Grid.Row="0" Grid.Column="2" Width="130">
+            <StackPanel>
+                <Button Command="{Binding Path=SendParameters}" Content="{x:Static view:IntervalSettings.SendParametersButton}"  />
+                <Button Command="{Binding Path=UpdateE2Prom}" Content="Update EEprom" />
+                
+            </StackPanel>
+        </GroupBox>
+        <GroupBox Header="Versioning" Grid.Row="0" Grid.Column="3">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="110" />
+                    <ColumnDefinition Width="90" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <TextBlock Text="Current version" Grid.Column="0" Grid.Row="0"></TextBlock>
+                <TextBox Background="Pink" IsEnabled="False" Grid.Row="0" Grid.Column="1" Text="{Binding Path=BoseVersion, Mode=OneWay}"></TextBox>
+                <Button Grid.Row="0" Grid.Column="2" Command="{Binding Path=GetVersion}" Content="Get current verion"></Button>
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="Define new version"></TextBlock>
+                <TextBox Background="Pink" Grid.Row="1" Grid.Column="1" MaxLength="11" Text="{Binding Path=UserDefinedVerion}"></TextBox>
+                <Button Grid.Row="1" Grid.Column="2" Command="{Binding Path=SetVersion}" Content="Set new verion"></Button>
+            </Grid>                
+                
+            
+        </GroupBox>
+    </Grid>
+</UserControl>

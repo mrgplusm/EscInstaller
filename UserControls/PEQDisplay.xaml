@@ -1,0 +1,48 @@
+﻿<UserControl x:Class="EscInstaller.UserControls.PEQDisplay"
+             Name="UcDisplay"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                         
+             xmlns:Numeric="clr-namespace:Microsoft.Research.DynamicDataDisplay.Charts.Axes.Numeric;assembly=DynamicDataDisplay"
+             xmlns:dynamicDataDisplay="clr-namespace:Microsoft.Research.DynamicDataDisplay;assembly=DynamicDataDisplay"
+             
+             xmlns:charts="clr-namespace:Microsoft.Research.DynamicDataDisplay.Charts;assembly=DynamicDataDisplay"             
+             xmlns:userControls="clr-namespace:EscInstaller.UserControls"
+             xmlns:overView="clr-namespace:EscInstaller.ViewModel.OverView"
+             xmlns:settings="clr-namespace:EscInstaller.ViewModel.Settings"
+             xmlns:converters="clr-namespace:Common.Converters;assembly=Common"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance settings:SpeakerDataViewModel, IsDesignTimeCreatable=True}">
+
+    <Grid x:Name="LayoutRoot" Background="White"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
+        <userControls:ChartChildrenPlotter VisibleArea="1, -15, 3.4, 30" PlotChildren="{Binding Path=PlotterChildren}" LegendVisibility="Collapsed" Background="White" IsEnabled="{Binding InLibrary, Converter={converters:BoolInvertConverter}}" >
+            
+            <dynamicDataDisplay:ChartPlotter.DataTransform>
+                <dynamicDataDisplay:Log10XTransform />
+            </dynamicDataDisplay:ChartPlotter.DataTransform>
+            <dynamicDataDisplay:ChartPlotter.MainVerticalAxis>
+                <charts:VerticalAxis >
+                    <charts:VerticalAxis.LabelProvider>
+                        <charts:ToStringLabelProvider  ></charts:ToStringLabelProvider>
+                    </charts:VerticalAxis.LabelProvider>
+                    <charts:VerticalAxis.TicksProvider>
+                        <charts:NumericTicksProvider></charts:NumericTicksProvider>
+                    </charts:VerticalAxis.TicksProvider>
+                </charts:VerticalAxis>
+            </dynamicDataDisplay:ChartPlotter.MainVerticalAxis>
+            <dynamicDataDisplay:ChartPlotter.MainHorizontalAxis>
+                <charts:HorizontalAxis>
+                    <charts:HorizontalAxis.LabelProvider>
+                        <Numeric:UnroundingLabelProvider />
+                    </charts:HorizontalAxis.LabelProvider>
+                    <charts:HorizontalAxis.TicksProvider>
+                        <Numeric:LogarithmNumericTicksProvider LogarithmBase="10" />
+                    </charts:HorizontalAxis.TicksProvider>
+                </charts:HorizontalAxis>
+            </dynamicDataDisplay:ChartPlotter.MainHorizontalAxis>
+        </userControls:ChartChildrenPlotter>
+    </Grid>
+</UserControl>

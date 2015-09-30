@@ -1,0 +1,282 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="_matrixGroupMessage" xml:space="preserve">
+    <value>ABCD button setup &amp; Message selection</value>
+  </data>
+  <data name="ABCDButtonsHeader" xml:space="preserve">
+    <value>ABCD Button setup: select 'Matrix' to activate Routing Matrix</value>
+  </data>
+  <data name="_matrixButtonPanelAD" xml:space="preserve">
+    <value>ABCD Buttons</value>
+  </data>
+  <data name="_matrixButtonAlarmAlertHeader" xml:space="preserve">
+    <value>Alarm &amp; Alert</value>
+  </data>
+  <data name="AllAlarm" xml:space="preserve">
+    <value>Message Alarm 1</value>
+  </data>
+  <data name="_matrixButtonAlarm" xml:space="preserve">
+    <value>Alarm 1</value>
+  </data>
+  <data name="PanelMessageA" xml:space="preserve">
+    <value>Alarm 1</value>
+  </data>
+  <data name="_matrixSelectAlarm" xml:space="preserve">
+    <value>Alarm message 1</value>
+  </data>
+  <data name="microutingOpt1" xml:space="preserve">
+    <value>Alarm 1</value>
+  </data>
+  <data name="microutingOpt2" xml:space="preserve">
+    <value>Alarm 1 &amp; 2</value>
+  </data>
+  <data name="AlarmAlertHeader" xml:space="preserve">
+    <value>Alarm message 1 &amp; 2</value>
+  </data>
+  <data name="_PreannAndAlarmAlart" xml:space="preserve">
+    <value>Alarm message 1 &amp; 2 and Pre-announcement selection</value>
+  </data>
+  <data name="_matrixButtonAlert" xml:space="preserve">
+    <value>Alarm 2</value>
+  </data>
+  <data name="AllAlert" xml:space="preserve">
+    <value>Message Alarm 2</value>
+  </data>
+  <data name="_matrixSelectAlert" xml:space="preserve">
+    <value>Alarm message 2</value>
+  </data>
+  <data name="PanelMessageB" xml:space="preserve">
+    <value>Alarm 2</value>
+  </data>
+  <data name="_matrixButtonA" xml:space="preserve">
+    <value>Button A</value>
+  </data>
+  <data name="_matrixButtonB" xml:space="preserve">
+    <value>Button B</value>
+  </data>
+  <data name="_matrixButtonC" xml:space="preserve">
+    <value>Button C</value>
+  </data>
+  <data name="_matrixButtonD" xml:space="preserve">
+    <value>Button D</value>
+  </data>
+  <data name="DisableFlat" xml:space="preserve">
+    <value>DisableFlat</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Emergency panel buttons &amp; GPO</value>
+  </data>
+  <data name="_matrixAnnouncMicEP" xml:space="preserve">
+    <value>Evacuation Panel</value>
+  </data>
+  <data name="_matrixGroupEvac" xml:space="preserve">
+    <value>Evacuation Panel</value>
+  </data>
+  <data name="_matrixSelectionEP" xml:space="preserve">
+    <value>Evacuation Panel</value>
+  </data>
+  <data name="_matrixAnnouncExtAudioIn" xml:space="preserve">
+    <value>External Audio input</value>
+  </data>
+  <data name="_matrixSelectionFDS" xml:space="preserve">
+    <value>FDS Interface</value>
+  </data>
+  <data name="_matrixAnnouncMicFDS" xml:space="preserve">
+    <value>Fire Detection System interface </value>
+  </data>
+  <data name="_matrixGroupFDS" xml:space="preserve">
+    <value>Fire Detection System</value>
+  </data>
+  <data name="_matrixGroupFire" xml:space="preserve">
+    <value>Fire Panel</value>
+  </data>
+  <data name="_matrixSelectionFP" xml:space="preserve">
+    <value>Fire Panel</value>
+  </data>
+  <data name="_matrixAnnouncMicFP" xml:space="preserve">
+    <value>Fire Panel</value>
+  </data>
+  <data name="_matrixSelectionFDSContacts" xml:space="preserve">
+    <value>The contacts of 1 GPO Card can only be linked to 1 ESC unit! </value>
+  </data>
+  <data name="_matrixButtonFDS" xml:space="preserve">
+    <value>GPO Card Contacts</value>
+  </data>
+  <data name="_matrixDisplayValue" xml:space="preserve">
+    <value>Matrix</value>
+  </data>
+  <data name="_matrixComboMatrixSelection" xml:space="preserve">
+    <value>Matrix selection</value>
+  </data>
+  <data name="_matrixComboMessage" xml:space="preserve">
+    <value>Message {0}</value>
+  </data>
+  <data name="RightHeader" xml:space="preserve">
+    <value>Message selection &amp; ABCD Button settings</value>
+  </data>
+  <data name="_matrixGroupAnnouncements" xml:space="preserve">
+    <value>Pre-announcements</value>
+  </data>
+  <data name="Microphonerouting" xml:space="preserve">
+    <value>Mic-signal is not forwarded if only an 'Alarm 2' message is linked to a routing table of a button</value>
+  </data>
+  <data name="MessageNo" xml:space="preserve">
+    <value>Matrix</value>
+  </data>
+  <data name="AlamAlertMic" xml:space="preserve">
+    <value>GPO relay is activated when an Alarm message is routed to the selected output:</value>
+  </data>
+  <data name="MatrixResetMessages" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="MatrixRetreiveMessages" xml:space="preserve">
+    <value>Retreive Messages</value>
+  </data>
+  <data name="MatrixMessagesRetreive" xml:space="preserve">
+    <value>Retreive messages from system</value>
+  </data>
+  <data name="_matrixGroupZoneSelection" xml:space="preserve">
+    <value>Routing Matrix for Keypad buttons / ABCD buttons / GPO Relay Card</value>
+  </data>
+  <data name="_matrixSelectionSelectButton" xml:space="preserve">
+    <value>Select Keypad button</value>
+  </data>
+  <data name="_ButtonRangeHeader" xml:space="preserve">
+    <value>Select: 'Keypad (P1-16)' or 'ABCD buttons' or 'GPO Relay Card'</value>
+  </data>
+  <data name="_matrixScrollSelSystemZone" xml:space="preserve">
+    <value>Select Entero ESC unit to display outputs</value>
+  </data>
+  <data name="MessSel" xml:space="preserve">
+    <value>Select the Matrix routing table for each button or select messages which will replace the Alarm/Alert messages used for the zone butons routing matrix.</value>
+  </data>
+  <data name="_matrixZone" xml:space="preserve">
+    <value>Zone {0}</value>
+  </data>
+  <data name="_matrixGroupAlarmAlert" xml:space="preserve">
+    <value>Alam 1 &amp; Alarm 2</value>
+  </data>
+  <data name="FirstABCD" xml:space="preserve">
+    <value>Matrix</value>
+  </data>
+  <data name="FirstPreannounce" xml:space="preserve">
+    <value>No Message</value>
+  </data>
+</root>

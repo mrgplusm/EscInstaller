@@ -1,0 +1,39 @@
+﻿<UserControl x:Class="EscInstaller.UserControls.VuMeterControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" >
+    <StackPanel>
+        <StackPanel Orientation="Horizontal" Margin="5">
+            <StackPanel.Resources>
+                <Style TargetType="Button">
+                    <Setter Property="Content" Value="Start" />
+                    <Setter Property="Command" Value="{Binding Path=StartVu}"></Setter>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=VuActivated}" Value="True">
+                            <Setter Property="Background" Value="SandyBrown" />
+                            <Setter Property="Command" Value="{Binding Path=StopVu}"></Setter>
+                            <Setter Property="Content" Value="Stop"></Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </StackPanel.Resources>
+            <Button  />
+
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <ProgressBar Background="LightGray" Foreground="Blue" Orientation="Vertical" Height="70" Margin="10" Width="20" Minimum="-100" Maximum="12" Value="{Binding Path=VuMeterMax, Mode=OneWay}" />
+            <ProgressBar Background="LightGray" Foreground="Green" Orientation="Vertical" Height="70" Margin="10" Width="20" Minimum="-100" Maximum="12" Value="{Binding Path=VuMeterCurrent, Mode=OneWay}" />
+            <ProgressBar Background="LightGray" Foreground="Red" Orientation="Vertical" Height="70" Margin="10" Width="20" Minimum="-100" Maximum="12" Value="{Binding Path=VuMeterAvarage, Mode=OneWay}" />
+
+        </StackPanel>
+        <StackPanel>
+
+            <TextBlock Foreground="Blue" Text="{Binding Path=VuMeterMax, StringFormat=Maximum &#x09;:{0:#}dB}" />
+            <TextBlock Foreground="Green" Text="{Binding Path=VuMeterCurrent, StringFormat=Current &#x09;&#x09;:{0:#}dB}" />
+            <TextBlock Foreground="Red" Text="{Binding Path=VuMeterAvarage, StringFormat=Average &#x09;&#x09;:{0:#}dB}" />
+            <TextBlock Text="{Binding Path=LastVuMeasure, StringFormat=Last measure&#x09;:{0:HH:mm:ss}}" />
+        </StackPanel>
+    </StackPanel>
+</UserControl>

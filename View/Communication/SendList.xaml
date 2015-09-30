@@ -1,0 +1,64 @@
+﻿<UserControl x:Class="EscInstaller.View.Communication.SendList"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:connection="clr-namespace:EscInstaller.ViewModel.Connection"
+      
+      xmlns:communication="clr-namespace:EscInstaller.View.Communication"
+
+      mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="450" d:DataContext="{d:DesignInstance connection:DispatchDataViewModel}">
+    <DataGrid Name="Lst" AutoGenerateColumns="False" AlternationCount="2" 
+              SelectionUnit="Cell" IsManipulationEnabled="False" AlternatingRowBackground="Chocolate"
+              
+              >
+        <DataGrid.Columns>
+            <DataGridTextColumn Binding="{Binding Path=Id, Mode=OneWay}" Header="{x:Static communication:Communication.Id}"   />
+            <DataGridTextColumn Binding="{Binding Path=DestinationAddress, Mode=OneWay}" Header="{x:Static communication:Communication.UnitId}"   />
+
+            <DataGridTemplateColumn Header="{x:Static communication:Communication.Module}"  IsReadOnly="True" >
+                <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBox Text="{Binding Path=ModuleName, Mode=OneWay}" IsManipulationEnabled="False" />
+                            <TextBox Text="{Binding Path=CreationDate, Mode=OneWay}" IsManipulationEnabled="False" ></TextBox>
+                        </StackPanel>
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+            </DataGridTemplateColumn>
+
+            <DataGridTemplateColumn Header="{x:Static communication:Communication.ErrorMessage}"  IsReadOnly="True" Width="200" >
+                <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                        <TextBox Text="{Binding Path=ErrorMessage, Mode=OneWay}"  AcceptsReturn="True" TextWrapping="Wrap" IsManipulationEnabled="False"
+                                         ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" ></TextBox>
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+            </DataGridTemplateColumn>
+
+            <DataGridCheckBoxColumn Binding="{Binding Path=IsDispatched, Mode=OneWay}" Width="50" Header="{x:Static communication:Communication.Isdisp}" />
+
+            <DataGridTemplateColumn>
+                <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                        <Button Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl},
+                                              Path=DataContext.RemoveData}" CommandParameter="{Binding}" Width="25" Height="25">
+                            <Image Source="../Common/Icons/Button-Remove-icon.png" Stretch="Fill"  />
+                        </Button>
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+            </DataGridTemplateColumn>
+        </DataGrid.Columns>
+        <DataGrid.RowStyle>
+            <Style TargetType="DataGridRow" >
+                <Setter Property="Background"  Value="AntiqueWhite" />
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding Path=HasErrors}">
+                        <Setter Property="Background" Value="red" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </DataGrid.RowStyle>
+    </DataGrid>
+</UserControl>

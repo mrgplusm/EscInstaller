@@ -1,0 +1,583 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="_dcOperationMenuEntry" xml:space="preserve">
+    <value>Music mute during 48Vdc operation</value>
+  </data>
+  <data name="_languageSelect" xml:space="preserve">
+    <value>Select language</value>
+  </data>
+  <data name="_lspBlockTitle" xml:space="preserve">
+    <value>LSP &amp; Room EQ</value>
+  </data>
+  <data name="_mainAddNewCard" xml:space="preserve">
+    <value>Add 4x4 zone card</value>
+  </data>
+  <data name="_mainAlarm" xml:space="preserve">
+    <value>Alarm 1</value>
+    <comment>Max 15 characters</comment>
+  </data>
+  <data name="_mainAlert" xml:space="preserve">
+    <value>Alarm 2</value>
+    <comment>Max 15 characters</comment>
+  </data>
+  <data name="_mainAux" xml:space="preserve">
+    <value>Auxiliary</value>
+    <comment>Max 15 characters</comment>
+  </data>
+  <data name="_mainConnection" xml:space="preserve">
+    <value>Connected:</value>
+  </data>
+  <data name="_mainEdit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="_mainEditAddUnit" xml:space="preserve">
+    <value>Add new unit</value>
+  </data>
+  <data name="_mainExitApp" xml:space="preserve">
+    <value>Exit installer</value>
+  </data>
+  <data name="_mainFile" xml:space="preserve">
+    <value>_File</value>
+  </data>
+  <data name="_mainFileClose" xml:space="preserve">
+    <value>Close c_urrent project</value>
+  </data>
+  <data name="_mainFileNewSystem" xml:space="preserve">
+    <value>New _system</value>
+  </data>
+  <data name="_mainFileOpenFile" xml:space="preserve">
+    <value>_Open file</value>
+  </data>
+  <data name="_mainFileSaveFile" xml:space="preserve">
+    <value>_Save file</value>
+  </data>
+  <data name="_mainHelp" xml:space="preserve">
+    <value>_Help</value>
+  </data>
+  <data name="_mainHelpAbout" xml:space="preserve">
+    <value>_About</value>
+  </data>
+  <data name="_mainHelpUserManual" xml:space="preserve">
+    <value>User _Manual</value>
+  </data>
+  <data name="_mainInput" xml:space="preserve">
+    <value>Input {0}</value>
+    <comment>Max 12 characters</comment>
+  </data>
+  <data name="_mainMaster" xml:space="preserve">
+    <value>Master</value>
+  </data>
+  <data name="_MainMenuconnection" xml:space="preserve">
+    <value>C_onnection Settings</value>
+  </data>
+  <data name="_MainMenuReceiveFromUnit" xml:space="preserve">
+    <value>_Receive from unit</value>
+  </data>
+  <data name="_MainMenuSendToUnit" xml:space="preserve">
+    <value>Send to _unit</value>
+  </data>
+  <data name="_mainMic1" xml:space="preserve">
+    <value>Microphone 1</value>
+    <comment>Max 15 characters</comment>
+  </data>
+  <data name="_mainMic2" xml:space="preserve">
+    <value>Microphone 2</value>
+    <comment>Max 15 characters</comment>
+  </data>
+  <data name="_mainMonitoring" xml:space="preserve">
+    <value>Monitoring</value>
+  </data>
+  <data name="_mainMonitoringEmailSettings" xml:space="preserve">
+    <value>E_mail settings</value>
+  </data>
+  <data name="_mainMonitoringMonitoring" xml:space="preserve">
+    <value>Monitoring</value>
+  </data>
+  <data name="_mainMSGDelCardConfirmation" xml:space="preserve">
+    <value>Are you sure to delete this card?</value>
+  </data>
+  <data name="_mainMSGDelCardTitle" xml:space="preserve">
+    <value>Delete card</value>
+  </data>
+  <data name="_mainMSGDelUnitConfirmation" xml:space="preserve">
+    <value>Are you sure to delete this slave unit?</value>
+  </data>
+  <data name="_mainMSGDelUnitTitle" xml:space="preserve">
+    <value>Delete slave unit</value>
+  </data>
+  <data name="_mainRemoveCard" xml:space="preserve">
+    <value>Remove 4x4 zone card</value>
+  </data>
+  <data name="_mainSlave" xml:space="preserve">
+    <value>Slave {0}</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="_mainToolLangDanish" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\denmark-flag1.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_mainToolLangDutch" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\netherlands-flag1.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_mainToolLangEnglish" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\ukflag1.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_mainToolLangFrance" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\france-flag1.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_mainToolLangGerman" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\germany-flag1.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_mainToolLangItaliano" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\italy-flag1.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_mainToolLangNorwegian" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\norway-flag1.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_mainToolLangPolish" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\poland-flag1.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_mainToolLangSpanish" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\spain-flag1.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_mainToolLangSwedish" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\sweden-flag1.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_mainTools" xml:space="preserve">
+    <value>_Tools</value>
+  </data>
+  <data name="_mainTools230Fail" xml:space="preserve">
+    <value>Energy save mode</value>
+  </data>
+  <data name="_mainToolsCalibrationTotal" xml:space="preserve">
+    <value>Run calibration complete system</value>
+  </data>
+  <data name="_mainToolsLanguage" xml:space="preserve">
+    <value>Select _Language</value>
+  </data>
+  <data name="_mainToolsLanguageDanish" xml:space="preserve">
+    <value>Danish</value>
+  </data>
+  <data name="_mainToolsLanguageDutch" xml:space="preserve">
+    <value>Dutch</value>
+  </data>
+  <data name="_mainToolsLanguageEnglish" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="_mainToolsLanguageFrance" xml:space="preserve">
+    <value>French</value>
+  </data>
+  <data name="_mainToolsLanguageGerman" xml:space="preserve">
+    <value>German</value>
+  </data>
+  <data name="_mainToolsLanguageItaliano" xml:space="preserve">
+    <value>Italiano</value>
+  </data>
+  <data name="_mainToolsLanguageNorwegian" xml:space="preserve">
+    <value>Norwegian</value>
+  </data>
+  <data name="_mainToolsLanguagePolish" xml:space="preserve">
+    <value>Polish</value>
+  </data>
+  <data name="_mainToolsLanguageSpanish" xml:space="preserve">
+    <value>Spanish</value>
+  </data>
+  <data name="_mainToolsLanguageSwedish" xml:space="preserve">
+    <value>Swedish</value>
+  </data>
+  <data name="_mainToolsOpenConnectionView" xml:space="preserve">
+    <value>_Setup connection</value>
+  </data>
+  <data name="_mainToolsOpenErrorLog" xml:space="preserve">
+    <value>Error _Log</value>
+  </data>
+  <data name="_mainToolsOpenPilotToneView" xml:space="preserve">
+    <value>_Pilot tone</value>
+  </data>
+  <data name="_mainToolsOutputContact" xml:space="preserve">
+    <value>_Output contact</value>
+  </data>
+  <data name="_mainToolsRedundancy" xml:space="preserve">
+    <value>_Redundancy</value>
+  </data>
+  <data name="_mainToolsZoneMatrix" xml:space="preserve">
+    <value>Emergency panel settings &amp; Routing Matrix</value>
+  </data>
+  <data name="_mainView" xml:space="preserve">
+    <value>_View</value>
+  </data>
+  <data name="_mainViewCloseWindows" xml:space="preserve">
+    <value>Close all _windows</value>
+  </data>
+  <data name="_mainWindowTitle" xml:space="preserve">
+    <value>Entero ESC Installer</value>
+  </data>
+  <data name="AboutwindowText" xml:space="preserve">
+    <value>ECS Emergency controller software</value>
+  </data>
+  <data name="AboutWindowTitle" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="AddUnit" xml:space="preserve">
+    <value>Add new unit</value>
+  </data>
+  <data name="BackupAmpBlock" xml:space="preserve">
+    <value>Backup Amp</value>
+  </data>
+  <data name="BackupAmpTitle" xml:space="preserve">
+    <value>Backup Amp</value>
+  </data>
+  <data name="BlMonitor" xml:space="preserve">
+    <value>Monitoring</value>
+  </data>
+  <data name="BlockTitleCompressor" xml:space="preserve">
+    <value>Compressor</value>
+  </data>
+  <data name="BlockTitleDelay" xml:space="preserve">
+    <value>Delay</value>
+  </data>
+  <data name="BlockTitleInputPeq" xml:space="preserve">
+    <value>PEQ</value>
+  </data>
+  <data name="BlockTitleSpeakerPeq" xml:space="preserve">
+    <value>Loudspeaker &amp; Room PEQ</value>
+  </data>
+  <data name="BlTcontrl" xml:space="preserve">
+    <value>Bass &amp; Treble</value>
+  </data>
+  <data name="btnFinished" xml:space="preserve">
+    <value>Finished </value>
+  </data>
+  <data name="CommErrorsCount" xml:space="preserve">
+    <value>Communication </value>
+  </data>
+  <data name="ConnectedMcu" xml:space="preserve">
+    <value>Connected to mcu</value>
+  </data>
+  <data name="ConnectionSettings" xml:space="preserve">
+    <value>Connection Settings</value>
+  </data>
+  <data name="Content" xml:space="preserve">
+    <value>{0}{1}</value>
+  </data>
+  <data name="DesignVersion" xml:space="preserve">
+    <value>Design ver {0}</value>
+  </data>
+  <data name="EmergencyInput" xml:space="preserve">
+    <value>Evac Matrix</value>
+  </data>
+  <data name="GuiVersion" xml:space="preserve">
+    <value>App ver {0}</value>
+  </data>
+  <data name="InstallerVersion" xml:space="preserve">
+    <value>Installer: {0}</value>
+  </data>
+  <data name="InstallModeByDefault" xml:space="preserve">
+    <value>Install mode by default</value>
+  </data>
+  <data name="IsInDcOperationStatusText" xml:space="preserve">
+    <value>Music Mute during 48Vdc operation: </value>
+  </data>
+  <data name="LinkMatrix" xml:space="preserve">
+    <value>Link Matrix</value>
+  </data>
+  <data name="loudspeakerEQLibrary" xml:space="preserve">
+    <value>Loudspeaker EQ Library</value>
+  </data>
+  <data name="lowVoltOff" xml:space="preserve">
+    <value>Off</value>
+  </data>
+  <data name="lowVoltOn" xml:space="preserve">
+    <value>On</value>
+  </data>
+  <data name="lowvoltQuestion" xml:space="preserve">
+    <value>Are you sure to enable playback of music when operating from the battery backup system?</value>
+  </data>
+  <data name="lowvoltQuestionTitle" xml:space="preserve">
+    <value>Attention</value>
+  </data>
+  <data name="MenuItemBatteryCalc" xml:space="preserve">
+    <value>Open Battery tool</value>
+  </data>
+  <data name="menuMeasureMent1k" xml:space="preserve">
+    <value>Measurement 1khz schedule</value>
+  </data>
+  <data name="MessageBoxSaveFileHeader" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="MessageBoxSaveFileText" xml:space="preserve">
+    <value>File not saved: {0}</value>
+  </data>
+  <data name="NewSystem" xml:space="preserve">
+    <value>New System</value>
+  </data>
+  <data name="NotConnectedMcu" xml:space="preserve">
+    <value>Not connected to mcu</value>
+  </data>
+  <data name="OpenFile" xml:space="preserve">
+    <value>Open file</value>
+  </data>
+  <data name="OpenSdCardMannager" xml:space="preserve">
+    <value>Sd Card manager</value>
+  </data>
+  <data name="Pilot19k" xml:space="preserve">
+    <value>19 Khz</value>
+  </data>
+  <data name="Pilot20k" xml:space="preserve">
+    <value>20 Khz</value>
+  </data>
+  <data name="Pilot21k" xml:space="preserve">
+    <value>21 Khz</value>
+  </data>
+  <data name="Pilot22k" xml:space="preserve">
+    <value>22 Khz</value>
+  </data>
+  <data name="ProgressFailed" xml:space="preserve">
+    <value>Failed</value>
+  </data>
+  <data name="ProgressFinished" xml:space="preserve">
+    <value>Finished synchronising</value>
+  </data>
+  <data name="ProgressFinishedTitle" xml:space="preserve">
+    <value>Succeed</value>
+  </data>
+  <data name="ReceiveFromUnit" xml:space="preserve">
+    <value>Receive From Unit</value>
+  </data>
+  <data name="SendToUnit" xml:space="preserve">
+    <value>Send to unit</value>
+  </data>
+  <data name="SpeakerLibraryEditorMenuItem" xml:space="preserve">
+    <value>SpeakerLibrary Editor</value>
+  </data>
+  <data name="TabCloseTooltip" xml:space="preserve">
+    <value>Removes {0}</value>
+  </data>
+  <data name="TransactionFailed" xml:space="preserve">
+    <value>Something went wrong during downloading</value>
+  </data>
+  <data name="UnknownInstallerVersion" xml:space="preserve">
+    <value>Unknown installer version</value>
+  </data>
+  <data name="WaitWhileReceiving" xml:space="preserve">
+    <value>Please wait while receiving..</value>
+  </data>
+  <data name="WaitWhileSending" xml:space="preserve">
+    <value>Please wait while sending..</value>
+  </data>
+  <data name="ZoneMatrix" xml:space="preserve">
+    <value>Zone Matrix</value>
+  </data>
+  <data name="BlBkp" xml:space="preserve">
+    <value>Backup {0}</value>
+  </data>
+  <data name="LoudSpeakerMatrix" xml:space="preserve">
+    <value>Loudspeaker Matrix {0}</value>
+  </data>
+  <data name="BlCompressor" xml:space="preserve">
+    <value>Compr.</value>
+  </data>
+  <data name="BlDelay" xml:space="preserve">
+    <value>Delay</value>
+  </data>
+  <data name="NotInstalledWatts" xml:space="preserve">
+    <value>Not Installed</value>
+  </data>
+  <data name="WattsSignature" xml:space="preserve">
+    <value>{0} Watt</value>
+  </data>
+  <data name="BlAuxiliary" xml:space="preserve">
+    <value>Auxiliary {0}</value>
+  </data>
+  <data name="BlBackupAmp" xml:space="preserve">
+    <value>Backup Amp {0}</value>
+  </data>
+  <data name="BlCompr" xml:space="preserve">
+    <value>Compressor</value>
+  </data>
+  <data name="BlInputName" xml:space="preserve">
+    <value>Input {0}</value>
+  </data>
+  <data name="BlOutputName" xml:space="preserve">
+    <value>Output {0}</value>
+  </data>
+  <data name="EmergencyInputs" xml:space="preserve">
+    <value>Alarm Matrix</value>
+  </data>
+  <data name="CommunicationTab" xml:space="preserve">
+    <value>Communication</value>
+  </data>
+  <data name="MatrixTab" xml:space="preserve">
+    <value>Zone Matrix</value>
+  </data>
+  <data name="OpenMeasurementSettingsMenuEntry" xml:space="preserve">
+    <value>Measurement settings</value>
+  </data>
+  <data name="MessageBoxDownloadText" xml:space="preserve">
+    <value>Do you want to download the configuration from the ESC units, overwriting the configuration in the current open file?</value>
+  </data>
+  <data name="MessageBoxDownloadTitle" xml:space="preserve">
+    <value>Please confirm download</value>
+  </data>
+  <data name="MessageBoxNoConnectionText" xml:space="preserve">
+    <value>Nothing to do; at least one MCU has to have a connection. Establish a connection for one of the opened units first!</value>
+  </data>
+  <data name="MessageBoxNoConnectionTitle" xml:space="preserve">
+    <value>No connections found</value>
+  </data>
+  <data name="MessageBoxUploadText" xml:space="preserve">
+    <value>Do you want to overwrite the configuration of the Esc with the settings as they are in the installer software?</value>
+  </data>
+  <data name="MessageBoxUploadTitle" xml:space="preserve">
+    <value>Please confirm upload</value>
+  </data>
+  <data name="CreateNewDesign" xml:space="preserve">
+    <value>No design is opened. Would you like to create a new design file?</value>
+  </data>
+  <data name="CreateNewDesignHeader" xml:space="preserve">
+    <value>Create new design?</value>
+  </data>
+  <data name="DisconnectedUnits" xml:space="preserve">
+    <value>The following units were disconnected and will now reboot: {0}</value>
+  </data>
+  <data name="DisconnectedUnitsTitle" xml:space="preserve">
+    <value>Disconnected units</value>
+  </data>
+  <data name="TimestampVerifyUpload" xml:space="preserve">
+    <value>The data of this unit is of a different .esc file. Would you like to continue uploading? {0} </value>
+  </data>
+  <data name="TimestampVerifyDownload" xml:space="preserve">
+    <value>The data of this unit is of a different .esc file. Would you like to continue downloading? {0} </value>
+  </data>
+  <data name="TimestampVerifyTitle" xml:space="preserve">
+    <value>Data esc mismatch</value>
+  </data>
+  <data name="OverwriteAsk" xml:space="preserve">
+    <value>Would you like to save the current file</value>
+  </data>
+  <data name="OverwriteAskTitle" xml:space="preserve">
+    <value>Close file</value>
+  </data>
+  <data name="SaveNewSystem" xml:space="preserve">
+    <value>Please enter a location to save the new design file</value>
+  </data>
+  <data name="SaveNewSystemTitle" xml:space="preserve">
+    <value>Create new file</value>
+  </data>
+</root>

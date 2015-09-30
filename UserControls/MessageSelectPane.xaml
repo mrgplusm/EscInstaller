@@ -1,0 +1,58 @@
+﻿<UserControl x:Class="Futurama.UserControls.MessageSelectPane"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" Name="pane" 
+             d:DesignHeight="200" d:DesignWidth="350">
+    <UserControl.Resources>
+
+    </UserControl.Resources>
+    <GroupBox Header="{Binding ElementName=pane, Path=GroupName}" >
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <StackPanel Style="{StaticResource stp}" Name="stp" >
+                <TextBlock Text="{Resx ButtonA}" />
+                <StackPanel Orientation="Horizontal">
+                <ComboBox ItemsSource="{Binding Path=MessagesA, ElementName=pane}" SelectedIndex="{Binding Path=Messages[startfrom], ElementName=pane}" Width="100" />
+                <TextBlock Name="txta" Text="{Resx PanelMessageA}"  Margin="10,0,0,0" Width="45" Visibility="{Binding IsVisibleTextA}" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                <ComboBox ItemsSource="{Binding Path=MessagesB, ElementName=pane}" SelectedIndex="{Binding Path=Messages[startfrom+1], ElementName=pane}" Width="100"/>
+                <TextBlock Name="txtb" Text="{Resx PanelMessageB}"  Margin="10,0,0,0" Width="45"  />
+                </StackPanel>
+
+                <Style TargetType="StackPanel" x:Key="stp">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ElementName=mesa, Path=SelectedIndex}" Value="1">
+                            <Setter TargetName="txta" Property="Text" Value="" />
+                            <Setter TargetName="txtb" Property="Text" Value="" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </StackPanel>
+            <StackPanel  Grid.Column="1">
+                <TextBlock Text="{Resx ButtonB}" />
+                <ComboBox ItemsSource="{Binding Path=MessagesA, ElementName=pane}" SelectedIndex="{Binding Path=Messages[startfrom+2], ElementName=pane}"/>
+                <ComboBox ItemsSource="{Binding Path=MessagesB, ElementName=pane}" SelectedIndex="{Binding Path=Messages[startfrom+3], ElementName=pane}"/>
+            </StackPanel>
+            <StackPanel Grid.Row="1">
+                <TextBlock Text="{Resx ButtonC}" />
+                <ComboBox ItemsSource="{Binding Path=MessagesA, ElementName=pane}" SelectedIndex="{Binding Path=Messages[startfrom+4], ElementName=pane}"/>
+                <ComboBox ItemsSource="{Binding Path=MessagesB, ElementName=pane}" SelectedIndex="{Binding Path=Messages[startfrom+5], ElementName=pane}"/>
+            </StackPanel>
+            <StackPanel Grid.Row="1" Grid.Column="1">
+                <TextBlock Text="{Resx ButtonD}" />
+                <ComboBox ItemsSource="{Binding Path=MessagesA, ElementName=pane}" SelectedIndex="{Binding Path=Messages[startfrom+6], ElementName=pane}"/>
+                <ComboBox ItemsSource="{Binding Path=MessagesB, ElementName=pane}" SelectedIndex="{Binding Path=Messages[startfrom+7], ElementName=pane}"/>
+            </StackPanel>
+        </Grid>
+    </GroupBox>
+</UserControl>

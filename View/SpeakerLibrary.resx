@@ -1,0 +1,280 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="EqualizerHeader" xml:space="preserve">
+    <value>Parametric EQ</value>
+  </data>
+  <data name="EqualizerRemovePeq" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="EqualizerSavePeq" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="FlatEQ" xml:space="preserve">
+    <value>Flat EQ</value>
+  </data>
+  <data name="LibraryEqStages" xml:space="preserve">
+    <value>Frequence Response</value>
+  </data>
+  <data name="PeqHeader" xml:space="preserve">
+    <value>EQ preset list {0}</value>
+  </data>
+  <data name="SpeakerExistsMessage" xml:space="preserve">
+    <value>Cannot create speaker in library with the same name</value>
+  </data>
+  <data name="SpeakerExistsTitle" xml:space="preserve">
+    <value>Speaker allready exists</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Loudspeaker &amp; Room PEQ {0}</value>
+  </data>
+  <data name="_lspBlockTitle" xml:space="preserve">
+    <value>LSP &amp; Room PEQ</value>
+  </data>
+  <data name="_lspCurveGroupTitle" xml:space="preserve">
+    <value>EQ Curve</value>
+  </data>
+  <data name="_lspSelectEQ" xml:space="preserve">
+    <value>Select loudspeaker EQ</value>
+  </data>
+  <data name="_lspSpeakerLibrary" xml:space="preserve">
+    <value>Loudspeaker library master</value>
+  </data>
+  <data name="_lspSpeakerListDescription" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="_lspSpeakerListName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="_lspSpeakerListVersion" xml:space="preserve">
+    <value>Version</value>
+  </data>
+  <data name="_lspWindowTitle" xml:space="preserve">
+    <value>Loudspeaker &amp; Room EQ</value>
+  </data>
+  <data name="_micPEQBand" xml:space="preserve">
+    <value>Band</value>
+  </data>
+  <data name="_micPEQBlockTitle" xml:space="preserve">
+    <value>PEQ</value>
+  </data>
+  <data name="_micPEQBoost" xml:space="preserve">
+    <value>Boost</value>
+  </data>
+  <data name="_micPEQEnable" xml:space="preserve">
+    <value>Enable</value>
+  </data>
+  <data name="_micPEQFreq" xml:space="preserve">
+    <value>Frequency</value>
+  </data>
+  <data name="_micPEQGroupEQCurve" xml:space="preserve">
+    <value>EQ Curve</value>
+  </data>
+  <data name="_micPEQOrder" xml:space="preserve">
+    <value>Order</value>
+  </data>
+  <data name="_micPEQQ" xml:space="preserve">
+    <value>Q</value>
+  </data>
+  <data name="_micPEQType" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="_speakerLibrary" xml:space="preserve">
+    <value>EQ Library</value>
+  </data>
+  <data name="_SpeakerLibraryLoadButtonToolTip" xml:space="preserve">
+    <value>Load Speaker into MCU</value>
+  </data>
+  <data name="_SpeakerLibraryRemoveButtonToolTip" xml:space="preserve">
+    <value>Remove speaker from user library</value>
+  </data>
+  <data name="_SpeakerLibrarySaveButtonToolTip" xml:space="preserve">
+    <value>Save speaker to user library</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="WindowIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\WindowIcon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="WindowImg" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\WindowImg.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="AdvancedSettings" xml:space="preserve">
+    <value>Advanced settings</value>
+  </data>
+  <data name="AddNewParam" xml:space="preserve">
+    <value>Add new param</value>
+  </data>
+  <data name="RemoveAllParams" xml:space="preserve">
+    <value>Remove all parameters</value>
+  </data>
+  <data name="AddNewSpeaker" xml:space="preserve">
+    <value>Add new speaker</value>
+  </data>
+  <data name="ButtonImport" xml:space="preserve">
+    <value>Import .peq or .seq file</value>
+  </data>
+  <data name="MoveThisSpeaker" xml:space="preserve">
+    <value>Move this speaker up/down</value>
+  </data>
+  <data name="PutLibSelection" xml:space="preserve">
+    <value>Copy current library selection into selected preset</value>
+  </data>
+  <data name="RemoveThisSpeaker" xml:space="preserve">
+    <value>Remove speaker from library</value>
+  </data>
+  <data name="SaveLibFile" xml:space="preserve">
+    <value>Save library file</value>
+  </data>
+  <data name="CancelCloseWindowText" xml:space="preserve">
+    <value>By closing this window changes will be lost, are you sure?</value>
+  </data>
+  <data name="CancelCloseWindowTitle" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="NotEnoughSpaceWarning" xml:space="preserve">
+    <value>The choosen speaker requires {0} bands, thile theres only space for {1} bands</value>
+  </data>
+  <data name="NotEnoughSpaceWarningTitle" xml:space="preserve">
+    <value>Not enough dsp biquads</value>
+  </data>
+  <data name="DeleteAllParamsVerify" xml:space="preserve">
+    <value>Are you sure removing all biquad settings?</value>
+  </data>
+  <data name="DeleteAllParamsVerifyTitle" xml:space="preserve">
+    <value>Remove all params</value>
+  </data>
+  <data name="GetPeqParams" xml:space="preserve">
+    <value>Get redundancy data</value>
+  </data>
+  <data name="LockWarning" xml:space="preserve">
+    <value>This cannot be edited because the same name occurs in the library. Choose a different name</value>
+  </data>
+  <data name="NameExists" xml:space="preserve">
+    <value>This name exists in library and belongs to a different configuration, please choose a different name</value>
+  </data>
+  <data name="NameExistsTitle" xml:space="preserve">
+    <value>Duplicate name</value>
+  </data>
+  <data name="SavedSucces" xml:space="preserve">
+    <value>Speaker Saved Succesfully in library</value>
+  </data>
+  <data name="SavedSuccesTitle" xml:space="preserve">
+    <value>Saved</value>
+  </data>
+</root>

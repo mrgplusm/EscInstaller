@@ -1,0 +1,188 @@
+﻿<Window x:Class="Futurama.View.EmailSendView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="Send Email" Height="727" Width="1118">
+    <Grid Width="1093">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="12" />
+            <RowDefinition Height="329*" />
+            <RowDefinition Height="17*" />
+            <RowDefinition Height="323*" />
+            <RowDefinition Height="7*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10" />
+            <ColumnDefinition Width="351" />
+            <ColumnDefinition Width="10" />
+            <ColumnDefinition Width="352" />
+            <ColumnDefinition Width="9" />
+            <ColumnDefinition Width="475" />
+        </Grid.ColumnDefinitions>
+        <GroupBox Grid.Column="3" Header="Sender" Height="332" HorizontalAlignment="Left" Name="gbSender" VerticalAlignment="Top" Width="351" Margin="0,10,0,0" Grid.RowSpan="3">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="10" />
+                    <RowDefinition Height="299" />
+                    <RowDefinition Height="96" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1" />
+                    <ColumnDefinition Width="140" />
+                    <ColumnDefinition Width="193" />
+                    <ColumnDefinition Width="107*" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="2" Name="stackPanel2" Margin="0,0,0,4" Grid.Row="1">
+                    <TextBox Height="28" Name="txtFrom" Width="auto" Margin="0,8,6,3" />
+                    <TextBox Height="28" Name="txtDisplayName" Width="auto" Margin="0,6,6,3" />
+                    <Label Content="SMTP setings" FontWeight="Bold" Margin="0,6,6,3" Height="28" HorizontalContentAlignment="Left" Name="label13" Width="auto" />
+                    <TextBox Height="28" Name="txtSMTPServerName"  Width="auto" Margin="0,6,6,3" />
+                    <TextBox Height="28" Name="txtSMTPPortNumber" Width="auto" Margin="0,6,6,3" />
+                    <CheckBox Height="21" Name="checkBox1" Width="auto" Margin="0,14,6,3" />
+                    <TextBox Height="28" Name="txtUserName" Width="auto" Margin="0,5,6,3" IsEnabled="False" />
+                    <PasswordBox Height="28" Name="txtPassword" Width="auto" PasswordChar="*" Margin="0,6,6,3" IsEnabled="False" />
+                </StackPanel>
+                <StackPanel Name="stackPanel1" Margin="5,0,0,4" Grid.Column="1" Grid.Row="1">
+                    <Label Content="From" Height="28" Margin="0,6,6,3" HorizontalContentAlignment="Right" Name="label9" Width="auto" />
+                    <Label Height="28" Name="label10" Width="auto" Margin="0,6,6,3" HorizontalAlignment="Right">From Display Name</Label>
+                    <Label Height="28" Margin="0,6,6,3" HorizontalContentAlignment="Right" Name="label12" Width="auto" />
+                    <Label Height="28" Name="label4" Width="auto" Margin="0,6,6,3" Content="SMTP Server" HorizontalContentAlignment="Right" />
+                    <Label Height="28" Name="label5" Width="auto" Margin="0,6,6,3" Content="SMTP port" HorizontalContentAlignment="Right" />
+                    <Label Height="28" Name="label3" Width="auto" Margin="0,6,6,3" Content="Authorization required" HorizontalContentAlignment="Right" />
+                    <Label Height="28" Name="label1" Width="auto" Margin="0,6,6,3" HorizontalContentAlignment="Right">Username</Label>
+                    <Label Height="28" Name="label2" Width="auto" Margin="0,6,6,3" Content="Password" HorizontalContentAlignment="Right" />
+                </StackPanel>
+            </Grid>
+        </GroupBox>
+        <GroupBox Grid.Column="3" Grid.Row="2" Header="Receiver" Height="332" HorizontalAlignment="Left" Name="gbReceiver" VerticalAlignment="Top" Width="351" Margin="0,9,0,0" Grid.RowSpan="3">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1" />
+                    <ColumnDefinition Width="140" />
+                    <ColumnDefinition Width="193" />
+                    <ColumnDefinition Width="107*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="10" />
+                    <RowDefinition Height="198" />
+                    <RowDefinition Height="197" />
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Column="1" Height="293" HorizontalAlignment="Left" Name="stackPanel3" VerticalAlignment="Top" Width="135" Margin="5,0,0,0" Grid.Row="1" Grid.RowSpan="2">
+                    <Label Content="Reciever 1" Height="28" Margin="0,6,6,3" Name="label20" Width="auto" HorizontalContentAlignment="Right" />
+                    <Label Content="Reciever 2" Height="28" Margin="0,6,6,3" Name="label21" Width="auto" HorizontalContentAlignment="Right" />
+                    <Label Content="Reciever 3" Height="28" Margin="0,6,6,3" Name="label22" Width="auto" HorizontalContentAlignment="Right" />
+                    <Label Content="Reciever 4" Height="28" Margin="0,6,6,3" Name="label23" Width="auto" HorizontalContentAlignment="Right" />
+                    <Label  Height="28" HorizontalContentAlignment="Right" Name="label36" Width="auto" />
+                    <Label Content="Country" Height="28" Margin="0,6,6,3" Name="label24" Width="auto" HorizontalContentAlignment="Right" />
+                </StackPanel>
+                <StackPanel Grid.Column="2" Name="stackPanel5" Margin="0,0,1,102" Grid.Row="1" Grid.RowSpan="2">
+                    <TextBox Height="28" Margin="0,6,6,3" Name="txtRecipient1"  Width="auto"  />
+                    <TextBox Height="28" Margin="0,6,6,3" Name="txtRecipient2" Width="auto" />
+                    <TextBox Height="28" Margin="0,6,6,3" Name="txtRecipient3" Width="auto" />
+                    <TextBox Height="28" Margin="0,6,6,3" Name="txtRecipient4" Width="auto" />
+                    <Label Content="Backup copy to Bose" FontWeight="Bold" Height="28" HorizontalContentAlignment="Left" Name="label35" Width="auto" />
+                    <ComboBox Margin="0,6,6,3" Name="cboBose" Width="auto" Height="23" IsEnabled="False"  />
+                </StackPanel>
+            </Grid>
+        </GroupBox>
+        <GroupBox Grid.Column="5" Header="Test email" Height="332" HorizontalAlignment="Left" Name="gbTestEmail" VerticalAlignment="Top" Width="351" Margin="0,9,0,0" Grid.RowSpan="2">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1" />
+                    <ColumnDefinition Width="142" />
+                    <ColumnDefinition Width="191" />
+                    <ColumnDefinition Width="107*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="10" />
+                    <RowDefinition Height="299" />
+                    <RowDefinition Height="96" />
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Column="1" Height="294" HorizontalAlignment="Left" Name="stackPanel8" VerticalAlignment="Top" Width="137" Margin="5,0,0,0" Grid.Row="1">
+                    <Label Height="28" Name="label8" Width="auto" Margin="0,6,6,3" HorizontalContentAlignment="Right">Attachment</Label>
+                    <Label Height="28" Name="label11" Width="auto" Margin="0,6,6,3" />
+                    <Label Height="28" Name="label6" Width="auto" Margin="0,6,6,3" HorizontalContentAlignment="Right">Subject</Label>
+                    <Label Height="28" Name="label7" Width="auto" Margin="0,6,6,3" HorizontalContentAlignment="Right">Body</Label>
+                </StackPanel>
+                <StackPanel Grid.Column="2" Height="294" HorizontalAlignment="Left" Name="stackPanel4" VerticalAlignment="Top" Width="190" Grid.Row="1">
+                    <TextBox Height="28" Margin="0,8,6,3" Name="txtAttachment" Width="auto"  />
+                    <Button Name="btnBrowseAttachment" Height="28" Margin="0,6,6,3" Width="50" HorizontalAlignment="Left" Content="Browse.." Click="btnBrowseAttachment_Click" />
+                    <TextBox Height="28" Margin="0,6,6,3" Name="txtSubject"  Width="auto" />
+                    <TextBox Height="137" Margin="0,6,6,3" Name="txtBody"  Width="auto" MinLines="10" TextWrapping="Wrap" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" />
+                    <Button Name="btnSendEmail" Height="23" Width="74" HorizontalAlignment="Right" Margin="0,6,6,0" Click="btnSendEmail_Click">Send Email</Button>
+                </StackPanel>
+            </Grid>
+        </GroupBox>
+        <GroupBox Grid.Column="1" Grid.RowSpan="3" Header="Project details" Height="332" HorizontalAlignment="Left" Margin="0,10,0,0" Name="gbProject" VerticalAlignment="Top" Width="351">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1" />
+                    <ColumnDefinition Width="140" />
+                    <ColumnDefinition Width="193" />
+                    <ColumnDefinition Width="107*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="10" />
+                    <RowDefinition Height="299" />
+                    <RowDefinition Height="96" />
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Column="2" Margin="0,0,0,4" Name="stackPanel6" Grid.Row="1">
+                    <TextBox Height="28" Margin="0,8,6,3" Name="txtProjectName" Width="auto" />
+                    <TextBox Height="28" Margin="0,6,6,3" Name="txtProjectAddress"  Width="auto" />
+                    <TextBox Height="28" Margin="0,6,6,3" Name="txtProjectZip" Width="auto" />
+                    <TextBox Height="28" Margin="0,6,6,3" Name="txtProjectPlace" Width="auto" />
+                    <TextBox Height="28" Margin="0,6,6,3" Name="txtProjectCountry" Width="auto" />
+                    <TextBox Height="28" Margin="0,6,6,3" Name="txtProjectPhone" Width="auto" />
+                    <TextBox Height="28" Margin="0,6,6,3" Name="txtProjectContact" Width="auto" />
+                    <TextBox Height="28" Margin="0,6,6,3" Name="txtProjectEmail" Width="auto" />
+                </StackPanel>
+                <StackPanel Grid.Column="1" Grid.Row="1" Margin="5,0,0,4" Name="stackPanel7">
+                    <Label Content="Name" Height="29" HorizontalContentAlignment="Right" Margin="0,6,6,3" Name="label15" Width="auto" />
+                    <Label Content="Address" Height="28" HorizontalAlignment="Right" Margin="0,6,6,3" Name="label16" Width="auto" />
+                    <Label Content="Zip code" Height="28" HorizontalContentAlignment="Right" Margin="0,6,6,3" Name="label18" Width="auto" />
+                    <Label Content="Place" Height="28" HorizontalContentAlignment="Right" Margin="0,6,6,3" Name="label19" Width="auto" />
+                    <Label Content="Country" Height="28" HorizontalContentAlignment="Right" Margin="0,6,6,3" Name="label26" Width="auto" />
+                    <Label Content="Phone" Height="28" HorizontalContentAlignment="Right" Margin="0,6,6,3" Name="label27" Width="auto" />
+                    <Label Content="Contact person" Height="28" HorizontalContentAlignment="Right" Margin="0,6,6,3" Name="label14" Width="auto" />
+                    <Label Content="Email address" Height="28" HorizontalContentAlignment="Right" Margin="0,6,6,3" Name="label17" Width="auto" />
+                </StackPanel>
+            </Grid>
+        </GroupBox>
+        <GroupBox Grid.Column="1" Header="Dealer details" Height="332" HorizontalAlignment="Left" Name="gbDealer" VerticalAlignment="Top" Width="351" Grid.Row="2" Margin="0,9,0,0" Grid.RowSpan="3">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1" />
+                    <ColumnDefinition Width="140" />
+                    <ColumnDefinition Width="193" />
+                    <ColumnDefinition Width="107*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="10" />
+                    <RowDefinition Height="299" />
+                    <RowDefinition Height="96" />
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Column="2" Margin="0,0,0,5" Name="stackPanel9" Grid.Row="1">
+                    <TextBox Height="28" Margin="0,6,6,3" Name="txtDealerName" Width="auto" />
+                    <TextBox Height="28" Margin="0,6,6,3" Name="txtDealerAddress" Width="auto" />
+                    <TextBox Height="28" Margin="0,6,6,3" Name="txtDealerZip" Width="auto" />
+                    <TextBox Height="28" Margin="0,6,6,3" Name="txtDealerPlace" Width="auto" />
+                    <TextBox Height="28" Margin="0,6,6,3" Name="txtDealerCountry" Width="auto" />
+                    <TextBox Height="28" Margin="0,6,6,3" Name="txtDealerPhone"  Width="auto" />
+                    <TextBox Height="28" Margin="0,6,6,3" Name="txtDealerContact"  Width="auto" />
+                    <TextBox Height="28" Margin="0,6,6,3" Name="txtDealerEmail"  Width="auto" />
+                </StackPanel>
+                <StackPanel Grid.Column="1" Grid.Row="1" Margin="5,0,0,4" Name="stackPanel10">
+                    <Label Content="Name" Height="29" HorizontalContentAlignment="Right" Margin="0,6,6,3" Name="label25" Width="auto" />
+                    <Label Content="Address" Height="28" HorizontalAlignment="Right" Margin="0,6,6,3" Name="label28" Width="auto" />
+                    <Label Content="Zip code" Height="28" HorizontalContentAlignment="Right" Margin="0,6,6,3" Name="label29" Width="auto" />
+                    <Label Content="Place" Height="28" HorizontalContentAlignment="Right" Margin="0,6,6,3" Name="label30" Width="auto" />
+                    <Label Content="Country" Height="28" HorizontalContentAlignment="Right" Margin="0,6,6,3" Name="label31" Width="auto" />
+                    <Label Content="Phone" Height="28" HorizontalContentAlignment="Right" Margin="0,6,6,3" Name="label32" Width="auto" />
+                    <Label Content="Contact person" Height="28" HorizontalContentAlignment="Right" Margin="0,6,6,3" Name="label33" Width="auto" />
+                    <Label Content="Email address" Height="28" HorizontalContentAlignment="Right" Margin="0,6,6,3" Name="label34" Width="auto" />
+                </StackPanel>
+            </Grid>
+        </GroupBox>
+    </Grid>
+</Window>
+
+

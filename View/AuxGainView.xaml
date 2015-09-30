@@ -1,0 +1,29 @@
+﻿<UserControl x:Class="EscInstaller.View.AuxGainView"
+              
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:userControls="clr-namespace:EscInstaller.UserControls"
+             xmlns:overView="clr-namespace:EscInstaller.ViewModel.OverView"
+             xmlns:View="clr-namespace:EscInstaller.View"
+
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300"
+             d:DataContext="{d:DesignInstance overView:BlAuxiliary}" >
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="
+                           Auto" />
+        </Grid.RowDefinitions> 
+
+        <GroupBox Header="{x:Static View:Auxiliary.AuxGainSlider}" >
+            <StackPanel Margin="5" >
+                <userControls:UcSlider SliderValue="{Binding Path=AuxGainSlider}" />
+            </StackPanel>
+        </GroupBox>
+    </Grid>
+</UserControl>

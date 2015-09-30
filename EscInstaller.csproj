@@ -1,0 +1,1015 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{0F13AB49-2595-472B-A7E0-D86A5C194553}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>EscInstaller</RootNamespace>
+    <AssemblyName>EscInstaller</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <Utf8Output>true</Utf8Output>
+    <ExpressionBlendVersion>4.0.20525.0</ExpressionBlendVersion>
+    <PublishUrl>C:\Users\asuspc\Dropbox\Release\Installers\EscInstaller\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <UpdateUrl>http://enterova.eu/updates/</UpdateUrl>
+    <SupportUrl>http://enterova.eu/</SupportUrl>
+    <TargetCulture>en</TargetCulture>
+    <ProductName>Entero VACIE installer software</ProductName>
+    <PublisherName>Bose GP Europe</PublisherName>
+    <SuiteName>Entero VACIE installer software</SuiteName>
+    <ApplicationRevision>21</ApplicationRevision>
+    <ApplicationVersion>0.10.6.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;INSTALLER</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>ESC.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>EscInstaller.App</StartupObject>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>7BD7288D85E950B87C3D21B0A1266E22DFD5D953</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>false</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>false</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MONITOR|x86'">
+    <OutputPath>bin\x86\MONITOR\</OutputPath>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MONITORING|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\MONITORING\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>EscInstaller_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Common">
+      <HintPath>..\ConnectionLibrary\bin\Debug\Common.dll</HintPath>
+    </Reference>
+    <Reference Include="DynamicDataDisplay">
+      <HintPath>Deps\DynamicDataDisplay.dll</HintPath>
+    </Reference>
+    <Reference Include="GalaSoft.MvvmLight">
+      <HintPath>packages\MvvmLightLibs.5.2.0.0\lib\net45\GalaSoft.MvvmLight.dll</HintPath>
+    </Reference>
+    <Reference Include="GalaSoft.MvvmLight.Extras">
+      <HintPath>packages\MvvmLightLibs.5.2.0.0\lib\net45\GalaSoft.MvvmLight.Extras.dll</HintPath>
+    </Reference>
+    <Reference Include="GalaSoft.MvvmLight.Platform">
+      <HintPath>packages\MvvmLightLibs.5.2.0.0\lib\net45\GalaSoft.MvvmLight.Platform.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Expression.Interactions">
+      <HintPath>..\packages\Unofficial.Blend.Interactivity.1.0.0\lib\net40\Microsoft.Expression.Interactions.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation">
+      <HintPath>packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Windows.Design.Extensibility, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="NAudio">
+      <HintPath>packages\NAudio.1.7.3\lib\net35\NAudio.dll</HintPath>
+    </Reference>
+    <Reference Include="policy.2.0.taglib-sharp">
+      <HintPath>packages\taglib.2.1.0.0\lib\policy.2.0.taglib-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationFramework.Aero">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ReachFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IdentityModel" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Printing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\MvvmLightLibs.5.2.0.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="taglib-sharp">
+      <HintPath>packages\taglib.2.1.0.0\lib\taglib-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="UIAutomationProvider" />
+    <Reference Include="UIAutomationTypes" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsFormsIntegration" />
+    <Reference Include="Xceed.Wpf.Toolkit">
+      <HintPath>packages\Xceed.Wpf.Toolkit.2.8.15465.16500\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="Converters\IsMainUnitConverter.cs" />
+    <Compile Include="ViewModel\EscCommunication\EepromDataHandler.cs" />
+    <Compile Include="ViewModel\EscCommunication\EscSender.cs" />
+    <Compile Include="ExtensionMethods.cs" />
+    <Compile Include="ImportSpeakers\SpeakerMethods.cs" />
+    <Compile Include="ImportSpeakers\ParametricEQ.cs" />
+    <Compile Include="ImportSpeakers\Speaker.cs" />
+    <Compile Include="Main.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Main.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Settings.cs" />
+    <Compile Include="SliderExt.cs" />
+    <Compile Include="UnitFinder.cs" />
+    <Compile Include="UserControls\CharsTextBox.xaml.cs">
+      <DependentUpon>CharsTextBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ChartChildrenPlotter.cs" />
+    <Compile Include="UserControls\CompressorGraph.xaml.cs">
+      <DependentUpon>CompressorGraph.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\MatrixView.xaml.cs">
+      <DependentUpon>MatrixView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\PEQDisplay.xaml.cs">
+      <DependentUpon>PEQDisplay.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\PEQParams.xaml.cs">
+      <DependentUpon>PEQParams.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\PEQSpeakerList.xaml.cs">
+      <DependentUpon>PEQSpeakerList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\SliderVu.xaml.cs">
+      <DependentUpon>SliderVu.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\UcEscNum.xaml.cs">
+      <DependentUpon>UcEscNum.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\UcSlider.xaml.cs">
+      <DependentUpon>UcSlider.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\UcSpeakerLibrary.xaml.cs">
+      <DependentUpon>UcSpeakerLibrary.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\VuMeterControl.xaml.cs">
+      <DependentUpon>VuMeterControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ValidationRules\LinkWitzValidate.cs" />
+    <Compile Include="ValidationRules\RegexValidationRule.cs" />
+    <Compile Include="ValidationRules\PortValidationRule.cs" />
+    <Compile Include="ViewModel\AlarmMessagesViewModel.cs" />
+    <Compile Include="ViewModel\EscCommunication\CommunicationBase.cs" />
+    <Compile Include="ViewModel\BatteryCalcViewModel.cs" />
+    <Compile Include="ViewModel\EscCommunication\EscReceiver.cs" />
+    <Compile Include="ViewModel\Connection\CommunicationViewModel.cs" />
+    <Compile Include="ViewModel\Connection\ConnectionViewModel.cs" />
+    <Compile Include="ViewModel\Connection\DispatchDataViewModel.cs" />
+    <Compile Include="ViewModel\EscCommunication\CommunicationReceive.cs" />
+    <Compile Include="ViewModel\EscCommunication\CommunicationSend.cs" />
+    <Compile Include="ViewModel\EscCommunication\SendData.cs" />
+    <Compile Include="ViewModel\EscCommunication\Downloader.cs" />
+    <Compile Include="ViewModel\EscCommunication\ReceiveData.cs" />
+    <Compile Include="ViewModel\EscCommunication\ItemtoDownload.cs" />
+    <Compile Include="ViewModel\LibraryEditorViewModel.cs" />
+    <Compile Include="ViewModel\Matrix\ButtonRangeSelector.cs" />
+    <Compile Include="ViewModel\Matrix\McuSelector.cs" />
+    <Compile Include="ViewModel\MesHeader.cs" />
+    <Compile Include="ViewModel\MesModuleViewModel.cs" />
+    <Compile Include="ViewModel\OverView\BindablePoint.cs" />
+    <Compile Include="ViewModel\OverView\BlAmplifier.cs" />
+    <Compile Include="ViewModel\OverView\BlAuxSpeakerPeq.cs" />
+    <Compile Include="ViewModel\OverView\ChkVm.cs" />
+    <Compile Include="ViewModel\OverView\BlSpMatrix.cs" />
+    <Compile Include="ViewModel\OverView\BlDelay.cs" />
+    <Compile Include="ViewModel\OverView\BlEmergency.cs" />
+    <Compile Include="ViewModel\OverView\BlExtInput.cs" />
+    <Compile Include="ViewModel\OverView\BlSpeaker.cs" />
+    <Compile Include="ViewModel\OverView\BlBackupAmp.cs" />
+    <Compile Include="ViewModel\OverView\EvacuationPanelViewModel.cs" />
+    <Compile Include="ViewModel\OverView\FdsViewModel.cs" />
+    <Compile Include="ViewModel\OverView\FirePanelViewModel.cs" />
+    <Compile Include="ViewModel\OverView\LineViewModel.cs" />
+    <Compile Include="ViewModel\OverView\LinkCardOptions.cs" />
+    <Compile Include="ViewModel\OverView\LinkLineVm.cs" />
+    <Compile Include="ViewModel\OverView\LinkOption.cs" />
+    <Compile Include="ViewModel\OverView\MainUnitEmergencyViewModel.cs" />
+    <Compile Include="ViewModel\OverView\SliderValue.cs" />
+    <Compile Include="ViewModel\OverView\SnapDiagramData.cs" />
+    <Compile Include="ViewModel\OverView\SnapShot.cs" />
+    <Compile Include="ViewModel\OverView\VCAController.cs" />
+    <Compile Include="ViewModel\OverView\VuMeter.cs" />
+    <Compile Include="ViewModel\OverView\VuMeterControl.cs" />
+    <Compile Include="ViewModel\ReceiverData.cs" />
+    <Compile Include="ViewModel\RecentFilesLogic.cs" />
+    <Compile Include="ViewModel\SDCard\SdFileVM.cs" />
+    <Compile Include="ViewModel\SDCard\SdLibraryEditorViewModel.cs" />
+    <Compile Include="ViewModel\SDCard\SdCardVm.cs" />
+    <Compile Include="ViewModel\SDCard\SdMessageVm.cs" />
+    <Compile Include="ViewModel\Matrix\ButtonSelectViewModel.cs" />
+    <Compile Include="ViewModel\Matrix\MessageSelectViewModel.cs" />
+    <Compile Include="ViewModel\Matrix\MatrixRangeSelector.cs" />
+    <Compile Include="ViewModel\Matrix\PanelViewModel.cs" />
+    <Compile Include="ViewModel\Settings\AuxLinkOption.cs" />
+    <Compile Include="ViewModel\OverView\BlAuxiliary.cs" />
+    <Compile Include="ViewModel\OverView\BlInputName.cs" />
+    <Compile Include="ViewModel\OverView\BlInputPeq.cs" />
+    <Compile Include="ViewModel\OverView\BlLink.cs" />
+    <Compile Include="ViewModel\OverView\BlMonitor.cs" />
+    <Compile Include="ViewModel\OverView\BlOutput.cs" />
+    <Compile Include="ViewModel\OverView\BlSpeakerPeq.cs" />
+    <Compile Include="ViewModel\OverView\BlToneControl.cs" />
+    <Compile Include="ViewModel\Settings\PeqBaseViewModel.cs" />
+    <Compile Include="ViewModel\Settings\PeqDataOperations.cs" />
+    <Compile Include="ViewModel\Settings\PeqDataViewModel.cs" />
+    <Compile Include="ViewModel\Settings\PeqField.cs" />
+    <Compile Include="ViewModel\OverView\DiagramData.cs" />
+    <Compile Include="ViewModel\Matrix\RowHeaderViewModel.cs" />
+    <Compile Include="ViewModel\Matrix\MatrixCellViewModel.cs" />
+    <Compile Include="ViewModel\CardViewModel.cs" />
+    <Compile Include="ViewModel\CardBaseViewModel.cs" />
+    <Compile Include="ViewModel\ExtensionCardViewModel.cs" />
+    <Compile Include="ViewModel\MainUnitViewModel.cs" />
+    <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="ViewModel\Matrix\ColumnHeaderViewModel.cs" />
+    <Compile Include="ViewModel\Settings\RadioButton.cs" />
+    <Compile Include="ViewModel\Settings\SetName.cs" />
+    <Compile Include="ViewModel\Settings\IntervalSettingsViewModel.cs" />
+    <Compile Include="ViewModel\Settings\SpeakerDataModelOperations.cs" />
+    <Compile Include="ViewModel\Settings\SpeakerDataViewModel.cs" />
+    <Compile Include="ViewModel\SystelmFileOperator.cs" />
+    <Compile Include="ViewModel\ViewModelLocator.cs" />
+    <Compile Include="View\AuxGainView.xaml.cs">
+      <DependentUpon>AuxGainView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Auxiliary.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Auxiliary.resx</DependentUpon>
+    </Compile>
+    <Compile Include="View\AuxiliaryView.xaml.cs">
+      <DependentUpon>AuxiliaryView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\BatteryCalc.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BatteryCalc.resx</DependentUpon>
+    </Compile>
+    <Compile Include="View\Communication\Communication.Designer.cs">
+      <DependentUpon>Communication.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="View\Communication\CommunicationView.xaml.cs">
+      <DependentUpon>CommunicationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Behaviors\BorderDropBehaviour.cs" />
+    <Compile Include="Behaviors\DataGridDropBehaviour.cs" />
+    <Compile Include="View\Delay.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Delay.resx</DependentUpon>
+    </Compile>
+    <Compile Include="View\DelayView.xaml.cs">
+      <DependentUpon>DelayView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Adorners\FrameworkElementAdorner.cs" />
+    <Compile Include="Behaviors\FrameworkElementDragBehavior.cs" />
+    <Compile Include="View\Communication\Download.xaml.cs">
+      <DependentUpon>Download.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Communication\DownloadView.xaml.cs">
+      <DependentUpon>DownloadView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\EmergencyPanelView.xaml.cs">
+      <DependentUpon>EmergencyPanelView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ExternalInput.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ExternalInput.resx</DependentUpon>
+    </Compile>
+    <Compile Include="View\ExternalInputView.xaml.cs">
+      <DependentUpon>ExternalInputView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Interfaces\IDragable.cs" />
+    <Compile Include="Interfaces\IDropable.cs" />
+    <Compile Include="View\InputName.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InputName.resx</DependentUpon>
+    </Compile>
+    <Compile Include="View\InputPeq.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InputPeq.resx</DependentUpon>
+    </Compile>
+    <Compile Include="View\InputPeqView.xaml.cs">
+      <DependentUpon>InputPeqView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\IntervalSettings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>IntervalSettings.resx</DependentUpon>
+    </Compile>
+    <Compile Include="View\LibraryEditor.xaml.cs">
+      <DependentUpon>LibraryEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Link.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Link.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Adorners\ListBoxAdorner.cs" />
+    <Compile Include="View\DragnDrop\ListBoxAdornerManager.cs" />
+    <Compile Include="View\LspMtrx.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LspMtrx.resx</DependentUpon>
+    </Compile>
+    <Compile Include="View\LspMtrxView.xaml.cs">
+      <DependentUpon>LspMtrxView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MeasurementMatri.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MeasurementMatri.resx</DependentUpon>
+    </Compile>
+    <Compile Include="View\Monitoring.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Monitoring.resx</DependentUpon>
+    </Compile>
+    <Compile Include="View\PageGain.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PageGain.resx</DependentUpon>
+    </Compile>
+    <Compile Include="View\Panel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Panel.resx</DependentUpon>
+    </Compile>
+    <Compile Include="View\EmergencyPanel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EmergencyPanel.resx</DependentUpon>
+    </Compile>
+    <Compile Include="View\SdMessageCard.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SdMessageCard.resx</DependentUpon>
+    </Compile>
+    <Compile Include="View\SdMessageCardView.xaml.cs">
+      <DependentUpon>SdMessageCardView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\SdMessages.xaml.cs">
+      <DependentUpon>SdMessages.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Communication\SendList.xaml.cs">
+      <DependentUpon>SendList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\SpeakerLibrary.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SpeakerLibrary.resx</DependentUpon>
+    </Compile>
+    <Compile Include="View\SpeakerLibraryView.xaml.cs">
+      <DependentUpon>SpeakerLibraryView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\IntervalSettingsView.xaml.cs">
+      <DependentUpon>IntervalSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ToneControl.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ToneControl.resx</DependentUpon>
+    </Compile>
+    <Compile Include="View\ToneControlView.xaml.cs">
+      <DependentUpon>ToneControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\InputNameView.xaml.cs">
+      <DependentUpon>InputNameView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\LinkView.xaml.cs">
+      <DependentUpon>LinkView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MainUnitView.xaml.cs">
+      <DependentUpon>MainUnitView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\PanelView.xaml.cs">
+      <DependentUpon>PanelView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MonitoringView.xaml.cs">
+      <DependentUpon>MonitoringView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\PageGainView.xaml.cs">
+      <DependentUpon>PageGainView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\UIHelper.cs" />
+    <Compile Include="View\UcAlarmlert.xaml.cs">
+      <DependentUpon>UcAlarmlert.xaml</DependentUpon>
+    </Compile>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="Skins\MainSkin.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Style\CustomCombobox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Style\GrayedOutImagge.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Style\GroupBoxExpander.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Style\GlassButton.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Style\LinkButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Style\StyleTest.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Style\ToggleButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\CharsTextBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControls\CompressorGraph.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\MatrixView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\PEQDisplay.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\PEQParams.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\PEQSpeakerList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\SliderVu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\UcEscNum.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\UcSlider.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\UcSpeakerLibrary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\VuMeterControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\AuxGainView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\AuxiliaryView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Communication\CommunicationView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\DelayView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Communication\Download.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Communication\DownloadView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\EmergencyPanelView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ExternalInputView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\InputPeqView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\LibraryEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\LspMtrxView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\SdMessageCardView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\SdMessages.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Communication\SendList.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\SpeakerLibraryView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\IntervalSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ToneControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\InputNameView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\LinkView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MainUnitView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\PanelView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MonitoringView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\PageGainView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\UcAlarmlert.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Main.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Main.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Auxiliary.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Auxiliary.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\BatteryCalc.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>BatteryCalc.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Communication\Communication.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Communication.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Delay.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Delay.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\ExternalInput.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ExternalInput.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\InputName.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>InputName.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\InputPeq.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>InputPeq.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\IntervalSettings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>IntervalSettings.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Link.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Link.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\LspMtrx.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>LspMtrx.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\MeasurementMatri.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>MeasurementMatri.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Monitoring.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Monitoring.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\PageGain.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PageGain.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Panel.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Panel.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\EmergencyPanel.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>EmergencyPanel.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\SdMessageCard.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>SdMessageCard.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\SpeakerLibrary.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>SpeakerLibrary.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\ToneControl.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ToneControl.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="app.manifest" />
+    <None Include="EscInstaller_TemporaryKey.pfx" />
+    <None Include="Icons\Thumbs.db" />
+    <None Include="packages.config" />
+    <None Include="Properties\app.manifest" />
+    <None Include="Properties\Settings.settings">
+      <Generator>PublicSettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5.1">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5.1 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.4.5">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 4.5</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\DS16S-SE.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Data\" />
+    <Folder Include="Language\" />
+    <Folder Include="SampleData\" />
+    <Folder Include="Templates\" />
+    <Folder Include="ViewModel\Monitoring\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Denmark-Flag.ico" />
+    <Resource Include="Resources\France-Flag.ico" />
+    <Resource Include="Resources\Germany-Flag.ico" />
+    <Resource Include="Resources\Italy-Flag.ico" />
+    <Resource Include="Resources\Netherlands-Flag.ico" />
+    <Resource Include="Resources\Norway-Flag.ico" />
+    <Resource Include="Resources\Poland-Flag.ico" />
+    <Resource Include="Resources\Spain-Flag.ico" />
+    <Resource Include="Resources\Sweden-Flag.ico" />
+    <Resource Include="Resources\UKFlag.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\_mainWindowIcon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ESC.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="MessageShiftReceive.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MessageShiftSend.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="SdPredefined\16kHz.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="SdPredefined\3 Tone.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="SdPredefined\DE msg.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="SdPredefined\DE+Lift.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="SdPredefined\FR msg.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="SdPredefined\FR+Lift.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="SdPredefined\Gong.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="SdPredefined\NL msg.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="SdPredefined\NL+Lift.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="SdPredefined\Siren.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="SdPredefined\SLWhoop2.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="SdPredefined\swDElift.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="SdPredefined\swDEmsg.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="SdPredefined\swFRlift.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="SdPredefined\swFRmsg.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="SdPredefined\swNLlift.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="SdPredefined\swNLmsg1.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="SdPredefined\swUKlift.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="SdPredefined\swUKmsg.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="SdPredefined\Test msg.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="SdPredefined\UK msg.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="SdPredefined\UK+Lift.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\WindowImg.bmp" />
+    <None Include="Resources\WindowIcon.ico" />
+    <None Include="Resources\TrayIcon.ico" />
+    <None Include="SpeakerLib.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\sweden-flag1.ico" />
+    <None Include="Resources\spain-flag1.ico" />
+    <None Include="Resources\poland-flag1.ico" />
+    <None Include="Resources\norway-flag1.ico" />
+    <None Include="Resources\italy-flag1.ico" />
+    <None Include="Resources\germany-flag1.ico" />
+    <None Include="Resources\france-flag1.ico" />
+    <None Include="Resources\ukflag1.ico" />
+    <None Include="Resources\netherlands-flag1.ico" />
+    <None Include="Resources\denmark-flag1.ico" />
+    <Resource Include="Images\FFFFFF-0.8.png" />
+    <Resource Include="Icons\add-32.png" />
+    <Resource Include="Icons\align_just.png" />
+    <Resource Include="Icons\All-Right-Reserved-32.png" />
+    <Resource Include="Icons\batteryMusic.png" />
+    <Resource Include="Icons\batteryNoMusic.png" />
+    <Resource Include="Icons\bridged.png" />
+    <Resource Include="Icons\Button-Remove-icon.png" />
+    <Resource Include="Icons\Cancel-32.png" />
+    <Resource Include="Icons\Chart-Bar-Table-32.png" />
+    <Resource Include="Icons\check.png" />
+    <Resource Include="Icons\Close-32.png" />
+    <Resource Include="Icons\configure-32.png" />
+    <Resource Include="Icons\Data-Table-32.png" />
+    <Resource Include="Icons\Denmark-Flag.ico" />
+    <Resource Include="Icons\Devices-media-floppy-icon.png" />
+    <Resource Include="Icons\docs2-32.png" />
+    <Resource Include="Icons\Download-32.png" />
+    <Resource Include="Icons\edit-icon.png" />
+    <Resource Include="Icons\email-11-16.png" />
+    <Resource Include="Icons\email-32.png" />
+    <Resource Include="Icons\Equalizer-blue-48.png" />
+    <Resource Include="Icons\Equalizer-red-48.png" />
+    <Resource Include="Icons\Equalizer-yellow-48.png" />
+    <Resource Include="Icons\ESC.ico" />
+    <Resource Include="Icons\ESCexit.ico" />
+    <Resource Include="Icons\fail.png" />
+    <Resource Include="Icons\Folder-Write-128.png" />
+    <Resource Include="Icons\France-Flag.ico" />
+    <Resource Include="Icons\Germany-Flag.ico" />
+    <Resource Include="Icons\grid-dot-icon.png" />
+    <Resource Include="Icons\Info_32.png" />
+    <Resource Include="Icons\Install-red-32.png" />
+    <Resource Include="Icons\interdit-32.png" />
+    <Resource Include="Icons\Italy-Flag.ico" />
+    <Resource Include="Icons\link-128.png" />
+    <Resource Include="Icons\lp2prstlist.png" />
+    <Resource Include="Icons\Misc-Database-3-icon.png" />
+    <Resource Include="Icons\Misc-Download-Database-icon.png" />
+    <Resource Include="Icons\Misc-Upload-Database-icon.png" />
+    <Resource Include="Icons\Monitor-32.png" />
+    <Resource Include="Icons\Monitor-64.png" />
+    <Resource Include="Icons\mono.png" />
+    <Resource Include="Icons\Netherlands-Flag.ico" />
+    <Resource Include="Icons\New logo.bmp" />
+    <Resource Include="Icons\New-32.png" />
+    <Resource Include="Icons\Norway-Flag.ico" />
+    <Resource Include="Icons\Open-32.png" />
+    <Resource Include="Icons\Open.ico" />
+    <Resource Include="Icons\Pdf-32.png" />
+    <Resource Include="Icons\Play-32.png" />
+    <Resource Include="Icons\Poland-Flag.ico" />
+    <Resource Include="Icons\Refresh_128.png" />
+    <Resource Include="Icons\remove-from-database-icon.png" />
+    <Resource Include="Icons\Sd-Card-128.png" />
+    <Resource Include="Icons\Settings-64.png" />
+    <Resource Include="Icons\Spain-Flag.ico" />
+    <Resource Include="Icons\speaker-volume-none-icon.png" />
+    <Resource Include="Icons\Status-audio-volume-high-icon.png" />
+    <Resource Include="Icons\Stop-32.png" />
+    <Resource Include="Icons\Sweden-Flag.ico" />
+    <Resource Include="Icons\transformer.png" />
+    <Resource Include="Icons\UKFlag.ico" />
+    <Resource Include="Icons\Upload-32.png" />
+    <Resource Include="Icons\vca3.png" />
+    <Content Include="Includes\SpeakerLib.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

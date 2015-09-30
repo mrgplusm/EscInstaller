@@ -1,0 +1,77 @@
+﻿<UserControl x:Class="EscInstaller.UserControls.UcSpeakerLibrary"            
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:importSpeakers="clr-namespace:EscInstaller.ImportSpeakers"
+             xmlns:view="clr-namespace:EscInstaller.View"
+             mc:Ignorable="d"
+             
+             >
+    <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5" >
+        <StackPanel Orientation="Horizontal" Margin="0,0,0,0"  >
+            <ComboBox ItemsSource="{x:Static importSpeakers:SpeakerMethods.Library}" SelectedItem="{Binding Path=LibrarySpeaker}" SelectedIndex="0" Width="140" 
+                      Margin="0,0,0,0" Height="25" Name="Librarybox">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Path=SpeakerName}" Foreground="{Binding Path=Color}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </StackPanel>
+		<StackPanel Orientation="Horizontal">
+        
+            <Button Command="{Binding Path=Save}" Margin="0,0,0,0" Height="35" Width="35" VerticalAlignment="Top" >
+                <Button.ToolTip>
+                    <ToolTip>
+                        <StackPanel>
+
+                            <TextBlock Text="{x:Static view:SpeakerLibrary._SpeakerLibrarySaveButtonToolTip}" />
+                        </StackPanel>
+                    </ToolTip>
+                </Button.ToolTip>
+                <Image Source="/Icons/Devices-media-floppy-icon.png" Margin="0" Stretch="Fill" Style="{StaticResource GrOut}" />
+            </Button>
+
+            <Button Command="{Binding Path=Remove}" Height="35" Width="35" VerticalAlignment="Top">
+                <Button.ToolTip>
+                    <ToolTip>
+                        <StackPanel>
+                            <TextBlock Text="{x:Static view:SpeakerLibrary._SpeakerLibraryRemoveButtonToolTip}" />
+                        </StackPanel>
+                    </ToolTip>
+                </Button.ToolTip>
+                <Image Source="/Icons/remove-from-database-icon.png" Stretch="Fill" Margin="0,0,0,0" Style="{StaticResource GrOut}" />
+            </Button>
+
+            <Button Command="{Binding LoadButton}" CommandParameter="{Binding ElementName=Librarybox, Path=SelectedItem}" Height="35" Width="35" Margin="0" HorizontalAlignment="Right" >
+                <Button.ToolTip>
+                    <ToolTip>
+                        <StackPanel>
+                            <TextBlock Text="{x:Static view:SpeakerLibrary.PutLibSelection}" />
+                        </StackPanel>
+                    </ToolTip>
+                </Button.ToolTip>
+                <StackPanel>
+                    <Image Source="/Icons/Misc-Upload-Database-icon.png" Stretch="Fill" Margin="0,0,0,0" Style="{StaticResource GrOut}" />
+                    
+                </StackPanel>
+            </Button>
+            <Button Command="{Binding ImportButton}" Height="35" Width="35" Margin="0" HorizontalAlignment="Right"  >
+                <Button.ToolTip>
+                    <ToolTip>
+                        <StackPanel>
+                            <TextBlock Text="{x:Static view:SpeakerLibrary.ButtonImport}" />
+                        </StackPanel>
+                    </ToolTip>
+                </Button.ToolTip>
+                <StackPanel>
+                    <Image Source="/Icons/Misc-Download-Database-icon.png" Stretch="Fill" Margin="0,0,0,0" Style="{StaticResource GrOut}" />
+                    
+                </StackPanel>
+            </Button>
+            
+
+        </StackPanel>        
+    </StackPanel>
+</UserControl>
