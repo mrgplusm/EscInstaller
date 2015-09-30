@@ -779,12 +779,14 @@
       <LastGenOutput>ToneControl.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <None Include="..\ConnectionLibrary\Icons\Thumbs.db">
+      <Link>Icons\Thumbs.db</Link>
+    </None>
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
     <None Include="app.manifest" />
     <None Include="EscInstaller_TemporaryKey.pfx" />
-    <None Include="Icons\Thumbs.db" />
     <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
@@ -816,29 +818,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\DS16S-SE.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Data\" />
-    <Folder Include="Language\" />
-    <Folder Include="SampleData\" />
-    <Folder Include="Templates\" />
     <Folder Include="ViewModel\Monitoring\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Denmark-Flag.ico" />
-    <Resource Include="Resources\France-Flag.ico" />
-    <Resource Include="Resources\Germany-Flag.ico" />
-    <Resource Include="Resources\Italy-Flag.ico" />
-    <Resource Include="Resources\Netherlands-Flag.ico" />
-    <Resource Include="Resources\Norway-Flag.ico" />
-    <Resource Include="Resources\Poland-Flag.ico" />
-    <Resource Include="Resources\Spain-Flag.ico" />
-    <Resource Include="Resources\Sweden-Flag.ico" />
-    <Resource Include="Resources\UKFlag.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\_mainWindowIcon.ico" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="ESC.ico" />
@@ -916,93 +896,204 @@
     <None Include="SdPredefined\UK+Lift.mp3">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Resources\WindowImg.bmp" />
-    <None Include="Resources\WindowIcon.ico" />
-    <None Include="Resources\TrayIcon.ico" />
     <None Include="SpeakerLib.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Resources\sweden-flag1.ico" />
-    <None Include="Resources\spain-flag1.ico" />
-    <None Include="Resources\poland-flag1.ico" />
-    <None Include="Resources\norway-flag1.ico" />
-    <None Include="Resources\italy-flag1.ico" />
-    <None Include="Resources\germany-flag1.ico" />
-    <None Include="Resources\france-flag1.ico" />
-    <None Include="Resources\ukflag1.ico" />
-    <None Include="Resources\netherlands-flag1.ico" />
-    <None Include="Resources\denmark-flag1.ico" />
-    <Resource Include="Images\FFFFFF-0.8.png" />
-    <Resource Include="Icons\add-32.png" />
-    <Resource Include="Icons\align_just.png" />
-    <Resource Include="Icons\All-Right-Reserved-32.png" />
-    <Resource Include="Icons\batteryMusic.png" />
-    <Resource Include="Icons\batteryNoMusic.png" />
-    <Resource Include="Icons\bridged.png" />
-    <Resource Include="Icons\Button-Remove-icon.png" />
-    <Resource Include="Icons\Cancel-32.png" />
-    <Resource Include="Icons\Chart-Bar-Table-32.png" />
-    <Resource Include="Icons\check.png" />
-    <Resource Include="Icons\Close-32.png" />
-    <Resource Include="Icons\configure-32.png" />
-    <Resource Include="Icons\Data-Table-32.png" />
-    <Resource Include="Icons\Denmark-Flag.ico" />
-    <Resource Include="Icons\Devices-media-floppy-icon.png" />
-    <Resource Include="Icons\docs2-32.png" />
-    <Resource Include="Icons\Download-32.png" />
-    <Resource Include="Icons\edit-icon.png" />
-    <Resource Include="Icons\email-11-16.png" />
-    <Resource Include="Icons\email-32.png" />
-    <Resource Include="Icons\Equalizer-blue-48.png" />
-    <Resource Include="Icons\Equalizer-red-48.png" />
-    <Resource Include="Icons\Equalizer-yellow-48.png" />
-    <Resource Include="Icons\ESC.ico" />
-    <Resource Include="Icons\ESCexit.ico" />
-    <Resource Include="Icons\fail.png" />
-    <Resource Include="Icons\Folder-Write-128.png" />
-    <Resource Include="Icons\France-Flag.ico" />
-    <Resource Include="Icons\Germany-Flag.ico" />
-    <Resource Include="Icons\grid-dot-icon.png" />
-    <Resource Include="Icons\Info_32.png" />
-    <Resource Include="Icons\Install-red-32.png" />
-    <Resource Include="Icons\interdit-32.png" />
-    <Resource Include="Icons\Italy-Flag.ico" />
-    <Resource Include="Icons\link-128.png" />
-    <Resource Include="Icons\lp2prstlist.png" />
-    <Resource Include="Icons\Misc-Database-3-icon.png" />
-    <Resource Include="Icons\Misc-Download-Database-icon.png" />
-    <Resource Include="Icons\Misc-Upload-Database-icon.png" />
-    <Resource Include="Icons\Monitor-32.png" />
-    <Resource Include="Icons\Monitor-64.png" />
-    <Resource Include="Icons\mono.png" />
-    <Resource Include="Icons\Netherlands-Flag.ico" />
-    <Resource Include="Icons\New logo.bmp" />
-    <Resource Include="Icons\New-32.png" />
-    <Resource Include="Icons\Norway-Flag.ico" />
-    <Resource Include="Icons\Open-32.png" />
-    <Resource Include="Icons\Open.ico" />
-    <Resource Include="Icons\Pdf-32.png" />
-    <Resource Include="Icons\Play-32.png" />
-    <Resource Include="Icons\Poland-Flag.ico" />
-    <Resource Include="Icons\Refresh_128.png" />
-    <Resource Include="Icons\remove-from-database-icon.png" />
-    <Resource Include="Icons\Sd-Card-128.png" />
-    <Resource Include="Icons\Settings-64.png" />
-    <Resource Include="Icons\Spain-Flag.ico" />
-    <Resource Include="Icons\speaker-volume-none-icon.png" />
-    <Resource Include="Icons\Status-audio-volume-high-icon.png" />
-    <Resource Include="Icons\Stop-32.png" />
-    <Resource Include="Icons\Sweden-Flag.ico" />
-    <Resource Include="Icons\transformer.png" />
-    <Resource Include="Icons\UKFlag.ico" />
-    <Resource Include="Icons\Upload-32.png" />
-    <Resource Include="Icons\vca3.png" />
+    <Resource Include="..\ConnectionLibrary\Icons\add-32.png">
+      <Link>Icons\add-32.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\align_just.png">
+      <Link>Icons\align_just.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\All-Right-Reserved-32.png">
+      <Link>Icons\All-Right-Reserved-32.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\batteryMusic.png">
+      <Link>Icons\batteryMusic.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\batteryNoMusic.png">
+      <Link>Icons\batteryNoMusic.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\bridged.png">
+      <Link>Icons\bridged.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\Button-Remove-icon.png">
+      <Link>Icons\Button-Remove-icon.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\Cancel-32.png">
+      <Link>Icons\Cancel-32.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\Chart-Bar-Table-32.png">
+      <Link>Icons\Chart-Bar-Table-32.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\check.png">
+      <Link>Icons\check.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\Close-32.png">
+      <Link>Icons\Close-32.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\configure-32.png">
+      <Link>Icons\configure-32.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\Data-Table-32.png">
+      <Link>Icons\Data-Table-32.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\Denmark-Flag.ico">
+      <Link>Icons\Denmark-Flag.ico</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\Devices-media-floppy-icon.png">
+      <Link>Icons\Devices-media-floppy-icon.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\docs2-32.png">
+      <Link>Icons\docs2-32.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\Download-32.png">
+      <Link>Icons\Download-32.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\edit-icon.png">
+      <Link>Icons\edit-icon.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\email-11-16.png">
+      <Link>Icons\email-11-16.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\email-32.png">
+      <Link>Icons\email-32.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\Equalizer-blue-48.png">
+      <Link>Icons\Equalizer-blue-48.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\Equalizer-red-48.png">
+      <Link>Icons\Equalizer-red-48.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\Equalizer-yellow-48.png">
+      <Link>Icons\Equalizer-yellow-48.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\ESC.ico">
+      <Link>Icons\ESC.ico</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\ESCexit.ico">
+      <Link>Icons\ESCexit.ico</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\fail.png">
+      <Link>Icons\fail.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\Folder-Write-128.png">
+      <Link>Icons\Folder-Write-128.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\France-Flag.ico">
+      <Link>Icons\France-Flag.ico</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\Germany-Flag.ico">
+      <Link>Icons\Germany-Flag.ico</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\grid-dot-icon.png">
+      <Link>Icons\grid-dot-icon.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\Info_32.png">
+      <Link>Icons\Info_32.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\Install-red-32.png">
+      <Link>Icons\Install-red-32.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\interdit-32.png">
+      <Link>Icons\interdit-32.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\Italy-Flag.ico">
+      <Link>Icons\Italy-Flag.ico</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\link-128.png">
+      <Link>Icons\link-128.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\lp2prstlist.png">
+      <Link>Icons\lp2prstlist.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\Misc-Database-3-icon.png">
+      <Link>Icons\Misc-Database-3-icon.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\Misc-Download-Database-icon.png">
+      <Link>Icons\Misc-Download-Database-icon.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\Misc-Upload-Database-icon.png">
+      <Link>Icons\Misc-Upload-Database-icon.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\Monitor-32.png">
+      <Link>Icons\Monitor-32.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\Monitor-64.png">
+      <Link>Icons\Monitor-64.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\mono.png">
+      <Link>Icons\mono.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\Netherlands-Flag.ico">
+      <Link>Icons\Netherlands-Flag.ico</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\New logo.bmp">
+      <Link>Icons\New logo.bmp</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\New-32.png">
+      <Link>Icons\New-32.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\Norway-Flag.ico">
+      <Link>Icons\Norway-Flag.ico</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\Open-32.png">
+      <Link>Icons\Open-32.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\Open.ico">
+      <Link>Icons\Open.ico</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\Pdf-32.png">
+      <Link>Icons\Pdf-32.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\Play-32.png">
+      <Link>Icons\Play-32.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\Poland-Flag.ico">
+      <Link>Icons\Poland-Flag.ico</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\Refresh_128.png">
+      <Link>Icons\Refresh_128.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\remove-from-database-icon.png">
+      <Link>Icons\remove-from-database-icon.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\Sd-Card-128.png">
+      <Link>Icons\Sd-Card-128.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\Settings-64.png">
+      <Link>Icons\Settings-64.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\Spain-Flag.ico">
+      <Link>Icons\Spain-Flag.ico</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\speaker-volume-none-icon.png">
+      <Link>Icons\speaker-volume-none-icon.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\Status-audio-volume-high-icon.png">
+      <Link>Icons\Status-audio-volume-high-icon.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\Stop-32.png">
+      <Link>Icons\Stop-32.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\Sweden-Flag.ico">
+      <Link>Icons\Sweden-Flag.ico</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\transformer.png">
+      <Link>Icons\transformer.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\UKFlag.ico">
+      <Link>Icons\UKFlag.ico</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\Upload-32.png">
+      <Link>Icons\Upload-32.png</Link>
+    </Resource>
+    <Resource Include="..\ConnectionLibrary\Icons\vca3.png">
+      <Link>Icons\vca3.png</Link>
+    </Resource>
     <Content Include="Includes\SpeakerLib.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

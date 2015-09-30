@@ -228,37 +228,7 @@
   <data name="_mainSlave" xml:space="preserve">
     <value>Slave {0}</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="_mainToolLangDanish" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\denmark-flag1.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="_mainToolLangDutch" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\netherlands-flag1.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="_mainToolLangEnglish" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\ukflag1.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="_mainToolLangFrance" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\france-flag1.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="_mainToolLangGerman" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\germany-flag1.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="_mainToolLangItaliano" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\italy-flag1.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="_mainToolLangNorwegian" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\norway-flag1.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="_mainToolLangPolish" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\poland-flag1.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="_mainToolLangSpanish" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\spain-flag1.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="_mainToolLangSwedish" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\sweden-flag1.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
+  
   <data name="_mainTools" xml:space="preserve">
     <value>_Tools</value>
   </data>
@@ -268,39 +238,7 @@
   <data name="_mainToolsCalibrationTotal" xml:space="preserve">
     <value>Run calibration complete system</value>
   </data>
-  <data name="_mainToolsLanguage" xml:space="preserve">
-    <value>Select _Language</value>
-  </data>
-  <data name="_mainToolsLanguageDanish" xml:space="preserve">
-    <value>Danish</value>
-  </data>
-  <data name="_mainToolsLanguageDutch" xml:space="preserve">
-    <value>Dutch</value>
-  </data>
-  <data name="_mainToolsLanguageEnglish" xml:space="preserve">
-    <value>English</value>
-  </data>
-  <data name="_mainToolsLanguageFrance" xml:space="preserve">
-    <value>French</value>
-  </data>
-  <data name="_mainToolsLanguageGerman" xml:space="preserve">
-    <value>German</value>
-  </data>
-  <data name="_mainToolsLanguageItaliano" xml:space="preserve">
-    <value>Italiano</value>
-  </data>
-  <data name="_mainToolsLanguageNorwegian" xml:space="preserve">
-    <value>Norwegian</value>
-  </data>
-  <data name="_mainToolsLanguagePolish" xml:space="preserve">
-    <value>Polish</value>
-  </data>
-  <data name="_mainToolsLanguageSpanish" xml:space="preserve">
-    <value>Spanish</value>
-  </data>
-  <data name="_mainToolsLanguageSwedish" xml:space="preserve">
-    <value>Swedish</value>
-  </data>
+  
   <data name="_mainToolsOpenConnectionView" xml:space="preserve">
     <value>_Setup connection</value>
   </data>
