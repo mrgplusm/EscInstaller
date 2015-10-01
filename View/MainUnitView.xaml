@@ -318,7 +318,7 @@
                             <MultiBinding StringFormat="{x:Static escInstaller:Main.BlOutputName}">
                                 <Binding Path="DisplayId"></Binding>
                             </MultiBinding>
-                            
+
                         </TextBlock.Text>
 
                     </TextBlock>
@@ -336,7 +336,7 @@
                             <MultiBinding StringFormat="{x:Static escInstaller:Main.BlAuxiliary}">
                                 <Binding Path="DisplayId"></Binding>
                             </MultiBinding>
-                            
+
                         </TextBlock.Text>
                         <TextBlock.Background>
                             <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
@@ -369,7 +369,7 @@
                             <MultiBinding StringFormat="{x:Static escInstaller:Main.BlBackupAmp}">
                                 <Binding Path="DisplayId"></Binding>
                             </MultiBinding>
-                            
+
                         </TextBlock.Text>
 
                         <TextBlock.Background>
@@ -393,7 +393,7 @@
                         <MultiBinding StringFormat="{x:Static escInstaller:Main.LoudSpeakerMatrix}">
                             <Binding Path="DisplayId"></Binding>
                         </MultiBinding>
-                        
+
                     </TextBlock.Text>
                     <TextBlock.LayoutTransform>
                         <RotateTransform Angle="-90"></RotateTransform>
@@ -404,9 +404,9 @@
 
         <DataTemplate DataType="{x:Type overView:BlAmplifier}" >
 
-            
+
             <Border Focusable="False" Width="{Binding Size.X}" Height="{Binding Size.Y}" Style="{StaticResource ResourceKey=BrdInactive}" BorderBrush="Black" Name="Border" >
-                
+
                 <Image VerticalAlignment="Center" HorizontalAlignment="Center">
                     <Image.Style>
                         <Style TargetType="{x:Type Image}">
@@ -555,60 +555,62 @@
 
         </ListBox>
 
-        
-        <GroupBox Content="{Binding SelectedObject}" x:Name="GroupBoxBottom" 
+        <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+            <GroupBox Content="{Binding SelectedObject}" x:Name="GroupBoxBottom" 
                   Header="{Binding SelectedObject.SettingName,FallbackValue='[Select an Element]', NotifyOnTargetUpdated=True}" 
-                  BorderBrush="LightGray" Grid.Row="1"
+                  BorderBrush="LightGray"
                   TargetUpdated="GroupBoxBottom_OnTargetUpdated"
                   >
-            <GroupBox.Resources>
-                <DataTemplate DataType="{x:Type overView:BlExtInput}">
-                    <view:ExternalInputView />
-                </DataTemplate>
-                <DataTemplate DataType="{x:Type overView:BlInputName}">
-                    <view:InputNameView />
-                </DataTemplate>
 
-                <DataTemplate DataType="{x:Type overView:BlDelay}">
-                    <view:DelayView />
-                </DataTemplate>
-                <DataTemplate DataType="{x:Type overView:BlInputPeq}">
-                    <view:InputPeqView />
-                </DataTemplate>
-                <DataTemplate DataType="{x:Type overView:BlLink}">
-                    <view:LinkView />
-                </DataTemplate>
-                <DataTemplate DataType="{x:Type overView:BlMonitor}">
-                    <view:MonitoringView />
-                </DataTemplate>
-                <DataTemplate DataType="{x:Type overView:BlOutput}">
-                    <view:PageGainView />
-                </DataTemplate>
-                <DataTemplate DataType="{x:Type overView:BlSpeakerPeq}">
-                    <view:SpeakerLibraryView />
-                </DataTemplate>
-                <DataTemplate DataType="{x:Type overView:BlAuxSpeakerPeq}">
-                    <view:AuxiliaryView />
-                </DataTemplate>
-                <DataTemplate DataType="{x:Type overView:BlAuxiliary}">
-                    <view:AuxGainView />
-                </DataTemplate>
-                <DataTemplate DataType="{x:Type overView:BlToneControl}">
-                    <view:ToneControlView />
-                </DataTemplate>
-                <DataTemplate DataType="{x:Type overView:BlSpMatrix}">
-                    <view:LspMtrxView />
-                </DataTemplate>
-                <DataTemplate DataType="{x:Type overView:BlEmergency}">
-                    <view:EmergencyPanelView />
-                </DataTemplate>
-                <DataTemplate DataType="{x:Type settings:IntervalSettingsViewModel}">
-                    <view:IntervalSettingsView />
-                </DataTemplate>
+                <GroupBox.Resources>
+                    <DataTemplate DataType="{x:Type overView:BlExtInput}">
+                        <view:ExternalInputView />
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type overView:BlInputName}">
+                        <view:InputNameView />
+                    </DataTemplate>
 
-            </GroupBox.Resources>
-            
-        </GroupBox>
+                    <DataTemplate DataType="{x:Type overView:BlDelay}">
+                        <view:DelayView />
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type overView:BlInputPeq}">
+                        <view:InputPeqView />
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type overView:BlLink}">
+                        <view:LinkView />
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type overView:BlMonitor}">
+                        <view:MonitoringView />
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type overView:BlOutput}">
+                        <view:PageGainView />
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type overView:BlSpeakerPeq}">
+                        <view:SpeakerLibraryView />
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type overView:BlAuxSpeakerPeq}">
+                        <view:AuxiliaryView />
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type overView:BlAuxiliary}">
+                        <view:AuxGainView />
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type overView:BlToneControl}">
+                        <view:ToneControlView />
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type overView:BlSpMatrix}">
+                        <view:LspMtrxView />
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type overView:BlEmergency}">
+                        <view:EmergencyPanelView />
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type settings:IntervalSettingsViewModel}">
+                        <view:IntervalSettingsView />
+                    </DataTemplate>
+
+                </GroupBox.Resources>
+
+            </GroupBox>
+        </ScrollViewer>
 
         <StackPanel Orientation="Horizontal" Background="#E2DFDF" Focusable="False" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left">
             <Button Command="{Binding Path=AddNewCard}" Content="{x:Static escInstaller:Main._mainAddNewCard}" />
