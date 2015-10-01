@@ -1,9 +1,6 @@
 using System;
 using System.Linq;
 using System.Windows;
-using System.Windows.Media;
-using System.Windows.Shapes;
-using Common.Commodules;
 
 namespace EscInstaller.ViewModel.OverView
 {
@@ -30,7 +27,7 @@ namespace EscInstaller.ViewModel.OverView
             _rowFirst = rowFirst;
             _rowIdSecond = rowSecond;
             Initiate();
-        }
+        }        
 
         private void Initiate()
         {

@@ -103,9 +103,6 @@
     <ManifestKeyFile>EscInstaller_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Common">
-      <HintPath>..\ConnectionLibrary\bin\Debug\Common.dll</HintPath>
-    </Reference>
     <Reference Include="DynamicDataDisplay">
       <HintPath>Deps\DynamicDataDisplay.dll</HintPath>
     </Reference>
@@ -817,7 +814,12 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\ConnectionLibrary\Common.csproj">
+      <Project>{caa7eb7f-4ca8-4a0f-a3c0-0da99182ce43}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="ESC.ico" />
   </ItemGroup>
@@ -1089,6 +1091,7 @@
     <Resource Include="..\ConnectionLibrary\Icons\vca3.png">
       <Link>Icons\vca3.png</Link>
     </Resource>
+    <Resource Include="Icons\FFFFFF-0.8.png" />
     <Content Include="Includes\SpeakerLib.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

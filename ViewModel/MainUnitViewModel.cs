@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Common.Model;
+using EscInstaller.ViewModel.Connection;
 using EscInstaller.ViewModel.EscCommunication;
 using EscInstaller.ViewModel.Settings;
 
@@ -42,6 +43,21 @@ namespace EscInstaller.ViewModel
 
             Receiver.HardwareReceived += Receiver_HardwareReceived;
             Receiver.EepromReceived += EepromHandler.ApplyEepromDataOnDesign;
+
+            UpdateConnectionMode();
+        }
+
+        /// <summary>
+        /// Connection might allready be initialized
+        /// </summary>
+        private void UpdateConnectionMode()
+        {
+            ConnectType = (Connection != null && Connection.UnitId == Id) ? Connection.ConnectType : ConnectType.None;
+        }
+
+        public ConnectionViewModel Connection
+        {
+            get { return _main.Communication.Connections.FirstOrDefault(d => d.UnitId == Id); }
         }
 
         void Communication_ConnectionModeChanged(object sender, ConnectionModeChangedEventArgs e)

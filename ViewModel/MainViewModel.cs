@@ -376,6 +376,7 @@ namespace EscInstaller.ViewModel
             {
                 return new RelayCommand(() =>
                 {
+                    if(IsInDesignMode) return;
                     var q = new SystemFileSaveAs();
                     q.Save();
 
@@ -473,9 +474,10 @@ namespace EscInstaller.ViewModel
 
         public bool ExitCommand()
         {
-            //Connection.FlushRemainingData(); ?..
+            if (IsInDesignMode) return true;
             if (LibraryData.SystemIsOpen)
             {
+                if (IsInDesignMode) return false;
                 var g = new SystemFileSaveAsk();
                 return g.Save();
             }            
@@ -507,11 +509,14 @@ namespace EscInstaller.ViewModel
             LibraryData.FuturamaSys.CreatedInstallerVersion =
                 Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
-            var q = new SystemFileSaveAs();
-            if (!q.Save())
+            if (!IsInDesignMode)
             {
-                LibraryData.CloseProject();
-                return false;
+                var q = new SystemFileSaveAs();
+                if (!q.Save())
+                {
+                    LibraryData.CloseProject();
+                    return false;
+                }
             }
 
             RaisePropertyChanged(() => FileName);
@@ -599,9 +604,12 @@ namespace EscInstaller.ViewModel
         {
             if (!LibraryData.SystemIsOpen) return true; // throw new Exception("no futuramasysfile defined");
 
-            var qq = new SystemFileSaveAsk();
-            if (!qq.Save())
-                return false;
+            if (!IsInDesignMode)
+            {
+                var qq = new SystemFileSaveAsk();
+                if (!qq.Save())
+                    return false;
+            }
 
             LibraryData.CloseProject();
             TabCollection.RemoveAll(q => q is MainUnitViewModel || q is PanelViewModel);

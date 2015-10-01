@@ -51,7 +51,7 @@ namespace EscInstaller.ViewModel
         public override bool Save()
         {
             if (!LibraryData.SystemIsOpen) return true;
-            
+
 
             try
             {
@@ -82,9 +82,9 @@ namespace EscInstaller.ViewModel
         /// </summary>
         /// <returns>true if operation succeded</returns>
         public override bool Save()
-        {
+        {            
             var option = MessageBox.Show(Main.OverwriteAsk, Main.OverwriteAskTitle, MessageBoxButton.YesNoCancel,
-                MessageBoxImage.Question, MessageBoxResult.OK);
+                MessageBoxImage.Question, MessageBoxResult.OK);            
 
             if (option == MessageBoxResult.No)
                 return true;
@@ -95,8 +95,6 @@ namespace EscInstaller.ViewModel
             SaveFile();
             return true;
         }
-
-
     }
 
     public class SystemFileSaveAs : SystemFileLogic

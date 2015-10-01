@@ -12,11 +12,11 @@
              xmlns:common1="clr-namespace:Common;assembly=Common"
              xmlns:settings="clr-namespace:EscInstaller.ViewModel.Settings"
              xmlns:escInstaller="clr-namespace:EscInstaller"
+             
              d:DataContext="{d:DesignInstance viewModel:MainUnitViewModel, IsDesignTimeCreatable=True}"             
              >
 
     <UserControl.Resources>
-
 
 
         <Style TargetType="TextBlock" x:Key="txtH" >
@@ -404,15 +404,16 @@
 
         <DataTemplate DataType="{x:Type overView:BlAmplifier}" >
 
+            
             <Border Focusable="False" Width="{Binding Size.X}" Height="{Binding Size.Y}" Style="{StaticResource ResourceKey=BrdInactive}" BorderBrush="Black" Name="Border" >
-
+                
                 <Image VerticalAlignment="Center" HorizontalAlignment="Center">
                     <Image.Style>
                         <Style TargetType="{x:Type Image}">
                             <Setter Property="Stretch" Value="Uniform"></Setter>
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding Path=OperationMode}" Value="{x:Static commodules:AmplifierOperationMode.Unknown}">
-                                    <Setter Property="Source" Value="../Images/FFFFFF-0.8.png" />
+                                    <Setter Property="Source" Value="../Icons/FFFFFF-0.8.png" />
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding Path=OperationMode}" Value="{x:Static commodules:AmplifierOperationMode.Single50V}">
                                     <Setter Property="Source" Value="../Icons/mono.png" />
@@ -554,11 +555,11 @@
 
         </ListBox>
 
-        <!--TargetUpdated="GroupBoxBottom_OnTargetUpdated"-->
+        
         <GroupBox Content="{Binding SelectedObject}" x:Name="GroupBoxBottom" 
                   Header="{Binding SelectedObject.SettingName,FallbackValue='[Select an Element]', NotifyOnTargetUpdated=True}" 
                   BorderBrush="LightGray" Grid.Row="1"
-                  
+                  TargetUpdated="GroupBoxBottom_OnTargetUpdated"
                   >
             <GroupBox.Resources>
                 <DataTemplate DataType="{x:Type overView:BlExtInput}">

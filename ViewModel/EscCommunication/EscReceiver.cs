@@ -259,8 +259,8 @@ namespace EscInstaller.ViewModel.EscCommunication
             if (handler != null) handler(this, e);
         }
 
-        private const int TrackShiftCardA = -2;
-        private const int TrackShiftCardB = -2;
+        const int TrackShiftCardA = -2;
+        const int TrackShiftCardB = -2;
 
         /// <summary>
         /// 
