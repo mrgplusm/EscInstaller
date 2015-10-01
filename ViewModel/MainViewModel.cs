@@ -376,7 +376,7 @@ namespace EscInstaller.ViewModel
             {
                 return new RelayCommand(() =>
                 {
-                    if(IsInDesignMode) return;
+                    if (IsInDesignMode) return;
                     var q = new SystemFileSaveAs();
                     q.Save();
 
@@ -480,8 +480,8 @@ namespace EscInstaller.ViewModel
                 if (IsInDesignMode) return false;
                 var g = new SystemFileSaveAsk();
                 return g.Save();
-            }            
-            
+            }
+
             Application.Current.Shutdown();
             return true;
         }
@@ -524,19 +524,21 @@ namespace EscInstaller.ViewModel
             _recentFilesLogic.AddFile(FileName);
 
             RaisePropertyChanged(() => InstallerVersion);
-            SelectedTab = TabCollection.FirstOrDefault(i => i.Id == 0);
+
             return true;
         }
 
         /// <summary>
         /// Adds al the mainunits and the matrix tab
         /// </summary>
-        private void AddMainUnitsToTab()
+        private async void AddMainUnitsToTab()
         {
             if (!LibraryData.SystemIsOpen) return;
 
             TabCollection.Clear();
+            await Task.Delay(150);
             foreach (var m in LibraryData.FuturamaSys.MainUnits) TabCollection.Add(new MainUnitViewModel(m, this));
+            SelectedTab = TabCollection.FirstOrDefault(i => i.Id == 0);
 
             TabCollection.Add(new PanelViewModel(this));
             TabCollection.Add(_comViewModel);
@@ -573,7 +575,11 @@ namespace EscInstaller.ViewModel
 
             Properties.Settings.Default.RecentLocationProject = Path.GetDirectoryName(filename);
 
-            if (LibraryData.SystemIsOpen) Close();
+            if (LibraryData.SystemIsOpen)
+            {
+                if (!Close()) return;
+            }
+
             FileName = filename;
 
             LibraryData.OpenSystem(t);
@@ -602,7 +608,7 @@ namespace EscInstaller.ViewModel
         /// </summary>
         private bool Close()
         {
-            if (!LibraryData.SystemIsOpen) return true; // throw new Exception("no futuramasysfile defined");
+            if (!LibraryData.SystemIsOpen) return true;
 
             if (!IsInDesignMode)
             {

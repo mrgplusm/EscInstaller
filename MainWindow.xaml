@@ -218,7 +218,7 @@
 
         <!--behaviors:TabContent.IsCached="True"-->
         <TabControl x:Name="TabControl" ItemsSource="{Binding Source={StaticResource TabCollectionViewSource}}" 
-                    Grid.Row="2" IsSynchronizedWithCurrentItem="True" SelectedItem="{Binding Path=SelectedTab, Mode=TwoWay}" >
+                    Grid.Row="2" SelectedItem="{Binding Path=SelectedTab, Mode=TwoWay}" >
             <TabControl.ItemTemplate>
                 <DataTemplate>
                     <ContentControl Content="{Binding}">

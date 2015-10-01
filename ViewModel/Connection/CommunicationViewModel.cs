@@ -25,6 +25,7 @@ namespace EscInstaller.ViewModel.Connection
 
         public static void AddData(IDispatchData data)
         {
+            if (data == null) return;
             var con = OpenConnections.FirstOrDefault(d => d.UnitId == data.DestinationAddress);
             if (con != null)
                 con.Connection.EnQueue(data);

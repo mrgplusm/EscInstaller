@@ -134,7 +134,7 @@ namespace EscInstaller.ViewModel.Settings
                 foreach (var pd in _spo.Value.GetPresetData(_flowId.Value))
                 {
                     CommunicationViewModel.AddData(pd);
-                }                
+                }
             }
 
             OnSpeakerNameChanged();
@@ -181,7 +181,7 @@ namespace EscInstaller.ViewModel.Settings
 
             CommunicationViewModel.AddData(_spo.Value.GetClearBiquadData(s.PeqDataModel.DspBiquads, _flowId.Value));
         }
-        
+
         public void RefreshBiquads()
         {
             DetachGraphHandlers();
@@ -310,7 +310,9 @@ namespace EscInstaller.ViewModel.Settings
 
                     if (_flowId.HasValue)
                     {
-                        CommunicationViewModel.AddData(_spo.Value.PresetNameFactory(_flowId.Value));
+                        var z = _spo.Value.PresetNameFactory(_flowId.Value);
+                        if (z != null)
+                            CommunicationViewModel.AddData(z);
                     }
                     foreach (var s in PeqDataViewModels)
                     {
