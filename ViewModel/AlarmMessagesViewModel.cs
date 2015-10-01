@@ -46,31 +46,16 @@ namespace EscInstaller.ViewModel
                 .Select(a => new MessageSelectViewModel(_main, a)));
         }
 
-        private static int MessageForNumber(int number, bool isAlarmMessage = false)
-        {
-            if (number == 0xff)
-                return 0;
-            return number - (isAlarmMessage ? 2 : 1);
-        }
-
-        private static int NumberForMessage(int number, bool isAlarmMessage = false)
-        {
-            if (number == 0)
-                return 0xff;
-            return number + (isAlarmMessage ? 2 : 1);
-        }
-
-
         public int PreannAlrm1
         {
             get
             {
-                return MessageForNumber(LibraryData.FuturamaSys.PreannAlrm1, true);
+                return LibraryData.FuturamaSys.PreannAlrm1;
             }
             set
             {
                 if (value == -1) return;
-                LibraryData.FuturamaSys.PreannAlrm1 = NumberForMessage(value, true);
+                LibraryData.FuturamaSys.PreannAlrm1 = value;
                 SendMessages();
             }
         }
@@ -79,12 +64,12 @@ namespace EscInstaller.ViewModel
         {
             get
             {
-                return MessageForNumber(LibraryData.FuturamaSys.PreannAlrm2, true);
+                return LibraryData.FuturamaSys.PreannAlrm2;
             }
             set
             {
                 if (value == -1) return;
-                LibraryData.FuturamaSys.PreannAlrm2 = NumberForMessage(value, true);
+                LibraryData.FuturamaSys.PreannAlrm2 = value;
                 SendMessages();
             }
         }
@@ -92,22 +77,22 @@ namespace EscInstaller.ViewModel
 
         public int PreannFp
         {
-            get { return MessageForNumber(LibraryData.FuturamaSys.PreannFp); }
+            get { return LibraryData.FuturamaSys.PreannFp; }
             set
             {
                 if (value == -1) return;
-                LibraryData.FuturamaSys.PreannFp = NumberForMessage(value);
+                LibraryData.FuturamaSys.PreannFp = value;
                 SendMessages();
             }
         }
 
         public int PreannEvac
         {
-            get { return MessageForNumber(LibraryData.FuturamaSys.PreannEvac); }
+            get { return LibraryData.FuturamaSys.PreannEvac; }
             set
             {
                 if (value == -1) return;
-                LibraryData.FuturamaSys.PreannEvac = NumberForMessage(value);
+                LibraryData.FuturamaSys.PreannEvac = value;
                 SendMessages();
             }
         }
@@ -117,12 +102,12 @@ namespace EscInstaller.ViewModel
             get
             {
 
-                return MessageForNumber(LibraryData.FuturamaSys.PreannFds);
+                return LibraryData.FuturamaSys.PreannFds;
             }
             set
             {
                 if (value == -1) return;
-                LibraryData.FuturamaSys.PreannFds = NumberForMessage(value);
+                LibraryData.FuturamaSys.PreannFds = value;
                 SendMessages();
             }
         }
@@ -134,12 +119,12 @@ namespace EscInstaller.ViewModel
             get
             {
 
-                return MessageForNumber(LibraryData.FuturamaSys.PreannExt);
+                return LibraryData.FuturamaSys.PreannExt;
             }
             set
             {
                 if (value == -1) return;
-                LibraryData.FuturamaSys.PreannExt = NumberForMessage(value);
+                LibraryData.FuturamaSys.PreannExt = value;
                 SendMessages();
             }
         }
