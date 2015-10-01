@@ -37,9 +37,9 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Text="{x:Static view:ExternalInput._matrixSelectAlarm}" />
-                <ComboBox Grid.Row="0" Grid.Column="1" ItemsSource="{Binding Path=Unit.AlarmMessages.MesA}" SelectedIndex="{Binding Path=Unit.AlarmMessages.PreannAlrm1}"/>
+                <ComboBox Grid.Row="0" Grid.Column="1" ItemsSource="{Binding Path=Unit.AlarmMessages.MesA}" SelectedItem="{Binding Path=Unit.AlarmMessages.PreannAlrm1}"/>
                 <TextBlock Grid.Row="1" Grid.Column="0" Text="{x:Static view:ExternalInput._matrixSelectAlert}" />
-                <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Path=Unit.AlarmMessages.MesA}" SelectedIndex="{Binding Path=Unit.AlarmMessages.PreannAlrm2}"/>
+                <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Path=Unit.AlarmMessages.MesA}" SelectedItem="{Binding Path=Unit.AlarmMessages.PreannAlrm2}"/>
             </Grid>
 
         </GroupBox>
@@ -56,13 +56,13 @@
                     <RowDefinition />
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Row="0" Grid.Column="0" Text="{x:Static view:ExternalInput._matrixAnnouncMicFP}"  />
-                <ComboBox Grid.Row="0" Grid.Column="1" ItemsSource="{Binding Path=Unit.AlarmMessages. MewWithNoMessage}" SelectedIndex="{Binding Path=Unit.AlarmMessages.PreannFp}"  />
+                <ComboBox Grid.Row="0" Grid.Column="1" ItemsSource="{Binding Path=Unit.AlarmMessages. MewWithNoMessage}" SelectedItem="{Binding Path=Unit.AlarmMessages.PreannFp}"  />
                 <TextBlock Grid.Row="1" Grid.Column="0" Text="{x:Static view:ExternalInput._matrixAnnouncMicEP}" />
-                <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Path=Unit.AlarmMessages.MewWithNoMessage}" SelectedIndex="{Binding Path=Unit.AlarmMessages.PreannEvac}"/>
+                <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Path=Unit.AlarmMessages.MewWithNoMessage}" SelectedItem="{Binding Path=Unit.AlarmMessages.PreannEvac}"/>
                 <TextBlock Grid.Row="2" Grid.Column="0" Text="{x:Static view:ExternalInput._matrixAnnouncMicFDS}" />
-                <ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding Path=Unit.AlarmMessages.MewWithNoMessage}" SelectedIndex="{Binding Path=Unit.AlarmMessages.PreannFds}" />
+                <ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding Path=Unit.AlarmMessages.MewWithNoMessage}" SelectedItem="{Binding Path=Unit.AlarmMessages.PreannFds}" />
                 <TextBlock Grid.Row="3" Grid.Column="0" Text="{x:Static view:ExternalInput._matrixAnnouncExtAudioIn}" Visibility="Collapsed" />
-                <ComboBox Grid.Row="3" Grid.Column="1" ItemsSource="{Binding Path=Unit.AlarmMessages.MewWithNoMessage}" Visibility="Collapsed" SelectedIndex="{Binding Path=Unit.AlarmMessages.PreannExt}" />
+                <ComboBox Grid.Row="3" Grid.Column="1" ItemsSource="{Binding Path=Unit.AlarmMessages.MewWithNoMessage}" Visibility="Collapsed" SelectedItem="{Binding Path=Unit.AlarmMessages.PreannExt}" />
 
             </Grid>
 

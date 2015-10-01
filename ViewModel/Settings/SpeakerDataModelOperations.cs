@@ -75,7 +75,7 @@ namespace EscInstaller.ViewModel.Settings
             ret.AddRange(allP);
 
             var unused1 = DataModel.AvailableBiquads.Except(usedBiquads);
-            var unused = (from q in usedBiquads where DataModel.AvailableBiquads.Contains(q) select q).ToArray();
+            //var unused = (from q in usedBiquads where DataModel.AvailableBiquads.Contains(q) select q).ToArray();
             var clearbq = GetClearBiquadData(unused1, presetId);
             ret.AddRange(clearbq);
 

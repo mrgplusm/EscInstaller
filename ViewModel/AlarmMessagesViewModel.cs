@@ -46,89 +46,80 @@ namespace EscInstaller.ViewModel
                 .Select(a => new MessageSelectViewModel(_main, a)));
         }
 
-        public int PreannAlrm1
+
+
+        public SdFileVM PreannAlrm1
         {
-            get
-            {
-                return LibraryData.FuturamaSys.PreannAlrm1;
-            }
+            get { return MesA.FirstOrDefault(p => p.Position == LibraryData.FuturamaSys.PreannAlrm1); }
             set
             {
-                if (value == -1) return;
-                LibraryData.FuturamaSys.PreannAlrm1 = value;
+                if (value == null) return;
+                LibraryData.FuturamaSys.PreannAlrm1 = value.Position;
+
                 SendMessages();
             }
         }
 
-        public int PreannAlrm2
+        public SdFileVM PreannAlrm2
         {
-            get
-            {
-                return LibraryData.FuturamaSys.PreannAlrm2;
-            }
+            get { return MesA.FirstOrDefault(p => p.Position == LibraryData.FuturamaSys.PreannAlrm2); }
             set
             {
-                if (value == -1) return;
-                LibraryData.FuturamaSys.PreannAlrm2 = value;
+                if (value == null) return;
+                LibraryData.FuturamaSys.PreannAlrm2 = value.Position;
+
                 SendMessages();
             }
         }
 
-
-        public int PreannFp
+        public SdFileVM PreannFp
         {
-            get { return LibraryData.FuturamaSys.PreannFp; }
+            get { return MewWithNoMessage.FirstOrDefault(p => p.Position == LibraryData.FuturamaSys.PreannFp); }
             set
             {
-                if (value == -1) return;
-                LibraryData.FuturamaSys.PreannFp = value;
+                if (value == null) return;
+                LibraryData.FuturamaSys.PreannFp = value.Position;
+
                 SendMessages();
             }
         }
 
-        public int PreannEvac
+        public SdFileVM PreannEvac
         {
-            get { return LibraryData.FuturamaSys.PreannEvac; }
+            get { return MewWithNoMessage.FirstOrDefault(p => p.Position == LibraryData.FuturamaSys.PreannEvac); }
             set
             {
-                if (value == -1) return;
-                LibraryData.FuturamaSys.PreannEvac = value;
+                if (value == null) return;
+                LibraryData.FuturamaSys.PreannEvac = value.Position;
+
                 SendMessages();
             }
         }
 
-        public int PreannFds
+        public SdFileVM PreannFds
         {
-            get
-            {
-
-                return LibraryData.FuturamaSys.PreannFds;
-            }
+            get { return MewWithNoMessage.FirstOrDefault(p => p.Position == LibraryData.FuturamaSys.PreannFds); }
             set
             {
-                if (value == -1) return;
-                LibraryData.FuturamaSys.PreannFds = value;
+                if (value == null) return;
+                LibraryData.FuturamaSys.PreannFds = value.Position;
+
                 SendMessages();
             }
         }
 
-
-
-        public int PreannExt
+        public SdFileVM PreannExt
         {
-            get
-            {
-
-                return LibraryData.FuturamaSys.PreannExt;
-            }
+            get { return MewWithNoMessage.FirstOrDefault(p => p.Position == LibraryData.FuturamaSys.PreannExt); }
             set
             {
-                if (value == -1) return;
-                LibraryData.FuturamaSys.PreannExt = value;
+                if (value == null) return;
+                LibraryData.FuturamaSys.PreannExt = value.Position;
+
                 SendMessages();
             }
         }
-
+        
         public ObservableCollection<MessageSelectViewModel> Messages { get; private set; }
 
 
