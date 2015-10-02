@@ -12,7 +12,7 @@ using Common;
 using Common.Model;
 using EscInstaller.View;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.CommandWpf;
 
 
 #endregion

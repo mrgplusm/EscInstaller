@@ -4,7 +4,7 @@ using System.Windows.Input;
 using Common.Model;
 using EscInstaller.View;
 using EscInstaller.ViewModel.Connection;
-using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using Common;
 using Common.Commodules;

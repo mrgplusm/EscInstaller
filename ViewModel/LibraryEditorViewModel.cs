@@ -8,7 +8,7 @@ using Common.Model;
 using EscInstaller.ImportSpeakers;
 using EscInstaller.ViewModel.Settings;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.CommandWpf;
 using EscInstaller.View;
 using Microsoft.Win32;
 using ITabControl = EscInstaller.ViewModel.Connection.ITabControl;

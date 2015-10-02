@@ -8,7 +8,7 @@ using EscInstaller.ViewModel.EscCommunication;
 using EscInstaller.ViewModel.SDCard;
 using GalaSoft.MvvmLight;
 using Common;
-using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.CommandWpf;
 
 namespace EscInstaller.ViewModel.Matrix
 {

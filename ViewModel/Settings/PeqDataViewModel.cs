@@ -7,7 +7,7 @@ using System.Windows.Media;
 using Common.Model;
 using GalaSoft.MvvmLight;
 using Common;
-using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.CommandWpf;
 using Microsoft.Research.DynamicDataDisplay;
 using Microsoft.Research.DynamicDataDisplay.Charts.Shapes;
 using Microsoft.Research.DynamicDataDisplay.DataSources;

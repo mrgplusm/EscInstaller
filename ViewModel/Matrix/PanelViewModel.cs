@@ -6,7 +6,7 @@ using System.Windows.Input;
 using EscInstaller.View;
 using EscInstaller.ViewModel.OverView;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using Common;
 using ITabControl = EscInstaller.ViewModel.Connection.ITabControl;

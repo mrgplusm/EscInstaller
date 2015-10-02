@@ -9,7 +9,7 @@ using Common;
 using Common.Commodules;
 using EscInstaller.ViewModel.Connection;
 using EscInstaller.ViewModel.OverView;
-using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.CommandWpf;
 using Microsoft.Win32;
 
 namespace EscInstaller.ViewModel.Settings

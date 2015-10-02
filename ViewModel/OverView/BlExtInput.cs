@@ -8,7 +8,7 @@ using Common.Model;
 using EscInstaller.View;
 using EscInstaller.ViewModel.SDCard;
 using Common;
-using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.CommandWpf;
 
 namespace EscInstaller.ViewModel.OverView
 {

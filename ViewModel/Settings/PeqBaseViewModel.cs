@@ -5,7 +5,7 @@ using System.Windows.Input;
 using EscInstaller.ImportSpeakers;
 using EscInstaller.View;
 using EscInstaller.ViewModel.Connection;
-using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.CommandWpf;
 
 using EscInstaller.ViewModel.OverView;
 

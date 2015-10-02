@@ -7,7 +7,7 @@ using Common;
 using Common.Commodules;
 using Common.Model;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.CommandWpf;
 
 namespace EscInstaller.ViewModel.Connection
 {

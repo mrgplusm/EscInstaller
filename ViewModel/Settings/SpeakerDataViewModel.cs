@@ -12,7 +12,7 @@ using EscInstaller.ImportSpeakers;
 using EscInstaller.View;
 using EscInstaller.ViewModel.Connection;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using Common;
 using Common.Commodules;

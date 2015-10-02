@@ -2,7 +2,7 @@ using Common.Model;
 using EscInstaller.View;
 using EscInstaller.ViewModel.EscCommunication;
 using EscInstaller.ViewModel.SDCard;
-using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.CommandWpf;
 using Common;
 using Common.Commodules;
 using System;

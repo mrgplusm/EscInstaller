@@ -20,7 +20,7 @@ using EscInstaller.ViewModel.EscCommunication;
 using EscInstaller.ViewModel.Matrix;
 using EscInstaller.ViewModel.SDCard;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.CommandWpf;
 
 using Common.Commodules;
 using System.Collections.ObjectModel;
@@ -198,15 +198,16 @@ namespace EscInstaller.ViewModel
         {
             get
             {
-                return new RelayCommand(async () =>
-                {
-                    if (!AreConnections()) return;
-                    var q = await InformUserTimestampAsync(true);
-                    if (!q) return;
-                    SendUnitData();
-
-                }, () => LibraryData.SystemIsOpen);
+                return new RelayCommand(TimeStampAsync);
             }
+        }
+
+        private async void TimeStampAsync()
+        {
+            if (!AreConnections()) return;
+            var q = await InformUserTimestampAsync(true);
+            if (!q) return;
+            SendUnitData();
         }
 
         private void SendUnitData()
@@ -451,10 +452,12 @@ namespace EscInstaller.ViewModel
             get { return new RelayCommand(() => Close(), () => LibraryData.SystemIsOpen); }
         }
 
+
+
         public ICommand InsertNewUnit
         {
             get
-            {
+            {                
                 return new RelayCommand(AddMainUnit, () => LibraryData.SystemIsOpen);
             }
         }

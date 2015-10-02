@@ -14,7 +14,7 @@ using EscInstaller.ViewModel.OverView;
 using Common;
 using Common.Commodules;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.CommandWpf;
 using CommunicationViewModel = EscInstaller.ViewModel.Connection.CommunicationViewModel;
 using ITabControl = EscInstaller.ViewModel.Connection.ITabControl;
 
