@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using Common.Commodules;
 using Common.Model;
 using GalaSoft.MvvmLight;
 using Common;
@@ -14,9 +15,43 @@ using Microsoft.Research.DynamicDataDisplay.DataSources;
 
 namespace EscInstaller.ViewModel.Settings
 {
+    public class PeakingFilter : PeqDataViewModel
+    {
+        public PeakingFilter(PeqDataModel peq)
+            : base(peq)
+        {
+
+        }
+
+        public override IEnumerable<SOS> FilterData
+        {
+            get
+            {
+                return new[]
+                {
+                    DspCoefficients.GetBiquadSos(PeqDataModel.Gain, PeqDataModel.Frequency.W(),
+                        PeqDataModel.BandWidth, false, DspCoefficients.Fs)
+                };
+            }
+        }
+
+        public override FilterType FilterType
+        {
+            get
+            {
+                return FilterType.Peaking;
+            }
+            set
+            {
+
+            }
+        }
+
+        
+    }
 
 
-    public sealed class PeqDataViewModel : ViewModelBase
+    public class PeqDataViewModel : ViewModelBase
     {
         public const double MinBandWidth = 0.1;
         public const double MinQ = 0.1;
@@ -33,7 +68,7 @@ namespace EscInstaller.ViewModel.Settings
 
         public event EventHandler<BiquadsChangedEventArgs> BiquadsChanged;
 
-        private void OnBiquadsChanged(BiquadsChangedEventArgs e)
+        public void OnBiquadsChanged(BiquadsChangedEventArgs e)
         {
             EventHandler<BiquadsChangedEventArgs> handler = BiquadsChanged;
             if (handler != null) handler(this, e);
@@ -45,11 +80,10 @@ namespace EscInstaller.ViewModel.Settings
         private bool _isMousOver;
         private LineGraph _lineData;
 
-        private SpeakerDataViewModel _speaker;
 
-        public PeqDataViewModel(PeqDataModel peq, SpeakerDataViewModel speaker)
+
+        public PeqDataViewModel(PeqDataModel peq)
         {
-            _speaker = speaker;
             PeqDataModel = peq;
             if (PeqDataModel.BandWidth < MinBandWidth) PeqDataModel.BandWidth = MinBandWidth;
             if (PeqDataModel.Frequency < MinFreq) PeqDataModel.Frequency = MinFreq;
@@ -77,6 +111,9 @@ namespace EscInstaller.ViewModel.Settings
                     Boost = e.Position.Y;
                 };
         }
+
+
+
 
         public DraggablePoint BandWidthPoint
         {
@@ -106,6 +143,9 @@ namespace EscInstaller.ViewModel.Settings
                 return _bandwidthPoint;
             }
         }
+
+        
+
 
         public Arrow BandwidthArrow
         {
@@ -187,21 +227,22 @@ namespace EscInstaller.ViewModel.Settings
                 if (PeqDataModel.Order == value || value == -1) return;
                 if ((FilterType == FilterType.LinkWitzHp || FilterType == FilterType.LinkWitzLp) && value % 2 != 0)
                     return;
-
-                //check if this change fits in current filter:
-                //value has to be smaller than current value; 
-                //the order is uneven. In this case half of a biquad is used already;
-                //There is space left.
-                if (value < PeqDataModel.Order ||
-                    PeqDataModel.Order % 2 != 0 ||
-                    _speaker.RequiredBiquads <
-                    ((int)_speaker.SpeakerPeqType))
+                
                 {
-                    PeqDataModel.Order = value;
-                    OnChangeBiquads(PeqField.Order);
+                    PeqDataModel.Order = value;                    
+                    OnBiquadsChanged(new BiquadsChangedEventArgs()
+                    {
+                        PeqField = PeqField.Order, RequestOrder = value
+                    }); //true
                 }
                 RaisePropertyChanged(() => Order);
             }
+        }
+
+        public void SetOrder(int order)
+        {
+            PeqDataModel.Order = Order;
+            UpdateGraphics();
         }
 
         public double Frequency
@@ -211,27 +252,22 @@ namespace EscInstaller.ViewModel.Settings
             {
                 if (Math.Abs(PeqDataModel.Frequency - value) < .01) return;
                 PeqDataModel.Frequency = value;
-                OnChangeBiquads(PeqField.Frequency);
+                UpdateGraphics();
+                OnBiquadsChanged(new BiquadsChangedEventArgs() { PeqField = PeqField.Frequency }); //true
                 RaisePropertyChanged(() => Frequency);
             }
         }
 
-
-        public FilterType FilterType
+        public virtual FilterType FilterType
         {
             get { return PeqDataModel.FilterType; }
             set
             {
-                if (PeqDataModel.FilterType == value) return;
-
-                PeqDataModel.FilterType = value;
-                //reset order
-                PeqDataModel.Order = 2;
-                RaisePropertyChanged(() => FilterType);
-                RaisePropertyChanged(() => Order);
-                OnChangeBiquads(PeqField.FilterType);
-
-                RaisePropertyChanged(() => FilterType);
+                OnBiquadsChanged(new BiquadsChangedEventArgs()
+                {
+                    PeqField = PeqField.FilterType,
+                    RequestFilterType = value
+                });
             }
         }
 
@@ -242,7 +278,8 @@ namespace EscInstaller.ViewModel.Settings
             {
                 if (Math.Abs(PeqDataModel.BandWidth - value) < .001) return;
                 PeqDataModel.BandWidth = value;
-                OnChangeBiquads(PeqField.Bandwidth);
+                UpdateGraphics();
+                OnBiquadsChanged(new BiquadsChangedEventArgs() { PeqField = PeqField.Bandwidth }); //true
                 RaisePropertyChanged(() => BandWidth);
             }
         }
@@ -254,19 +291,12 @@ namespace EscInstaller.ViewModel.Settings
             {
                 if (Math.Abs(PeqDataModel.Boost - value) < 0.001) return;
                 PeqDataModel.Boost = value;
-                OnChangeBiquads(PeqField.Boost);
+                UpdateGraphics();
+                OnBiquadsChanged(new BiquadsChangedEventArgs() { PeqField = PeqField.Boost }); //true
                 RaisePropertyChanged(() => Boost);
             }
         }
-
-        /// <summary>
-        /// Correct speaker magnitude value in dB. Use only in first biquad.
-        /// </summary>
-        public double GainCorrectValue
-        {
-            get { return Index == 0 ? -_speaker.DbMagnitude : 0; }
-        }
-
+        
         /// <summary>
         ///     Enable or disable whole eq param setting
         /// </summary>
@@ -276,22 +306,17 @@ namespace EscInstaller.ViewModel.Settings
             set
             {
                 PeqDataModel.IsEnabled = value;
-                OnChangeBiquads(PeqField.IsEnabled);
+                UpdateGraphics();
+                OnBiquadsChanged(new BiquadsChangedEventArgs() { PeqField = PeqField.IsEnabled }); //true
                 RaisePropertyChanged(() => IsEnabled);
             }
         }
 
-        public IEnumerable<SOS> FilterData
+        public virtual IEnumerable<SOS> FilterData
         {
             get
             {
-                return (PeqDataModel.FilterType == FilterType.Peaking)
-                           ? new[]
-                               {
-                                   DspCoefficients.GetBiquadSos(PeqDataModel.Gain, PeqDataModel.Frequency.W(),
-                                                                PeqDataModel.BandWidth, false, DspCoefficients.Fs)
-                               }
-                           : DspCoefficients.GetXoverSOS(PeqDataModel.Frequency, PeqDataModel.Order,
+                return DspCoefficients.GetXoverSOS(PeqDataModel.Frequency, PeqDataModel.Order,
                                                          PeqDataModel.FilterType,
                                                          DspCoefficients.Fs, PeqDataModel.Gain);
             }
@@ -380,8 +405,7 @@ namespace EscInstaller.ViewModel.Settings
             if (handler != null) handler(this, EventArgs.Empty);
         }
 
-
-        private void OnChangeBiquads(PeqField peqField)
+        private void UpdateGraphics()
         {
             DraggablePoint.Position = new Point(Frequency, Boost);
             LineData.DataSource = GenLine();
@@ -400,32 +424,14 @@ namespace EscInstaller.ViewModel.Settings
             {
                 BandWidthPoint.Position = Posb();
             }
-
-            RaisePropertyChanged(() => Color);
-
-            if (BiquadsChanged == null) return;
-            OnBiquadsChanged(new BiquadsChangedEventArgs() { PeqField = peqField }); //true
-        }
-
-        public void Parse(PeqDataModel other, SpeakerDataViewModel speaker)
-        {
-            _speaker = speaker;
-            PeqDataModel = other;
-
-            RaisePropertyChanged(() => Boost);
-            RaisePropertyChanged(() => Frequency);
-            RaisePropertyChanged(() => BandWidth);
-            RaisePropertyChanged(() => Order);
-            RaisePropertyChanged(() => Frequency);
-            RaisePropertyChanged(() => FilterType);
-            OnChangeBiquads(PeqField.FilterType);
-
-            RaisePropertyChanged(() => Index);
+            RaisePropertyChanged(() => Color);                       
         }
     }
 
     public class BiquadsChangedEventArgs
     {
         public PeqField PeqField { get; set; }
+        public FilterType RequestFilterType { get; set; }
+        public int RequestOrder { get; set; }
     }
 }

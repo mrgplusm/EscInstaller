@@ -134,8 +134,7 @@ namespace EscInstaller.ViewModel.EscCommunication
         /// <param name="dspCopy"></param>
         public void SetRedundantData(SpeakerDataModel speaker, List<byte> dspCopy)
         {
-            var spo = new SpeakerLogic(speaker);
-            spo.ParseRedundancyData(dspCopy);
+            speaker.ParseRedundancyData(dspCopy);                       
         }        
 
         /// <summary>

@@ -2,11 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Windows;
 using Common;
 using Common.Commodules;
 using Common.Model;
-using EscInstaller.ViewModel.Connection;
 
 namespace EscInstaller.ViewModel.Settings
 {
@@ -23,10 +21,7 @@ namespace EscInstaller.ViewModel.Settings
             if (!isOk)
             {
                 ResetAvailableBq();
-                foreach (var peqDataModel in model.PEQ)
-                {
-                    peqDataModel.DspBiquads = new HashSet<int>();
-                }
+                
             }
         }
 
@@ -39,11 +34,11 @@ namespace EscInstaller.ViewModel.Settings
             foreach (var peqDataModel in _model.PEQ)
             {
                 int req = new[] { peqDataModel }.RequiredBiquads();
-                if (peqDataModel.DspBiquads == null) return false;
-                if (peqDataModel.DspBiquads.Count != req)
+                if (peqDataModel.Biquads == null) return false;
+                if (peqDataModel.Biquads.Count != req)
                     return false;
                 //if biquad is in model, it cannot be in another model or available
-                if (peqDataModel.DspBiquads.Any(_model.AvailableBiquads.Contains))
+                if (peqDataModel.Biquads.Any(_model.AvailableBiquads.Contains))
                     return false;
             }
 
@@ -74,9 +69,9 @@ namespace EscInstaller.ViewModel.Settings
             var allP = AllParamData(presetId);
             ret.AddRange(allP);
 
-            var unused1 = DataModel.AvailableBiquads.Except(usedBiquads);
-            //var unused = (from q in usedBiquads where DataModel.AvailableBiquads.Contains(q) select q).ToArray();
-            var clearbq = GetClearBiquadData(unused1, presetId);
+            var unused1 = DataModel.AvailableBiquads.Except(usedBiquads);            
+            var clearbq = ClearBiquadData(unused1, presetId);
+          
             ret.AddRange(clearbq);
 
             return ret;
@@ -105,154 +100,98 @@ namespace EscInstaller.ViewModel.Settings
 
         public PeqParam GetSosParamPackage(SOS sos, int flowId, int biquad)
         {
-            return SafeLoadEnabled
-                              ? new SafeLoadParam(sos, flowId, biquad, DataModel.SpeakerPeqType)
-                              : new PeqParam(sos, flowId, biquad, DataModel.SpeakerPeqType);
+            return new SafeLoadParam(sos, flowId, biquad, DataModel.SpeakerPeqType);
+            //: new PeqParam(sos, flowId, biquad, DataModel.SpeakerPeqType);
 
         }
-
+        
         public void ParseRedundancyData(List<byte> dspCopy)
-        {
-            DataModel.PEQ.Clear();
+        {            
             for (var redundancyPosition = 0; redundancyPosition < (int)DataModel.SpeakerPeqType; redundancyPosition++)
             {
-                int skipto;
-                try
-                {
-                    skipto = RedundancyAddress(redundancyPosition, DataModel.Id);
-                }
-                catch (ArgumentException a)
-                {
-                    Debug.WriteLine("Redundancy address not valid {0}", a);
-                    return;
-                }
-
-                var rawData = dspCopy.Skip(skipto).Take(PeqDataLogic.PeqRedundancyCount).ToArray();
-                var pdm = new PeqDataModel();
-                var peqR = new PeqDataLogic(pdm);
-                var resolved = peqR.ResolveData(rawData);
-
-                if (!resolved) continue;
-
-                DataModel.PEQ.Add(pdm);
-
-                foreach (var dspBiquad in pdm.DspBiquads)
-                {
-                    DataModel.AvailableBiquads.Remove(dspBiquad);
-                }
+                var position = EepromPosition(dspCopy, redundancyPosition);
+                SetPeqData(position);                
             }
         }
 
-
-        public static readonly bool SafeLoadEnabled;
-        public static readonly bool SetEepromEnabled;
-
-        static SpeakerLogic()
+        private byte[] EepromPosition(List<byte> dspCopy, int redpos )
         {
-            bool b;
-            SafeLoadEnabled = bool.TryParse(LibraryData.Settings["SafeloadEnabled"], out b) && b;
-            SetEepromEnabled = bool.TryParse(LibraryData.Settings["SetEepromEnabled"], out b) && b;
+            int skipto;
+            try
+            {
+                skipto = EqDataFiles.RedundancyAddress(redpos, DataModel.Id, DataModel.SpeakerPeqType);
+            }
+            catch (ArgumentException a)
+            {
+                Debug.WriteLine("Redundancy address not valid {0}", a); return null;
+            }
+            return dspCopy.Skip(skipto).Take(EqDataFiles.PeqRedundancyCount).ToArray();
         }
 
+        private void SetPeqData(byte[] rawData)
+        {            
+            PeqDataModel pdm;
 
+            try
+            {
+                pdm = EqDataFiles.Parse(rawData);
+                DataModel.PEQ.Add(pdm);
+            }
+            catch (ArgumentException a)
+            {
+                Debug.WriteLine("Raw eeprom data could not be parsed for peq");
+                return;
+            }
+
+            foreach (var dspBiquad in pdm.Biquads)
+            {
+                DataModel.AvailableBiquads.Remove(dspBiquad);
+            }
+        }
 
         /// <summary>
-        /// Clears biquad positions in DSP and adds their positions to the "free positions" - list
+        /// The biquads are not rembered als "used" and can be claimed again
         /// </summary>
-        public IEnumerable<IDispatchData> GetClearBiquadData(IEnumerable<int> biquads, int flowId)
+        /// <param name="biquads"></param>
+        public void FreeupBiquads(IEnumerable<int> biquads)
         {
-            var ret = new List<IDispatchData>();
-            foreach (var biquad in biquads.ToArray())
+            foreach (var biquad in biquads)
             {
-                ret.Add(GetSosParamPackage(SOS.Empty(), flowId, biquad));
                 DataModel.AvailableBiquads.Add(biquad);
-                ret.Add(GetRedundancyData(flowId, biquad));
-
             }
-            return ret;
         }
 
         /// <summary>
         /// Clears all biquads and redundancy data for this flow
         /// </summary>
-
         /// <param name="flowId"></param>
-        public List<IDispatchData> GetClearBiquadData(int flowId)
+        public List<IDispatchData> ClearBiquadData(int flowId)
         {
             var ret = new List<IDispatchData>();
 
             for (int biquad = 0; biquad < (int)DataModel.SpeakerPeqType; biquad++)
             {
                 ret.Add(GetSosParamPackage(SOS.Empty(), flowId, biquad));
-                ret.Add(GetRedundancyData(flowId, biquad));
+                ret.Add(RedundancyData(flowId, biquad));
             }
-            ResetAvailableBq();
+            
             return ret;
         }
 
-        public SetE2PromExt GetRedundancyData(int flowId, int bq, PeqDataLogic pdo = null)
-        {
-            if (!SetEepromEnabled) return null;
-
-            var redundancydata = (pdo == null) ? new byte[] { 0, 0, 0, 0, 0, 0, 0, 0 } : pdo.GetRedundancyData();
+        public SetE2PromExt RedundancyData(int flowId, int bq)
+        {            
+            //var redundancydata = (pdo == null) ? new byte[] { 0, 0, 0, 0, 0, 0, 0, 0 } : pdo.GetRedundancyData();
             var mcuId = GenericMethods.GetMainunitIdForFlowId(flowId);
             try
             {
-                var redAddress = RedundancyAddress(bq, DataModel.Id);
-                return new SetE2PromExt(mcuId, redundancydata, redAddress);
+                var redAddress = EqDataFiles.RedundancyAddress(bq, DataModel.Id, DataModel.SpeakerPeqType);
+                return new SetE2PromExt(mcuId,  redundancydata, redAddress);
             }
             catch (ArgumentException a)
             {
                 Debug.WriteLine("Redundancy address not valid {0}", a);
                 return null;
 
-            }
-        }
-
-        /// <summary>           
-        /// start: 34816 end: 39935
-        /// Define redundancy addresses in eeprom
-        /// size: 8 bytes redundancy data * biquads (bytes)
-        /// tot:  size * channels (bytes)
-        ///         chnn  bqs   size  tot   address range
-        /// preset  12    14    112   1344  34816   36159
-        /// Aux     3     7     56    168   36160   36327    
-        /// mic     2     5     40    80    36328   36408
-        /// </summary>
-        /// <param name="biquad"></param>                
-        /// <param name="speakerId">
-        /// which speaker:
-        /// preset: 0-11, aux 12-14, mic 15-16        
-        /// </param>
-        /// <returns></returns>
-        public ushort RedundancyAddress(int biquad, int speakerId)
-        {
-            switch (DataModel.SpeakerPeqType)
-            {
-                case SpeakerPeqType.BiquadsMic:
-                    if (biquad > 4)
-                        throw new ArgumentException("Mic does not have biquad" + biquad);
-                    if (speakerId > 16 || speakerId < 15)
-                        throw new ArgumentException("Mic does not have positon" + speakerId);
-                    return
-                        (ushort)
-                            (McuDat.MicRedundancy + biquad * PeqDataLogic.PeqRedundancyCount +
-                             (speakerId - 15) * 40);
-
-                case SpeakerPeqType.BiquadsAux:
-                    if (biquad > 6)
-                        throw new ArgumentException("Aux does not have biquad" + biquad);
-                    if (speakerId > 14 || speakerId < 12)
-                        throw new ArgumentException("Aux does not have positon" + speakerId);
-                    return (ushort)(McuDat.AuxRedundancy + biquad * PeqDataLogic.PeqRedundancyCount + (speakerId - 12) * 56);
-                case SpeakerPeqType.BiquadsPreset:
-                    if (biquad > 13)
-                        throw new ArgumentException("Preset does not have biquad" + biquad);
-                    if (speakerId > 11 || speakerId < 0)
-                        throw new ArgumentException("Preset does not have positon" + speakerId);
-                    return (ushort)(McuDat.PresetRedundancy + biquad * PeqDataLogic.PeqRedundancyCount + speakerId * 112);
-                default:
-                    throw new ArgumentException("SpeakerPeqType does not exist");
             }
         }
 

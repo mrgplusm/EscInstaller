@@ -11,6 +11,7 @@ using Common.Model;
 using EscInstaller.ImportSpeakers;
 using EscInstaller.View;
 using EscInstaller.ViewModel.Connection;
+using EscInstaller.ViewModel.EscCommunication;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using Common;
@@ -64,12 +65,12 @@ namespace EscInstaller.ViewModel.Settings
             if (speakerData.PEQ != null)
                 DbMagnitude = Fourier(speakerData.PEQ).Max();
 
-            _spo = new Lazy<SpeakerLogic>(() => new SpeakerLogic(_speakerData));
+            _spo = new SpeakerLogic(_speakerData);
 
-
+            PopulateActionField();
         }
 
-        private readonly Lazy<SpeakerLogic> _spo;
+        private readonly SpeakerLogic _spo;
 
         public SpeakerPeqType SpeakerPeqType
         {
@@ -116,7 +117,7 @@ namespace EscInstaller.ViewModel.Settings
             //copy the data to the model
             if (_flowId.HasValue)
             {
-                foreach (var pd in _spo.Value.GetPresetData(_flowId.Value))
+                foreach (var pd in _spo.GetPresetData(_flowId.Value))
                 {
                     CommunicationViewModel.AddData(pd);
                 }
@@ -165,7 +166,8 @@ namespace EscInstaller.ViewModel.Settings
             RedrawMasterLine();
             if (!_flowId.HasValue) return;
 
-            CommunicationViewModel.AddData(_spo.Value.GetClearBiquadData(s.PeqDataModel.DspBiquads, _flowId.Value));
+            CommunicationViewModel.AddData(_spo.ClearBiquadData(s.PeqDataModel.DspBiquads, _flowId.Value));
+            _spo.FreeupBiquads(s.PeqDataModel.DspBiquads);
         }
 
         public void RefreshBiquads()
@@ -189,34 +191,74 @@ namespace EscInstaller.ViewModel.Settings
                 if (IsInDesignMode) return null;
                 return _addNewParam ?? (_addNewParam =
 
-                    new RelayCommand(() =>
-                    {
-                        var vm = NewParam();
-                        if (vm == null) return;
-
-                        PlotterChildren.Add(vm.LineData);
-                        PlotterChildren.Add(vm.DraggablePoint);
-                        SetModelHandlers(vm);
-
-                        RedrawMasterLine();
-
-                        if (!_flowId.HasValue) return;
-                        try
-                        {
-                            var q = new PeqDataLogic(vm.PeqDataModel);
-
-                            IEnumerable<IDispatchData> data = q.GetParamData(_spo.Value, _flowId.Value).ToList();
-                            CommunicationViewModel.AddData(data);
-                        }
-                        catch (Exception e)
-                        {
-                            MessageBox.Show(e.Message, "Filter upload", MessageBoxButton.OK, MessageBoxImage.Error,
-                                MessageBoxResult.OK);
-                        }
-                    }, () => _spo.Value.DataModel.AvailableBiquads != null &&
+                    new RelayCommand(AddParam, () => _spo.Value.DataModel.AvailableBiquads != null &&
                              PeqDataModels.RequiredBiquads() < (int)SpeakerPeqType));
             }
         }
+
+        private void AddParam()
+        {
+            var vm = NewParam();
+            if (vm == null) return;
+
+            PlotterChildren.Add(vm.LineData);
+            PlotterChildren.Add(vm.DraggablePoint);
+            SetModelHandlers(vm);
+
+            RedrawMasterLine();
+
+            SendParamData(vm.PeqDataModel);
+        }
+
+
+
+        private void SendParamData(PeqDataModel dm)
+        {
+
+            if (!_flowId.HasValue) return;
+            try
+            {
+                var q = new PeqDataLogic(dm);
+
+                IEnumerable<IDispatchData> data = q.GetParamData(_spo, _flowId.Value).ToList();
+                CommunicationViewModel.AddData(data);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "Filter upload", MessageBoxButton.OK, MessageBoxImage.Error,
+                    MessageBoxResult.OK);
+            }
+        }
+
+
+        private void OrderRequested(BiquadsChangedEventArgs bf, PeqDataViewModel vm)
+        {
+            //check if this change fits in current filter:
+            //value has to be smaller than current value; 
+            //the order is odd. In this case half of a biquad is used already;
+            //There is space left.
+
+            if (bf.RequestOrder < vm.Order ||
+                vm.Order % 2 != 0 ||
+                (RequiredBiquads < ((int)SpeakerPeqType)))
+                vm.SetOrder(bf.RequestOrder);
+        }
+
+        private void FilterChanged(BiquadsChangedEventArgs bf, PeqDataViewModel vm)
+        {
+            RemovePeqParam(vm, EventArgs.Empty);
+            AddNewParam
+        }
+
+        private void PopulateActionField()
+        {
+            _actionForField.Add(PeqField.Order, OrderRequested);
+            _actionForField.Add(PeqField.FilterType, FilterChanged);
+        }
+
+        private readonly Dictionary<PeqField, Action<BiquadsChangedEventArgs, PeqDataViewModel>> _actionForField =
+            new Dictionary<PeqField, Action<BiquadsChangedEventArgs, PeqDataViewModel>>();
+        
 
         /// <summary>
         /// This function is called when a biquad parameter has been changed
@@ -235,24 +277,16 @@ namespace EscInstaller.ViewModel.Settings
             }
 
             if (!_flowId.HasValue) return;
-            var op = new PeqDataLogic(model1.PeqDataModel);
-
+            
             if (!model1.IsEnabled)
             {
-                CommunicationViewModel.AddData(_spo.Value.GetClearBiquadData(model1.PeqDataModel.DspBiquads, _flowId.Value));
+                CommunicationViewModel.AddData(_spo.ClearBiquadData(model1.PeqDataModel.DspBiquads, _flowId.Value));
+                _spo.FreeupBiquads(model1.PeqDataModel.DspBiquads);
                 return;
             }
 
-            try
-            {
-                IEnumerable<IDispatchData> data = op.GetParamData(_spo.Value, _flowId.Value).ToList();
-                CommunicationViewModel.AddData(data);
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message, "Filter upload", MessageBoxButton.OK, MessageBoxImage.Error,
-                    MessageBoxResult.OK);
-            }
+            _actionForField[pf.PeqField](pf,model1);
+            SendParamData(model1.PeqDataModel);
         }
 
         private void SetModelHandlers(PeqDataViewModel model1)
@@ -296,7 +330,7 @@ namespace EscInstaller.ViewModel.Settings
 
                     foreach (var s in PeqDataViewModels.ToArray())
                     {
-                        RemovePeqParam(s, EventArgs.Empty);                        
+                        RemovePeqParam(s, EventArgs.Empty);
                     }
 
                     SendMyName();
@@ -362,7 +396,7 @@ namespace EscInstaller.ViewModel.Settings
                 {
                     _peqDataViewModels = new ObservableCollection<PeqDataViewModel>();
 
-                    foreach (var z in PeqDataModels.Select(n => new PeqDataViewModel(n, this)))
+                    foreach (var z in PeqDataModels.Select(n => new PeqDataViewModel(n)))
                     {
                         _peqDataViewModels.Add(z);
                     }
@@ -501,7 +535,7 @@ namespace EscInstaller.ViewModel.Settings
                     };
 
                 //vms might not be initiated, add viewmodel before model as initialisation wraps all available models
-                var vm = new PeqDataViewModel(dm, this);
+                var vm = new PeqDataViewModel(dm);
                 PeqDataViewModels.Add(vm);
 
                 PeqDataModels.Add(dm);
@@ -527,7 +561,7 @@ namespace EscInstaller.ViewModel.Settings
             //dm.Parse(data);
 
             PeqDataModels.Add(dm);
-            var vm = new PeqDataViewModel(dm, this);
+            var vm = new PeqDataViewModel(dm);
             vm.RemoveThisParam += RemovePeqParam;
             PeqDataViewModels.Add(vm);
         }
