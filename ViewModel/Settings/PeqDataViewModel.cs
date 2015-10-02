@@ -14,6 +14,8 @@ using Microsoft.Research.DynamicDataDisplay.DataSources;
 
 namespace EscInstaller.ViewModel.Settings
 {
+
+
     public sealed class PeqDataViewModel : ViewModelBase
     {
         public const double MinBandWidth = 0.1;
@@ -28,7 +30,15 @@ namespace EscInstaller.ViewModel.Settings
                 Brushes.LightSlateGray, Brushes.LawnGreen, Brushes.LightSkyBlue, Brushes.Magenta, Brushes.MediumPurple
             };
 
-        public Action<PeqDataViewModel, PeqField> BiquadsChanged;
+
+        public event EventHandler<BiquadsChangedEventArgs> BiquadsChanged;
+
+        private void OnBiquadsChanged(BiquadsChangedEventArgs e)
+        {
+            EventHandler<BiquadsChangedEventArgs> handler = BiquadsChanged;
+            if (handler != null) handler(this, e);
+        }
+
         private Arrow _bandwidthArrow;
         private DraggablePoint _bandwidthPoint;
         private DraggablePoint _draggablePoint;
@@ -66,7 +76,7 @@ namespace EscInstaller.ViewModel.Settings
                     Frequency = e.Position.X;
                     Boost = e.Position.Y;
                 };
-        }      
+        }
 
         public DraggablePoint BandWidthPoint
         {
@@ -296,7 +306,7 @@ namespace EscInstaller.ViewModel.Settings
             set
             {
                 PeqDataModel.Gain = value;
-                RaisePropertyChanged(()=> Gain);
+                RaisePropertyChanged(() => Gain);
             }
         }
 
@@ -354,13 +364,6 @@ namespace EscInstaller.ViewModel.Settings
                    || PeqDataModel.FilterType == FilterType.LowShelf;
         }
 
-
-        public void OnRemoveThisParam()
-        {
-            if (RemoveThisParam != null)
-                RemoveThisParam();
-        }
-
         public ICommand RemoveParam
         {
             get
@@ -369,7 +372,14 @@ namespace EscInstaller.ViewModel.Settings
             }
         }
 
-        public Action RemoveThisParam;
+        public event EventHandler RemoveThisParam;
+
+        private void OnRemoveThisParam()
+        {
+            EventHandler handler = RemoveThisParam;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
+
 
         private void OnChangeBiquads(PeqField peqField)
         {
@@ -394,7 +404,7 @@ namespace EscInstaller.ViewModel.Settings
             RaisePropertyChanged(() => Color);
 
             if (BiquadsChanged == null) return;
-            BiquadsChanged.Invoke(this, peqField); //true
+            OnBiquadsChanged(new BiquadsChangedEventArgs() { PeqField = peqField }); //true
         }
 
         public void Parse(PeqDataModel other, SpeakerDataViewModel speaker)
@@ -412,5 +422,10 @@ namespace EscInstaller.ViewModel.Settings
 
             RaisePropertyChanged(() => Index);
         }
+    }
+
+    public class BiquadsChangedEventArgs
+    {
+        public PeqField PeqField { get; set; }
     }
 }

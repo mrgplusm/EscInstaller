@@ -13,7 +13,6 @@ using EscInstaller.View;
 using EscInstaller.ViewModel.Connection;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
-using GalaSoft.MvvmLight.Messaging;
 using Common;
 using Common.Commodules;
 using Microsoft.Research.DynamicDataDisplay;
@@ -62,9 +61,6 @@ namespace EscInstaller.ViewModel.Settings
             _speakerData = speakerData;
             _flowId = flowId;
 
-
-
-            //set magniture directly in case speaker loaded
             if (speakerData.PEQ != null)
                 DbMagnitude = Fourier(speakerData.PEQ).Max();
 
@@ -78,12 +74,6 @@ namespace EscInstaller.ViewModel.Settings
         public SpeakerPeqType SpeakerPeqType
         {
             get { return DataModel.SpeakerPeqType; }
-            //set
-            //{
-            //    DataModel.SpeakerPeqType = value;
-            //    var q = new SpeakerLogic(_speakerData);
-            //    _spo.
-            //}
         }
 
 
@@ -96,11 +86,6 @@ namespace EscInstaller.ViewModel.Settings
                     .Cast<SpeakerPeqType>()));
             }
         }
-
-
-
-
-
 
         public SpeakerDataModel DataModel
         {
@@ -172,8 +157,9 @@ namespace EscInstaller.ViewModel.Settings
             return SpeakerMethods.Library.Any(y => !y.IsCustom && y.SpeakerName == name);
         }
 
-        public void RemovePeqParam(PeqDataViewModel s)
+        private void RemovePeqParam(object sender, EventArgs eventArgs)
         {
+            var s = (PeqDataViewModel)sender;
             RemoveVm(s);
             OnRemoveParam(s);
             RedrawMasterLine();
@@ -234,15 +220,15 @@ namespace EscInstaller.ViewModel.Settings
 
         /// <summary>
         /// This function is called when a biquad parameter has been changed
-        /// </summary>
-        /// <param name="model1"></param>
-        /// <param name="pf"></param>
-        protected virtual void OnChangeBiquads(PeqDataViewModel model1, PeqField pf)
+        /// </summary>        
+        protected virtual void OnChangeBiquads(object sender, BiquadsChangedEventArgs pf)
         {
+            var model1 = (PeqDataViewModel)sender;
+
             IsCustom = true;
             RedrawMasterLine();
 
-            if (pf == PeqField.FilterType &&
+            if (pf.PeqField == PeqField.FilterType &&
                 !model1.HasBandwidth())
             {
                 RemoveBandwith(model1);
@@ -271,7 +257,7 @@ namespace EscInstaller.ViewModel.Settings
 
         private void SetModelHandlers(PeqDataViewModel model1)
         {
-            model1.BiquadsChanged = OnChangeBiquads;
+            model1.BiquadsChanged += OnChangeBiquads;
 
             model1.DraggablePoint.MouseRightButtonDown += (sender, args) =>
             {
@@ -287,7 +273,7 @@ namespace EscInstaller.ViewModel.Settings
             };
 
             model1.BandWidthPoint.MouseRightButtonDown += (q, i) => RemoveBandwith(model1);
-            model1.RemoveThisParam += () => RemovePeqParam(model1);
+            model1.RemoveThisParam += RemovePeqParam;
         }
 
 
@@ -308,21 +294,13 @@ namespace EscInstaller.ViewModel.Settings
                         MessageBoxButton.OKCancel, MessageBoxImage.Warning, MessageBoxResult.Cancel) == MessageBoxResult.Cancel)
                         return;
 
-                    if (_flowId.HasValue)
+                    foreach (var s in PeqDataViewModels.ToArray())
                     {
-                        var z = _spo.Value.PresetNameFactory(_flowId.Value);
-                        if (z != null)
-                            CommunicationViewModel.AddData(z);
+                        RemovePeqParam(s, EventArgs.Empty);                        
                     }
-                    foreach (var s in PeqDataViewModels)
-                    {
-                        RemoveVm(s);
-                    }
-                    Clear();
-                    SendMyName();
-                    RedrawMasterLine();
-                }
 
+                    SendMyName();
+                }
                     );
             }
         }
@@ -403,8 +381,7 @@ namespace EscInstaller.ViewModel.Settings
         {
             foreach (var peq in _peqDataViewModels)
             {
-                var peq1 = peq;
-                peq.RemoveThisParam += () => RemovePeqParam(peq1);
+                peq.RemoveThisParam += RemovePeqParam;
             }
         }
 
@@ -450,7 +427,6 @@ namespace EscInstaller.ViewModel.Settings
             }
             RaisePropertyChanged(() => SpeakerName);
             OnSpeakerNameChanged();
-
         }
 
         public void OnSpeakerNameChanged()
@@ -493,7 +469,7 @@ namespace EscInstaller.ViewModel.Settings
         }
 
 
-        public Action<PeqDataViewModel> ParamRemoved { get; set; }
+
 
         /// <summary>
         /// Amount of biquads used by this speaker
@@ -552,9 +528,10 @@ namespace EscInstaller.ViewModel.Settings
 
             PeqDataModels.Add(dm);
             var vm = new PeqDataViewModel(dm, this);
-            vm.RemoveThisParam += () => RemovePeqParam(vm);
+            vm.RemoveThisParam += RemovePeqParam;
             PeqDataViewModels.Add(vm);
         }
+
         /// <summary>
         /// Add new biquads to this speaker (e.g. for import)
         /// </summary>
@@ -643,8 +620,7 @@ namespace EscInstaller.ViewModel.Settings
 
         public void OnRemoveParam(PeqDataViewModel s)
         {
-            if (ParamRemoved != null)
-                ParamRemoved.Invoke(s);
+
             PeqDataModels.Remove(s.PeqDataModel);
             PeqDataViewModels.Remove(s);
             ReorderIds(PeqDataViewModels);

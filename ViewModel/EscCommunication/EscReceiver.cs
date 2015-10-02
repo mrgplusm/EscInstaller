@@ -213,15 +213,15 @@ namespace EscInstaller.ViewModel.EscCommunication
         public async void GetEeprom(E2PromArea area)
         {
             _eepromReceivePackages[area] = 0;
-            var ar = McuDat.EepromPlaces.First(q => q.Area == area);
+            var ar = McuDat.EepromAreaFactory(area);
 
             if (Main.DataModel.DspCopy == null)
             {
                 Main.DataModel.DspCopy = new List<byte>(Enumerable.Range(0, 131072).Select(n => (byte)0));
             }
-            var count = ar.Size / McuDat.BufferSize;
+            var count = ar.Size / McuDat.BufferSize + 1;
 
-            for (var i = ar.Location; i < ar.Location + ar.Size; i += McuDat.BufferSize)
+            for (var i = ar.Location; i < ar.Location + ar.Size + McuDat.BufferSize; i += McuDat.BufferSize)
             {
                 var s = new GetE2PromExt(Main.Id, McuDat.BufferSize, i);
                 CommunicationViewModel.AddData(s);
