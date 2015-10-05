@@ -4,6 +4,7 @@ using Common;
 using Common.Model;
 using EscInstaller.View;
 using EscInstaller.ViewModel.Settings;
+using EscInstaller.ViewModel.Settings.Peq;
 
 namespace EscInstaller.ViewModel.OverView
 {

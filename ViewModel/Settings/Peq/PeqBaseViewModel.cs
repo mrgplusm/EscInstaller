@@ -5,12 +5,10 @@ using System.Windows.Input;
 using EscInstaller.ImportSpeakers;
 using EscInstaller.View;
 using EscInstaller.ViewModel.Connection;
+using EscInstaller.ViewModel.OverView;
 using GalaSoft.MvvmLight.CommandWpf;
 
-using EscInstaller.ViewModel.OverView;
-
-
-namespace EscInstaller.ViewModel.Settings
+namespace EscInstaller.ViewModel.Settings.Peq
 {
     public abstract class PeqBaseViewModel : SnapDiagramData
     {
@@ -105,6 +103,8 @@ namespace EscInstaller.ViewModel.Settings
                 {
                     SpeakerMethods.Import(CurrentSpeaker);
                     var t = new SpeakerLogic(CurrentSpeaker.DataModel);
+                    
+
                     CommunicationViewModel.AddData(t.GetPresetData(Id));
                     CommunicationViewModel.AddData(t.PresetNameFactory(Id));
                 });

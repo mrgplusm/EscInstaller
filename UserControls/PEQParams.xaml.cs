@@ -8,6 +8,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using EscInstaller.ViewModel.Settings;
+using EscInstaller.ViewModel.Settings.Peq;
 using Xceed.Wpf.Toolkit;
 
 namespace EscInstaller.UserControls

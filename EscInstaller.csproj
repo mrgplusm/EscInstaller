@@ -287,10 +287,12 @@
     <Compile Include="ViewModel\OverView\BlOutput.cs" />
     <Compile Include="ViewModel\OverView\BlSpeakerPeq.cs" />
     <Compile Include="ViewModel\OverView\BlToneControl.cs" />
-    <Compile Include="ViewModel\Settings\PeqBaseViewModel.cs" />
-    <Compile Include="ViewModel\Settings\PeqDataOperations.cs" />
-    <Compile Include="ViewModel\Settings\PeqDataViewModel.cs" />
-    <Compile Include="ViewModel\Settings\PeqField.cs" />
+    <Compile Include="ViewModel\Settings\Peq\CrossoverLogic.cs" />
+    <Compile Include="ViewModel\Settings\Peq\FilterLogicBase.cs" />
+    <Compile Include="ViewModel\Settings\Peq\PeqBaseViewModel.cs" />
+    <Compile Include="ViewModel\Settings\Peq\PeqDataOperations.cs" />
+    <Compile Include="ViewModel\Settings\Peq\PeqDataViewModel.cs" />
+    <Compile Include="ViewModel\Settings\Peq\PeqField.cs" />
     <Compile Include="ViewModel\OverView\DiagramData.cs" />
     <Compile Include="ViewModel\Matrix\RowHeaderViewModel.cs" />
     <Compile Include="ViewModel\Matrix\MatrixCellViewModel.cs" />
@@ -303,8 +305,8 @@
     <Compile Include="ViewModel\Settings\RadioButton.cs" />
     <Compile Include="ViewModel\Settings\SetName.cs" />
     <Compile Include="ViewModel\Settings\IntervalSettingsViewModel.cs" />
-    <Compile Include="ViewModel\Settings\SpeakerDataModelOperations.cs" />
-    <Compile Include="ViewModel\Settings\SpeakerDataViewModel.cs" />
+    <Compile Include="ViewModel\Settings\Peq\SpeakerLogic.cs" />
+    <Compile Include="ViewModel\Settings\Peq\SpeakerDataViewModel.cs" />
     <Compile Include="ViewModel\SystelmFileOperator.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="View\AuxGainView.xaml.cs">
@@ -1096,9 +1098,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ViewModel\Settings\Peq\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -2,6 +2,7 @@ using EscInstaller.View;
 using Common.Model;
 using EscInstaller.ViewModel.Settings;
 using System.Windows;
+using EscInstaller.ViewModel.Settings.Peq;
 
 namespace EscInstaller.ViewModel.OverView
 {

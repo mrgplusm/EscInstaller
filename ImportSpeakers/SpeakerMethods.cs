@@ -1,19 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Reflection.Emit;
 using System.Text.RegularExpressions;
 using System.Windows;
-using System.Windows.Threading;
 using Common.Model;
 using Common;
 using EscInstaller.Properties;
-using EscInstaller.ViewModel.Settings;
+using EscInstaller.ViewModel.Settings.Peq;
 using Microsoft.Win32;
 
 namespace EscInstaller.ImportSpeakers

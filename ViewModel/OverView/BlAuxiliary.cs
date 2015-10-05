@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using EscInstaller.ViewModel.Connection;
 using EscInstaller.ViewModel.Settings;
 using Common.Commodules;
+using EscInstaller.ViewModel.Settings.Peq;
 
 namespace EscInstaller.ViewModel.OverView
 {

@@ -7,19 +7,19 @@ using System.Numerics;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using Common;
+using Common.Commodules;
 using Common.Model;
 using EscInstaller.ImportSpeakers;
 using EscInstaller.View;
 using EscInstaller.ViewModel.Connection;
-using EscInstaller.ViewModel.EscCommunication;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
-using Common;
-using Common.Commodules;
 using Microsoft.Research.DynamicDataDisplay;
 using Microsoft.Research.DynamicDataDisplay.DataSources;
+using Xceed.Wpf.Toolkit.Core.Converters;
 
-namespace EscInstaller.ViewModel.Settings
+namespace EscInstaller.ViewModel.Settings.Peq
 {
     public enum SpeakerValue
     {
@@ -29,7 +29,7 @@ namespace EscInstaller.ViewModel.Settings
         Color,
     }
 
-    public class SpeakerDataViewModel : ViewModelBase, IDragable
+    public class SpeakerDataViewModel : ViewModelBase
     {
         private readonly SpeakerDataModel _speakerData;
         private readonly int? _flowId;
@@ -65,18 +65,15 @@ namespace EscInstaller.ViewModel.Settings
             if (speakerData.PEQ != null)
                 DbMagnitude = Fourier(speakerData.PEQ).Max();
 
-            _spo = new SpeakerLogic(_speakerData);
+            
 
             PopulateActionField();
-        }
-
-        private readonly SpeakerLogic _spo;
+        }        
 
         public SpeakerPeqType SpeakerPeqType
         {
             get { return DataModel.SpeakerPeqType; }
         }
-
 
         private static ObservableCollection<SpeakerPeqType> _speakerPeqTypes;
         public ObservableCollection<SpeakerPeqType> SpeakerPeqTypes
@@ -117,9 +114,11 @@ namespace EscInstaller.ViewModel.Settings
             //copy the data to the model
             if (_flowId.HasValue)
             {
-                foreach (var pd in _spo.GetPresetData(_flowId.Value))
+                var sl = new SpeakerLogic(DataModel);
+                foreach (var pd in sl.DspData(_flowId.Value))
                 {
                     CommunicationViewModel.AddData(pd);
+                    //todo: clear unused bq params
                 }
             }
 
@@ -166,7 +165,12 @@ namespace EscInstaller.ViewModel.Settings
             RedrawMasterLine();
             if (!_flowId.HasValue) return;
 
-            CommunicationViewModel.AddData(_spo.ClearBiquadData(s.PeqDataModel.DspBiquads, _flowId.Value));
+            var sl = new SpeakerLogic(DataModel, Id);
+            var dspdata = sl.GetEmptyDspData(s.PeqDataModel.Biquads);
+            var redundancydata = sl.GetEmtptyRedundancyData(s.PeqDataModel.Biquads);
+
+            CommunicationViewModel.AddData(dspdata);
+            CommunicationViewModel.AddData(redundancydata);
             _spo.FreeupBiquads(s.PeqDataModel.DspBiquads);
         }
 
@@ -181,7 +185,6 @@ namespace EscInstaller.ViewModel.Settings
             RedrawMasterLine();
         }
 
-
         private RelayCommand _addNewParam;
 
         public ICommand AddNewParam
@@ -191,7 +194,7 @@ namespace EscInstaller.ViewModel.Settings
                 if (IsInDesignMode) return null;
                 return _addNewParam ?? (_addNewParam =
 
-                    new RelayCommand(AddParam, () => _spo.Value.DataModel.AvailableBiquads != null &&
+                    new RelayCommand(AddParam, () => DataModel.AvailableBiquads != null &&
                              PeqDataModels.RequiredBiquads() < (int)SpeakerPeqType));
             }
         }
@@ -217,9 +220,7 @@ namespace EscInstaller.ViewModel.Settings
 
             if (!_flowId.HasValue) return;
             try
-            {
-                var q = new PeqDataLogic(dm);
-
+            {                
                 IEnumerable<IDispatchData> data = q.GetParamData(_spo, _flowId.Value).ToList();
                 CommunicationViewModel.AddData(data);
             }
@@ -258,7 +259,6 @@ namespace EscInstaller.ViewModel.Settings
 
         private readonly Dictionary<PeqField, Action<BiquadsChangedEventArgs, PeqDataViewModel>> _actionForField =
             new Dictionary<PeqField, Action<BiquadsChangedEventArgs, PeqDataViewModel>>();
-        
 
         /// <summary>
         /// This function is called when a biquad parameter has been changed
@@ -277,7 +277,7 @@ namespace EscInstaller.ViewModel.Settings
             }
 
             if (!_flowId.HasValue) return;
-            
+
             if (!model1.IsEnabled)
             {
                 CommunicationViewModel.AddData(_spo.ClearBiquadData(model1.PeqDataModel.DspBiquads, _flowId.Value));
@@ -285,7 +285,7 @@ namespace EscInstaller.ViewModel.Settings
                 return;
             }
 
-            _actionForField[pf.PeqField](pf,model1);
+            _actionForField[pf.PeqField](pf, model1);
             SendParamData(model1.PeqDataModel);
         }
 
@@ -679,22 +679,9 @@ namespace EscInstaller.ViewModel.Settings
         public void SendMyName()
         {
             if (!_flowId.HasValue) return;
-            var package = _spo.Value.PresetNameFactory(_flowId.Value);
+            var package = _spo.PresetNameFactory(_flowId.Value);
             if (package != null)
                 CommunicationViewModel.AddData(package);
-        }
-
-        public Type DataType
-        {
-            get { return typeof(SpeakerDataViewModel); }
-        }
-
-        public Action<SpeakerDataViewModel> RemoveThis;
-
-        public void Remove()
-        {
-            if (RemoveThis != null)
-                RemoveThis(this);
         }
     }
 }

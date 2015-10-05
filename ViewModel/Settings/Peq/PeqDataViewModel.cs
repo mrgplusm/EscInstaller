@@ -4,16 +4,15 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
-using Common.Commodules;
+using Common;
 using Common.Model;
 using GalaSoft.MvvmLight;
-using Common;
 using GalaSoft.MvvmLight.CommandWpf;
 using Microsoft.Research.DynamicDataDisplay;
 using Microsoft.Research.DynamicDataDisplay.Charts.Shapes;
 using Microsoft.Research.DynamicDataDisplay.DataSources;
 
-namespace EscInstaller.ViewModel.Settings
+namespace EscInstaller.ViewModel.Settings.Peq
 {
     public class PeakingFilter : PeqDataViewModel
     {

@@ -1,4 +1,4 @@
-﻿namespace EscInstaller.ViewModel.Settings
+﻿namespace EscInstaller.ViewModel.Settings.Peq
 {
     public enum PeqField
     {

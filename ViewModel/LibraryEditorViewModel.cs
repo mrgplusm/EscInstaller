@@ -7,6 +7,7 @@ using Common;
 using Common.Model;
 using EscInstaller.ImportSpeakers;
 using EscInstaller.ViewModel.Settings;
+using EscInstaller.ViewModel.Settings.Peq;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using EscInstaller.View;

@@ -13,10 +13,11 @@
              xmlns:converters1="clr-namespace:Common.Converters;assembly=Common"
              xmlns:settings="clr-namespace:EscInstaller.ViewModel.Settings"
              xmlns:view="clr-namespace:EscInstaller.View"
+             xmlns:peq="clr-namespace:EscInstaller.ViewModel.Settings.Peq"
 
 
              mc:Ignorable="d"                  
-             d:DataContext="{d:DesignInstance settings:SpeakerDataViewModel, IsDesignTimeCreatable=True }"
+             d:DataContext="{d:DesignInstance peq:SpeakerDataViewModel, IsDesignTimeCreatable=True }"
 >
     <UserControl.Resources>
 

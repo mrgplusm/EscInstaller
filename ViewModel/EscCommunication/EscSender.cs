@@ -7,6 +7,7 @@ using Common.Commodules;
 using Common.Model;
 using EscInstaller.ViewModel.Connection;
 using EscInstaller.ViewModel.Settings;
+using EscInstaller.ViewModel.Settings.Peq;
 
 namespace EscInstaller.ViewModel.EscCommunication
 {
@@ -374,8 +375,6 @@ namespace EscInstaller.ViewModel.EscCommunication
 
             await z.WaitAsync();
             OnMessageSelectionSend(new DownloadProgressEventArgs() { Progress = 1, Total = 1 });
-
-
         }
 
         public event EventHandler<DownloadProgressEventArgs> MessageSelectionSend;
@@ -386,44 +385,35 @@ namespace EscInstaller.ViewModel.EscCommunication
             if (handler != null) handler(this, e);
         }
 
+        private IEnumerable<IDispatchData> GetPresetData(int flowOffset, SpeakerPeqType type)
+        {
+            return _main.SpeakerDataModels.Where(s => s.SpeakerPeqType == type)
+                .Select((speakerDataModel, flow) => new SpeakerLogic(speakerDataModel, flow + flowOffset))
+                .SelectMany(sp => sp.TotalSpeakerData());
+        }        
+
         /// <summary>
         /// //aux &&
         /// redundancy data &&
         /// peq data &&
         /// EQpreset names
         /// </summary>        
-        public async void SetSpeakerPresetData()
+        private IEnumerable<IDispatchData> GetTotalPresetData()
         {
-            var retlist = new List<IDispatchData>();
-            var flow = _main.Id * 12;
-            if (_main.SpeakerDataModels == null) return;
-            foreach (var sp in _main.SpeakerDataModels.Where(s => s.SpeakerPeqType == SpeakerPeqType.BiquadsPreset)
-                .Select(speakerDataModel => new SpeakerLogic(speakerDataModel)))
+            var flowOffsets = new Dictionary<SpeakerPeqType, int>
             {
-                retlist.AddRange(sp.GetPresetData(flow));
-                flow++;
-            }
+                {SpeakerPeqType.BiquadsPreset, _main.Id*12},
+                {SpeakerPeqType.BiquadsAux, _main.Id * 12},
+                {SpeakerPeqType.BiquadsMic, 2 + _main.Id * 5 + GenericMethods.StartCountFrom},
+            };
 
-            flow = _main.Id * 12;
-            foreach (var sp in _main.SpeakerDataModels.Where(q => q.SpeakerPeqType == SpeakerPeqType.BiquadsAux)
-                .Select(source => new SpeakerLogic(source)))
-            {
-                retlist.AddRange(sp.GetPresetData(flow));
-                flow++;
-            }
-
-            flow = 2 + _main.Id * 5 + GenericMethods.StartCountFrom;
-            foreach (var sp in _main.SpeakerDataModels.Where(q => q.SpeakerPeqType == SpeakerPeqType.BiquadsMic)
-                .Select(source => new SpeakerLogic(source)))
-            {
-                retlist.AddRange(sp.GetPresetData((flow)));
-                flow++;
-            }
-
-            var total = retlist.Count;
+            return flowOffsets.SelectMany(offset => GetPresetData(offset.Value, offset.Key));
+        }
 
 
-            foreach (var data in retlist)
+        public async void SetSpeakerPresetData()
+        {                       
+            foreach (var data in GetTotalPresetData())
             {
                 CommunicationViewModel.AddData(data);
                 await data.WaitAsync();
@@ -433,9 +423,6 @@ namespace EscInstaller.ViewModel.EscCommunication
                     Total = total
                 });
             }
-
-
-
         }
 
         private volatile int _peqDataCount;
