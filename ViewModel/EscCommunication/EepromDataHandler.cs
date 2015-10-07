@@ -8,6 +8,7 @@ using Common.Commodules;
 using Common.Converters;
 using Common.Model;
 using EscInstaller.ViewModel.Settings;
+using EscInstaller.ViewModel.Settings.Peq;
 
 namespace EscInstaller.ViewModel.EscCommunication
 {
@@ -110,9 +111,9 @@ namespace EscInstaller.ViewModel.EscCommunication
 
         private void SetRedundancyData()
         {
-            foreach (var speaker in _main.DataModel.SpeakerDataModels)
+            foreach (var logic in _main.DataModel.SpeakerDataModels.Select(speaker => new SpeakerLogic(speaker)))
             {
-                SetRedundantData(speaker, _main.DataModel.DspCopy);
+                logic.ParseRedundancyData(_main.DataModel.DspCopy);
             }
             OnSpeakerRedundancyDataUpdated();
         }
@@ -124,18 +125,6 @@ namespace EscInstaller.ViewModel.EscCommunication
             EventHandler handler = SpeakerRedundancyDataUpdated;
             if (handler != null) handler(this, EventArgs.Empty);
         }
-
-
-        /// <summary>
-        /// Resolve all redundand data for one speaker
-        /// 
-        /// </summary>
-        /// <param name="speaker"></param>
-        /// <param name="dspCopy"></param>
-        public void SetRedundantData(SpeakerDataModel speaker, List<byte> dspCopy)
-        {
-            speaker.ParseRedundancyData(dspCopy);                       
-        }        
 
         /// <summary>
         /// Put the dsp cache into readable names 

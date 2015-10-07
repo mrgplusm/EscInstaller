@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using Common;
+using Common.Commodules;
 using Common.Model;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
@@ -14,55 +17,19 @@ using Microsoft.Research.DynamicDataDisplay.DataSources;
 
 namespace EscInstaller.ViewModel.Settings.Peq
 {
-    public class PeakingFilter : PeqDataViewModel
-    {
-        public PeakingFilter(PeqDataModel peq)
-            : base(peq)
-        {
-
-        }
-
-        public override IEnumerable<SOS> FilterData
-        {
-            get
-            {
-                return new[]
-                {
-                    DspCoefficients.GetBiquadSos(PeqDataModel.Gain, PeqDataModel.Frequency.W(),
-                        PeqDataModel.BandWidth, false, DspCoefficients.Fs)
-                };
-            }
-        }
-
-        public override FilterType FilterType
-        {
-            get
-            {
-                return FilterType.Peaking;
-            }
-            set
-            {
-
-            }
-        }
-
-        
-    }
-
-
     public class PeqDataViewModel : ViewModelBase
     {
         public const double MinBandWidth = 0.1;
         public const double MinQ = 0.1;
         public const double MinFreq = 10;
 
-        private static readonly Brush[] LinebBrushes = new Brush[]
-            {
-                Brushes.SpringGreen, Brushes.PowderBlue, Brushes.SaddleBrown, Brushes.LightSalmon,
-                Brushes.SeaGreen, Brushes.YellowGreen, Brushes.Violet, Brushes.SlateBlue,
-                Brushes.NavajoWhite, Brushes.Olive, Brushes.Pink, Brushes.LightGoldenrodYellow,
-                Brushes.LightSlateGray, Brushes.LawnGreen, Brushes.LightSkyBlue, Brushes.Magenta, Brushes.MediumPurple
-            };
+        private static readonly Brush[] LinebBrushes =
+        {
+            Brushes.SpringGreen, Brushes.PowderBlue, Brushes.SaddleBrown, Brushes.LightSalmon,
+            Brushes.SeaGreen, Brushes.YellowGreen, Brushes.Violet, Brushes.SlateBlue,
+            Brushes.NavajoWhite, Brushes.Olive, Brushes.Pink, Brushes.LightGoldenrodYellow,
+            Brushes.LightSlateGray, Brushes.LawnGreen, Brushes.LightSkyBlue, Brushes.Magenta, Brushes.MediumPurple
+        };
 
 
         public event EventHandler<BiquadsChangedEventArgs> BiquadsChanged;
@@ -143,7 +110,7 @@ namespace EscInstaller.ViewModel.Settings.Peq
             }
         }
 
-        
+
 
 
         public Arrow BandwidthArrow
@@ -226,21 +193,41 @@ namespace EscInstaller.ViewModel.Settings.Peq
                 if (PeqDataModel.Order == value || value == -1) return;
                 if ((FilterType == FilterType.LinkWitzHp || FilterType == FilterType.LinkWitzLp) && value % 2 != 0)
                     return;
-                
                 {
-                    PeqDataModel.Order = value;                    
                     OnBiquadsChanged(new BiquadsChangedEventArgs()
                     {
-                        PeqField = PeqField.Order, RequestOrder = value
-                    }); //true
+                        PeqField = PeqField.Order,
+                        RequestOrder = value
+                    });
                 }
-                RaisePropertyChanged(() => Order);
             }
+        }
+
+        public void SetType(FilterType type)
+        {
+            PeqDataModel.FilterType = type;            
+        }
+
+        public void ResetType()
+        {
+            System.Windows.Threading.Dispatcher.CurrentDispatcher.BeginInvoke(
+                new Action(async () =>
+                {
+                    await Task.Delay(30);
+                    RaisePropertyChanged(() => FilterType);
+                })
+                );
         }
 
         public void SetOrder(int order)
         {
-            PeqDataModel.Order = Order;
+            PeqDataModel.Order = order;
+        }
+
+        public void UpdateFilterType()
+        {
+            RaisePropertyChanged(() => Order);
+            RaisePropertyChanged(() => FilterType);
             UpdateGraphics();
         }
 
@@ -267,6 +254,7 @@ namespace EscInstaller.ViewModel.Settings.Peq
                     PeqField = PeqField.FilterType,
                     RequestFilterType = value
                 });
+
             }
         }
 
@@ -295,7 +283,7 @@ namespace EscInstaller.ViewModel.Settings.Peq
                 RaisePropertyChanged(() => Boost);
             }
         }
-        
+
         /// <summary>
         ///     Enable or disable whole eq param setting
         /// </summary>
@@ -423,11 +411,11 @@ namespace EscInstaller.ViewModel.Settings.Peq
             {
                 BandWidthPoint.Position = Posb();
             }
-            RaisePropertyChanged(() => Color);                       
+            RaisePropertyChanged(() => Color);
         }
     }
 
-    public class BiquadsChangedEventArgs
+    public class BiquadsChangedEventArgs : CancelEventArgs
     {
         public PeqField PeqField { get; set; }
         public FilterType RequestFilterType { get; set; }

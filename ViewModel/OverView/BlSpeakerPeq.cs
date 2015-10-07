@@ -33,7 +33,7 @@ namespace EscInstaller.ViewModel.OverView
 
         void Receiver_PresetNamesUpdated(object sender, System.EventArgs e)
         {
-            RaisePropertyChanged(()=> DisplaySetting);
+            RaisePropertyChanged(() => DisplaySetting);
         }
 
         public void UpdateName()
@@ -91,11 +91,11 @@ namespace EscInstaller.ViewModel.OverView
                 if (_currentSpeaker == null)
                 {
                     _currentSpeaker = new SpeakerDataViewModel(
-                        Main.SpeakerDataModels[_flow.Id%12], Id);
+                        Main.SpeakerDataModels[_flow.Id % 12], Id);
                 }
-                _currentSpeaker.SpeakerNameChanged = ()=> RaisePropertyChanged(()=>DisplaySetting);
+                _currentSpeaker.SpeakerNameChanged += (sender, args) => RaisePropertyChanged(() => DisplaySetting);
                 return _currentSpeaker;
-                
+
                 //return (SpeakerDataViewModel)SpeakerSelect.CurrentItem; 
             }
         }

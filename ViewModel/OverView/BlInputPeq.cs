@@ -2,6 +2,7 @@ using Common.Model;
 using EscInstaller.ViewModel.Settings;
 using Common;
 using EscInstaller.ViewModel.Settings.Peq;
+using TagLib.IFD;
 
 namespace EscInstaller.ViewModel.OverView
 {
@@ -36,7 +37,7 @@ namespace EscInstaller.ViewModel.OverView
                 Main.DataModel.ExpansionCards * 5 * RowHeight + 5 * RowHeight
                 + ((_flow.Id - GenericMethods.StartCountFrom) % 5 * RowHeight)
                 + (Main.DataModel.ExpansionCards + 1) * InnerSpace;
-            
+
             foreach (var snapshot in Snapshots)
             {
                 snapshot.Calculate();
@@ -79,9 +80,13 @@ namespace EscInstaller.ViewModel.OverView
                     return new SpeakerDataViewModel(new SpeakerDataModel());
                 }
                 //extflowId 2 & 3, position 15&16 => +13
-                return _currentSpeaker ?? (_currentSpeaker =
-                    new SpeakerDataViewModel(Main.SpeakerDataModels[(_flow.Id - GenericMethods.StartCountFrom) % 5 + 13], Id)
-                    {SpeakerNameChanged = ()=> RaisePropertyChanged(()=> DisplaySetting)});
+
+                if (_currentSpeaker != null) return _currentSpeaker;
+                _currentSpeaker =
+                    new SpeakerDataViewModel(
+                        Main.SpeakerDataModels[(_flow.Id - GenericMethods.StartCountFrom) % 5 + 13], Id);
+                _currentSpeaker.SpeakerNameChanged += (sender, args) => RaisePropertyChanged(() => DisplaySetting);
+                return _currentSpeaker;
             }
         }
 

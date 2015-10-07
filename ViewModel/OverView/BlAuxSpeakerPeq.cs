@@ -87,8 +87,11 @@ namespace EscInstaller.ViewModel.OverView
                 {
                     return new SpeakerDataViewModel(new SpeakerDataModel());
                 }
-                return _currentSpeaker ?? (_currentSpeaker = new SpeakerDataViewModel(Main.SpeakerDataModels[_card.Id + 12], Id) { SpeakerNameChanged = () => RaisePropertyChanged(() => DisplaySetting) });
+                if (_currentSpeaker != null) return _currentSpeaker;
+                _currentSpeaker = new SpeakerDataViewModel(Main.SpeakerDataModels[_card.Id + 12], Id);
 
+                _currentSpeaker.SpeakerNameChanged += ((sender, args) => RaisePropertyChanged(() => DisplaySetting));
+                return _currentSpeaker;
             }
         }
 

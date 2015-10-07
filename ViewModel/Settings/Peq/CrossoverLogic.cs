@@ -24,5 +24,7 @@ namespace EscInstaller.ViewModel.Settings.Peq
                 PEQDataModel.FilterType, DspCoefficients.Fs).Select((source, index) =>
                     GetSosParamPackage(source, GetBiquad(index)));
         }
+
+        
     }
 }

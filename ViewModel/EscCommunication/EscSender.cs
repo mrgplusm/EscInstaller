@@ -388,7 +388,7 @@ namespace EscInstaller.ViewModel.EscCommunication
         private IEnumerable<IDispatchData> GetPresetData(int flowOffset, SpeakerPeqType type)
         {
             return _main.SpeakerDataModels.Where(s => s.SpeakerPeqType == type)
-                .Select((speakerDataModel, flow) => new SpeakerLogic(speakerDataModel, flow + flowOffset))
+                .Select((speakerDataModel, flow) => new SpeakerLogicForFlow(speakerDataModel, flow + flowOffset))
                 .SelectMany(sp => sp.TotalSpeakerData());
         }        
 
@@ -398,7 +398,7 @@ namespace EscInstaller.ViewModel.EscCommunication
         /// peq data &&
         /// EQpreset names
         /// </summary>        
-        private IEnumerable<IDispatchData> GetTotalPresetData()
+        public IEnumerable<IDispatchData> GetTotalPresetData()
         {
             var flowOffsets = new Dictionary<SpeakerPeqType, int>
             {
@@ -410,10 +410,10 @@ namespace EscInstaller.ViewModel.EscCommunication
             return flowOffsets.SelectMany(offset => GetPresetData(offset.Value, offset.Key));
         }
 
-
-        public async void SetSpeakerPresetData()
-        {                       
-            foreach (var data in GetTotalPresetData())
+        public async void SetSpeakerPresetData(List<IDispatchData> dataToSend)
+        {
+            var total = dataToSend.Count;
+            foreach (var data in dataToSend)
             {
                 CommunicationViewModel.AddData(data);
                 await data.WaitAsync();

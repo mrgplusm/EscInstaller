@@ -2,26 +2,28 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Runtime.InteropServices;
 using Common;
-using Common.Commodules;
 using Common.Model;
 
 namespace EscInstaller.ViewModel.Settings.Peq
 {
     public class SpeakerLogic
     {
-        private readonly SpeakerDataModel _model;
-        private readonly int _flowId;
+        protected readonly SpeakerDataModel Model;
+        //private readonly int _flowId;
 
-        public SpeakerLogic(SpeakerDataModel model, int flowId)
+        public SpeakerLogic(SpeakerDataModel model)
         {
-            _model = model;
-            _flowId = flowId;
+            Model = model;
+
             if (model.PEQ == null) model.PEQ = new List<PeqDataModel>();
+
+            UpdateIntegraty();
         }
 
         /// <summary>
+        /// Updates used biquads field
+        /// Library speakers do not have stored biquad values per filter
         /// Compare stored biquads with actual filters for older sw versions
         /// </summary>
         /// <returns></returns>
@@ -29,103 +31,59 @@ namespace EscInstaller.ViewModel.Settings.Peq
         {
             if (CheckBiquadIntegraty()) return;
 
-            ResetAvailableBq();
-            _model.PEQ = new List<PeqDataModel>();
+            AssignBqsToFilters();
+        }
+
+        private void AssignBqsToFilters()
+        {
+            if (Model.PEQ.RequiredBiquads() > (int)Model.SpeakerPeqType)
+                throw new Exception("This configuration uses too many biquads");
+            var bq = GetBiquadStack();
+
+            foreach (var peqDataModel in Model.PEQ)
+            {
+                var req = new[] { peqDataModel }.RequiredBiquads();
+                peqDataModel.Biquads = new List<int>();
+                for (int i = 0; i < req; i++)
+                {
+                    peqDataModel.Biquads.Add(bq.Pop());
+                }
+            }
+        }
+
+        private Stack<int> GetBiquadStack()
+        {
+            return new Stack<int>(Enumerable.Range(0, (int)Model.SpeakerPeqType));
         }
 
         private bool CheckBiquadIntegraty()
         {
             //_model.AvailableBiquads = GenHashset();
-            foreach (var peqDataModel in _model.PEQ)
+            foreach (var peqDataModel in Model.PEQ)
             {
+                if (peqDataModel.Biquads == null)
+                {
+                    peqDataModel.Biquads = new List<int>();
+                    return false;
+                }
+
                 int req = new[] { peqDataModel }.RequiredBiquads();
-                if (peqDataModel.Biquads == null) return false;
                 if (peqDataModel.Biquads.Count != req)
                     return false;
                 //if biquad is in model, it cannot be in another model or available
-                if (peqDataModel.Biquads.Any(_model.AvailableBiquads.Contains))
-                    return false;
+                //if (peqDataModel.Biquads.Any(Model.AvailableBiquads.Contains))
+                //    return false;
             }
-
-            return ((int)_model.SpeakerPeqType - _model.PEQ.RequiredBiquads()) == _model.AvailableBiquads.Count;
-        }
-
-        public IEnumerable<SetE2PromExt> RedundancyData()
-        {
-            return _model.PEQ.Select(LogicFactory).SelectMany(logic => logic.RedundancyData());
-        }
-
-        public IEnumerable<PeqParam> DspData()
-        {
-            return _model.PEQ.Select(LogicFactory).SelectMany(logic => logic.GetParamData());
-        }
-
-        public IEnumerable<PeqParam> DspData(PeqDataModel data)
-        {
-            return LogicFactory(data).GetParamData();
-        }
-
-        public IEnumerable<PeqParam> GetEmptyDspData(IEnumerable<int> biquads)
-        {
-            return biquads.Select(bq => new PeqParam(SOS.Empty(), _flowId, bq, _model.SpeakerPeqType));
-        }
-
-        public IEnumerable<SetE2PromExt> GetEmtptyRedundancyData(IEnumerable<int> biquads)
-        {
-            return
-                biquads.Select(
-                    bq =>
-                        new SetE2PromExt(GenericMethods.GetMainunitIdForFlowId(_flowId),
-                            EqDataFiles.RedundancyData(null),
-                            EqDataFiles.RedundancyAddress(bq, _model.Id, _model.SpeakerPeqType)));
-        }
-
-        /// <summary>
-        /// Dsp Data
-        /// Redundancy data
-        /// Empty dsp data for empty biquads
-        /// Empty redundancy data for empty biquads
-        /// </summary>
-        /// <returns></returns>
-        public IEnumerable<IDispatchData> TotalSpeakerData()
-        {
-            foreach (var peqParam in DspData())
-            {
-                yield return peqParam;
-            }
-
-            foreach (var setE2PromExt in RedundancyData())
-            {
-                yield return setE2PromExt;
-            }
-
-            foreach (var peqParam in GetEmptyDspData(_model.AvailableBiquads))
-            {
-                yield return peqParam;
-            }
-
-            foreach (var setE2PromExt in GetEmtptyRedundancyData(_model.AvailableBiquads))
-            {
-                yield return setE2PromExt;
-            }
-        }
-
-        private FilterLogicBase LogicFactory(PeqDataModel model)
-        {
-            switch (model.FilterType)
-            {
-                case FilterType.Peaking:
-                    return new PeakingLogic(model, _model, _flowId);
-                default:
-                    return new CrossoverLogic(model, _model, _flowId);
-            }
+            return (int)Model.SpeakerPeqType > Model.PEQ.RequiredBiquads();
+            //return ((int)Model.SpeakerPeqType - Model.PEQ.RequiredBiquads()) == Model.AvailableBiquads.Count;
         }
 
         public void ParseRedundancyData(List<byte> dspCopy)
         {
-            for (var redundancyPosition = 0; redundancyPosition < (int)_model.SpeakerPeqType; redundancyPosition++)
+            Model.PEQ.Clear();
+            for (var redundancyPosition = 0; redundancyPosition < (int)Model.SpeakerPeqType; redundancyPosition++)
             {
-                var position = EepromPosition(dspCopy, redundancyPosition);
+                var position = EepromPosition(dspCopy, redundancyPosition);                                   
                 SetPeqData(position);
             }
         }
@@ -135,7 +93,7 @@ namespace EscInstaller.ViewModel.Settings.Peq
             int skipto;
             try
             {
-                skipto = EqDataFiles.RedundancyAddress(redpos, _model.Id, _model.SpeakerPeqType);
+                skipto = EqDataFiles.RedundancyAddress(redpos, Model.Id, Model.SpeakerPeqType);
             }
             catch (ArgumentException a)
             {
@@ -146,38 +104,54 @@ namespace EscInstaller.ViewModel.Settings.Peq
 
         private void SetPeqData(byte[] rawData)
         {
-            PeqDataModel pdm;
-
+            if (rawData.All(s => s == 0))
+                return;
             try
             {
-                pdm = EqDataFiles.Parse(rawData);
-                _model.PEQ.Add(pdm);
+                PeqDataModel pdm = EqDataFiles.Parse(rawData);
+                Model.PEQ.Add(pdm);
             }
             catch (ArgumentException a)
             {
                 Debug.WriteLine("Raw eeprom data could not be parsed for peq " + a);
                 return;
             }
+        }
 
-            foreach (var dspBiquad in pdm.Biquads)
+        //private void ResetAvailableBq()
+        //{
+        //    if (Model.AvailableBiquads == null) Model.AvailableBiquads = new HashSet<int>();
+        //    var all = (Enumerable.Range(0, (int)Model.SpeakerPeqType));
+        //    foreach (var i in all) { Model.AvailableBiquads.Add(i); }
+        //}
+
+        public IEnumerable<int> UsedBiquads()
+        {
+            return Model.PEQ.SelectMany(n => n.Biquads);
+        }
+
+        public Stack<int> AvailableBiquads()
+        {
+            return new Stack<int>(Enumerable.Range(0, (int)Model.SpeakerPeqType).Except(UsedBiquads()));
+        }
+
+        public void AssignBiquads(PeqDataModel dm)
+        {
+            var r = new[] { dm }.RequiredBiquads();
+            var availablebq = AvailableBiquads();
+
+            foreach (var biquad in dm.Biquads)
             {
-                _model.AvailableBiquads.Remove(dspBiquad);
+                availablebq.Push(biquad);
+            }
+
+            dm.Biquads = new List<int>();
+
+            for (int i = 0; i < r; i++)
+            {
+                dm.Biquads.Add(availablebq.Pop());
             }
         }
 
-        private void ResetAvailableBq()
-        {
-            if (_model.AvailableBiquads == null) _model.AvailableBiquads = new HashSet<int>();
-            var all = (Enumerable.Range(0, (int)_model.SpeakerPeqType));
-            foreach (var i in all) { _model.AvailableBiquads.Add(i); }
-        }
-
-        public PresetNameUpdate PresetNameFactory()
-        {
-            //set the name of choosen preset
-            if (_model.SpeakerPeqType == SpeakerPeqType.BiquadsMic) return null;
-            var mcuId = GenericMethods.GetMainunitIdForFlowId(_flowId);
-            return new PresetNameUpdate(mcuId, _model.SpeakerName, _model.Id);
-        }
     }
 }

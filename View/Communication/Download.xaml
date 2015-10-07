@@ -26,7 +26,7 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
-                        <Image Source="Icons/check.png" Width="15" Height="15">
+                        <Image Source="../../Icons/check.png" Width="15" Height="15">
                             <Image.Style>
                                 <Style TargetType="{x:Type Image}">
                                     <Setter Property="Visibility" Value="Hidden"></Setter>

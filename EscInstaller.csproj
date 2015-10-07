@@ -289,8 +289,9 @@
     <Compile Include="ViewModel\OverView\BlToneControl.cs" />
     <Compile Include="ViewModel\Settings\Peq\CrossoverLogic.cs" />
     <Compile Include="ViewModel\Settings\Peq\FilterLogicBase.cs" />
+    <Compile Include="ViewModel\Settings\Peq\PeakingFilter.cs" />
     <Compile Include="ViewModel\Settings\Peq\PeqBaseViewModel.cs" />
-    <Compile Include="ViewModel\Settings\Peq\PeqDataOperations.cs" />
+    <Compile Include="ViewModel\Settings\Peq\PeakingLogic.cs" />
     <Compile Include="ViewModel\Settings\Peq\PeqDataViewModel.cs" />
     <Compile Include="ViewModel\Settings\Peq\PeqField.cs" />
     <Compile Include="ViewModel\OverView\DiagramData.cs" />
@@ -302,6 +303,7 @@
     <Compile Include="ViewModel\MainUnitViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\Matrix\ColumnHeaderViewModel.cs" />
+    <Compile Include="ViewModel\Settings\Peq\SpeakerLogicForFlow.cs" />
     <Compile Include="ViewModel\Settings\RadioButton.cs" />
     <Compile Include="ViewModel\Settings\SetName.cs" />
     <Compile Include="ViewModel\Settings\IntervalSettingsViewModel.cs" />

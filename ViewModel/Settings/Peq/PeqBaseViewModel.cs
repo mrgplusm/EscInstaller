@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
@@ -22,6 +23,19 @@ namespace EscInstaller.ViewModel.Settings.Peq
             Main = main;
 
             PresentationTraceSources.DataBindingSource.Switch.Level = SourceLevels.Critical;
+
+            main.EepromHandler.SpeakerRedundancyDataUpdated += EepromHandlerOnSpeakerRedundancyDataUpdated;
+            main.EepromHandler.PresetNamesUpdated += EepromHandlerOnPresetNamesUpdated;
+        }
+
+        private void EepromHandlerOnPresetNamesUpdated(object sender, EventArgs eventArgs)
+        {
+            CurrentSpeaker.UpdateSpeakerName();
+        }
+
+        private void EepromHandlerOnSpeakerRedundancyDataUpdated(object sender, EventArgs eventArgs)
+        {
+            CurrentSpeaker.RefreshBiquads();
         }
 
         public abstract SpeakerDataViewModel CurrentSpeaker { get; }
@@ -102,11 +116,11 @@ namespace EscInstaller.ViewModel.Settings.Peq
                 return new RelayCommand(() =>
                 {
                     SpeakerMethods.Import(CurrentSpeaker);
-                    var t = new SpeakerLogic(CurrentSpeaker.DataModel);
-                    
+                    var t = new SpeakerLogicForFlow(CurrentSpeaker.DataModel, Id);
 
-                    CommunicationViewModel.AddData(t.GetPresetData(Id));
-                    CommunicationViewModel.AddData(t.PresetNameFactory(Id));
+
+                    CommunicationViewModel.AddData(t.TotalSpeakerData());
+                    CommunicationViewModel.AddData(t.PresetNameFactory());
                 });
             }
         }

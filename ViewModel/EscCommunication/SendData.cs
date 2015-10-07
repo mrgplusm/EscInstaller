@@ -1,4 +1,6 @@
-﻿namespace EscInstaller.ViewModel.EscCommunication
+﻿using System.Linq;
+
+namespace EscInstaller.ViewModel.EscCommunication
 {
     public class SendData : Downloader
     {
@@ -85,7 +87,7 @@
             var presets = new ItemtoDownload()
             {
                 ItemName = "Peq data + redundancy",
-                Function = () => Main.Sender.SetSpeakerPresetData(),
+                Function = () => Main.Sender.SetSpeakerPresetData(Main.Sender.GetTotalPresetData().ToList()),
             };
             Main.Sender.SpeakerPeqDownloaded += presets.OnCompleted;
             ItemstoDownload.Add(presets);            
