@@ -53,6 +53,7 @@ namespace EscInstaller.ViewModel
         private void UpdateConnectionMode()
         {
             ConnectType = (Connection != null && Connection.UnitId == Id) ? Connection.ConnectType : ConnectType.None;
+            _main.Communication.SetTriggers();
         }
 
         public ConnectionViewModel Connection

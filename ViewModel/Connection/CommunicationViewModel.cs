@@ -48,7 +48,7 @@ namespace EscInstaller.ViewModel.Connection
         {
             if (LibraryData.FuturamaSys.Connections == null) return;
 
-            foreach (var c in LibraryData.FuturamaSys.Connections.Select(model => new ConnectionViewModel(model)))
+            foreach (var c in LibraryData.FuturamaSys.Connections.Select(model => new ConnectionViewModel(model)).Except(OpenConnections))
             {
                 OpenConnections.Add(c);
             }
@@ -104,8 +104,7 @@ namespace EscInstaller.ViewModel.Connection
                     var z = new ConnectionModel { IsNetConnect = (q == "net") };
                     var vm = new ConnectionViewModel(z);
 
-                    vm.Connection.ConnectModeChanged += Connection_ConnectModeChanged;
-                    vm.Connection.UnitIdChanged += Connection_ConnectModeChanged;
+                    AttachConnectionEvents(vm);
                     OpenConnections.Add(vm);
 
                     if (!LibraryData.SystemIsOpen) return;
@@ -114,6 +113,18 @@ namespace EscInstaller.ViewModel.Connection
                     LibraryData.FuturamaSys.Connections.Add(z);
                 });
             }
+        }
+
+        private void AttachConnectionEvents(ConnectionViewModel vm)
+        {
+            vm.Connection.ConnectModeChanged += Connection_ConnectModeChanged;
+            vm.Connection.UnitIdChanged += Connection_ConnectModeChanged;
+        }
+
+        private void RemoveConnectionEvents(ConnectionViewModel vm)
+        {
+            vm.Connection.ConnectModeChanged -= Connection_ConnectModeChanged;
+            vm.Connection.UnitIdChanged -= Connection_ConnectModeChanged;
         }
 
         void Connection_ConnectModeChanged(object sender, ConnectionModeChangedEventArgs c)
@@ -159,6 +170,15 @@ namespace EscInstaller.ViewModel.Connection
             {
                 Properties.Settings.Default.ReadCommunicationDisclaimer = value;
                 RaisePropertyChanged(() => ReadDisclaimer);
+            }
+        }
+
+        public void SetTriggers()
+        {
+            foreach (var connectionViewModel in OpenConnections)
+            {
+                RemoveConnectionEvents(connectionViewModel);
+                AttachConnectionEvents(connectionViewModel);
             }
         }
     }

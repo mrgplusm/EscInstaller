@@ -23,12 +23,13 @@ namespace EscInstaller.ViewModel.Settings.Peq
 
         public IEnumerable<SetE2PromExt> GetEmtptyRedundancyData(IEnumerable<int> biquads)
         {
+
             return
                 biquads.Select(
                     bq =>
                         new SetE2PromExt(GenericMethods.GetMainunitIdForFlowId(_flowId),
-                            EqDataFiles.RedundancyData(null),
-                            EqDataFiles.RedundancyAddress(bq, Model.Id, Model.SpeakerPeqType)));
+                            (new FilterBase(null)).RedundancyToBytes(),
+                            RedundancyAddress(bq)));
         }
 
         public IEnumerable<SetE2PromExt> RedundancyData()

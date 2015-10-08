@@ -288,6 +288,7 @@
     <Compile Include="ViewModel\OverView\BlSpeakerPeq.cs" />
     <Compile Include="ViewModel\OverView\BlToneControl.cs" />
     <Compile Include="ViewModel\Settings\Peq\CrossoverLogic.cs" />
+    <Compile Include="ViewModel\Settings\Peq\FilterBase.cs" />
     <Compile Include="ViewModel\Settings\Peq\FilterLogicBase.cs" />
     <Compile Include="ViewModel\Settings\Peq\PeakingFilter.cs" />
     <Compile Include="ViewModel\Settings\Peq\PeqBaseViewModel.cs" />

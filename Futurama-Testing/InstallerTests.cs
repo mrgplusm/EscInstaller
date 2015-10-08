@@ -2,16 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO.Packaging;
 using System.Linq;
-using System.Security.Permissions;
 using Common.Model;
-using EscInstaller;
 using EscInstaller.ViewModel;
-using EscInstaller.ViewModel.OverView;
-using EscInstaller.ViewModel.Settings;
 using Common;
 using Common.Commodules;
+using EscInstaller.ViewModel.Settings.Peq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 
@@ -71,13 +67,14 @@ namespace Futurama_Testing
         {
 
             foreach (var q in TestSpeaker().PEQ)
-            {
-                var z = new PeqDataLogic(q);
+            {                
+                var z = new FilterBase(q);
+                var data = z.RedundancyToBytes();
 
-                var data = z.GetRedundancyData();
                 var conv = new PeqDataModel();
-                var qqq = new PeqDataLogic(conv);
-                qqq.ResolveData(data);
+                var logic = new FilterBase(conv);
+                logic.Parse(data);
+                
 
                 Assert.AreEqual(q.Frequency, conv.Frequency, .5);
                 Assert.AreEqual(q.Boost, conv.Boost, .5);
@@ -87,44 +84,11 @@ namespace Futurama_Testing
                 Assert.AreEqual(q.BandWidth, conv.BandWidth, .5);
                 Assert.AreEqual(q.Order, conv.Order);
 
-                CollectionAssert.AreEqual(q.DspBiquads.ToArray(), conv.DspBiquads.ToArray());
+                CollectionAssert.AreEqual(q.Biquads.ToArray(), conv.Biquads.ToArray());
             }
         }
 
-        /// <summary>
-        /// Tests if no memoryleak occurs when removing and adding cards
-        /// </summary>
-        [TestMethod]
-        public void MainUnitViewCards()
-        {
-            var m = new MainUnitViewModel(LibraryData.FuturamaSys.MainUnits.First(), new MainViewModel());
-
-            var count = new int[3];
-
-            count[0] = m.DiagramObjects.Count;
-            m.AddNewCard.Execute(null);
-            count[1] = m.DiagramObjects.Count;
-            m.AddNewCard.Execute(null);
-            count[2] = m.DiagramObjects.Count;
-
-            m.RemoveLastCard.Execute(null);
-            m.RemoveLastCard.Execute(null);
-
-            for (var i = 0; i < 5; i++)
-            {
-                Assert.AreEqual(count[0], m.DiagramObjects.Count);
-                m.AddNewCard.Execute(null);
-                Assert.AreEqual(count[1], m.DiagramObjects.Count);
-                m.AddNewCard.Execute(null);
-                Assert.AreEqual(count[2], m.DiagramObjects.Count);
-                //remove
-                m.RemoveLastCard.Execute(null);
-                Assert.AreEqual(count[1], m.DiagramObjects.Count);
-                m.RemoveLastCard.Execute(null);
-                Assert.AreEqual(count[0], m.DiagramObjects.Count);
-            }
-        }
-
+        
         [TestMethod]
         public void TestRecentFiles()
         {
@@ -198,21 +162,7 @@ namespace Futurama_Testing
             }
             
         }
-               
-        [TestMethod]
-        public void ClearBiquadTest()
-        {
-            //todo:incomplete, untested
-            var speakerModel = new SpeakerDataModel { SpeakerPeqType = SpeakerPeqType.BiquadsPreset };
-            var spdvm = new SpeakerLogic(speakerModel);
-            {
-                var q = spdvm.GetClearBiquadData(0);
-                Assert.AreEqual(28, q.Count);
-            }
-            {
-                var q = spdvm.GetClearBiquadData(Enumerable.Range(1, 10).Select(x => x).ToArray(), 0);                
-            }            
-        }
+         
 
 
         [TestMethod]
@@ -328,7 +278,7 @@ namespace Futurama_Testing
             {
                 BandWidth = 1,
                 Boost = 1,
-                DspBiquads = null,
+                Biquads = null,
                 FilterType = filterType,
                 Frequency = freq,
                 Gain = 1,
@@ -352,56 +302,10 @@ namespace Futurama_Testing
             speakerdata.PEQ.Add(TestPeqParam(FilterType.Peaking, 1000, 4));
             speakerdata.PEQ.Add(TestPeqParam(FilterType.BesselHp, 2000, 4));
 
-            var q = new SpeakerLogic(speakerdata);
-            q.ResetAvailableBq();
 
             return speakerdata;
         }
 
-        /// <summary>
-        /// Check passfilter method against expexted sos params in packages
-        /// </summary>
-        [TestMethod]
-        public void PassFilterTest()
-        {
-            var x = false;
-            var testsp = TestSpeaker();
-            var logic = new SpeakerLogic(testsp);
-
-            foreach (var tp in testsp.PEQ.Where(t => (int)t.FilterType > 0 && (int)t.FilterType < 6))
-            {
-                var peqlogic = new PeqDataLogic(tp);
-                peqlogic.PassFilterData(logic, 0);
-
-                var fd = peqlogic.PassFilterData(logic, 0).OfType<PeqParam>().ToList();
-
-                var comp1 = DspCoefficients.GetXoverSOS(tp.Frequency, tp.Order, tp.FilterType, DspCoefficients.Fs).ToArray();
-
-                var biquadsUsed = (tp.Order + 1) >> 1;
-                Assert.AreEqual((biquadsUsed), comp1.Length);
-
-                var first = fd.First();
-
-                Assert.AreEqual(biquadsUsed, fd.Count);
-                Assert.IsTrue(tp.DspBiquads.Any(q => q == fd.First().Biquad));
-                Assert.IsTrue(comp1.Any(q => q.Equals(fd.First().SosData)));
-                x = true;
-
-                if (fd.Count < 2) continue;
-                var second = fd.Skip(1).First();
-                Assert.IsTrue(tp.DspBiquads.Any(q => q == second.Biquad));
-                Assert.AreNotEqual(second.Biquad, first.Biquad);
-                Assert.IsTrue(comp1.Any(q => q.Equals(second.SosData)));
-                //                Assert.AreNotEqual(first.SosData, second.SosData);
-
-                if (fd.Count < 3) continue;
-                var third = fd.Skip(2).First();
-                Assert.AreNotEqual(third.Biquad, first.Biquad);
-                Assert.AreNotEqual(third.Biquad, second.Biquad);
-                Assert.IsTrue(comp1.Any(q => q.Equals(third.SosData)));
-            }
-            Assert.IsTrue(x);
-        }
 
         [TestMethod]
         public void SendPresetTemporaryFunction()
@@ -446,7 +350,7 @@ namespace Futurama_Testing
                     var tp = TestSpeaker();
                     tp.SpeakerPeqType = spType[i];
                     var logig = new SpeakerLogic(tp);
-                    var address = logig.RedundancyAddress(biqaudSpeakerId[i, test, 0], biqaudSpeakerId[i, test, 1]);
+                    var address = logig.RedundancyAddress(biqaudSpeakerId[i, test, 0]);
                     
                     Assert.AreEqual(expected[i, test], address);
                 }

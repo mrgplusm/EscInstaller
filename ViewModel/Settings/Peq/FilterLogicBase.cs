@@ -6,24 +6,24 @@ using Common.Model;
 
 namespace EscInstaller.ViewModel.Settings.Peq
 {
-    public abstract class FilterLogicBase
+    public abstract class FilterLogicBase : FilterBase
     {
-        protected readonly PeqDataModel PEQDataModel;
+
         private readonly SpeakerDataModel _model;
         protected readonly int FlowId;
 
         protected FilterLogicBase(PeqDataModel peqDataModel, SpeakerDataModel model, int flowId)
+            : base(peqDataModel)
         {
-            PEQDataModel = peqDataModel;
             _model = model;
             FlowId = flowId;
 
             if (PEQDataModel.Biquads == null)
                 throw new Exception("No biquads are defined for this filter");
-            if(new[] {PEQDataModel}.RequiredBiquads() > PEQDataModel.Biquads.Count)
+            if (new[] { PEQDataModel }.RequiredBiquads() > PEQDataModel.Biquads.Count)
                 throw new Exception("Not enough biquads are defined for this filter");
         }
-      
+
         /// <summary>
         /// Sends a multi biquad passband filter
         /// there should be enough biquads assigned to this filter
@@ -43,7 +43,8 @@ namespace EscInstaller.ViewModel.Settings.Peq
 
         private int GetRedundancyAddress(int biquad)
         {
-            return EqDataFiles.RedundancyAddress(GetBiquad(biquad), _model.Id, _model.SpeakerPeqType);
+            var z = new SpeakerLogic(_model);
+            return z.RedundancyAddress(GetBiquad(biquad));
         }
 
         public virtual IEnumerable<SetE2PromExt> RedundancyData()
@@ -52,14 +53,14 @@ namespace EscInstaller.ViewModel.Settings.Peq
 
             var redAddress = GetRedundancyAddress(0);
 
-            var data = EqDataFiles.RedundancyData(PEQDataModel);
+            var data = RedundancyToBytes();
 
             yield return new SetE2PromExt(mcuId, data, redAddress);
 
             //if biquad consists out of more biquads remove their redundancy data
             for (int i = 1; i < PEQDataModel.Biquads.Count; i++)
             {
-                yield return new SetE2PromExt(mcuId, EqDataFiles.RedundancyData(null), GetRedundancyAddress(i));
+                yield return new SetE2PromExt(mcuId, RedundancyToBytes(), GetRedundancyAddress(i));
             }
         }
     }
