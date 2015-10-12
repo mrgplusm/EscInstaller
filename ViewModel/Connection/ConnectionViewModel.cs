@@ -19,9 +19,9 @@ namespace EscInstaller.ViewModel.Connection
             DataModel = connection;
             Connection = new Common.Connection();
 
-            Connection.ErrorOccured += message => Application.Current.Dispatcher.Invoke(() =>
+            Connection.ErrorOccured += (a,b) => Application.Current.Dispatcher.Invoke(() =>
             {
-                ErrorInfo = message;
+                ErrorInfo = b.Exception.Message;
 
                 RaisePropertyChanged(() => ConnectMode);
             });
@@ -184,7 +184,5 @@ namespace EscInstaller.ViewModel.Connection
             if (ReferenceEquals(this, other)) return true;
             return Equals(DataModel, other.DataModel);
         }
-
-
     }
 }
