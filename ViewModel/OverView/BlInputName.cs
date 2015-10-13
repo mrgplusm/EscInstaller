@@ -28,9 +28,9 @@ namespace EscInstaller.ViewModel.OverView
             _main = main;
 
 
-            main.Receiver.SensitivityDownloaded += ReceiverOnSensitivityDownloaded;
-            main.EepromHandler.PresetNamesUpdated += Receiver_PresetNamesUpdated;
-            main.EepromHandler.DspMirrorUpdated += Receiver_DspMirrorUpdated;
+            //main.SensitivityDownloaded += ReceiverOnSensitivityDownloaded;
+            main.PresetNamesUpdated += Receiver_PresetNamesUpdated;
+            main.DspMirrorUpdated += Receiver_DspMirrorUpdated;
             main.MonitorSliderUpdated += (a, b) => RaisePropertyChanged(() => MonitorSlider);
         }
 

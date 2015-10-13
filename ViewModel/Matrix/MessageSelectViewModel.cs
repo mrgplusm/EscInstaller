@@ -5,6 +5,7 @@ using System.Windows.Input;
 using EscInstaller.View;
 using EscInstaller.ViewModel.Connection;
 using EscInstaller.ViewModel.EscCommunication;
+using EscInstaller.ViewModel.EscCommunication.Logic;
 using EscInstaller.ViewModel.SDCard;
 using GalaSoft.MvvmLight;
 using Common;
@@ -28,8 +29,8 @@ namespace EscInstaller.ViewModel.Matrix
         {
             _main = main;
             _id = id;
-            _main.Receiver.SdCardMessagesReceived += Receiver_SdCardMessagesReceived;
-            _main.Receiver.SdCardPositionsReceived += ReceiverOnSdCardPositionsReceived;
+            main.SdCardMessagesReceived += Receiver_SdCardMessagesReceived;
+            main.SdCardPositionsReceived += ReceiverOnSdCardPositionsReceived;
         }
 
         private void ReceiverOnSdCardPositionsReceived(object sender, EventArgs eventArgs)
@@ -44,9 +45,8 @@ namespace EscInstaller.ViewModel.Matrix
             RaisePropertyChanged(() => ButtonD2);
         }
 
-        void Receiver_SdCardMessagesReceived(object sender, DownloadProgressEventArgs e)
-        {
-            if (e.Progress < e.Total) return;
+        void Receiver_SdCardMessagesReceived(object sender, EventArgs eventArgs)
+        {            
             foreach (var sdFileVM in MesA.Concat(MesB))
             {
                 sdFileVM.UpdateName();
@@ -219,12 +219,13 @@ namespace EscInstaller.ViewModel.Matrix
         }
 
 
-        public void SendMessages()
+        public async void SendMessages()
         {
 
             if (!LibraryData.SystemIsOpen) return;
             if (LibraryData.FuturamaSys.Messages == null || LibraryData.FuturamaSys.Messages.Count < 3) return;
-            _main.Sender.SetMessageData();
+            var q = new MessageSelector(_main.DataModel);
+            await q.SetMessageData(new Progress<DownloadProgress>());
         }
     }
 

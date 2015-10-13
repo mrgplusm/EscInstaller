@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using EscInstaller.ViewModel.EscCommunication.downloadItems;
+using EscInstaller.ViewModel.EscCommunication.UploadItem;
 
 namespace EscInstaller.ViewModel.EscCommunication
 {
@@ -15,101 +16,19 @@ namespace EscInstaller.ViewModel.EscCommunication
 
         protected void PopulateItems()
         {
-            var toneControl = new ItemtoDownload()
-            {
-                ItemName = "Tone Control",
-                Function = () => Main.Sender.SetToneControls(),
-            };
+            ItemstoDownload.Add(new Auxlinks(Main));
+            ItemstoDownload.Add(new Delaysettings(Main));
+            ItemstoDownload.Add(new InputSensitivity(Main));
+            ItemstoDownload.Add(new Linelinks(Main));
 
-            Main.Sender.ToneControlSend += toneControl.OnCompleted;
-            ItemstoDownload.Add(toneControl);
+            ItemstoDownload.Add(new MatrixSelection(Main));
+            ItemstoDownload.Add(new Messageselection(Main));
+            ItemstoDownload.Add(new Peqpresetnames(Main));
+            ItemstoDownload.Add(new InOutNames(Main));
 
-            var inoutputnames = new ItemtoDownload()
-            {
-                ItemName = "In/output names",
-                Function = () => Main.Sender.SetInAndOutputNames(),
-            };
-
-            Main.Sender.InOutputNamesSend += inoutputnames.OnCompleted;
-            ItemstoDownload.Add(inoutputnames);
-
-            var links = new ItemtoDownload()
-            {
-                ItemName = "Line links",
-                Function = () => Main.Sender.SetLinkDemuxers(),
-            };
-
-            Main.Sender.LinkDemuxSend += links.OnCompleted;
-            ItemstoDownload.Add(links);
-
-            var delay = new ItemtoDownload()
-            {
-                ItemName = "Delay settings",
-                Function = () => Main.Sender.SetDelaySettings(),
-            };
-
-            Main.Sender.DelaySend += delay.OnCompleted;
-            ItemstoDownload.Add(delay);
-
-            var emergencySliders = new ItemtoDownload()
-            {
-                ItemName = "emergencySliders",
-                Function = () => Main.Sender.SetSliders(),
-            };
-
-            Main.Sender.EmergencySlidersSend += emergencySliders.OnCompleted;
-            ItemstoDownload.Add(emergencySliders);
-
-            var inputSensitivity = new ItemtoDownload()
-            {
-                ItemName = "Input Sensitivity",
-                Function = () => Main.Sender.SetInputSensitivity(),
-            };
-            Main.Sender.InputSensitivitySend += inputSensitivity.OnCompleted;
-            ItemstoDownload.Add(inputSensitivity);
-
-            var auxLinks = new ItemtoDownload()
-            {
-                ItemName = "Aux link",
-                Function = () => Main.Sender.SetAuxLink(),
-            };
-            Main.Sender.AuxLinks += auxLinks.OnCompleted;
-            ItemstoDownload.Add(auxLinks);
-
-            var peqNames = new ItemtoDownload()
-            {
-                ItemName = "Peq preset names",
-                Function = () => Main.Sender.PeqNames(),
-            };
-            Main.Sender.PeqNamesSend += peqNames.OnCompleted;
-            ItemstoDownload.Add(peqNames);
-
-            var presets = new ItemtoDownload()
-            {
-                ItemName = "Peq data + redundancy",
-                Function = () => Main.Sender.SetSpeakerPresetData(Main.Sender.GetTotalPresetData().ToList()),
-            };
-            Main.Sender.SpeakerPeqDownloaded += presets.OnCompleted;
-            ItemstoDownload.Add(presets);            
-
-            
-            var matrix = new ItemtoDownload()
-            {
-                ItemName = "Matrix selection",
-                Function = () => Main.Sender.SetMatrixSelections(),
-            };
-            Main.Sender.MatrixSendComplete += matrix.OnCompleted;
-            ItemstoDownload.Add(matrix);
-            
-            var messages = new ItemtoDownload()
-            {
-                ItemName = "Message selection",
-                Function = () => Main.Sender.SetMessageData(),
-            };
-            Main.Sender.MessageSelectionSend += messages.OnCompleted;
-            ItemstoDownload.Add(messages);
-
-
-        }        
+            ItemstoDownload.Add(new PeqData(Main));
+            ItemstoDownload.Add(new GainSliders(Main));
+            ItemstoDownload.Add(new ToneControl(Main));
+        }
     }
 }

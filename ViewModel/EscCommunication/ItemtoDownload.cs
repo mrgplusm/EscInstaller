@@ -1,29 +1,21 @@
 using System;
-using Common;
+using System.Threading.Tasks;
+using EscInstaller.ViewModel.EscCommunication.Logic;
 using GalaSoft.MvvmLight;
 
 namespace EscInstaller.ViewModel.EscCommunication
 {
-    public class ItemtoDownload : ViewModelBase
+    public abstract class ItemtoDownload : ViewModelBase, IProgress<DownloadProgress>
     {
-        private bool _receiveCompleted;
+        protected readonly MainUnitViewModel Main;
         private bool _doDownload;
         private double _progressBar;
+        private bool _receiveCompleted;
 
 
-        public event EventHandler DownloadClicked;
-
-        protected virtual void OnDownloadClicked()
+        protected ItemtoDownload(MainUnitViewModel main)
         {
-            EventHandler handler = DownloadClicked;
-            if (handler != null) handler(this, EventArgs.Empty);
-        }
-
-
-        public void SelectDownload(bool value)
-        {
-            _doDownload = value;
-            RaisePropertyChanged(() => DoDownload);
+            Main = main;
         }
 
         public bool DoDownload
@@ -37,41 +29,27 @@ namespace EscInstaller.ViewModel.EscCommunication
             }
         }
 
-        public string ItemName { get; set; }
+        public abstract string ItemName { get; }
+
         /// <summary>
-        /// to execute when this item is selected
+        ///     to execute when this item is selected
         /// </summary>
-        public Action Function { get; set; }
+        public abstract Task Function { get; }
 
-
-        public ItemtoDownload()
-        {
-
-        }
 
         public bool ReceiveCompleted
         {
             get { return _receiveCompleted; }
             set
             {
+                Done();
                 _receiveCompleted = value;
                 RaisePropertyChanged(() => ReceiveCompleted);
             }
         }
 
         /// <summary>
-        /// Item finished downloading
-        /// </summary>
-        public event EventHandler DownloadCompleted;
-
-        protected virtual void OnDownloadCompleted()
-        {
-            EventHandler handler = DownloadCompleted;
-            if (handler != null) handler(this, EventArgs.Empty);
-        }
-
-        /// <summary>
-        /// Indicates progress from 0 - 100;
+        ///     Indicates progress from 0 - 100;
         /// </summary>
         public double ProgressBar
         {
@@ -83,36 +61,41 @@ namespace EscInstaller.ViewModel.EscCommunication
             }
         }
 
-        public virtual void OnCompleted(object sender, DownloadProgressEventArgs e)
+        public void Report(DownloadProgress e)
         {
             if (e.Progress >= e.Total - .01)
             {
                 ReceiveCompleted = true;
-                OnDownloadCompleted();
+
                 ProgressBar = 100;
             }
             else
             {
-                ProgressBar = (double)e.Progress / e.Total * 100;
+                ProgressBar = (double) e.Progress/e.Total*100;
             }
         }
 
-        public void OnCompleted(object sender, EventArgs e)
+        public event EventHandler DownloadClicked;
+
+        protected virtual void OnDownloadClicked()
         {
-            ReceiveCompleted = true;
-            OnDownloadCompleted();
-            ProgressBar = 100;
+            var handler = DownloadClicked;
+            if (handler != null) handler(this, EventArgs.Empty);
         }
-    }
 
-    public class ItemToEeprom : ItemtoDownload
-    {
-        public E2PromArea Area { get; set; }
-
-        public void OnCompleted(object sender, DownloadEepromEventArgs e)
+        public void SelectDownload(bool value)
         {
-            if (Area == e.Area)
-                base.OnCompleted(sender, e);
+            _doDownload = value;
+            RaisePropertyChanged(() => DoDownload);
+        }
+
+        protected Progress<DownloadProgress> ProgressFactory()
+        {
+            return new Progress<DownloadProgress>(Report);
+        }
+
+        protected virtual void Done()
+        {
         }
     }
 }

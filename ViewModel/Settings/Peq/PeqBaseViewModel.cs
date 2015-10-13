@@ -24,8 +24,8 @@ namespace EscInstaller.ViewModel.Settings.Peq
 
             PresentationTraceSources.DataBindingSource.Switch.Level = SourceLevels.Critical;
 
-            main.EepromHandler.SpeakerRedundancyDataUpdated += EepromHandlerOnSpeakerRedundancyDataUpdated;
-            main.EepromHandler.PresetNamesUpdated += EepromHandlerOnPresetNamesUpdated;
+            main.RedundancyUpdated += EepromHandlerOnSpeakerRedundancyDataUpdated;
+            main.PresetNamesUpdated += EepromHandlerOnPresetNamesUpdated;
         }
 
         private void EepromHandlerOnPresetNamesUpdated(object sender, EventArgs eventArgs)

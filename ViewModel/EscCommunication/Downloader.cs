@@ -10,7 +10,7 @@ namespace EscInstaller.ViewModel.EscCommunication
         protected readonly MainUnitViewModel Main;
         private bool _allChecked = true;
         private bool _escDownloadCompleted;
-        
+
         protected Downloader(MainUnitViewModel main)
         {
             Main = main;
@@ -22,23 +22,8 @@ namespace EscInstaller.ViewModel.EscCommunication
             get { return Main.DisplayValue; }
         }
 
-        protected void AttachHandler(ItemtoDownload itemtoDownload)
-        {
-            itemtoDownload.DownloadClicked += SubItemChecked;
-            itemtoDownload.SelectDownload(true);
-            itemtoDownload.DownloadCompleted += itemtoDownload_DownloadCompleted;
-        }
-
-
-        private void SubItemChecked(object sender, EventArgs eventArgs)
-        {
-            _allChecked = ItemstoDownload.All(d => d.DoDownload);
-            OnAllItemsChecked();
-            RaisePropertyChanged(() => AllChecked);
-        }
-
         /// <summary>
-        /// Download all items of this esc
+        ///     Download all items of this esc
         /// </summary>
         public bool AllChecked
         {
@@ -53,34 +38,6 @@ namespace EscInstaller.ViewModel.EscCommunication
             }
         }
 
-        /// <summary>
-        /// Occurs whenever state of allchecked changes
-        /// </summary>
-        public event EventHandler AllItemsChecked;
-
-        protected virtual void OnAllItemsChecked()
-        {
-            EventHandler handler = AllItemsChecked;
-            if (handler != null) handler(this, EventArgs.Empty);
-        }
-
-        private void CheckAllDownloadItems(bool value)
-        {
-            foreach (var itemtoDownload in ItemstoDownload) itemtoDownload.SelectDownload(value);
-        }
-
-
-
-
-        void itemtoDownload_DownloadCompleted(object sender, EventArgs e)
-        {
-            if (ItemstoDownload.Where(q => q.DoDownload).All(s => s.ReceiveCompleted))
-            {
-                EscDownloadCompleted = true;
-            }
-            OnDownloadItemStateChanged();
-        }
-
         public bool EscDownloadCompleted
         {
             get { return _escDownloadCompleted; }
@@ -91,26 +48,65 @@ namespace EscInstaller.ViewModel.EscCommunication
             }
         }
 
+        public ObservableCollection<ItemtoDownload> ItemstoDownload { get; protected set; }
+
+        protected void AttachHandler(ItemtoDownload itemtoDownload)
+        {
+            itemtoDownload.DownloadClicked += SubItemChecked;
+            itemtoDownload.SelectDownload(true);
+        }
+
+
+        private void SubItemChecked(object sender, EventArgs eventArgs)
+        {
+            _allChecked = ItemstoDownload.All(d => d.DoDownload);
+            OnAllItemsChecked();
+            RaisePropertyChanged(() => AllChecked);
+        }
+
         /// <summary>
-        /// One of the items finished downloading
+        ///     Occurs whenever state of allchecked changes
+        /// </summary>
+        public event EventHandler AllItemsChecked;
+
+        protected virtual void OnAllItemsChecked()
+        {
+            var handler = AllItemsChecked;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
+
+        private void CheckAllDownloadItems(bool value)
+        {
+            foreach (var itemtoDownload in ItemstoDownload) itemtoDownload.SelectDownload(value);
+        }
+
+
+        private void itemtoDownload_DownloadCompleted(object sender, EventArgs e)
+        {
+            if (ItemstoDownload.Where(q => q.DoDownload).All(s => s.ReceiveCompleted))
+            {
+                EscDownloadCompleted = true;
+            }
+            OnDownloadItemStateChanged();
+        }
+
+        /// <summary>
+        ///     One of the items finished downloading
         /// </summary>
         public event EventHandler DownloadItemStateChanged;
 
         protected virtual void OnDownloadItemStateChanged()
         {
-            EventHandler handler = DownloadItemStateChanged;
+            var handler = DownloadItemStateChanged;
             if (handler != null) handler(this, EventArgs.Empty);
         }
 
 
-        public ObservableCollection<ItemtoDownload> ItemstoDownload { get; protected set; }
-
-
-        public void StartDownload()
+        public async void StartDownload()
         {
             foreach (var itemtoDownload in ItemstoDownload.Where(n => n.DoDownload))
             {
-                itemtoDownload.Function();
+                await itemtoDownload.Function;
             }
         }
     }

@@ -6,14 +6,12 @@ namespace EscInstaller.ViewModel.EscCommunication
 {
     public class CommunicationSend : CommunicationBase
     {
+        private ObservableCollection<Downloader> _escs;
+
         public CommunicationSend(MainViewModel main)
             : base(main)
         {
-
         }
-
-
-        private ObservableCollection<Downloader> _escs;
 
         public override ObservableCollection<Downloader> Escs
         {

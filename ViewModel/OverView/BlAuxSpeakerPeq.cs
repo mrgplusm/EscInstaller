@@ -34,7 +34,7 @@ namespace EscInstaller.ViewModel.OverView
             Location.X = XLocation;
 
             _card = card;
-            main.EepromHandler.PresetNamesUpdated += Receiver_PresetNamesUpdated;
+            main.PresetNamesUpdated += Receiver_PresetNamesUpdated;
         }
 
         void Receiver_PresetNamesUpdated(object sender, System.EventArgs e)

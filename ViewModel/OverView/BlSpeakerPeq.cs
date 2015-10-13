@@ -28,7 +28,7 @@ namespace EscInstaller.ViewModel.OverView
             Location.X = XLocation;
 
             _flow = flow;
-            main.EepromHandler.PresetNamesUpdated += Receiver_PresetNamesUpdated;
+            main.PresetNamesUpdated += Receiver_PresetNamesUpdated;
         }
 
         void Receiver_PresetNamesUpdated(object sender, System.EventArgs e)

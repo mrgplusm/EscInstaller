@@ -6,11 +6,18 @@ using Common.Commodules;
 using Common.Model;
 using EscInstaller.ViewModel.Connection;
 
-namespace EscInstaller.ViewModel.EscCommunication
+namespace EscInstaller.ViewModel.EscCommunication.Logic
 {
-    class SdMessageNameLoader
+    internal class SdMessageNameLoader
     {
         private readonly int _card;
+
+        private readonly List<SdFileModel>[] _sdFileModels =
+        {
+            LibraryData.FuturamaSys.SdFilesA,
+            LibraryData.FuturamaSys.SdFilesB
+        };
+
         private readonly int _track;
 
         /// <param name="card">Either 0 or 1</param>
@@ -30,8 +37,6 @@ namespace EscInstaller.ViewModel.EscCommunication
             return false;
         }
 
-
-        readonly List<SdFileModel>[] _sdFileModels = { LibraryData.FuturamaSys.SdFilesA, LibraryData.FuturamaSys.SdFilesB };
 
         public async Task GetMessageName()
         {
@@ -53,7 +58,7 @@ namespace EscInstaller.ViewModel.EscCommunication
         }
 
         /// <summary>
-        /// esc sometimes gives erroneously wrong response. If name contains 16khz, redownload a few times until succes.
+        ///     esc sometimes gives erroneously wrong response. If name contains 16khz, redownload a few times until succes.
         /// </summary>
         /// <param name="download"></param>
         /// <returns>true if name is not 16khz</returns>

@@ -31,10 +31,10 @@ namespace EscInstaller.ViewModel.OverView
             _main = main;
             Location.X = XLocation;
             _flow = flow;
-            _main.Receiver.EepromReceived += ReceiverOnEepromReceived;
+            _main.KreisUpdated += ReceiverOnEepromReceived;
         }
 
-        private void ReceiverOnEepromReceived(object sender, DownloadEepromEventArgs downloadEepromEventArgs)
+        private void ReceiverOnEepromReceived(object sender, EventArgs eventArgs)
         {
             _l = GetLoads(_flow, _main.DataModel);
         }

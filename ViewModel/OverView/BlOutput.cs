@@ -22,8 +22,8 @@ namespace EscInstaller.ViewModel.OverView
         {
             _flow = flow;            
             Location.X = XLocation;
-            main.EepromHandler.PresetNamesUpdated += Receiver_PresetNamesUpdated;
-            main.EepromHandler.DspMirrorUpdated += ReceiverOnDspMirrorUpdated;
+            main.PresetNamesUpdated += Receiver_PresetNamesUpdated;
+            main.DspMirrorUpdated += ReceiverOnDspMirrorUpdated;
         }
 
         private void ReceiverOnDspMirrorUpdated(object sender, EventArgs eventArgs)

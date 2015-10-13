@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -35,7 +36,7 @@ namespace EscInstaller.ViewModel.OverView
             SetYLocation();
 
             UpdatePanelCount();
-            _main.Receiver.EepromReceived += Receiver_EepromReceived;
+            
 
         }
 
@@ -53,11 +54,7 @@ namespace EscInstaller.ViewModel.OverView
                 @base.Value.PanelCount = _main.DataModel.AttachedPanelsBus2.Count(z => z.IsInstalled && z.PanelType == @base.Key);
             }
         }
-
-        void Receiver_EepromReceived(object sender, DownloadEepromEventArgs e)
-        {
-            UpdatePanelCount();
-        }
+        
 
         private readonly Point _size = new Point(Width, RowHeight * 4 + UnitHeight);
         public override Point Size

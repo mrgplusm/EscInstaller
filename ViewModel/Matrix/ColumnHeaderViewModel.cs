@@ -43,7 +43,7 @@ namespace EscInstaller.ViewModel.Matrix
             MainUnit.CardsUpdated += NewMcu_CardsUpdated;
 
             AlarmSelectionChanged += OnAlarmSelectionChanged;
-            mainUnit.EepromHandler.RoutingTableUpdated += Receiver_EepromValuesReceived;
+            mainUnit.RoutingTableUpdated += Receiver_EepromValuesReceived;
         }
 
         void Receiver_EepromValuesReceived(object sender, EventArgs e)
@@ -72,11 +72,11 @@ namespace EscInstaller.ViewModel.Matrix
         private void PanelViewModelOnMcuChanged(object sender, McuChangedEventArgs rangeChangedEventArgs)
         {
             MainUnit.CardsUpdated -= NewMcu_CardsUpdated;
-            MainUnit.EepromHandler.RoutingTableUpdated -= Receiver_EepromValuesReceived;
+            MainUnit.RoutingTableUpdated -= Receiver_EepromValuesReceived;
 
             MainUnit = rangeChangedEventArgs.NewMcu;
 
-            MainUnit.EepromHandler.RoutingTableUpdated += Receiver_EepromValuesReceived;
+            MainUnit.RoutingTableUpdated += Receiver_EepromValuesReceived;
             rangeChangedEventArgs.NewMcu.CardsUpdated += NewMcu_CardsUpdated;
             Update();
         }

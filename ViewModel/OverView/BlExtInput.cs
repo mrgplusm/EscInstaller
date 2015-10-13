@@ -32,7 +32,7 @@ namespace EscInstaller.ViewModel.OverView
             if (_flow.Id < GenericMethods.StartCountFrom)
                 throw new ArgumentException("External input on flow " + _flow.Id);
             Unit.ExtinputUpdate += () => RaisePropertyChanged(() => DisplaySetting);
-            Unit.EepromHandler.DspMirrorUpdated += Receiver_DspMirrorUpdated;
+            Unit.DspMirrorUpdated += Receiver_DspMirrorUpdated;
             
 
             InitSliders();

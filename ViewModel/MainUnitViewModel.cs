@@ -8,6 +8,7 @@ using System.Windows.Input;
 using Common.Model;
 using EscInstaller.ViewModel.Connection;
 using EscInstaller.ViewModel.EscCommunication;
+using EscInstaller.ViewModel.EscCommunication.Logic;
 using EscInstaller.ViewModel.Settings;
 
 using EscInstaller.ViewModel.OverView;
@@ -24,8 +25,6 @@ namespace EscInstaller.ViewModel
     public sealed class MainUnitViewModel : ViewModelBase, ITabControl, IEquatable<MainUnitViewModel>
     {
         internal EepromDataHandler EepromHandler { get; private set; }
-        internal EscReceiver Receiver { get; private set; }
-        internal EscSender Sender { get; private set; }
         internal VuMeter VuMeter { get; private set; }
         public AlarmMessagesViewModel AlarmMessages { get; private set; }
 
@@ -34,15 +33,10 @@ namespace EscInstaller.ViewModel
             main.Communication.ConnectionModeChanged += Communication_ConnectionModeChanged;
             _mainUnit = mainUnit;
             _main = main;
-            main.SystemChanged += UpdateName;
-            Receiver = new EscReceiver(this);
-            EepromHandler = new EepromDataHandler(this);
-            Sender = new EscSender(this);
+            main.SystemChanged += UpdateName;                       
+            
             VuMeter = new VuMeter(this);
-            AlarmMessages = new AlarmMessagesViewModel(this);
-
-            Receiver.HardwareReceived += Receiver_HardwareReceived;
-            Receiver.EepromReceived += EepromHandler.ApplyEepromDataOnDesign;
+            AlarmMessages = new AlarmMessagesViewModel(this);                       
 
             UpdateConnectionMode();
         }
@@ -100,7 +94,7 @@ namespace EscInstaller.ViewModel
 
 
 
-        void Receiver_HardwareReceived(object sender, EventArgs e)
+        public void UpdateHardware()
         {
             UpdateGraphics();
             UpdateLineLinks();
@@ -679,6 +673,64 @@ namespace EscInstaller.ViewModel
         {
             EventHandler<MainUnitUpdatedEventArgs> handler = CardsUpdated;
             if (handler != null) handler(this, e);
+        }
+
+        public event EventHandler SdCardMessagesReceived;
+
+        public void OnSdCardMessagesReceived()
+        {
+            EventHandler handler = SdCardMessagesReceived;
+            if (handler != null) handler(this, EventArgs.Empty);
+            
+        }
+
+        public event EventHandler SdCardPositionsReceived;
+
+        public void OnSdCardPositionsReceived()
+        {
+            EventHandler handler = SdCardPositionsReceived;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
+
+        public event EventHandler KreisUpdated;
+
+        public void OnKreisUpdated()
+        {
+            EventHandler handler = KreisUpdated;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
+
+
+        public event EventHandler RedundancyUpdated;
+
+        public void OnRedundancyUpdated()
+        {
+            EventHandler handler = RedundancyUpdated;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
+
+        public event EventHandler RoutingTableUpdated;
+
+        public void OnRoutingTableUpdated()
+        {
+            EventHandler handler = RoutingTableUpdated;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
+
+        public event EventHandler PresetNamesUpdated;
+
+        public void OnPresetNamesUpdated()
+        {
+            EventHandler handler = PresetNamesUpdated;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
+
+        public event EventHandler DspMirrorUpdated;
+
+        public void OnDspMirrorUpdated()
+        {
+            EventHandler handler = DspMirrorUpdated;
+            if (handler != null) handler(this, EventArgs.Empty);
         }
     }
 

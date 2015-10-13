@@ -9,25 +9,20 @@ namespace EscInstaller.ViewModel.EscCommunication
 {
     public abstract class CommunicationBase : ViewModelBase
     {
-        protected MainViewModel Main { get; private set; }
-        private bool _downloadFinished;
         private bool _allFromAllSources = true;
+        private bool _downloadFinished;
+        private bool _isDownloading;
 
         /// <summary>
-        /// 
         /// </summary>
-        /// <param name="main"></param>        
+        /// <param name="main"></param>
         protected CommunicationBase(MainViewModel main)
         {
             Main = main;
         }
 
+        protected MainViewModel Main { get; private set; }
 
-        protected void AttachHandlers(Downloader esc)
-        {
-            esc.DownloadItemStateChanged += n_SelectedItemsFinished;
-            esc.AllItemsChecked += NOnDownloadItemStateChanged;
-        }
 
         public bool AllFromAllSources
         {
@@ -40,18 +35,6 @@ namespace EscInstaller.ViewModel.EscCommunication
             }
         }
 
-
-
-        private void NOnDownloadItemStateChanged(object sender, EventArgs eventArgs)
-        {
-            _allFromAllSources = Escs.All(n => n.AllChecked);
-            RaisePropertyChanged(() => AllFromAllSources);
-        }
-
-        void n_SelectedItemsFinished(object sender, EventArgs e)
-        {
-            DownloadFinished = (Escs.All(s => s.EscDownloadCompleted));
-        }
 
         public bool DownloadFinished
         {
@@ -68,8 +51,6 @@ namespace EscInstaller.ViewModel.EscCommunication
         public abstract ObservableCollection<Downloader> Escs { get; }
 
 
-        private bool _isDownloading;
-
         public ICommand StartDownload
         {
             get
@@ -85,6 +66,21 @@ namespace EscInstaller.ViewModel.EscCommunication
             }
         }
 
+        protected void AttachHandlers(Downloader esc)
+        {
+            esc.DownloadItemStateChanged += n_SelectedItemsFinished;
+            esc.AllItemsChecked += NOnDownloadItemStateChanged;
+        }
 
+        private void NOnDownloadItemStateChanged(object sender, EventArgs eventArgs)
+        {
+            _allFromAllSources = Escs.All(n => n.AllChecked);
+            RaisePropertyChanged(() => AllFromAllSources);
+        }
+
+        private void n_SelectedItemsFinished(object sender, EventArgs e)
+        {
+            DownloadFinished = (Escs.All(s => s.EscDownloadCompleted));
+        }
     }
 }

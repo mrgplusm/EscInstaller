@@ -17,6 +17,7 @@ using EscInstaller.UserControls;
 using EscInstaller.View;
 using EscInstaller.View.Communication;
 using EscInstaller.ViewModel.EscCommunication;
+using EscInstaller.ViewModel.EscCommunication.Logic;
 using EscInstaller.ViewModel.Matrix;
 using EscInstaller.ViewModel.SDCard;
 using GalaSoft.MvvmLight;
@@ -265,7 +266,10 @@ namespace EscInstaller.ViewModel
             {
                 //if no timestamp ever made avaiable, create one
                 if (mainUnitViewModel.Timestamp == 0)
-                    CommunicationViewModel.AddData(mainUnitViewModel.Sender.TimeStamp());
+                {
+                    var d = new TimeStampUpdater(mainUnitViewModel.DataModel);                    
+                    CommunicationViewModel.AddData(d.TimeStamp());
+                }
                 else
                     mainUnitViewModel.DataModel.TimeStampWrittenToEsc = mainUnitViewModel.Timestamp;
             }
@@ -682,7 +686,7 @@ namespace EscInstaller.ViewModel
         {
             EventHandler<SystemChangedEventArgs> handler = SystemChanged;
             if (handler != null) handler(this, e);
-        }
+        }        
     }
 
     public class SystemChangedEventArgs : EventArgs
