@@ -64,12 +64,9 @@ namespace EscInstaller.ViewModel.EscCommunication.Logic
         /// <returns>true if name is not 16khz</returns>
         private static bool CheckName(SdCardMessageName download)
         {
-            if (download.TrackName.ToLower().Contains("16khz"))
-            {
-                Debug.WriteLine("Warning: Track {0} contains 16khz! Re-downloading..", download.TrackNumber);
-                return false;
-            }
-            return true;
+            if (!download.TrackName.ToLower().Contains("16khz")) return true;
+            Debug.WriteLine("Warning: Track {0} contains 16khz! Re-downloading..", download.TrackNumber);
+            return false;
         }
 
         private static SdCardMessageName CardNameFactory(int card, int track)

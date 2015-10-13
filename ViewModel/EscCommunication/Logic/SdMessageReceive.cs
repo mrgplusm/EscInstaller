@@ -59,7 +59,7 @@ namespace EscInstaller.ViewModel.EscCommunication.Logic
             {
                 for (var i = SdFirstMessageToDownload; i < list.count; i++)
                 {
-                    var s = new SdMessageNameLoader(list.n, list.count);
+                    var s = new SdMessageNameLoader(list.n, i);
                     await s.GetMessageName();
                     iProgress.Report(new DownloadProgress() {Progress = ++_sdMessagePackages, Total = _messageCount});
                 }
