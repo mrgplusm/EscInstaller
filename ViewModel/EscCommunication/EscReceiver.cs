@@ -3,10 +3,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls.Primitives;
+using System.Windows.Documents;
 using Common;
 using Common.Commodules;
 using Common.Model;
@@ -125,47 +126,7 @@ namespace EscInstaller.ViewModel.EscCommunication
             if (handler != null) handler(this, EventArgs.Empty);
         }
 
-        public async void GetSdCardMessages()
-        {
-            var q = new SdCardMessageCount();
-            CommunicationViewModel.AddData(q);
 
-            await q.WaitAsync();
-
-            _sdMessagePackages = 0;
-            if (LibraryData.FuturamaSys == null) return;
-            //clear stored messages
-            foreach (var b in LibraryData.FuturamaSys
-                .SdFilesB
-                .Concat(LibraryData.FuturamaSys.SdFilesA)
-                .Where(qq => qq.Position != 0xff))
-            {
-                b.Name = null;
-                //b.AvailableOnSdCard = false;
-            }
-
-            //skip 0 and 1(16khz) start at position 2
-            for (var i = 2; i < q.CountA; i++)
-            {
-                GetMessageName(0, i);
-            }
-
-            for (var i = 2; i < q.CountB; i++)
-            {
-                GetMessageName(1, i);
-            }
-            _messageCount = q.CountA + q.CountB + 1 + TrackShiftCardA + TrackShiftCardB;
-
-            Application.Current.Dispatcher.Invoke(() =>
-                OnSdCardMessagesReceived(new DownloadProgressEventArgs
-                {
-                    Progress = ++_sdMessagePackages,
-                    Total = _messageCount,
-                }));
-        }
-
-        private volatile int _messageCount;
-        private volatile int _sdMessagePackages;
 
         /// <summary>
         /// Occurs when all message names are received from main unit
@@ -199,7 +160,7 @@ namespace EscInstaller.ViewModel.EscCommunication
             LibraryData.FuturamaSys.PreannFp = s.PreannounceFP;
 
             LibraryData.FuturamaSys.Messages = s.MessageSelectModels;
-            Application.Current.Dispatcher.Invoke(OnSdCardPositionsReceived);
+            OnSdCardPositionsReceived();
         }
 
         public event EventHandler SdCardPositionsReceived;
@@ -259,61 +220,62 @@ namespace EscInstaller.ViewModel.EscCommunication
             if (handler != null) handler(this, e);
         }
 
-        const int TrackShiftCardA = -2;
-        const int TrackShiftCardB = -2;
 
         /// <summary>
-        /// 
+        /// skip 0 and 1(16khz) start at position 2
         /// </summary>
-        /// <param name="card">Either 0 or 1</param>
-        /// <param name="track">message id to receive</param>
-        private async void GetMessageName(int card, int track)
+        private const int SdFirstMessageToDownload = 2;
+
+        /// <summary>
+        /// clear stored messages
+        /// </summary>
+        private static void ClearMessages()
         {
-            if (LibraryData.FuturamaSys == null || LibraryData.FuturamaSys.SdFilesB == null ||
-                LibraryData.FuturamaSys.SdFilesA == null
-                || LibraryData.FuturamaSys.SdFilesA.Count < 0xff
-                || LibraryData.FuturamaSys.SdFilesB.Count < 0xff)
+            if (LibraryData.FuturamaSys == null) return;
+
+            foreach (var b in LibraryData.FuturamaSys
+                .SdFilesB
+                .Concat(LibraryData.FuturamaSys.SdFilesA)
+                .Where(qq => qq.Position != 0xff))
             {
-                Debug.WriteLine("Couldn't store message names, futuramasys or messagesA/B null");
-                return;
-            }
-
-
-            //esc sometimes gives erroneously wrong response. If name contains 16khz, redownload a few times until succes.
-            try
-            {
-                for (var n = 0; n < 3; n++)
-                {
-                    var download = new SdCardMessageName(card, track);
-                    CommunicationViewModel.AddData(download);
-                    await download.WaitAsync();
-
-                    if (download.TrackName.ToLower().Contains("16khz"))
-                    {
-                        Debug.WriteLine("Warning: Track {0} contains 16khz! Re-downloading..", download.TrackNumber);
-                        continue;
-                    }
-                    if (download.CardNumber == 0)
-                    {
-                        var f = LibraryData.FuturamaSys.SdFilesA[download.TrackNumber + TrackShiftCardA];
-                        f.Name = download.TrackName;
-                        //f.AvailableOnSdCard = true;
-                        return;
-                    }
-                    else
-                    {
-                        var f = LibraryData.FuturamaSys.SdFilesB[download.TrackNumber + TrackShiftCardB];
-                        f.Name = download.TrackName;
-                        //f.AvailableOnSdCard = true;
-                        return;
-                    }
-                }
-            }
-            finally
-            {
-                OnSdCardMessagesReceived(new DownloadProgressEventArgs() { Progress = ++_sdMessagePackages, Total = _messageCount });
-
+                b.Name = null;
             }
         }
+
+        private async Task<int[]> GetSdMessageCount()
+        {
+            var q = new SdCardMessageCount();
+            CommunicationViewModel.AddData(q);
+
+            await q.WaitAsync();
+
+            _messageCount = q.CountA + q.CountB + 1 + (SdCardMessageName.TrackShift * 2);
+            return new[] { q.CountA, q.CountB };
+        }
+
+        public async void GetSdCardMessages()
+        {
+            ClearMessages();
+            var lists = await GetSdMessageCount();
+
+            foreach (var list in lists.Select((count, n) => new { count, n }))
+            {
+                for (var i = SdFirstMessageToDownload; i < list.count; i++)
+                {
+                    var s = new SdMessageNameLoader(list.n, list.count);
+                    await s.GetMessageName();
+                    OnSdCardMessagesReceived(new DownloadProgressEventArgs() { Progress = ++_sdMessagePackages, Total = _messageCount });
+                }
+            }
+
+            OnSdCardMessagesReceived(new DownloadProgressEventArgs
+            {
+                Progress = ++_sdMessagePackages,
+                Total = _messageCount,
+            });
+        }
+
+        private volatile int _messageCount;
+        private volatile int _sdMessagePackages;
     }
 }

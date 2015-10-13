@@ -85,7 +85,6 @@ namespace EscInstaller.ViewModel.EscCommunication
 
         public virtual void OnCompleted(object sender, DownloadProgressEventArgs e)
         {
-
             if (e.Progress >= e.Total - .01)
             {
                 ReceiveCompleted = true;
