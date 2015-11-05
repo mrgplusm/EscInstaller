@@ -54,7 +54,7 @@ namespace EscInstaller.ViewModel.Matrix
                 RaisePropertyChanged(() => SelectedMcu);
             }
         }
-
+        
         public ObservableCollection<RowHeaderViewModel> RowHeaders { get; private set; }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace EscInstaller.ViewModel.Matrix
         public ObservableCollection<ColumnHeaderViewModel> ColumnHeaderViews { get; private set; }
 
         public static string PanelText
-            => Panel._matrixSelectionFP + "\t\t" + Panel._matrixSelectionEP + "\t\t" + Panel._matrixSelectionFDS;
+            => $@"{Panel._matrixSelectionFP}		{Panel._matrixSelectionEP}		{Panel._matrixSelectionFDS}";
 
         public ObservableCollection<ButtonRangeSelector> ButtonRangeSelectors { get; private set; }
         public ObservableCollection<McuSelector> McuSelectors { get; private set; }
@@ -88,7 +88,8 @@ namespace EscInstaller.ViewModel.Matrix
         private void InitiateSelectors()
         {
             ButtonRangeSelectors = new ObservableCollection<ButtonRangeSelector>(Enumerable.
-                Range(0, 18).Select(i => new ButtonRangeSelector(i, this))) {[0] = {IsSelected = true}};
+                Range(0, 18).Select(i => new ButtonRangeSelector(i, this)))
+            {[0] = { IsSelected = true } };
 
             SelectedMcu = _main.TabCollection.OfType<MainUnitViewModel>().First(i => i.Id == 0);
 
@@ -96,11 +97,10 @@ namespace EscInstaller.ViewModel.Matrix
                 _main.TabCollection.OfType<MainUnitViewModel>().Select(q => new McuSelector(q, this)));
             _main.SystemChanged += MainOnSystemChanged;
 
-
             McuSelectors[0].IsSelected = true;
 
             ColumnHeaderViews = new ObservableCollection<ColumnHeaderViewModel>(Enumerable.Range(0, 12).Select(
-                x => new ColumnHeaderViewModel(x, SelectedMcu, this)));
+                ColumnHeaderFactory));            
 
             ButtonChanged += (sender, args) => ButtonStartId = args.NewId;
 
@@ -108,6 +108,13 @@ namespace EscInstaller.ViewModel.Matrix
 
             RowHeaders = new ObservableCollection<RowHeaderViewModel>(GenRows(SelectedMcu));
             SelectedMcu.CardsUpdated += NewMcuOnCardsUpdated;
+        }
+
+        private ColumnHeaderViewModel ColumnHeaderFactory(int id)
+        {
+            var mod = new ColumnHeaderViewModel(id, SelectedMcu, this);
+            mod.AlarmSelectionChanged += (sender, args) =>  OnMessageSelectionChanged(args);
+            return mod;
         }
 
         private void MainOnSystemChanged(object sender, SystemChangedEventArgs systemChangedEventArgs)
@@ -123,6 +130,8 @@ namespace EscInstaller.ViewModel.Matrix
                 McuSelectors.Remove(rem);
             }
         }
+
+        public event EventHandler<MessageSelectionEventArgs> MessageSelectionChanged;
 
         private void OnMcuChanged(object sender, McuChangedEventArgs rangeChangedEventArgs)
         {
@@ -146,7 +155,7 @@ namespace EscInstaller.ViewModel.Matrix
             {
                 RowHeaders.Add(rowHeaderViewModel);
             }
-        }
+        }        
 
         private static IEnumerable<RowHeaderViewModel> GenRows(MainUnitViewModel selector)
         {
@@ -169,7 +178,14 @@ namespace EscInstaller.ViewModel.Matrix
         {
             ButtonChanged?.Invoke(this, e);
         }
+
+        protected virtual void OnMessageSelectionChanged(MessageSelectionEventArgs e)
+        {
+            MessageSelectionChanged?.Invoke(this, e);
+        }
     }
+
+    
 
     public class McuChangedEventArgs : EventArgs
     {

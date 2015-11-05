@@ -12,6 +12,7 @@ using Common.Commodules;
 using Common.Model;
 using EscInstaller.ViewModel.Connection;
 using EscInstaller.ViewModel.EscCommunication.Logic;
+using EscInstaller.ViewModel.Matrix;
 using EscInstaller.ViewModel.OverView;
 using EscInstaller.ViewModel.Settings;
 using GalaSoft.MvvmLight;
@@ -43,7 +44,7 @@ namespace EscInstaller.ViewModel
             main.SystemChanged += UpdateName;
 
             VuMeter = new VuMeter(this);
-            AlarmMessages = new AlarmMessagesViewModel(this);
+            AlarmMessages = new AlarmMessagesViewModel(this);            
 
             UpdateConnectionMode();
         }
@@ -180,6 +181,13 @@ namespace EscInstaller.ViewModel
                     () => DataModel.ExpansionCards < 2);
             }
         }
+
+        public void MatrixSelectionChanged(MessageSelectionEventArgs e)
+        {
+            AlarmMessages.MatrixSelectonChanged(e);
+        }
+
+        
 
         public ICommand RemoveLastCard
         {
@@ -330,13 +338,9 @@ namespace EscInstaller.ViewModel
             RaisePropertyChanged(() => Name);
         }
 
-        public event EventHandler PanelSelectionChanged;
+        
 
-        internal void OnPanelSelectionChanged()
-        {
-            var handler = PanelSelectionChanged;
-            if (handler != null) handler(this, EventArgs.Empty);
-        }
+        
 
         public event EventHandler MonitorSliderUpdated;
 
@@ -717,7 +721,7 @@ namespace EscInstaller.ViewModel
         {
             var handler = DspMirrorUpdated;
             if (handler != null) handler(this, EventArgs.Empty);
-        }
+        }        
     }
 
     public class MainUnitUpdatedEventArgs : EventArgs

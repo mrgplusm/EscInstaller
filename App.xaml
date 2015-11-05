@@ -1,39 +1,36 @@
 ﻿<Application x:Class="EscInstaller.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"             
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModel="clr-namespace:EscInstaller.ViewModel"
 
-             mc:Ignorable="d" 
-    StartupUri="MainWindow.xaml"    >
+             mc:Ignorable="d"
+             StartupUri="MainWindow.xaml">
 
     <Application.Resources>
         <!--Global View Model Locator-->
-        
+
         <ResourceDictionary>
 
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Style\LinkButton.xaml" />
-                <ResourceDictionary Source="/PresentationFramework.Aero;component/themes/Aero.NormalColor.xaml"/>
-                <ResourceDictionary Source="Style/GlassButton.xaml"/>
+                <ResourceDictionary Source="/PresentationFramework.Aero;component/themes/Aero.NormalColor.xaml" />
+                <ResourceDictionary Source="Style/GlassButton.xaml" />
                 <ResourceDictionary Source="Style/CustomCombobox.xaml" />
                 <ResourceDictionary Source="Style/GroupBoxExpander.xaml" />
                 <ResourceDictionary Source="Style/GrayedOutImagge.xaml" />
-                <ResourceDictionary Source="Style/CustomCombobox.xaml"/>
+                <ResourceDictionary Source="Style/CustomCombobox.xaml" />
 
             </ResourceDictionary.MergedDictionaries>
 
             <viewModel:ViewModelLocator x:Key="Locator"
-                             d:IsDataSource="True" />
-
-     
+                                        d:IsDataSource="True" />
 
 
         </ResourceDictionary>
 
     </Application.Resources>
-
 
 
 </Application>

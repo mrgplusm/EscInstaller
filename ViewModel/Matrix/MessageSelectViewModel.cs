@@ -1,10 +1,12 @@
 #region
 
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using Common;
+using Common.Commodules;
 using EscInstaller.View;
 using EscInstaller.ViewModel.EscCommunication.Logic;
 using EscInstaller.ViewModel.SDCard;
@@ -30,10 +32,12 @@ namespace EscInstaller.ViewModel.Matrix
 
         public MessageSelectViewModel(MainUnitViewModel main, int id)
         {
+            FillSelectionDic();
             _main = main;
             _id = id;
             main.SdCardMessagesReceived += Receiver_SdCardMessagesReceived;
             main.SdCardPositionsReceived += ReceiverOnSdCardPositionsReceived;
+
         }
 
         public string HeaderKey
@@ -83,7 +87,7 @@ namespace EscInstaller.ViewModel.Matrix
                     {
                         t.ButtonA1 = 0xff;
                         t.ButtonA2 = 0xff;
-                        t.ButtonB2 = 0xff;
+                        t.ButtonB1 = 0xff;
                         t.ButtonB2 = 0xff;
                         t.ButtonC1 = 0xff;
                         t.ButtonC2 = 0xff;
@@ -93,6 +97,77 @@ namespace EscInstaller.ViewModel.Matrix
                 });
             }
         }
+
+        /// <summary>
+        /// 192 A   id: 0
+        /// 193 B
+        /// 194 C
+        /// 195 D
+        /// 
+        /// 196 A   id: 1
+        /// 197 B
+        /// 198 C
+        /// 199 D
+        /// 
+        /// 200 A   id: 2
+        /// 201 B   
+        /// 202 C
+        /// 203 D
+        /// </summary>
+        private readonly List<Action> _selectionUpdated = new List<Action>();
+
+        private void FillSelectionDic()
+        {
+            _selectionUpdated.Add(() =>
+            {
+                EnabledA = MessageIsEnabled(0);
+                RaisePropertyChanged(()=> EnabledA);
+            });
+            _selectionUpdated.Add(() =>
+            {
+                EnabledB = MessageIsEnabled(1);
+                RaisePropertyChanged(() => EnabledB);
+            });
+            _selectionUpdated.Add(() =>
+            {
+                EnabledC = MessageIsEnabled(2);
+                RaisePropertyChanged(() => EnabledC);
+            });
+            _selectionUpdated.Add(() =>
+            {
+                EnabledD = MessageIsEnabled(3);
+                RaisePropertyChanged(() => EnabledD);
+            });
+        }
+
+
+        private bool MessageIsEnabled(int relativeId)
+        {
+            var buttonId = relativeId + 192 + _id*4;
+            return LibraryData.FuturamaSys.MatrixSelection
+                .Where( n => n.ButtonId == buttonId &&             
+                        n.FlowId >= _main.Id*12 && 
+                        n.FlowId < _main.Id * 12 +12)
+                .Any(n => n.BroadcastMessage == BroadCastMessage.Alarm1);
+        }
+
+        public void MatrixSelectionChanged(MessageSelectionEventArgs mea)
+        {
+            if(mea.MainUnitId != _main.Id) return;
+            if(mea.ButtonId < 192 || mea.ButtonId > 204) return;
+
+            var updateId = (mea.ButtonId - 192) >> 2;
+
+            _selectionUpdated[updateId]();
+        }
+
+        /// <summary>
+        /// Button ABCD alarm2 enabled 
+        /// </summary>
+        public bool EnabledA { get; set; } = false;
+        public bool EnabledB { get; set; } = false;
+        public bool EnabledC { get; set; } = false;
+        public bool EnabledD { get; set; } = false;
 
         public SdFileVM ButtonA1
         {
@@ -228,6 +303,8 @@ namespace EscInstaller.ViewModel.Matrix
             var q = new MessageSelector(_main.DataModel);
             await q.SetMessageData(new Progress<DownloadProgress>());
         }
+
+        
     }
 
     public class MessageSelectionChangedEventArgs

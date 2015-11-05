@@ -76,7 +76,10 @@ namespace EscInstaller.ViewModel
             {
                 LibraryData.CreateEmptySystem();
             }
-            Open(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\d.esc");
+            else
+            {
+                Open(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\d.esc");
+            }
 #endif
         }
 
@@ -92,15 +95,9 @@ namespace EscInstaller.ViewModel
             }
         }
 
-        public string NotConnectedMcu
-        {
-            get { return Main.NotConnectedMcu; }
-        }
+        public string NotConnectedMcu => Main.NotConnectedMcu;
 
-        public string ConnectedMcu
-        {
-            get { return Main.ConnectedMcu; }
-        }
+        public string ConnectedMcu => Main.ConnectedMcu;
 
         public ICommand EnableDcOperation
         {
@@ -373,9 +370,11 @@ namespace EscInstaller.ViewModel
                 AddMainUnit(s);
             }
 
-            var nq = new DownloadView();
-            nq.Title = "Download to PC ESC => GUI";
-            nq.Background = Brushes.LightGreen;
+            var nq = new DownloadView
+            {
+                Title = "Download to PC ESC => GUI",
+                Background = Brushes.LightGreen
+            };
             var qq = new CommunicationReceive(this); //  EscCommunicationBase(this);
             nq.DataContext = qq;
             nq.Show();
@@ -481,12 +480,34 @@ namespace EscInstaller.ViewModel
 
             TabCollection.Clear();
             await Task.Delay(150);
-            foreach (var m in LibraryData.FuturamaSys.MainUnits) TabCollection.Add(new MainUnitViewModel(m, this));
+            
+            foreach (var m in LibraryData.FuturamaSys.MainUnits) TabCollection.Add(MainUnitFactory(m));
             SelectedTab = TabCollection.FirstOrDefault(i => i.Id == 0);
 
-            TabCollection.Add(new PanelViewModel(this));
+            TabCollection.Add(PanelViewFactory);
             TabCollection.Add(Communication);
         }
+
+        private MainUnitViewModel MainUnitFactory(MainUnitModel m)
+        {
+            var ret = new MainUnitViewModel(m, this);
+            MessageSelectionChanged += (sender, args) => ret.MatrixSelectionChanged(args);
+            return ret;
+        }
+        
+        public PanelViewModel PanelViewFactory 
+        {
+            get
+            {
+                var ret = new PanelViewModel(this);
+                ret.MessageSelectionChanged += (sender, args) => OnMessageSelectionChanged(args);        
+                return ret;
+            }
+        }
+
+        
+
+        public event EventHandler<MessageSelectionEventArgs> MessageSelectionChanged;
 
         /// <summary>
         ///     Opens esc file
@@ -616,10 +637,16 @@ namespace EscInstaller.ViewModel
 
         public event EventHandler<SystemChangedEventArgs> SystemChanged;
 
+
         protected virtual void OnSystemChanged(SystemChangedEventArgs e)
         {
-            var handler = SystemChanged;
-            if (handler != null) handler(this, e);
+            SystemChanged?.Invoke(this, e);
+        }
+
+
+        protected virtual void OnMessageSelectionChanged(MessageSelectionEventArgs e)
+        {
+            MessageSelectionChanged?.Invoke(this, e);
         }
     }
 

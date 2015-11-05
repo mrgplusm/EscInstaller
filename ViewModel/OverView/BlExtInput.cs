@@ -74,48 +74,24 @@ namespace EscInstaller.ViewModel.OverView
         public MainUnitViewModel Unit { get; }
         public MainViewModel MainViewModel { get; }
 
-        public override int Id
-        {
-            get { return _flow.Id; }
-        }
+        public override int Id => _flow.Id;
 
         public ObservableCollection<SliderValue> Sliders { get; private set; }
 
-        public override List<SnapShot> Snapshots
+        public override List<SnapShot> Snapshots => _snapShots ?? (_snapShots = new List<SnapShot>()
         {
-            get
-            {
-                return _snapShots ?? (_snapShots = new List<SnapShot>()
-                {
-                    new SnapShot(this) {Offset = {X = Size.X, Y = 17}}
-                });
-            }
-        }
+            new SnapShot(this) {Offset = {X = Size.X, Y = 17}}
+        });
 
-        public MainUnitViewModel MainUnitView
-        {
-            get { return Unit; }
-        }
+        public MainUnitViewModel MainUnitView => Unit;
 
-        public string DisplaySetting
-        {
-            get { return Sliders[(_flow.Id - GenericMethods.StartCountFrom)%5].Value.ToString("N2") + " dB"; }
-        }
+        public string DisplaySetting => Sliders[(_flow.Id - GenericMethods.StartCountFrom)%5].Value.ToString("N2") + " dB";
 
-        public override string SettingName
-        {
-            get { return ExternalInput.Title; }
-        }
+        public override string SettingName => ExternalInput.Title;
 
-        public string BlockName
-        {
-            get { return Names[(_flow.Id - GenericMethods.StartCountFrom)%5]; }
-        }
+        public string BlockName => Names[(_flow.Id - GenericMethods.StartCountFrom)%5];
 
-        public override Point Size
-        {
-            get { return new Point(Width, UnitHeight); }
-        }
+        public override Point Size => new Point(Width, UnitHeight);
 
         public override ICommand StartVu
         {

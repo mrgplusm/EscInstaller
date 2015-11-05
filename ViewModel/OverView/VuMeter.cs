@@ -29,7 +29,7 @@ namespace EscInstaller.ViewModel.OverView
         {
             _main = main;
             _vuTimer.Elapsed += VuTimerEvent;
-            main.PanelSelectionChanged += (sender, args) => StopVuMeter();
+            
             _vuValues.Add(-80);
         }
 

@@ -61,9 +61,8 @@ namespace EscInstaller.View
             sb.Completed += sb_Completed;
             sb.Begin();
 
-            var z = (MainUnitViewModel) DataContext;
-            if (z == null) return;
-            z.OnPanelSelectionChanged();
+            var z = (MainUnitViewModel) DataContext;            
+            z?.VuMeter?.StopVuMeter();
         }
 
         private void sb_Completed(object sender, EventArgs e)
