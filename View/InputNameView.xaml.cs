@@ -1,6 +1,9 @@
-﻿using System.Windows;
+﻿#region
+
 using System.Windows.Controls;
 using System.Windows.Input;
+
+#endregion
 
 namespace EscInstaller.View
 {
@@ -21,9 +24,11 @@ namespace EscInstaller.View
 
         private void OnButtonKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Escape) { };
-        //        Close();
+            if (e.Key == Key.Escape)
+            {
+            }
+            ;
+            //        Close();
         }
     }
-
 }

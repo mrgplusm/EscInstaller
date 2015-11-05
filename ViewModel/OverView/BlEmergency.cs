@@ -1,20 +1,23 @@
-using System;
+#region
+
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using Common.Model;
 using EscInstaller.View;
-using EscInstaller.ViewModel.EscCommunication;
+
+#endregion
 
 namespace EscInstaller.ViewModel.OverView
 {
     public sealed class BlEmergency : SnapDiagramData
     {
-        private readonly MainUnitViewModel _main;
         public const int Width = BlLink.Width;
         public const int XLocation = BlInputPeq.XLocation + Distance + BlInputPeq.Width;
-
+        private readonly MainUnitViewModel _main;
+        private ObservableCollection<DiagramData> _snap;
+        private List<SnapShot> _snapShots;
 #if DEBUG
         public BlEmergency()
         {
@@ -28,72 +31,31 @@ namespace EscInstaller.ViewModel.OverView
 
             for (var x = 0; x < 5; x++)
             {
-                Snapshots.Add(new SnapShot(this) { Offset = { X = 0, Y = SnapshotHeight + RowHeight * x }, SnapType = SnapType.Gray, RowId = x });
+                Snapshots.Add(new SnapShot(this)
+                {
+                    Offset = {X = 0, Y = SnapshotHeight + RowHeight*x},
+                    SnapType = SnapType.Gray,
+                    RowId = x
+                });
             }
-            Snapshots.Add(new SnapShot(this) { Offset = { X = SnapshotWidth, Y = 0 }, RowId = 30 });
+            Snapshots.Add(new SnapShot(this) {Offset = {X = SnapshotWidth, Y = 0}, RowId = 30});
 
             Location.X = XLocation;
             SetYLocation();
 
             UpdatePanelCount();
-            
-
         }
 
-        void UpdatePanelCount()
-        {
-            var d = new Dictionary<PanelType, PanelBase>()
-            {
-             {PanelType.Fire, _snapShots.OfType<FirePanelViewModel>().FirstOrDefault()}   ,
-             {PanelType.Evacuation , _snapShots.OfType<EvacuationPanelViewModel>().FirstOrDefault()}   ,
-             {PanelType.Fds, _snapShots.OfType<FdsViewModel>().FirstOrDefault()}   
-            };
-
-            foreach (var @base in d.Where(@base => @base.Value != null))
-            {
-                @base.Value.PanelCount = _main.DataModel.AttachedPanelsBus2.Count(z => z.IsInstalled && z.PanelType == @base.Key);
-            }
-        }
-        
-
-        private readonly Point _size = new Point(Width, RowHeight * 4 + UnitHeight);
-        public override Point Size
-        {
-            get
-            {
-                return _size;
-            }
-        }
+        public override Point Size { get; } = new Point(Width, RowHeight*4 + UnitHeight);
 
         public override string SettingName
         {
             get { return EmergencyPanel.DisplayTitle; }
         }
 
-        public override void SetYLocation()
-        {
-            Location.Y = _main.DataModel.ExpansionCards * 5 * RowHeight + 5 * RowHeight
-                + (InnerSpace) * (1 + _main.DataModel.ExpansionCards);
-
-
-            foreach (var snapshot in Snapshots)
-            {
-                snapshot.Calculate();
-            }
-
-            Location.ValueChanged();
-        }
-
-
-        private List<SnapShot> _snapShots;
-
         public override List<SnapShot> Snapshots
         {
-            get
-            {
-                return _snapShots ?? (_snapShots = new List<SnapShot>());
-
-            }
+            get { return _snapShots ?? (_snapShots = new List<SnapShot>()); }
         }
 
         public override int Id
@@ -101,25 +63,6 @@ namespace EscInstaller.ViewModel.OverView
             get { return _main.Id; }
         }
 
-        private void SetLines()
-        {
-            var list = new List<DiagramData>();
-
-            for (var q = 0; q < 1; q++)
-            {
-                list.Add(new LineViewModel(_snap.OfType<FdsViewModel>().First(i => i.Id == q), _snap.OfType<EvacuationPanelViewModel>().First(i => i.Id == q)));
-                list.Add(new LineViewModel(_snap.OfType<EvacuationPanelViewModel>().First(i => i.Id == q), _snap.OfType<FirePanelViewModel>().First(i => i.Id == q)));
-                list.Add(new LineViewModel(_snap.OfType<FirePanelViewModel>().First(i => i.Id == q), _snap.OfType<MainUnitEmergencyViewModel>().First()));
-            }
-
-            foreach (var diagramData in list)
-            {
-                _snap.Add(diagramData);
-            }
-
-        }
-
-        private ObservableCollection<DiagramData> _snap;
         public ObservableCollection<DiagramData> SnapDiagram
         {
             get
@@ -127,7 +70,7 @@ namespace EscInstaller.ViewModel.OverView
                 if (_snap == null)
                 {
                     _snap = new ObservableCollection<DiagramData>();
-                    for (int i = 0; i < 1; i++)
+                    for (var i = 0; i < 1; i++)
                     {
                         _snap.Add(new FdsViewModel(i, 0));
                         _snap.Add(new EvacuationPanelViewModel(i, 100));
@@ -138,6 +81,56 @@ namespace EscInstaller.ViewModel.OverView
                 }
 
                 return _snap;
+            }
+        }
+
+        private void UpdatePanelCount()
+        {
+            var d = new Dictionary<PanelType, PanelBase>()
+            {
+                {PanelType.Fire, _snapShots.OfType<FirePanelViewModel>().FirstOrDefault()},
+                {PanelType.Evacuation, _snapShots.OfType<EvacuationPanelViewModel>().FirstOrDefault()},
+                {PanelType.Fds, _snapShots.OfType<FdsViewModel>().FirstOrDefault()}
+            };
+
+            foreach (var @base in d.Where(@base => @base.Value != null))
+            {
+                @base.Value.PanelCount =
+                    _main.DataModel.AttachedPanelsBus2.Count(z => z.IsInstalled && z.PanelType == @base.Key);
+            }
+        }
+
+        public override void SetYLocation()
+        {
+            Location.Y = _main.DataModel.ExpansionCards*5*RowHeight + 5*RowHeight
+                         + (InnerSpace)*(1 + _main.DataModel.ExpansionCards);
+
+
+            foreach (var snapshot in Snapshots)
+            {
+                snapshot.Calculate();
+            }
+
+            Location.ValueChanged();
+        }
+
+        private void SetLines()
+        {
+            var list = new List<DiagramData>();
+
+            for (var q = 0; q < 1; q++)
+            {
+                list.Add(new LineViewModel(_snap.OfType<FdsViewModel>().First(i => i.Id == q),
+                    _snap.OfType<EvacuationPanelViewModel>().First(i => i.Id == q)));
+                list.Add(new LineViewModel(_snap.OfType<EvacuationPanelViewModel>().First(i => i.Id == q),
+                    _snap.OfType<FirePanelViewModel>().First(i => i.Id == q)));
+                list.Add(new LineViewModel(_snap.OfType<FirePanelViewModel>().First(i => i.Id == q),
+                    _snap.OfType<MainUnitEmergencyViewModel>().First()));
+            }
+
+            foreach (var diagramData in list)
+            {
+                _snap.Add(diagramData);
             }
         }
     }

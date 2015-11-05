@@ -1,23 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
+﻿#region
+
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using EscInstaller.ViewModel;
 using EscInstaller.ViewModel.SDCard;
+
+#endregion
 
 namespace EscInstaller.View
 {
     /// <summary>
-    /// Interaction logic for ExternalInput.xaml
+    ///     Interaction logic for ExternalInput.xaml
     /// </summary>
     public partial class ExternalInputView : UserControl
     {
@@ -53,12 +45,9 @@ namespace EscInstaller.View
             if (m != null)
                 e.Accepted = m.Position != 0xff;
         }
-
-
     }
 
     public class MessageBBox : ComboBox
     {
-        
     }
 }

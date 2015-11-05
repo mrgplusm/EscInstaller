@@ -1,16 +1,17 @@
+#region
+
 using System;
 using System.Globalization;
 using System.Windows.Data;
 using Common.Converters;
-using Common.Model;
 using EscInstaller.ViewModel;
+
+#endregion
 
 namespace EscInstaller.Converters
 {
     public class IsEligibleForRemove : BaseConverter, IValueConverter
     {
-
-        public IsEligibleForRemove() { }
         #region IValueConverter Members
 
         public object Convert(object value, Type targetType,

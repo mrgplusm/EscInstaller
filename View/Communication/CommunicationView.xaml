@@ -1,30 +1,31 @@
 ﻿<UserControl x:Class="EscInstaller.View.Communication.CommunicationView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" mc:Ignorable="d"
 
-    xmlns:common1="clr-namespace:Common;assembly=Common"
-    xmlns:view="clr-namespace:EscInstaller.View"
-    xmlns:connection="clr-namespace:EscInstaller.ViewModel.Connection"
-    xmlns:converters2="clr-namespace:Common.Converters;assembly=Common"
-    xmlns:validators="clr-namespace:Common.Validators;assembly=Common"
-    xmlns:communication="clr-namespace:EscInstaller.View.Communication"
-    d:DataContext="{d:DesignInstance connection:CommunicationViewModel, IsDesignTimeCreatable=True}">
+             xmlns:common1="clr-namespace:Common;assembly=Common"
+             xmlns:view="clr-namespace:EscInstaller.View"
+             xmlns:connection="clr-namespace:EscInstaller.ViewModel.Connection"
+             xmlns:converters2="clr-namespace:Common.Converters;assembly=Common"
+             xmlns:validators="clr-namespace:Common.Validators;assembly=Common"
+             xmlns:communication="clr-namespace:EscInstaller.View.Communication"
+             d:DataContext="{d:DesignInstance connection:CommunicationViewModel, IsDesignTimeCreatable=True}">
     <UserControl.Resources>
 
 
         <DataTemplate DataType="{x:Type connection:ConnectionViewModel}">
 
-            <GroupBox Header="{Binding Path=UnitId, Converter={converters2:MainUnitNameDisplayValue}}" HorizontalAlignment="Stretch" >
+            <GroupBox Header="{Binding Path=UnitId, Converter={converters2:MainUnitNameDisplayValue}}"
+                      HorizontalAlignment="Stretch">
 
 
-                <Grid Margin="5" >
+                <Grid Margin="5">
                     <Grid.ColumnDefinitions>
 
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
 
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
@@ -35,31 +36,36 @@
                     </Grid.RowDefinitions>
 
 
-                    <Button Margin="3" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.RemoveConnection}" CommandParameter="{Binding}" 
+                    <Button Margin="3"
+                            Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.RemoveConnection}"
+                            CommandParameter="{Binding}"
                             Grid.Column="2" Grid.Row="0" Content="{x:Static communication:Communication.Remove}" />
 
-                    <common1:ConnectButton             
-                            Connection="{Binding Path=Connection}" Address="{Binding Path=Ipaddress}" Mode="Install" Type="{Binding ConnectType}"
-                            
-                            Grid.Column="0" Grid.Row="1" 
-                            Name="btnConnect" />
-                    <TextBlock Grid.Column="0" HorizontalAlignment="Right" Width="150" Margin="3" 
-                               IsManipulationEnabled="False" Grid.Row="0" Text="{x:Static communication:Communication.ComConnect}" Visibility="{Binding Path=IsNetwork, Converter={converters2:BoolToVisibilityInvertedConverter}}"/>
-                    <TextBlock Grid.Column="0" HorizontalAlignment="Right"  Width="150" IsManipulationEnabled="False" Grid.Row="0" Text="{x:Static communication:Communication.NetConnect}" 
-                               Visibility="{Binding Path=IsNetwork, Converter={converters2:BoolToVisibilityConverter}}"/>
+                    <common1:ConnectButton
+                        Connection="{Binding Path=Connection}" Address="{Binding Path=Ipaddress}" Mode="Install"
+                        Type="{Binding ConnectType}"
 
-                    <ComboBox ItemsSource="{Binding Path=Ports}" Text="{Binding Path=Ipaddress}" 
+                        Grid.Column="0" Grid.Row="1"
+                        Name="btnConnect" />
+                    <TextBlock Grid.Column="0" HorizontalAlignment="Right" Width="150" Margin="3"
+                               IsManipulationEnabled="False" Grid.Row="0"
+                               Text="{x:Static communication:Communication.ComConnect}"
+                               Visibility="{Binding Path=IsNetwork, Converter={converters2:BoolToVisibilityInvertedConverter}}" />
+                    <TextBlock Grid.Column="0" HorizontalAlignment="Right" Width="150" IsManipulationEnabled="False"
+                               Grid.Row="0" Text="{x:Static communication:Communication.NetConnect}"
+                               Visibility="{Binding Path=IsNetwork, Converter={converters2:BoolToVisibilityConverter}}" />
+
+                    <ComboBox ItemsSource="{Binding Path=Ports}" Text="{Binding Path=Ipaddress}"
                               Grid.Row="0" Grid.Column="1" Width="200" Name="PortCombo"
-                              Visibility="{Binding Path=IsNetwork, Converter={converters2:BoolToVisibilityInvertedConverter}}" >
-                    </ComboBox>
-
-
+                              Visibility="{Binding Path=IsNetwork, Converter={converters2:BoolToVisibilityInvertedConverter}}" />
 
 
                     <TextBox Grid.Row="0" Grid.Column="1" Width="150"
-                             Visibility="{Binding Path=IsNetwork, Converter={converters2:BoolToVisibilityConverter}}" Name="tbIpAddr" >
+                             Visibility="{Binding Path=IsNetwork, Converter={converters2:BoolToVisibilityConverter}}"
+                             Name="tbIpAddr">
 
-                        <Binding Path="Ipaddress" ValidatesOnExceptions="True" NotifyOnValidationError="True" UpdateSourceTrigger="PropertyChanged">
+                        <Binding Path="Ipaddress" ValidatesOnExceptions="True" NotifyOnValidationError="True"
+                                 UpdateSourceTrigger="PropertyChanged">
                             <Binding.ValidationRules>
                                 <validators:IpAddressValidate />
                             </Binding.ValidationRules>
@@ -68,8 +74,9 @@
                             <Style TargetType="{x:Type TextBox}">
                                 <Style.Triggers>
                                     <Trigger Property="Validation.HasError" Value="true">
-                                        <Setter Property="ToolTip" Value="{Binding RelativeSource={x:Static RelativeSource.Self},
-                                            Path=(Validation.Errors)[0].ErrorContent}"/>
+                                        <Setter Property="ToolTip"
+                                                Value="{Binding RelativeSource={x:Static RelativeSource.Self},
+                                            Path=(Validation.Errors)[0].ErrorContent}" />
                                     </Trigger>
                                 </Style.Triggers>
                             </Style>
@@ -95,12 +102,12 @@
                         </Grid.Style>
                     </Grid>-->
 
-                    <TextBlock Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" 
-                               Text="{Binding Path=ErrorInfo, Mode=OneWay}" Foreground="Red" Width="400" 
-                                                   TextWrapping="WrapWithOverflow"  />
+                    <TextBlock Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2"
+                               Text="{Binding Path=ErrorInfo, Mode=OneWay}" Foreground="Red" Width="400"
+                               TextWrapping="WrapWithOverflow" />
                     <!--<CheckBox IsChecked="{Binding Path=IsInDetailMode}" Content="{x:Static view:Communication.AdvancedMode}" 
                               Margin="3" Grid.Row="1" Grid.Column="2" Name="ChkAdvanced"></CheckBox>-->
-                    <TextBlock Name="txtInstallMode" Grid.Row="1" Grid.Column="1" Margin="3" Width="200"/>
+                    <TextBlock Name="txtInstallMode" Grid.Row="1" Grid.Column="1" Margin="3" Width="200" />
                 </Grid>
 
                 <!--<i:Interaction.Triggers>
@@ -112,41 +119,45 @@
             </GroupBox>
             <DataTemplate.Triggers>
                 <DataTrigger
-                        Binding="{Binding Path=ConnectMode}" Value="{x:Static common1:ConnectMode.Install}">
+                    Binding="{Binding Path=ConnectMode}" Value="{x:Static common1:ConnectMode.Install}">
                     <Setter Property="Background" Value="Green" TargetName="txtInstallMode" />
-                    <Setter Value="{x:Static communication:Communication.InstallModeOn}" Property="Text" 
-                            TargetName="txtInstallMode" ></Setter>
-                    <Setter Value="False" Property="IsEnabled" TargetName="PortCombo"></Setter>
-                    <Setter Value="False" Property="IsEnabled" TargetName="tbIpAddr"></Setter>
+                    <Setter Value="{x:Static communication:Communication.InstallModeOn}" Property="Text"
+                            TargetName="txtInstallMode" />
+                    <Setter Value="False" Property="IsEnabled" TargetName="PortCombo" />
+                    <Setter Value="False" Property="IsEnabled" TargetName="tbIpAddr" />
                 </DataTrigger>
 
                 <DataTrigger Binding="{Binding Path=ConnectMode}" Value="{x:Static common1:ConnectMode.None}">
-                    <Setter Value="{x:Static communication:Communication.InstallModeOff}" Property="Text" TargetName="txtInstallMode"></Setter>
+                    <Setter Value="{x:Static communication:Communication.InstallModeOff}" Property="Text"
+                            TargetName="txtInstallMode" />
                     <Setter Property="Background" Value="Red" TargetName="txtInstallMode" />
 
-                </DataTrigger>                
+                </DataTrigger>
             </DataTemplate.Triggers>
         </DataTemplate>
 
     </UserControl.Resources>
-    <ScrollViewer >
+    <ScrollViewer>
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <StackPanel Grid.Row="0">
-                <TextBlock Margin="5" Text="{x:Static communication:Communication.ConnectionWarning}" Foreground="Red" Name="Warning1" 
-                       TextWrapping="Wrap" Width="400" HorizontalAlignment="Left" />
-                <TextBlock Margin="5" Text="{x:Static communication:Communication.ConnectionWarningLine2}" Foreground="Red" Name="Warning2"
-                       TextWrapping="Wrap" Width="400" HorizontalAlignment="Left"/>
-                <CheckBox Margin="5" Content="{x:Static communication:Communication.GotIt}" Foreground="Red" Name="GotIt" IsChecked="{Binding Path=ReadDisclaimer}" />
+                <TextBlock Margin="5" Text="{x:Static communication:Communication.ConnectionWarning}" Foreground="Red"
+                           Name="Warning1"
+                           TextWrapping="Wrap" Width="400" HorizontalAlignment="Left" />
+                <TextBlock Margin="5" Text="{x:Static communication:Communication.ConnectionWarningLine2}"
+                           Foreground="Red" Name="Warning2"
+                           TextWrapping="Wrap" Width="400" HorizontalAlignment="Left" />
+                <CheckBox Margin="5" Content="{x:Static communication:Communication.GotIt}" Foreground="Red"
+                          Name="GotIt" IsChecked="{Binding Path=ReadDisclaimer}" />
 
                 <StackPanel.Style>
                     <Style TargetType="StackPanel">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding ElementName=GotIt, Path=IsChecked}" Value="True">
-                                <Setter Property="Visibility" Value="Collapsed"></Setter>
+                                <Setter Property="Visibility" Value="Collapsed" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -167,26 +178,29 @@
                             <ColumnDefinition Width="200" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-                        <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="2" Grid.ColumnSpan="3" VerticalAlignment="Stretch">
-                            <ItemsControl ItemsSource="{Binding Path=Connections}" 
-                                  IsManipulationEnabled="False"  />
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="2" Grid.ColumnSpan="3"
+                                      VerticalAlignment="Stretch">
+                            <ItemsControl ItemsSource="{Binding Path=Connections}"
+                                          IsManipulationEnabled="False" />
                         </ScrollViewer>
 
-                        <Button Grid.Column="0" Grid.Row="0" Command="{Binding Path=AddConnection}" CommandParameter="serial" Content="{x:Static communication:Communication.AddUsbConnection}" >
-
-                        </Button>
-                        <Button Grid.Column="1" Grid.Row="0" Command="{Binding Path=AddConnection}" CommandParameter="net" Content="{x:Static communication:Communication.AddNetworkConnection}" >
-                        </Button>
+                        <Button Grid.Column="0" Grid.Row="0" Command="{Binding Path=AddConnection}"
+                                CommandParameter="serial"
+                                Content="{x:Static communication:Communication.AddUsbConnection}" />
+                        <Button Grid.Column="1" Grid.Row="0" Command="{Binding Path=AddConnection}"
+                                CommandParameter="net"
+                                Content="{x:Static communication:Communication.AddNetworkConnection}" />
 
                         <TextBlock Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1">
                             <TextBlock.Style>
                                 <Style TargetType="{x:Type TextBlock}">
-                                    <Setter Property="Visibility" Value="Collapsed"></Setter>
+                                    <Setter Property="Visibility" Value="Collapsed" />
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding Path=QueuedData}" Value="true">
-                                            <Setter Property="Text" Value="{x:Static communication:Communication.WarningQueuedData}"></Setter>
-                                            <Setter Property="Foreground" Value="Red"></Setter>
-                                            <Setter Property="Visibility" Value="Visible"></Setter>
+                                            <Setter Property="Text"
+                                                    Value="{x:Static communication:Communication.WarningQueuedData}" />
+                                            <Setter Property="Foreground" Value="Red" />
+                                            <Setter Property="Visibility" Value="Visible" />
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
@@ -213,7 +227,7 @@
                     <Style TargetType="TabControl">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding ElementName=GotIt, Path=IsChecked}" Value="False">
-                                <Setter Property="Visibility" Value="Collapsed"></Setter>
+                                <Setter Property="Visibility" Value="Collapsed" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>

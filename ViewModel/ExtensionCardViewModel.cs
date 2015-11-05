@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿#region
+
 using Common.Model;
-using EscInstaller.ViewModel.Settings;
-using Common;
+
+#endregion
 
 namespace EscInstaller.ViewModel
 {
@@ -23,12 +23,5 @@ namespace EscInstaller.ViewModel
             //    BlockUnits.AddRange(t.GetOverView);
             //}
         }
-
-        //private SortedSet<FlowModel> GenFlows()
-        //{
-        //    return new SortedSet<FlowModel>(
-        //        Enumerable.Range(5 * MainUnitViewModel.Id + GenericMethods.StartCountFrom, 5).Select(
-        //            n => new FlowModel {Id = n}).ToList());
-        //}
     }
 }

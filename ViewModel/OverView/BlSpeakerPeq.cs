@@ -1,73 +1,54 @@
-using EscInstaller.View;
-using Common.Model;
-using EscInstaller.ViewModel.Settings;
+#region
+
+using System;
 using System.Windows;
+using Common.Model;
+using EscInstaller.View;
 using EscInstaller.ViewModel.Settings.Peq;
+
+#endregion
 
 namespace EscInstaller.ViewModel.OverView
 {
     public sealed class BlSpeakerPeq : PeqBaseViewModel
     {
-
-        private readonly FlowModel _flow;
-
-
+        public const int Width = 107;
+        public const int XLocation = BlDelay.Width + Distance + BlDelay.XLocation;
+        private SpeakerDataViewModel _currentSpeaker;
 #if DEBUG
         public BlSpeakerPeq()
             : base(new MainUnitViewModel())
         {
-            _flow = new FlowModel();
+            DataModel = new FlowModel();
         }
 #endif
 
-        public const int Width = 107;
-        public const int XLocation = BlDelay.Width + Distance + BlDelay.XLocation;
         public BlSpeakerPeq(FlowModel flow, MainUnitViewModel main)
             : base(main)
         {
             Location.X = XLocation;
 
-            _flow = flow;
+            DataModel = flow;
             main.PresetNamesUpdated += Receiver_PresetNamesUpdated;
         }
 
-        void Receiver_PresetNamesUpdated(object sender, System.EventArgs e)
-        {
-            RaisePropertyChanged(() => DisplaySetting);
-        }
-
-        public void UpdateName()
-        {
-            RaisePropertyChanged(() => DisplaySetting);
-        }
-
-        public FlowModel DataModel
-        {
-            get { return _flow; }
-        }
+        public FlowModel DataModel { get; }
 
         public override int Id
         {
-            get { return _flow.Id; }
+            get { return DataModel.Id; }
         }
 
         public override string SettingName
         {
-            get { return string.Format(SpeakerLibrary.Title, _flow.Id + 1); }
-        }
-
-        public override void SetYLocation()
-        {
-            var row = Id % 12;
-            var yspace = row > 3 ? (InnerSpace + RowHeight) * (row > 7 ? 2 : 1) : 0;
-            Location.Y = RowHeight * row + yspace;
+            get { return string.Format(SpeakerLibrary.Title, DataModel.Id + 1); }
         }
 
         public override string DisplaySetting
         {
             get
             {
-                var t = Main.DataModel.SpeakerDataModels[_flow.Id % 12];
+                var t = Main.DataModel.SpeakerDataModels[DataModel.Id%12];
                 return SpeakerDataViewModel.DisplayValue(t, true);
             }
         }
@@ -77,9 +58,6 @@ namespace EscInstaller.ViewModel.OverView
             get { return new Point(Width, UnitHeight); }
         }
 
-
-
-        private SpeakerDataViewModel _currentSpeaker;
         public override SpeakerDataViewModel CurrentSpeaker
         {
             get
@@ -91,7 +69,7 @@ namespace EscInstaller.ViewModel.OverView
                 if (_currentSpeaker == null)
                 {
                     _currentSpeaker = new SpeakerDataViewModel(
-                        Main.SpeakerDataModels[_flow.Id % 12], Id);
+                        Main.SpeakerDataModels[DataModel.Id%12], Id);
                 }
                 _currentSpeaker.SpeakerNameChanged += (sender, args) => RaisePropertyChanged(() => DisplaySetting);
                 return _currentSpeaker;
@@ -102,8 +80,24 @@ namespace EscInstaller.ViewModel.OverView
 
         protected override int PresetId
         {
-            get { return _flow.Id; }
+            get { return DataModel.Id; }
         }
 
+        private void Receiver_PresetNamesUpdated(object sender, EventArgs e)
+        {
+            RaisePropertyChanged(() => DisplaySetting);
+        }
+
+        public void UpdateName()
+        {
+            RaisePropertyChanged(() => DisplaySetting);
+        }
+
+        public override void SetYLocation()
+        {
+            var row = Id%12;
+            var yspace = row > 3 ? (InnerSpace + RowHeight)*(row > 7 ? 2 : 1) : 0;
+            Location.Y = RowHeight*row + yspace;
+        }
     }
 }

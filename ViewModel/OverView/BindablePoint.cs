@@ -1,11 +1,18 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Windows;
 using GalaSoft.MvvmLight;
+
+#endregion
 
 namespace EscInstaller.ViewModel.OverView
 {
     public class BindablePoint : ViewModelBase
     {
+        private Point _value;
+        public Action OnValueChanged;
+
         public virtual double X
         {
             get { return Value.X; }
@@ -18,7 +25,6 @@ namespace EscInstaller.ViewModel.OverView
             set { Value = new Point(Value.X, value); }
         }
 
-        private Point _value;
         public Point Value
         {
             get { return _value; }
@@ -33,14 +39,10 @@ namespace EscInstaller.ViewModel.OverView
             }
         }
 
-
         public void ValueChanged()
         {
             if (OnValueChanged != null)
                 OnValueChanged();
         }
-
-        public Action OnValueChanged;
     }
-
 }

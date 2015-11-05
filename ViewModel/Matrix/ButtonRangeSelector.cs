@@ -1,4 +1,8 @@
+#region
+
 using EscInstaller.View;
+
+#endregion
 
 namespace EscInstaller.ViewModel.Matrix
 {
@@ -13,20 +17,13 @@ namespace EscInstaller.ViewModel.Matrix
             panel.ButtonChanged += panel_ButtonChanged;
         }
 
-        void panel_ButtonChanged(object sender, RangeChangedEventArgs e)
-        {                        
-            base.IsSelected = e.NewId == Id;
-            Update();
-        }
-
-
         public override bool IsSelected
         {
             get { return base.IsSelected; }
             set
-            {                
-                base.IsSelected = value;                
-                _panel.OnButtonChanged(new RangeChangedEventArgs() { NewId = Id });                
+            {
+                base.IsSelected = value;
+                _panel.OnButtonChanged(new RangeChangedEventArgs() {NewId = Id});
             }
         }
 
@@ -38,8 +35,14 @@ namespace EscInstaller.ViewModel.Matrix
                     return Panel._matrixButtonFDS;
                 if (Id == 16)
                     return string.Format(Panel._matrixButtonPanelAD);
-                return string.Format("P{0}: {1} - {2}", Id + 1, (Id * 12 + 1), (Id * 12 + 12));
+                return $"P{Id + 1}: {(Id*12 + 1)} - {(Id*12 + 12)}";
             }
+        }
+
+        private void panel_ButtonChanged(object sender, RangeChangedEventArgs e)
+        {
+            base.IsSelected = e.NewId == Id;
+            Update();
         }
     }
 }

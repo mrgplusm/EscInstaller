@@ -1,17 +1,20 @@
+#region
+
 using System.Collections.Generic;
-using Common.Model;
 using System.Windows;
+using Common.Model;
+
+#endregion
 
 namespace EscInstaller.ViewModel.OverView
 {
     public sealed class BlBackupAmp : SnapDiagramData
     {
-        readonly MainUnitViewModel _main;
-        private readonly CardModel _card;
-
-
         public const int Width = 85;
         public const int XLocation = BlOutput.Width + Distance + BlOutput.XLocation;
+        private readonly CardModel _card;
+        private readonly MainUnitViewModel _main;
+        private List<SnapShot> _snapShots;
 
         public BlBackupAmp(MainUnitViewModel main, CardModel card)
         {
@@ -30,19 +33,9 @@ namespace EscInstaller.ViewModel.OverView
             get { return _card.Id; }
         }
 
-
-
-        public override void SetYLocation()
-        {
-            Location.Y = (InnerSpace + RowHeight * 5) * _card.Id + RowHeight * 4;
-        }
-
         public override string SettingName
         {
-            get
-            {
-                return "backupAmp";
-            }
+            get { return "backupAmp"; }
         }
 
         public string DisplaySetting
@@ -60,8 +53,6 @@ namespace EscInstaller.ViewModel.OverView
             get { return new Point(Width, UnitHeight); }
         }
 
-        private List<SnapShot> _snapShots;
-
         public override List<SnapShot> Snapshots
         {
             get
@@ -69,16 +60,20 @@ namespace EscInstaller.ViewModel.OverView
                 if (_snapShots != null) return _snapShots;
                 _snapShots = (_snapShots = new List<SnapShot>
                 {
-
                     new SnapShot(this) {Offset = {X = 0, Y = SnapshotHeight}},
-                    new SnapShot(this) {Offset = {X = Size.X, Y = SnapshotHeight}},                    
+                    new SnapShot(this) {Offset = {X = Size.X, Y = SnapshotHeight}},
                     //add bottom point
-                    new SnapShot(this) {Offset = {X = SnapshotWidth, Y = 0}},
+                    new SnapShot(this) {Offset = {X = SnapshotWidth, Y = 0}}
                 });
 
 
                 return _snapShots;
             }
+        }
+
+        public override void SetYLocation()
+        {
+            Location.Y = (InnerSpace + RowHeight*5)*_card.Id + RowHeight*4;
         }
     }
 }

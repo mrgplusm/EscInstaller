@@ -1,40 +1,28 @@
+#region
+
 using System;
-using System.Text;
 using System.Windows;
-using Common;
+using Common.Commodules;
+using Common.Model;
 using EscInstaller.View;
 using EscInstaller.ViewModel.Connection;
-using GalaSoft.MvvmLight.Messaging;
-using Common.Model;
-using Common.Commodules;
+
+#endregion
 
 namespace EscInstaller.ViewModel.OverView
 {
     public sealed class BlOutput : SnapDiagramData
     {
-
-
         public const int Width = 100;
         public const int XLocation = BlMonitor.Width + Distance + BlMonitor.XLocation;
-        readonly FlowModel _flow;
+        private readonly FlowModel _flow;
 
         public BlOutput(FlowModel flow, MainUnitViewModel main)
         {
-            _flow = flow;            
+            _flow = flow;
             Location.X = XLocation;
             main.PresetNamesUpdated += Receiver_PresetNamesUpdated;
             main.DspMirrorUpdated += ReceiverOnDspMirrorUpdated;
-        }
-
-        private void ReceiverOnDspMirrorUpdated(object sender, EventArgs eventArgs)
-        {
-            RaisePropertyChanged(() => Gain);
-            RaisePropertyChanged(() => OutputGain);
-        }
-
-        void Receiver_PresetNamesUpdated(object sender, EventArgs e)
-        {
-            RaisePropertyChanged(() => NameOfOutput);
         }
 
         public override int Id
@@ -42,27 +30,15 @@ namespace EscInstaller.ViewModel.OverView
             get { return _flow.Id; }
         }
 
-        public void UpdateName()
-        {
-            RaisePropertyChanged(() => NameOfOutput);
-        }
-
         public string DisplayId
         {
-            get
-            {
-                return (_flow.Id + 1).ToString("N0");
-            }
+            get { return (_flow.Id + 1).ToString("N0"); }
         }
 
         public bool HasAmplifier
-        {   
+        {
             get { return _flow.HasAmplifier; }
-            set
-            {
-                _flow.HasAmplifier = value;
-
-            }
+            set { _flow.HasAmplifier = value; }
         }
 
         public override Point Size
@@ -104,17 +80,32 @@ namespace EscInstaller.ViewModel.OverView
             }
         }
 
-
         public override string SettingName
         {
             get { return string.Format(PageGain._outputBlockTitle, _flow.Id + 1); }
         }
 
+        private void ReceiverOnDspMirrorUpdated(object sender, EventArgs eventArgs)
+        {
+            RaisePropertyChanged(() => Gain);
+            RaisePropertyChanged(() => OutputGain);
+        }
+
+        private void Receiver_PresetNamesUpdated(object sender, EventArgs e)
+        {
+            RaisePropertyChanged(() => NameOfOutput);
+        }
+
+        public void UpdateName()
+        {
+            RaisePropertyChanged(() => NameOfOutput);
+        }
+
         public override void SetYLocation()
         {
-            var row = Id % 12;
-            var yspace = row > 3 ? (InnerSpace + RowHeight) * (row > 7 ? 2 : 1) : 0;
-            Location.Y = RowHeight * row + yspace;
+            var row = Id%12;
+            var yspace = row > 3 ? (InnerSpace + RowHeight)*(row > 7 ? 2 : 1) : 0;
+            Location.Y = RowHeight*row + yspace;
         }
     }
 }

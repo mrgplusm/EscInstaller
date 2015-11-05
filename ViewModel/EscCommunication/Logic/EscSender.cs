@@ -1,8 +1,12 @@
+#region
+
 using System.Collections.Generic;
 using System.Linq;
 using Common;
 using Common.Commodules;
 using Common.Model;
+
+#endregion
 
 namespace EscInstaller.ViewModel.EscCommunication.Logic
 {
@@ -14,7 +18,6 @@ namespace EscInstaller.ViewModel.EscCommunication.Logic
         {
             _main = main;
         }
-
 
         /// <summary>
         ///     List of input deviation settings which aren't set to 0

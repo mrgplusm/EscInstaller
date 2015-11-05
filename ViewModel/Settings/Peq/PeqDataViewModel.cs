@@ -1,4 +1,6 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -6,14 +8,16 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Threading;
 using Common;
-using Common.Commodules;
 using Common.Model;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using Microsoft.Research.DynamicDataDisplay;
 using Microsoft.Research.DynamicDataDisplay.Charts.Shapes;
 using Microsoft.Research.DynamicDataDisplay.DataSources;
+
+#endregion
 
 namespace EscInstaller.ViewModel.Settings.Peq
 {
@@ -31,22 +35,11 @@ namespace EscInstaller.ViewModel.Settings.Peq
             Brushes.LightSlateGray, Brushes.LawnGreen, Brushes.LightSkyBlue, Brushes.Magenta, Brushes.MediumPurple
         };
 
-
-        public event EventHandler<BiquadsChangedEventArgs> BiquadsChanged;
-
-        public void OnBiquadsChanged(BiquadsChangedEventArgs e)
-        {
-            EventHandler<BiquadsChangedEventArgs> handler = BiquadsChanged;
-            if (handler != null) handler(this, e);
-        }
-
         private Arrow _bandwidthArrow;
         private DraggablePoint _bandwidthPoint;
         private DraggablePoint _draggablePoint;
         private bool _isMousOver;
         private LineGraph _lineData;
-
-
 
         public PeqDataViewModel(PeqDataModel peq)
         {
@@ -55,31 +48,28 @@ namespace EscInstaller.ViewModel.Settings.Peq
             if (PeqDataModel.Frequency < MinFreq) PeqDataModel.Frequency = MinFreq;
 
             DraggablePoint.PositionCoerceCallbacks.Add((container, position) =>
-                {
-                    var point = position;
-                    if (Math.Abs(point.Y - 0) > .1 && FilterType != FilterType.Peaking
-                        && FilterType != FilterType.LowShelf && FilterType != FilterType.HighShelf)
-                        point = new Point(point.X, 0);
+            {
+                var point = position;
+                if (Math.Abs(point.Y - 0) > .1 && FilterType != FilterType.Peaking
+                    && FilterType != FilterType.LowShelf && FilterType != FilterType.HighShelf)
+                    point = new Point(point.X, 0);
 
-                    if (point.X > 20000) point = new Point(20000, point.Y);
-                    if (point.Y > 15) point = new Point(point.X, 15);
-                    if (point.X < 10) point = new Point(10, point.Y);
-                    if (point.Y < -15) point = new Point(point.X, -15);
-                    return point;
-                });
+                if (point.X > 20000) point = new Point(20000, point.Y);
+                if (point.Y > 15) point = new Point(point.X, 15);
+                if (point.X < 10) point = new Point(10, point.Y);
+                if (point.Y < -15) point = new Point(point.X, -15);
+                return point;
+            });
 
             DraggablePoint.PositionChanged += (sender, e) =>
-                {
-                    if ((Math.Abs(Math.Log10(e.Position.X) - Math.Log10(Frequency)) < .05) &&
-                        (Math.Abs(e.Position.Y - Boost) < 0.2)) return;
+            {
+                if ((Math.Abs(Math.Log10(e.Position.X) - Math.Log10(Frequency)) < .05) &&
+                    (Math.Abs(e.Position.Y - Boost) < 0.2)) return;
 
-                    Frequency = e.Position.X;
-                    Boost = e.Position.Y;
-                };
+                Frequency = e.Position.X;
+                Boost = e.Position.Y;
+            };
         }
-
-
-
 
         public DraggablePoint BandWidthPoint
         {
@@ -91,33 +81,29 @@ namespace EscInstaller.ViewModel.Settings.Peq
                     return _bandwidthPoint;
                 }
 
-                _bandwidthPoint = new DraggablePoint(Posb()) { Foreground = Brushes.Coral };
+                _bandwidthPoint = new DraggablePoint(Posb()) {Foreground = Brushes.Coral};
 
                 OnBandwithPositionChange(_bandwidthPoint.Position);
 
                 _bandwidthPoint.PositionChanged += (o, eventArgs) => OnBandwithPositionChange(eventArgs.Position);
 
                 _bandwidthPoint.PositionCoerceCallbacks.Add((container, position) =>
-                    {
-                        var dist = 10 * Math.Abs(Math.Log10(position.X) - Math.Log10(DraggablePoint.Position.X));
-                        double x;
-                        if (dist > 6.67) x = Math.Pow(10, Math.Log10(DraggablePoint.Position.X) - .667);
-                        else if (dist < .1) x = Math.Pow(10, Math.Log10(DraggablePoint.Position.X) - .01);
-                        else x = position.X;
-                        return new Point(x, Boost);
-                    });
+                {
+                    var dist = 10*Math.Abs(Math.Log10(position.X) - Math.Log10(DraggablePoint.Position.X));
+                    double x;
+                    if (dist > 6.67) x = Math.Pow(10, Math.Log10(DraggablePoint.Position.X) - .667);
+                    else if (dist < .1) x = Math.Pow(10, Math.Log10(DraggablePoint.Position.X) - .01);
+                    else x = position.X;
+                    return new Point(x, Boost);
+                });
                 return _bandwidthPoint;
             }
         }
-
-
-
 
         public Arrow BandwidthArrow
         {
             get { return _bandwidthArrow ?? (_bandwidthArrow = new Arrow(Posb(), PosE())); }
         }
-
 
         public int Index
         {
@@ -130,7 +116,6 @@ namespace EscInstaller.ViewModel.Settings.Peq
             set { PeqDataModel.Id = value; }
         }
 
-
         public Brush Color
         {
             get { return LinebBrushes[Index]; }
@@ -141,18 +126,17 @@ namespace EscInstaller.ViewModel.Settings.Peq
             get
             {
                 return _lineData ?? (_lineData = new LineGraph(GenLine()
-                                                     )
-                    {
-                        Stroke = LinebBrushes[Index],
-                        StrokeThickness = 1,
-                        Visibility = IsEnabled
-                                         ? Visibility.Visible
-                                         : Visibility.Collapsed,
-                        ZIndex = Index,
-                    });
+                    )
+                {
+                    Stroke = LinebBrushes[Index],
+                    StrokeThickness = 1,
+                    Visibility = IsEnabled
+                        ? Visibility.Visible
+                        : Visibility.Collapsed,
+                    ZIndex = Index
+                });
             }
         }
-
 
         public bool IsMouseOver
         {
@@ -170,28 +154,24 @@ namespace EscInstaller.ViewModel.Settings.Peq
             get
             {
                 return _draggablePoint ?? (_draggablePoint = new DraggablePoint(
-                                                                 new Point(Frequency, Boost)
-                                                                 )
-                    {
-                        //IsEnabled = _speaker.Id != 15,
-                        Visibility = IsEnabled ? Visibility.Visible : Visibility.Collapsed
-                    });
+                    new Point(Frequency, Boost)
+                    )
+                {
+                    //IsEnabled = _speaker.Id != 15,
+                    Visibility = IsEnabled ? Visibility.Visible : Visibility.Collapsed
+                });
             }
         }
 
-        public PeqDataModel PeqDataModel { get; private set; }
+        public PeqDataModel PeqDataModel { get; }
 
         public int Order
         {
-            get
-            {
-
-                return PeqDataModel.Order;
-            }
+            get { return PeqDataModel.Order; }
             set
             {
                 if (PeqDataModel.Order == value || value == -1) return;
-                if ((FilterType == FilterType.LinkWitzHp || FilterType == FilterType.LinkWitzLp) && value % 2 != 0)
+                if ((FilterType == FilterType.LinkWitzHp || FilterType == FilterType.LinkWitzLp) && value%2 != 0)
                     return;
                 {
                     OnBiquadsChanged(new BiquadsChangedEventArgs()
@@ -203,14 +183,114 @@ namespace EscInstaller.ViewModel.Settings.Peq
             }
         }
 
+        public double Frequency
+        {
+            get { return PeqDataModel.Frequency; }
+            set
+            {
+                if (Math.Abs(PeqDataModel.Frequency - value) < .01) return;
+                PeqDataModel.Frequency = value;
+                UpdateGraphics();
+                OnBiquadsChanged(new BiquadsChangedEventArgs() {PeqField = PeqField.Frequency}); //true
+                RaisePropertyChanged(() => Frequency);
+            }
+        }
+
+        public virtual FilterType FilterType
+        {
+            get { return PeqDataModel.FilterType; }
+            set
+            {
+                OnBiquadsChanged(new BiquadsChangedEventArgs()
+                {
+                    PeqField = PeqField.FilterType,
+                    RequestFilterType = value
+                });
+            }
+        }
+
+        public double BandWidth
+        {
+            get { return PeqDataModel.BandWidth; }
+            set
+            {
+                if (Math.Abs(PeqDataModel.BandWidth - value) < .001) return;
+                PeqDataModel.BandWidth = value;
+                UpdateGraphics();
+                OnBiquadsChanged(new BiquadsChangedEventArgs() {PeqField = PeqField.Bandwidth}); //true
+                RaisePropertyChanged(() => BandWidth);
+            }
+        }
+
+        public double Boost
+        {
+            get { return !HasBoost() ? 0 : PeqDataModel.Boost; }
+            set
+            {
+                if (Math.Abs(PeqDataModel.Boost - value) < 0.001) return;
+                PeqDataModel.Boost = value;
+                UpdateGraphics();
+                OnBiquadsChanged(new BiquadsChangedEventArgs() {PeqField = PeqField.Boost}); //true
+                RaisePropertyChanged(() => Boost);
+            }
+        }
+
+        /// <summary>
+        ///     Enable or disable whole eq param setting
+        /// </summary>
+        public bool IsEnabled
+        {
+            get { return PeqDataModel.IsEnabled; }
+            set
+            {
+                PeqDataModel.IsEnabled = value;
+                UpdateGraphics();
+                OnBiquadsChanged(new BiquadsChangedEventArgs() {PeqField = PeqField.IsEnabled}); //true
+                RaisePropertyChanged(() => IsEnabled);
+            }
+        }
+
+        public virtual IEnumerable<SOS> FilterData
+        {
+            get
+            {
+                return DspCoefficients.GetXoverSOS(PeqDataModel.Frequency, PeqDataModel.Order,
+                    PeqDataModel.FilterType,
+                    DspCoefficients.Fs, PeqDataModel.Gain);
+            }
+        }
+
+        public double Gain
+        {
+            get { return PeqDataModel.Gain; }
+            set
+            {
+                PeqDataModel.Gain = value;
+                RaisePropertyChanged(() => Gain);
+            }
+        }
+
+        public ICommand RemoveParam
+        {
+            get { return new RelayCommand(OnRemoveThisParam); }
+        }
+
+        public event EventHandler<BiquadsChangedEventArgs> BiquadsChanged;
+
+        public void OnBiquadsChanged(BiquadsChangedEventArgs e)
+        {
+            var handler = BiquadsChanged;
+            if (handler != null) handler(this, e);
+        }
+
         public void SetType(FilterType type)
         {
-            PeqDataModel.FilterType = type;            
+            PeqDataModel.FilterType = type;
         }
 
         public void ResetType()
         {
-            System.Windows.Threading.Dispatcher.CurrentDispatcher.BeginInvoke(
+            Dispatcher.CurrentDispatcher.BeginInvoke(
                 new Action(async () =>
                 {
                     await Task.Delay(30);
@@ -231,107 +311,16 @@ namespace EscInstaller.ViewModel.Settings.Peq
             UpdateGraphics();
         }
 
-        public double Frequency
-        {
-            get { return PeqDataModel.Frequency; }
-            set
-            {
-                if (Math.Abs(PeqDataModel.Frequency - value) < .01) return;
-                PeqDataModel.Frequency = value;
-                UpdateGraphics();
-                OnBiquadsChanged(new BiquadsChangedEventArgs() { PeqField = PeqField.Frequency }); //true
-                RaisePropertyChanged(() => Frequency);
-            }
-        }
-
-        public virtual FilterType FilterType
-        {
-            get { return PeqDataModel.FilterType; }
-            set
-            {
-                OnBiquadsChanged(new BiquadsChangedEventArgs()
-                {
-                    PeqField = PeqField.FilterType,
-                    RequestFilterType = value
-                });
-
-            }
-        }
-
-        public double BandWidth
-        {
-            get { return PeqDataModel.BandWidth; }
-            set
-            {
-                if (Math.Abs(PeqDataModel.BandWidth - value) < .001) return;
-                PeqDataModel.BandWidth = value;
-                UpdateGraphics();
-                OnBiquadsChanged(new BiquadsChangedEventArgs() { PeqField = PeqField.Bandwidth }); //true
-                RaisePropertyChanged(() => BandWidth);
-            }
-        }
-
-        public double Boost
-        {
-            get { return !HasBoost() ? 0 : PeqDataModel.Boost; }
-            set
-            {
-                if (Math.Abs(PeqDataModel.Boost - value) < 0.001) return;
-                PeqDataModel.Boost = value;
-                UpdateGraphics();
-                OnBiquadsChanged(new BiquadsChangedEventArgs() { PeqField = PeqField.Boost }); //true
-                RaisePropertyChanged(() => Boost);
-            }
-        }
-
-        /// <summary>
-        ///     Enable or disable whole eq param setting
-        /// </summary>
-        public bool IsEnabled
-        {
-            get { return PeqDataModel.IsEnabled; }
-            set
-            {
-                PeqDataModel.IsEnabled = value;
-                UpdateGraphics();
-                OnBiquadsChanged(new BiquadsChangedEventArgs() { PeqField = PeqField.IsEnabled }); //true
-                RaisePropertyChanged(() => IsEnabled);
-            }
-        }
-
-        public virtual IEnumerable<SOS> FilterData
-        {
-            get
-            {
-                return DspCoefficients.GetXoverSOS(PeqDataModel.Frequency, PeqDataModel.Order,
-                                                         PeqDataModel.FilterType,
-                                                         DspCoefficients.Fs, PeqDataModel.Gain);
-            }
-        }
-
-        public double Gain
-        {
-            get
-            {
-                return PeqDataModel.Gain;
-            }
-            set
-            {
-                PeqDataModel.Gain = value;
-                RaisePropertyChanged(() => Gain);
-            }
-        }
-
         private Point Posb()
         {
-            return new Point(Math.Pow(10, Math.Log10(DraggablePoint.Position.X) - BandWidth / 10),
-                             DraggablePoint.Position.Y);
+            return new Point(Math.Pow(10, Math.Log10(DraggablePoint.Position.X) - BandWidth/10),
+                DraggablePoint.Position.Y);
         }
 
         private Point PosE()
         {
-            return new Point(Math.Pow(10, Math.Log10(DraggablePoint.Position.X) + BandWidth / 10),
-                             DraggablePoint.Position.Y);
+            return new Point(Math.Pow(10, Math.Log10(DraggablePoint.Position.X) + BandWidth/10),
+                DraggablePoint.Position.Y);
         }
 
         public bool HasBandwidth()
@@ -340,12 +329,12 @@ namespace EscInstaller.ViewModel.Settings.Peq
                      || FilterType == FilterType.LowShelf
                      || FilterType == FilterType.HighShelf
                      || FilterType == FilterType.Notch
-                    ));
+                ));
         }
 
         private void OnBandwithPositionChange(Point position)
         {
-            var bdwtemp = 10 * Math.Abs(Math.Log10(position.X) - Math.Log10(DraggablePoint.Position.X));
+            var bdwtemp = 10*Math.Abs(Math.Log10(position.X) - Math.Log10(DraggablePoint.Position.X));
             if (Math.Abs(BandWidth - bdwtemp) < .1) return;
             BandWidth = bdwtemp;
             BandwidthArrow.StartPoint = Posb();
@@ -365,7 +354,7 @@ namespace EscInstaller.ViewModel.Settings.Peq
         {
             return (FilterType == FilterType.Peaking || FilterType == FilterType.HighShelf ||
                     FilterType == FilterType.LowShelf
-                   );
+                );
         }
 
         public bool IsSecondOrder()
@@ -376,19 +365,11 @@ namespace EscInstaller.ViewModel.Settings.Peq
                    || PeqDataModel.FilterType == FilterType.LowShelf;
         }
 
-        public ICommand RemoveParam
-        {
-            get
-            {
-                return new RelayCommand(OnRemoveThisParam);
-            }
-        }
-
         public event EventHandler RemoveThisParam;
 
         private void OnRemoveThisParam()
         {
-            EventHandler handler = RemoveThisParam;
+            var handler = RemoveThisParam;
             if (handler != null) handler(this, EventArgs.Empty);
         }
 

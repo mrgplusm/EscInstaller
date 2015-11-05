@@ -7,6 +7,6 @@
         Order,
         Frequency,
         Boost,
-        Bandwidth,
+        Bandwidth
     }
 }

@@ -1,24 +1,24 @@
-using Common.Model;
-using EscInstaller.ViewModel.Settings;
+#region
+
+using System.Windows;
 using Common;
+using Common.Model;
 using EscInstaller.ViewModel.Settings.Peq;
-using TagLib.IFD;
+
+#endregion
 
 namespace EscInstaller.ViewModel.OverView
 {
     public sealed class BlInputPeq : PeqBaseViewModel
     {
-
-        readonly FlowModel _flow;
-
         public const int Width = BlToneControl.Width;
         public const int XLocation = BlExtInput.Width + Distance + BlExtInput.XLocation;
-
+        private readonly FlowModel _flow;
+        private SpeakerDataViewModel _currentSpeaker;
 #if DEBUG
         public BlInputPeq()
             : base(new MainUnitViewModel(LibraryData.EmptyEsc(1), new MainViewModel()))
         {
-
         }
 #endif
 
@@ -31,22 +31,13 @@ namespace EscInstaller.ViewModel.OverView
             SetYLocation();
         }
 
-        public override void SetYLocation()
-        {
-            Location.Y =
-                Main.DataModel.ExpansionCards * 5 * RowHeight + 5 * RowHeight
-                + ((_flow.Id - GenericMethods.StartCountFrom) % 5 * RowHeight)
-                + (Main.DataModel.ExpansionCards + 1) * InnerSpace;
-
-            foreach (var snapshot in Snapshots)
-            {
-                snapshot.Calculate();
-            }
-        }
-
         public override string SettingName
         {
-            get { return string.Format(EscInstaller.Main.BlockTitleInputPeq, _flow.Id - 1 - (GenericMethods.StartCountFrom % 5)); }
+            get
+            {
+                return string.Format(EscInstaller.Main.BlockTitleInputPeq,
+                    _flow.Id - 1 - (GenericMethods.StartCountFrom%5));
+            }
         }
 
         public override int Id
@@ -54,10 +45,9 @@ namespace EscInstaller.ViewModel.OverView
             get { return _flow.Id; }
         }
 
-
-        public override System.Windows.Point Size
+        public override Point Size
         {
-            get { return new System.Windows.Point(Width, UnitHeight); }
+            get { return new Point(Width, UnitHeight); }
         }
 
         protected override int PresetId
@@ -70,7 +60,6 @@ namespace EscInstaller.ViewModel.OverView
             get { return string.Empty; }
         }
 
-        private SpeakerDataViewModel _currentSpeaker;
         public override SpeakerDataViewModel CurrentSpeaker
         {
             get
@@ -84,7 +73,7 @@ namespace EscInstaller.ViewModel.OverView
                 if (_currentSpeaker != null) return _currentSpeaker;
                 _currentSpeaker =
                     new SpeakerDataViewModel(
-                        Main.SpeakerDataModels[(_flow.Id - GenericMethods.StartCountFrom) % 5 + 13], Id);
+                        Main.SpeakerDataModels[(_flow.Id - GenericMethods.StartCountFrom)%5 + 13], Id);
                 _currentSpeaker.SpeakerNameChanged += (sender, args) => RaisePropertyChanged(() => DisplaySetting);
                 return _currentSpeaker;
             }
@@ -92,7 +81,20 @@ namespace EscInstaller.ViewModel.OverView
 
         public int InputPeqId
         {
-            get { return (_flow.Id - GenericMethods.StartCountFrom) % 5; }
+            get { return (_flow.Id - GenericMethods.StartCountFrom)%5; }
+        }
+
+        public override void SetYLocation()
+        {
+            Location.Y =
+                Main.DataModel.ExpansionCards*5*RowHeight + 5*RowHeight
+                + ((_flow.Id - GenericMethods.StartCountFrom)%5*RowHeight)
+                + (Main.DataModel.ExpansionCards + 1)*InnerSpace;
+
+            foreach (var snapshot in Snapshots)
+            {
+                snapshot.Calculate();
+            }
         }
     }
 }

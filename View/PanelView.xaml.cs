@@ -1,7 +1,10 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Windows;
 using System.Windows.Controls;
 
+#endregion
 
 namespace EscInstaller.View
 {
@@ -23,16 +26,6 @@ namespace EscInstaller.View
                     inner = ex.InnerException.Message;
                 MessageBox.Show(ex.Message + "\n" + inner);
             }
-
-
-
         }
-
-
     }
-
-    
-
 }
-
-

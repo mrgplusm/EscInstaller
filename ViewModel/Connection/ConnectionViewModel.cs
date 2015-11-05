@@ -1,4 +1,6 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
@@ -8,18 +10,23 @@ using Common.Model;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 
+#endregion
+
 namespace EscInstaller.ViewModel.Connection
 {
     public class ConnectionViewModel : ViewModelBase, IEquatable<ConnectionViewModel>
     {
+        private ObservableCollection<DispatchDataViewModel> _changelist;
         private string _errorInfo;
+        private ObservableCollection<string> _ports;
+        private int _unitId = -1;
 
         public ConnectionViewModel(ConnectionModel connection)
         {
             DataModel = connection;
             Connection = new Common.Connection();
 
-            Connection.ErrorOccured += (a,b) => Application.Current.Dispatcher.Invoke(() =>
+            Connection.ErrorOccured += (a, b) => Application.Current.Dispatcher.Invoke(() =>
             {
                 ErrorInfo = b.Exception.Message;
 
@@ -27,7 +34,7 @@ namespace EscInstaller.ViewModel.Connection
             });
 
             Connection.ConnectModeChanged += (sender, mode) => Application.Current.Dispatcher.Invoke(() =>
-            {            
+            {
                 ErrorInfo = string.Empty;
                 RaisePropertyChanged(() => ConnectMode);
             });
@@ -41,10 +48,8 @@ namespace EscInstaller.ViewModel.Connection
 #endif
         }
 
-        public Common.Connection Connection { get; private set; }
-
-
-        public ConnectionModel DataModel { get; private set; }
+        public Common.Connection Connection { get; }
+        public ConnectionModel DataModel { get; }
 
         public bool IsNetwork
         {
@@ -62,17 +67,13 @@ namespace EscInstaller.ViewModel.Connection
             private set
             {
                 _unitId = value;
-                RaisePropertyChanged(()=> UnitId);
+                RaisePropertyChanged(() => UnitId);
             }
         }
 
-        private ObservableCollection<string> _ports;
         public ObservableCollection<string> Ports
         {
-            get
-            {
-                return _ports ?? (_ports = new ObservableCollection<string>(PortList.GetList()));
-            }
+            get { return _ports ?? (_ports = new ObservableCollection<string>(PortList.GetList())); }
         }
 
         public string ErrorInfo
@@ -97,10 +98,7 @@ namespace EscInstaller.ViewModel.Connection
 
         public ConnectMode ConnectMode
         {
-            get
-            {
-                return Connection.Mode;
-            }
+            get { return Connection.Mode; }
         }
 
         public ICommand ClearChangeList
@@ -108,20 +106,16 @@ namespace EscInstaller.ViewModel.Connection
             get
             {
                 return new RelayCommand(() =>
+                {
+                    foreach (var source in ChangeList.ToList())
                     {
-                        foreach (var source in ChangeList.ToList())
-                        {
-                            source.Remove();
-                        }
+                        source.Remove();
+                    }
 
-                        ChangeList.Clear();
-                    });
+                    ChangeList.Clear();
+                });
             }
         }
-
-
-        private ObservableCollection<DispatchDataViewModel> _changelist;
-        private int _unitId = -1;
 
         public ObservableCollection<DispatchDataViewModel> ChangeList
         {
@@ -133,10 +127,10 @@ namespace EscInstaller.ViewModel.Connection
             get
             {
                 return new RelayCommand<DispatchDataViewModel>(data =>
-                    {
-                        data.Remove();
-                        ChangeList.Remove(data);
-                    });
+                {
+                    data.Remove();
+                    ChangeList.Remove(data);
+                });
             }
         }
 
@@ -160,6 +154,13 @@ namespace EscInstaller.ViewModel.Connection
             }
         }
 
+        public bool Equals(ConnectionViewModel other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return Equals(DataModel, other.DataModel);
+        }
+
         public void EndConnection()
         {
             ErrorInfo = string.Empty;
@@ -170,19 +171,12 @@ namespace EscInstaller.ViewModel.Connection
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return other.GetType() == GetType() && Equals((ConnectionViewModel)other);
+            return other.GetType() == GetType() && Equals((ConnectionViewModel) other);
         }
 
         public override int GetHashCode()
         {
             return (DataModel != null ? DataModel.GetHashCode() : 0);
-        }
-
-        public bool Equals(ConnectionViewModel other)
-        {
-            if (ReferenceEquals(null, other)) return false;
-            if (ReferenceEquals(this, other)) return true;
-            return Equals(DataModel, other.DataModel);
         }
     }
 }

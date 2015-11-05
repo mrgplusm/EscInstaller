@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -5,7 +7,8 @@ using System.Linq;
 using Common;
 using Common.Commodules;
 using Common.Model;
-using TagLib.Id3v2;
+
+#endregion
 
 namespace EscInstaller.ViewModel.Settings.Peq
 {
@@ -23,20 +26,18 @@ namespace EscInstaller.ViewModel.Settings.Peq
             UpdateIntegraty();
         }
 
-        /// <summary>           
-        /// start: 34816 end: 39935
-        /// Define redundancy addresses in eeprom
-        /// size: 8 bytes redundancy data * biquads (bytes)
-        /// tot:  size * channels (bytes)
-        ///         chnn  bqs   size  tot   address range
-        /// preset  12    14    112   1344  34816   36159
-        /// Aux     3     7     56    168   36160   36327    
-        /// mic     2     5     40    80    36328   36408
+        /// <summary>
+        ///     start: 34816 end: 39935
+        ///     Define redundancy addresses in eeprom
+        ///     size: 8 bytes redundancy data * biquads (bytes)
+        ///     tot:  size * channels (bytes)
+        ///     chnn  bqs   size  tot   address range
+        ///     preset  12    14    112   1344  34816   36159
+        ///     Aux     3     7     56    168   36160   36327
+        ///     mic     2     5     40    80    36328   36408
         /// </summary>
-
         /// which speaker:
-        /// preset: 0-11, aux 12-14, mic 15-16        
-
+        /// preset: 0-11, aux 12-14, mic 15-16
         /// <returns></returns>
         public ushort RedundancyAddress(int biquad)
         {
@@ -49,30 +50,30 @@ namespace EscInstaller.ViewModel.Settings.Peq
                         throw new ArgumentException("Mic does not have positon" + Model.Id);
                     return
                         (ushort)
-                            (McuDat.MicRedundancy + biquad * FilterBase.PeqRedundancyCount +
-                             (Model.Id - 15) * 40);
+                            (McuDat.MicRedundancy + biquad*FilterBase.PeqRedundancyCount +
+                             (Model.Id - 15)*40);
 
                 case SpeakerPeqType.BiquadsAux:
                     if (biquad > 6)
                         throw new ArgumentException("Aux does not have biquad" + biquad);
                     if (Model.Id > 14 || Model.Id < 12)
                         throw new ArgumentException("Aux does not have positon" + Model.Id);
-                    return (ushort)(McuDat.AuxRedundancy + biquad * FilterBase.PeqRedundancyCount + (Model.Id - 12) * 56);
+                    return (ushort) (McuDat.AuxRedundancy + biquad*FilterBase.PeqRedundancyCount + (Model.Id - 12)*56);
                 case SpeakerPeqType.BiquadsPreset:
                     if (biquad > 13)
                         throw new ArgumentException("Preset does not have biquad" + biquad);
                     if (Model.Id > 11 || Model.Id < 0)
                         throw new ArgumentException("Preset does not have positon" + Model.Id);
-                    return (ushort)(McuDat.PresetRedundancy + biquad * FilterBase.PeqRedundancyCount + Model.Id * 112);
+                    return (ushort) (McuDat.PresetRedundancy + biquad*FilterBase.PeqRedundancyCount + Model.Id*112);
                 default:
                     throw new ArgumentException("SpeakerPeqType does not exist");
             }
         }
 
         /// <summary>
-        /// Updates used biquads field
-        /// Library speakers do not have stored biquad values per filter
-        /// Compare stored biquads with actual filters for older sw versions
+        ///     Updates used biquads field
+        ///     Library speakers do not have stored biquad values per filter
+        ///     Compare stored biquads with actual filters for older sw versions
         /// </summary>
         /// <returns></returns>
         public void UpdateIntegraty()
@@ -84,15 +85,15 @@ namespace EscInstaller.ViewModel.Settings.Peq
 
         private void AssignBqsToFilters()
         {
-            if (Model.PEQ.RequiredBiquads() > (int)Model.SpeakerPeqType)
+            if (Model.PEQ.RequiredBiquads() > (int) Model.SpeakerPeqType)
                 throw new Exception("This configuration uses too many biquads");
             var bq = GetBiquadStack();
 
             foreach (var peqDataModel in Model.PEQ)
             {
-                var req = new[] { peqDataModel }.RequiredBiquads();
+                var req = new[] {peqDataModel}.RequiredBiquads();
                 peqDataModel.Biquads = new List<int>();
-                for (int i = 0; i < req; i++)
+                for (var i = 0; i < req; i++)
                 {
                     peqDataModel.Biquads.Add(bq.Pop());
                 }
@@ -101,7 +102,7 @@ namespace EscInstaller.ViewModel.Settings.Peq
 
         private Stack<int> GetBiquadStack()
         {
-            return new Stack<int>(Enumerable.Range(0, (int)Model.SpeakerPeqType));
+            return new Stack<int>(Enumerable.Range(0, (int) Model.SpeakerPeqType));
         }
 
         private bool CheckBiquadIntegraty()
@@ -115,23 +116,23 @@ namespace EscInstaller.ViewModel.Settings.Peq
                     return false;
                 }
 
-                int req = new[] { peqDataModel }.RequiredBiquads();
+                var req = new[] {peqDataModel}.RequiredBiquads();
                 if (peqDataModel.Biquads.Count != req)
                     return false;
                 //if biquad is in model, it cannot be in another model or available
                 //if (peqDataModel.Biquads.Any(Model.AvailableBiquads.Contains))
                 //    return false;
             }
-            return (int)Model.SpeakerPeqType > Model.PEQ.RequiredBiquads();
+            return (int) Model.SpeakerPeqType > Model.PEQ.RequiredBiquads();
             //return ((int)Model.SpeakerPeqType - Model.PEQ.RequiredBiquads()) == Model.AvailableBiquads.Count;
         }
 
         public void ParseRedundancyData(List<byte> dspCopy)
         {
             Model.PEQ.Clear();
-            for (var redundancyPosition = 0; redundancyPosition < (int)Model.SpeakerPeqType; redundancyPosition++)
+            for (var redundancyPosition = 0; redundancyPosition < (int) Model.SpeakerPeqType; redundancyPosition++)
             {
-                var position = EepromPosition(dspCopy, redundancyPosition);                                   
+                var position = EepromPosition(dspCopy, redundancyPosition);
                 SetPeqData(position);
             }
         }
@@ -145,7 +146,8 @@ namespace EscInstaller.ViewModel.Settings.Peq
             }
             catch (ArgumentException a)
             {
-                Debug.WriteLine("Redundancy address not valid {0}", a); return null;
+                Debug.WriteLine("Redundancy address not valid {0}", a);
+                return null;
             }
             return dspCopy.Skip(skipto).Take(FilterBase.PeqRedundancyCount).ToArray();
         }
@@ -164,7 +166,6 @@ namespace EscInstaller.ViewModel.Settings.Peq
             catch (ArgumentException a)
             {
                 Debug.WriteLine("Raw eeprom data could not be parsed for peq " + a);
-                return;
             }
         }
 
@@ -182,12 +183,12 @@ namespace EscInstaller.ViewModel.Settings.Peq
 
         public Stack<int> AvailableBiquads()
         {
-            return new Stack<int>(Enumerable.Range(0, (int)Model.SpeakerPeqType).Except(UsedBiquads()));
+            return new Stack<int>(Enumerable.Range(0, (int) Model.SpeakerPeqType).Except(UsedBiquads()));
         }
 
         public void AssignBiquads(PeqDataModel dm)
         {
-            var r = new[] { dm }.RequiredBiquads();
+            var r = new[] {dm}.RequiredBiquads();
             var availablebq = AvailableBiquads();
 
             foreach (var biquad in dm.Biquads)
@@ -197,11 +198,10 @@ namespace EscInstaller.ViewModel.Settings.Peq
 
             dm.Biquads = new List<int>();
 
-            for (int i = 0; i < r; i++)
+            for (var i = 0; i < r; i++)
             {
                 dm.Biquads.Add(availablebq.Pop());
             }
         }
-
     }
 }

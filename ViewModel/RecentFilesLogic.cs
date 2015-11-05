@@ -1,20 +1,23 @@
+#region
+
 using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Windows.Controls;
+
+#endregion
 
 namespace EscInstaller.ViewModel
 {
     public class RecentFilesLogic
     {
         public const int MaxRecentFiles = 5;
-
         private readonly MainViewModel _main;
 
         public RecentFilesLogic(MainViewModel main)
         {
             _main = main;
-            
+
             InitiateStorageCollection();
 
             //initiate if empty
@@ -28,7 +31,6 @@ namespace EscInstaller.ViewModel
             {
                 _main.RecentFiles.Add(mi);
             }
-            
         }
 
         private static void InitiateStorageCollection()
@@ -39,7 +41,6 @@ namespace EscInstaller.ViewModel
 
         public void AddFile(string file)
         {
-
             if (Properties.Settings.Default.RecentFiles.Contains(file))
             {
                 RemoveFirstWhenExceedCound();
@@ -50,7 +51,6 @@ namespace EscInstaller.ViewModel
             RemoveFirstWhenExceedCound();
 
             _main.RecentFiles.Insert(0, MenuItemRecent(file));
-
         }
 
         private static void RemoveFirstWhenExceedCound()
@@ -60,9 +60,8 @@ namespace EscInstaller.ViewModel
                 Properties.Settings.Default.RecentFiles.RemoveAt(0);
             }
         }
-        
 
-        MenuItem MenuItemRecent(string item)
+        private MenuItem MenuItemRecent(string item)
         {
             var mi = new MenuItem
             {

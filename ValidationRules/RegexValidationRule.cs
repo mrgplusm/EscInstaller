@@ -1,6 +1,10 @@
+#region
+
 using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Windows.Controls;
+
+#endregion
 
 namespace EscInstaller.ValidationRules
 {
@@ -28,10 +32,7 @@ namespace EscInstaller.ValidationRules
             {
                 return new ValidationResult(false, "no matching regex");
             }
-            else
-            {
-                return new ValidationResult(true, null);
-            }
+            return new ValidationResult(true, null);
         }
     }
 }

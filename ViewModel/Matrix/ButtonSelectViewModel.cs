@@ -1,9 +1,13 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Common.Model;
 using EscInstaller.View;
 using GalaSoft.MvvmLight;
+
+#endregion
 
 namespace EscInstaller.ViewModel.Matrix
 {

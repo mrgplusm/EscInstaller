@@ -1,21 +1,17 @@
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+#region
+
 using System.Linq;
-using System.Windows;
-using System.Windows.Shapes;
 using Common.Model;
-using EscInstaller.View;
 using GalaSoft.MvvmLight;
+
+#endregion
 
 namespace EscInstaller.ViewModel.OverView
 {
-
-
-
     internal sealed class LspLeftHeader : ChkVm
     {
-        private FlowModel _flow;
+        private readonly FlowModel _flow;
+        private BindablePoint _location;
 
         public LspLeftHeader(int line, CardModel card, MainUnitModel main)
             : base(0, line, card, main)
@@ -23,36 +19,31 @@ namespace EscInstaller.ViewModel.OverView
             _flow = card.Flows.Skip(line).FirstOrDefault();
         }
 
-        public String HeaderValue
+        public string HeaderValue
         {
-            get
-            {
-                return (FlowId + 1).ToString("N0");
-            }
+            get { return (FlowId + 1).ToString("N0"); }
         }
 
         public bool IsPresent
         {
             get
             {
-                if(_flow.AttachedChannels == null || _flow == null ) return false;
-                return _flow.AttachedChannels.Length > 3 && _flow.AttachedChannels.Any(t=> t);
+                if (_flow.AttachedChannels == null || _flow == null) return false;
+                return _flow.AttachedChannels.Length > 3 && _flow.AttachedChannels.Any(t => t);
             }
         }
 
-        private BindablePoint _location;
-
         public override BindablePoint Location
         {
-            get { return _location ?? (_location = new BindablePoint() { X = 0, Y = Line * BlSpMatrix.NodeSize }); }
+            get { return _location ?? (_location = new BindablePoint() {X = 0, Y = Line*BlSpMatrix.NodeSize}); }
         }
     }
 
     internal sealed class LspNode : ChkVm
     {
-        private readonly int _loudspeaker;
-        private readonly int _line;
         private readonly FlowModel _flow;
+        private readonly int _line;
+        private readonly int _loudspeaker;
 
         public LspNode(int loudspeaker, int line, CardModel card, MainUnitModel main)
             : base(loudspeaker, line, card, main)
@@ -63,7 +54,7 @@ namespace EscInstaller.ViewModel.OverView
         }
 
         /// <summary>
-        /// Determines a speaker is attached
+        ///     Determines a speaker is attached
         /// </summary>
         public bool IsPresent
         {
@@ -76,16 +67,17 @@ namespace EscInstaller.ViewModel.OverView
 
         public string NodeValue
         {
-            get { return (_line + _flow.Id +1).ToString("N0"); }
+            get { return (_line + _flow.Id + 1).ToString("N0"); }
         }
     }
 
     public abstract class ChkVm : ViewModelBase
     {
-        protected readonly int Loudspeaker;
-        protected readonly int Line;
         protected readonly CardModel Card;
+        protected readonly int Line;
+        protected readonly int Loudspeaker;
         protected readonly MainUnitModel Main;
+        private BindablePoint _location;
 
         protected ChkVm(int loudspeaker, int line, CardModel card, MainUnitModel main)
         {
@@ -97,14 +89,21 @@ namespace EscInstaller.ViewModel.OverView
 
         protected int FlowId
         {
-            get { return Main.Id * 12 + Card.Id * 4 + Line; }
+            get { return Main.Id*12 + Card.Id*4 + Line; }
         }
-
-        private BindablePoint _location;
 
         public virtual BindablePoint Location
         {
-            get { return _location ?? (_location = new BindablePoint() { X = Line * BlSpMatrix.NodeSize + BlSpMatrix.NodeSize, Y = Loudspeaker * BlSpMatrix.NodeSize }); }
+            get
+            {
+                return _location ??
+                       (_location =
+                           new BindablePoint()
+                           {
+                               X = Line*BlSpMatrix.NodeSize + BlSpMatrix.NodeSize,
+                               Y = Loudspeaker*BlSpMatrix.NodeSize
+                           });
+            }
         }
     }
 }

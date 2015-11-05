@@ -1,31 +1,39 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Windows.Input;
+using Common;
 using EscInstaller.View;
+using EscInstaller.ViewModel.Connection;
 using EscInstaller.ViewModel.OverView;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.CommandWpf;
-using GalaSoft.MvvmLight.Messaging;
-using Common;
-using ITabControl = EscInstaller.ViewModel.Connection.ITabControl;
 
+#endregion
 
 namespace EscInstaller.ViewModel.Matrix
 {
     public class PanelViewModel : ViewModelBase, ITabControl
     {
         private readonly MainViewModel _main;
-
+        private int _buttonStartId;
+        private MainUnitViewModel _selectedMcu;
 
         public PanelViewModel(MainViewModel main)
         {
             _main = main;
 
             InitiateSelectors();
-
         }
+
+#if DEBUG
+        public PanelViewModel()
+        {
+            _main = new MainViewModel();
+            InitiateSelectors();
+        }
+#endif
 
         public int ButtonStartId
         {
@@ -37,7 +45,6 @@ namespace EscInstaller.ViewModel.Matrix
             }
         }
 
-
         public MainUnitViewModel SelectedMcu
         {
             get { return _selectedMcu; }
@@ -48,40 +55,59 @@ namespace EscInstaller.ViewModel.Matrix
             }
         }
 
-        
+        public ObservableCollection<RowHeaderViewModel> RowHeaders { get; private set; }
 
-#if DEBUG
-        public PanelViewModel()
+        /// <summary>
+        ///     Column headers of matrix (cells reside in colums)
+        /// </summary>
+        public ObservableCollection<ColumnHeaderViewModel> ColumnHeaderViews { get; private set; }
+
+        public static string PanelText
+            => Panel._matrixSelectionFP + "\t\t" + Panel._matrixSelectionEP + "\t\t" + Panel._matrixSelectionFDS;
+
+        public ObservableCollection<ButtonRangeSelector> ButtonRangeSelectors { get; private set; }
+        public ObservableCollection<McuSelector> McuSelectors { get; private set; }
+
+        public int MicRoutingOpt
         {
-            _main = new MainViewModel();
-            InitiateSelectors();
+            get
+            {
+                return 1; //temporary on both.
+                //return LibraryData.FuturamaSys.MicrophoneRouting;
+            }
+            set
+            {
+                LibraryData.FuturamaSys.MicrophoneRouting = value;
+                RaisePropertyChanged(() => MicRoutingOpt);
+            }
         }
-#endif
+
+        //used to set tab to right.
+        public int Id => 33;
 
         private void InitiateSelectors()
         {
             ButtonRangeSelectors = new ObservableCollection<ButtonRangeSelector>(Enumerable.
-                Range(0, 18).Select(i => new ButtonRangeSelector(i, this)));
+                Range(0, 18).Select(i => new ButtonRangeSelector(i, this))) {[0] = {IsSelected = true}};
 
-            ButtonRangeSelectors[0].IsSelected = true;
             SelectedMcu = _main.TabCollection.OfType<MainUnitViewModel>().First(i => i.Id == 0);
 
             McuSelectors = new ObservableCollection<McuSelector>(
                 _main.TabCollection.OfType<MainUnitViewModel>().Select(q => new McuSelector(q, this)));
-            _main.SystemChanged+= MainOnSystemChanged;
-            
+            _main.SystemChanged += MainOnSystemChanged;
+
 
             McuSelectors[0].IsSelected = true;
 
             ColumnHeaderViews = new ObservableCollection<ColumnHeaderViewModel>(Enumerable.Range(0, 12).Select(
-                    x => new ColumnHeaderViewModel(x, SelectedMcu, this)));
+                x => new ColumnHeaderViewModel(x, SelectedMcu, this)));
 
             ButtonChanged += (sender, args) => ButtonStartId = args.NewId;
 
             McuChanged += OnMcuChanged;
 
             RowHeaders = new ObservableCollection<RowHeaderViewModel>(GenRows(SelectedMcu));
-            SelectedMcu.CardsUpdated += NewMcuOnCardsUpdated;            
+            SelectedMcu.CardsUpdated += NewMcuOnCardsUpdated;
         }
 
         private void MainOnSystemChanged(object sender, SystemChangedEventArgs systemChangedEventArgs)
@@ -90,9 +116,10 @@ namespace EscInstaller.ViewModel.Matrix
             {
                 McuSelectors.Add(new McuSelector(systemChangedEventArgs.NewMainUnit, this));
             }
-            else if(systemChangedEventArgs.OldMainUnit !=null)
+            else if (systemChangedEventArgs.OldMainUnit != null)
             {
-                var rem = McuSelectors.FirstOrDefault(s => s.MainUnitViewModel.Equals(systemChangedEventArgs.OldMainUnit));
+                var rem =
+                    McuSelectors.FirstOrDefault(s => s.MainUnitViewModel.Equals(systemChangedEventArgs.OldMainUnit));
                 McuSelectors.Remove(rem);
             }
         }
@@ -105,8 +132,7 @@ namespace EscInstaller.ViewModel.Matrix
             UpdateRowHeaders();
 
             rangeChangedEventArgs.NewMcu.CardsUpdated += NewMcuOnCardsUpdated;
-
-        }        
+        }
 
         private void NewMcuOnCardsUpdated(object sender, MainUnitUpdatedEventArgs mainUnitUpdatedEventArgs)
         {
@@ -127,70 +153,21 @@ namespace EscInstaller.ViewModel.Matrix
             return selector.DiagramObjects.OfType<BlOutput>().Select(result => new RowHeaderViewModel(result));
         }
 
-        public ObservableCollection<RowHeaderViewModel> RowHeaders { get; private set; }
-
-
         /// <summary>
-        ///     Column headers of matrix (cells reside in colums)
-        /// </summary>
-        public ObservableCollection<ColumnHeaderViewModel> ColumnHeaderViews { get; private set; }
-
-        private int _buttonStartId;
-
-
-        //used to set tab to right.
-        public int Id
-        {
-            get { return 33; }
-        }
-
-        public static string PanelText
-        {
-            get
-            {
-                return Panel._matrixSelectionFP + "\t\t" + Panel._matrixSelectionEP + "\t\t" + Panel._matrixSelectionFDS;
-            }
-        }
-
-
-        public ObservableCollection<ButtonRangeSelector> ButtonRangeSelectors { get; private set; }
-
-        public ObservableCollection<McuSelector> McuSelectors { get; private set; }    
-
-        
-
-        public int MicRoutingOpt
-        {
-            get
-            {
-                return 1; //temporary on both.
-                //return LibraryData.FuturamaSys.MicrophoneRouting;
-            }
-            set
-            {
-                LibraryData.FuturamaSys.MicrophoneRouting = value;
-                RaisePropertyChanged(() => MicRoutingOpt);
-            }
-        }
-
-        /// <summary>
-        /// User selected button range 
+        ///     User selected button range
         /// </summary>
         public event EventHandler<RangeChangedEventArgs> ButtonChanged;
 
-        public virtual void OnButtonChanged(RangeChangedEventArgs e)
-        {
-            EventHandler<RangeChangedEventArgs> handler = ButtonChanged;
-            if (handler != null) handler(this, e);
-        }
-
         public event EventHandler<McuChangedEventArgs> McuChanged;
-        private MainUnitViewModel _selectedMcu;
 
         public virtual void OnMcuChanged(McuChangedEventArgs e)
         {
-            EventHandler<McuChangedEventArgs> handler = McuChanged;
-            if (handler != null) handler(this, e);
+            McuChanged?.Invoke(this, e);
+        }
+
+        public virtual void OnButtonChanged(RangeChangedEventArgs e)
+        {
+            ButtonChanged?.Invoke(this, e);
         }
     }
 

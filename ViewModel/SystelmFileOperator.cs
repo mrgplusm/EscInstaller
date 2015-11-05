@@ -1,40 +1,34 @@
+#region
+
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
-using System.Timers;
 using System.Windows;
 using Common;
-using EscInstaller.ImportSpeakers;
-using Microsoft.Win32;
+
+#endregion
 
 namespace EscInstaller.ViewModel
 {
     public abstract class SystemFileLogic
     {
-
-
-
-
-
-
         public abstract bool Save();
 
-
         /// <summary>
-        /// Save file without asking to location as defined in LibraryData.SystemFileName
+        ///     Save file without asking to location as defined in LibraryData.SystemFileName
         /// </summary>
         protected void SaveFile()
         {
             if (!LibraryData.SystemIsOpen) return;
             if (string.IsNullOrWhiteSpace(LibraryData.SystemFileName)) return;
 
-            LibraryData.FuturamaSys.LastSavedInstallerVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            LibraryData.FuturamaSys.LastSavedInstallerVersion =
+                Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
             try
             {
                 FileManagement.SaveSystemFile(LibraryData.FuturamaSys, LibraryData.SystemFileName);
-
             }
             catch (Exception e)
             {
@@ -47,7 +41,6 @@ namespace EscInstaller.ViewModel
 
     public class SystemFileBackup : SystemFileLogic
     {
-
         public override bool Save()
         {
             if (!LibraryData.SystemIsOpen) return true;
@@ -68,23 +61,21 @@ namespace EscInstaller.ViewModel
 
             return true;
         }
-
     }
 
 
     public class SystemFileSaveAsk : SystemFileLogic
     {
         /// <summary>
-        /// asks user what to do with unsaved data
-        /// cancel => false
-        /// 
-        /// Save file w asking user how to save
+        ///     asks user what to do with unsaved data
+        ///     cancel => false
+        ///     Save file w asking user how to save
         /// </summary>
         /// <returns>true if operation succeded</returns>
         public override bool Save()
-        {            
+        {
             var option = MessageBox.Show(Main.OverwriteAsk, Main.OverwriteAskTitle, MessageBoxButton.YesNoCancel,
-                MessageBoxImage.Question, MessageBoxResult.OK);            
+                MessageBoxImage.Question, MessageBoxResult.OK);
 
             if (option == MessageBoxResult.No)
                 return true;
@@ -100,7 +91,7 @@ namespace EscInstaller.ViewModel
     public class SystemFileSaveAs : SystemFileLogic
     {
         /// <summary>
-        /// Save file w asking user how to save
+        ///     Save file w asking user how to save
         /// </summary>
         /// <returns>false if user canceled</returns>
         private static bool AskUser()
@@ -113,7 +104,7 @@ namespace EscInstaller.ViewModel
         }
 
         /// <summary>
-        /// asks user what to do with unsaved data
+        ///     asks user what to do with unsaved data
         /// </summary>
         public override bool Save()
         {

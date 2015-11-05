@@ -1,12 +1,15 @@
+#region
+
 using Common.Model;
 using GalaSoft.MvvmLight;
+
+#endregion
 
 namespace EscInstaller.ViewModel.OverView
 {
     public class VCAController : ViewModelBase
     {
         private readonly FlowModel _flow;
-
 
         public VCAController(FlowModel flow)
         {

@@ -1,30 +1,33 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Windows;
 using System.Windows.Input;
+
+#endregion
 
 namespace EscInstaller.View.Communication
 {
     /// <summary>
-    /// Interaction logic for DownloadView.xaml
+    ///     Interaction logic for DownloadView.xaml
     /// </summary>
     public partial class DownloadView : Window
     {
-
         private static DownloadView _openwindow;
 
         public DownloadView()
         {
             Loaded += DownloadView_Loaded;
             Closed += DownloadView_Closed;
-            InitializeComponent();            
+            InitializeComponent();
         }
 
-        static void DownloadView_Closed(object sender, EventArgs e)
+        private static void DownloadView_Closed(object sender, EventArgs e)
         {
             _openwindow = null;
         }
 
-        void DownloadView_Loaded(object sender, RoutedEventArgs e)
+        private void DownloadView_Loaded(object sender, RoutedEventArgs e)
         {
             if (_openwindow != null)
             {
@@ -34,7 +37,6 @@ namespace EscInstaller.View.Communication
 
             _openwindow = this;
         }
-
 
         private void CommandBinding_OnExecuted(object sender, ExecutedRoutedEventArgs e)
         {

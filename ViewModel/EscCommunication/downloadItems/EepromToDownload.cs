@@ -1,4 +1,8 @@
+#region
+
 using Common;
+
+#endregion
 
 namespace EscInstaller.ViewModel.EscCommunication.downloadItems
 {

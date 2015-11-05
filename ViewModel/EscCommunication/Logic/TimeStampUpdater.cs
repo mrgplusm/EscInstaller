@@ -1,8 +1,12 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using Common;
 using Common.Commodules;
 using Common.Model;
+
+#endregion
 
 namespace EscInstaller.ViewModel.EscCommunication.Logic
 {

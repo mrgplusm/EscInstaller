@@ -1,13 +1,15 @@
-﻿using System.Windows;
+﻿#region
+
+using System.Windows;
 using System.Windows.Media;
+
+#endregion
 
 namespace EscInstaller.View
 {
     /// <summary>
     ///     Interaction logic for LibraryEditor.xaml
     /// </summary>
-    /// 
-
     public partial class LibraryEditor
     {
         public delegate Point GetDragDropPosition(IInputElement element);
@@ -19,15 +21,12 @@ namespace EscInstaller.View
             InitializeComponent();
         }
 
-
         public bool IsMouseOnTargetRow(Visual target, GetDragDropPosition position)
         {
             if (target == null) return false;
             var posbounds = VisualTreeHelper.GetDescendantBounds(target);
-            var mousepos = position((IInputElement)target);
+            var mousepos = position((IInputElement) target);
             return posbounds.Contains(mousepos);
-        }        
+        }
     }
-
-       
 }

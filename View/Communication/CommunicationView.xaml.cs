@@ -8,7 +8,6 @@
         public CommunicationView()
         {
             InitializeComponent();
-        }      
+        }
     }
 }
-

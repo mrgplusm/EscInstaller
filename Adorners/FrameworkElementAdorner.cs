@@ -1,10 +1,14 @@
+#region
+
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Media;
 
+#endregion
+
 namespace EscInstaller.Adorners
 {
-    class FrameworkElementAdorner : Adorner
+    internal class FrameworkElementAdorner : Adorner
     {
         private readonly AdornerLayer _adornerLayer;
 
@@ -38,8 +42,8 @@ namespace EscInstaller.Adorners
             drawingContext.DrawEllipse(renderBrush, renderPen, adornedElementRect.TopLeft, renderRadius, renderRadius);
             drawingContext.DrawEllipse(renderBrush, renderPen, adornedElementRect.TopRight, renderRadius, renderRadius);
             drawingContext.DrawEllipse(renderBrush, renderPen, adornedElementRect.BottomLeft, renderRadius, renderRadius);
-            drawingContext.DrawEllipse(renderBrush, renderPen, adornedElementRect.BottomRight, renderRadius, renderRadius);
+            drawingContext.DrawEllipse(renderBrush, renderPen, adornedElementRect.BottomRight, renderRadius,
+                renderRadius);
         }
-
     }
 }

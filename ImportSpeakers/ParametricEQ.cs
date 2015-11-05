@@ -1,9 +1,13 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.CodeDom.Compiler;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Xml.Schema;
 using System.Xml.Serialization;
+
+#endregion
 
 namespace EscInstaller.ImportSpeakers
 {
@@ -33,7 +37,6 @@ namespace EscInstaller.ImportSpeakers
     public class ParametricEQ
     {
         private ParametricEQProperty[] propertyField;
-
         private string typeNumberField;
 
         /// <remarks />
@@ -62,7 +65,6 @@ namespace EscInstaller.ImportSpeakers
     public class ParametricEQProperty
     {
         private string nameField;
-
         private string valueField;
 
         /// <remarks />

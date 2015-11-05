@@ -1,27 +1,26 @@
 ﻿<UserControl x:Class="EscInstaller.View.MonitoringView"
-              
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"        
-	    
-		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"        
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:overview="clr-namespace:EscInstaller.ViewModel.OverView"
+
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:overview="clr-namespace:EscInstaller.ViewModel.OverView"
              xmlns:converters1="clr-namespace:Common.Converters;assembly=Common"
              xmlns:view="clr-namespace:EscInstaller.View"
-        mc:Ignorable="d"
-        x:Name="Monitoring"
-        d:DataContext="{d:DesignInstance overview:BlMonitor}"
-        >
+             mc:Ignorable="d"
+             x:Name="Monitoring"
+             d:DataContext="{d:DesignInstance overview:BlMonitor}">
 
     <Grid Margin="5">
         <Grid.Resources>
-            <Style TargetType="TextBox" >
+            <Style TargetType="TextBox">
                 <Setter Property="IsManipulationEnabled" Value="False" />
             </Style>
-            <Style TargetType="CheckBox" >
+            <Style TargetType="CheckBox">
                 <Setter Property="Margin" Value="3" />
             </Style>
-            <Style TargetType="RadioButton" >
+            <Style TargetType="RadioButton">
                 <Setter Property="Margin" Value="3" />
             </Style>
         </Grid.Resources>
@@ -29,7 +28,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions >
+        <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
@@ -38,15 +37,15 @@
 
         </Grid.ColumnDefinitions>
 
-        <GroupBox Grid.Row="1"   Grid.Column="0" Header="{x:Static view:Monitoring.FrequencyLow}" >
+        <GroupBox Grid.Row="1" Grid.Column="0" Header="{x:Static view:Monitoring.FrequencyLow}">
 
-            <Grid >
+            <Grid>
 
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="130" />
                     <ColumnDefinition Width="50" />
                     <ColumnDefinition Width="50" />
-                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="50" />
 
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
@@ -60,25 +59,33 @@
 
                 <TextBlock Text="{x:Static view:Monitoring.StoredWatt}" Grid.Row="1" Grid.Column="0" />
                 <TextBlock Text="{x:Static view:Monitoring.StoredOhm}" Grid.Row="2" Grid.Column="0" />
-                <TextBlock Text="{x:Static view:Monitoring.MeasuredWatt}" Grid.Row="3" Grid.Column="0" Visibility="Collapsed" />
-                <TextBlock Text="{x:Static view:Monitoring.MeasuredOhm}" Grid.Row="4" Grid.Column="0" Visibility="Collapsed" />
+                <TextBlock Text="{x:Static view:Monitoring.MeasuredWatt}" Grid.Row="3" Grid.Column="0"
+                           Visibility="Collapsed" />
+                <TextBlock Text="{x:Static view:Monitoring.MeasuredOhm}" Grid.Row="4" Grid.Column="0"
+                           Visibility="Collapsed" />
 
 
+                <TextBlock Text="{x:Static view:Monitoring._monitorLoadA1}" FontStyle="Italic" Grid.Row="0"
+                           Grid.Column="1" />
+                <TextBlock Text="{x:Static view:Monitoring._monitorLoadB1}" FontStyle="Italic" Grid.Row="0"
+                           Grid.Column="2" />
+                <TextBlock Text="{x:Static view:Monitoring._monitorLoadAB}" FontStyle="Italic" Background="Orange"
+                           Grid.Row="0" Grid.Column="3" />
 
-                <TextBlock Text="{x:Static view:Monitoring._monitorLoadA1}" FontStyle="Italic"    Grid.Row="0" Grid.Column="1"></TextBlock>
-                <TextBlock Text="{x:Static view:Monitoring._monitorLoadB1}" FontStyle="Italic"    Grid.Row="0" Grid.Column="2"></TextBlock>
-                <TextBlock Text="{x:Static view:Monitoring._monitorLoadAB}" FontStyle="Italic" Background="Orange"  Grid.Row="0" Grid.Column="3"></TextBlock>
-
-                <TextBox Text="{Binding Path=Loads[0]}" Grid.Column="1" Grid.Row="1" Visibility="{Binding Flow.AmplifierOperationMode, Converter={converters1:NoWattWhenImpedance}}" />
-                <TextBox Text="{Binding Path=Loads[1]}" Grid.Column="2" Grid.Row="1" Visibility="{Binding Flow.AmplifierOperationMode, Converter={converters1:NoWattWhenImpedance}}" />
-                <TextBox Text="{Binding Path=Loads[2]}" Grid.Column="3" Grid.Row="1"  Visibility="{Binding Flow.AmplifierOperationMode, Converter={converters1:NoWattWhenImpedance}}" />
+                <TextBox Text="{Binding Path=Loads[0]}" Grid.Column="1" Grid.Row="1"
+                         Visibility="{Binding Flow.AmplifierOperationMode, Converter={converters1:NoWattWhenImpedance}}" />
+                <TextBox Text="{Binding Path=Loads[1]}" Grid.Column="2" Grid.Row="1"
+                         Visibility="{Binding Flow.AmplifierOperationMode, Converter={converters1:NoWattWhenImpedance}}" />
+                <TextBox Text="{Binding Path=Loads[2]}" Grid.Column="3" Grid.Row="1"
+                         Visibility="{Binding Flow.AmplifierOperationMode, Converter={converters1:NoWattWhenImpedance}}" />
 
                 <TextBox Text="{Binding Path=Loads[3]}" Grid.Column="1" Grid.Row="2" />
                 <TextBox Text="{Binding Path=Loads[4]}" Grid.Column="2" Grid.Row="2" />
                 <TextBox Text="{Binding Path=Loads[5]}" Grid.Column="3" Grid.Row="2" />
 
                 <TextBox Text="{Binding Path=MeasuredValues[0]}" Grid.Column="1" Grid.Row="3" Visibility="Collapsed" />
-                <TextBox Text="{Binding Path=MeasuredValues[4]}" Grid.Column="2" Grid.Row="3" Height="24" VerticalAlignment="Top" Visibility="Collapsed" />
+                <TextBox Text="{Binding Path=MeasuredValues[4]}" Grid.Column="2" Grid.Row="3" Height="24"
+                         VerticalAlignment="Top" Visibility="Collapsed" />
                 <TextBox Text="{Binding Path=MeasuredValues[8]}" Grid.Column="3" Grid.Row="3" Visibility="Collapsed" />
 
                 <TextBox Text="{Binding Path=MeasuredValues[1]}" Grid.Column="1" Grid.Row="4" Visibility="Collapsed" />
@@ -87,14 +94,14 @@
             </Grid>
         </GroupBox>
 
-        <GroupBox Header="{Binding Path=PilotfrequencyInt}" Grid.Row="0" Grid.Column="0" >
-            <Grid >
+        <GroupBox Header="{Binding Path=PilotfrequencyInt}" Grid.Row="0" Grid.Column="0">
+            <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="20" />
-                    <ColumnDefinition Width="110"/>
-                    <ColumnDefinition  Width="50"/>
-                    <ColumnDefinition  Width="50"/>
-                    <ColumnDefinition  Width="50"/>
+                    <ColumnDefinition Width="110" />
+                    <ColumnDefinition Width="50" />
+                    <ColumnDefinition Width="50" />
+                    <ColumnDefinition Width="50" />
 
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
@@ -108,18 +115,27 @@
 
                 <!--low pilot frequency -->
 
-                <TextBlock Text="{x:Static view:Monitoring.StoredWatt}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" />
+                <TextBlock Text="{x:Static view:Monitoring.StoredWatt}" Grid.Row="1" Grid.Column="0"
+                           Grid.ColumnSpan="2" />
                 <TextBlock Text="{x:Static view:Monitoring.StoredOhm}" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" />
-                <TextBlock Text="{x:Static view:Monitoring.MeasuredWatt}" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Visibility="Collapsed" />
-                <TextBlock Text="{x:Static view:Monitoring.MeasuredOhm}" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Visibility="Collapsed" />
+                <TextBlock Text="{x:Static view:Monitoring.MeasuredWatt}" Grid.Row="3" Grid.Column="0"
+                           Grid.ColumnSpan="2" Visibility="Collapsed" />
+                <TextBlock Text="{x:Static view:Monitoring.MeasuredOhm}" Grid.Row="4" Grid.Column="0"
+                           Grid.ColumnSpan="2" Visibility="Collapsed" />
 
-                <TextBlock Text="{x:Static view:Monitoring._monitorLoadA1}" FontStyle="Italic"   Grid.Row="0" Grid.Column="2"/>
-                <TextBlock Text="{x:Static view:Monitoring._monitorLoadB1}" FontStyle="Italic"   Grid.Row="0" Grid.Column="3"/>
-                <TextBlock Text="{x:Static view:Monitoring._monitorLoadAB}" FontStyle="Italic" Background="Orange"  Grid.Row="0" Grid.Column="4"/>
+                <TextBlock Text="{x:Static view:Monitoring._monitorLoadA1}" FontStyle="Italic" Grid.Row="0"
+                           Grid.Column="2" />
+                <TextBlock Text="{x:Static view:Monitoring._monitorLoadB1}" FontStyle="Italic" Grid.Row="0"
+                           Grid.Column="3" />
+                <TextBlock Text="{x:Static view:Monitoring._monitorLoadAB}" FontStyle="Italic" Background="Orange"
+                           Grid.Row="0" Grid.Column="4" />
 
-                <TextBox Text="{Binding Path=Loads[6]}" Grid.Column="2" Grid.Row="1"  Visibility="{Binding Flow.AmplifierOperationMode, Converter={converters1:NoWattWhenImpedance}}" />
-                <TextBox Text="{Binding Path=Loads[7]}" Grid.Column="3" Grid.Row="1"  Visibility="{Binding Flow.AmplifierOperationMode, Converter={converters1:NoWattWhenImpedance}}" />
-                <TextBox Text="{Binding Path=Loads[8]}" Grid.Column="4" Grid.Row="1"  Visibility="{Binding Flow.AmplifierOperationMode, Converter={converters1:NoWattWhenImpedance}}" />
+                <TextBox Text="{Binding Path=Loads[6]}" Grid.Column="2" Grid.Row="1"
+                         Visibility="{Binding Flow.AmplifierOperationMode, Converter={converters1:NoWattWhenImpedance}}" />
+                <TextBox Text="{Binding Path=Loads[7]}" Grid.Column="3" Grid.Row="1"
+                         Visibility="{Binding Flow.AmplifierOperationMode, Converter={converters1:NoWattWhenImpedance}}" />
+                <TextBox Text="{Binding Path=Loads[8]}" Grid.Column="4" Grid.Row="1"
+                         Visibility="{Binding Flow.AmplifierOperationMode, Converter={converters1:NoWattWhenImpedance}}" />
 
                 <TextBox Text="{Binding Path=Loads[9]}" Grid.Column="2" Grid.Row="2" />
                 <TextBox Text="{Binding Path=Loads[10]}" Grid.Column="3" Grid.Row="2" />
@@ -134,8 +150,6 @@
                 <TextBox Text="{Binding Path=MeasuredValues[11]}" Grid.Column="4" Grid.Row="4" Visibility="Collapsed" />
 
 
-
-
                 <!--end low pilot frequency -->
 
             </Grid>
@@ -144,42 +158,54 @@
 
         <GroupBox Header="{x:Static view:Monitoring._monitorDeviation1}" Grid.Row="0" Grid.Column="1" IsEnabled="False">
             <StackPanel Margin="5">
-                <RadioButton GroupName="dev0" Content="{Binding Path=Loads[2], FallbackValue=5%, Converter={converters1:WattConverter}, ConverterParameter=5}"
-                                     IsChecked="{Binding Path=DeviationHp, Mode=TwoWay, Converter={converters1:RadioConverter}, ConverterParameter=0}"  />
-                <RadioButton GroupName="dev1" Content="{Binding Path=Loads[2], FallbackValue=10%, Converter={converters1:WattConverter}, ConverterParameter=10}" 
-                                      IsChecked="{Binding Path=DeviationHp, Mode=TwoWay, Converter={converters1:RadioConverter}, ConverterParameter=1}"  />
-                <RadioButton GroupName="dev2" Content="{Binding Path=Loads[2], FallbackValue=20%, Converter={converters1:WattConverter}, ConverterParameter=20}" 
-                                      IsChecked="{Binding Path=DeviationHp, Mode=TwoWay, Converter={converters1:RadioConverter}, ConverterParameter=2}"  />
-                <RadioButton GroupName="dev3" Content="{Binding Path=Loads[2], FallbackValue=30%, Converter={converters1:WattConverter}, ConverterParameter=30}" 
-                                      IsChecked="{Binding Path=DeviationHp, Mode=TwoWay, Converter={converters1:RadioConverter}, ConverterParameter=3}"  />
-                <RadioButton GroupName="dev4" Content="{Binding Path=Loads[2], FallbackValue=50%, Converter={converters1:WattConverter}, ConverterParameter=50}" 
-                                      IsChecked="{Binding Path=DeviationHp, Mode=TwoWay, Converter={converters1:RadioConverter}, ConverterParameter=4}"  />
+                <RadioButton GroupName="dev0"
+                             Content="{Binding Path=Loads[2], FallbackValue=5%, Converter={converters1:WattConverter}, ConverterParameter=5}"
+                             IsChecked="{Binding Path=DeviationHp, Mode=TwoWay, Converter={converters1:RadioConverter}, ConverterParameter=0}" />
+                <RadioButton GroupName="dev1"
+                             Content="{Binding Path=Loads[2], FallbackValue=10%, Converter={converters1:WattConverter}, ConverterParameter=10}"
+                             IsChecked="{Binding Path=DeviationHp, Mode=TwoWay, Converter={converters1:RadioConverter}, ConverterParameter=1}" />
+                <RadioButton GroupName="dev2"
+                             Content="{Binding Path=Loads[2], FallbackValue=20%, Converter={converters1:WattConverter}, ConverterParameter=20}"
+                             IsChecked="{Binding Path=DeviationHp, Mode=TwoWay, Converter={converters1:RadioConverter}, ConverterParameter=2}" />
+                <RadioButton GroupName="dev3"
+                             Content="{Binding Path=Loads[2], FallbackValue=30%, Converter={converters1:WattConverter}, ConverterParameter=30}"
+                             IsChecked="{Binding Path=DeviationHp, Mode=TwoWay, Converter={converters1:RadioConverter}, ConverterParameter=3}" />
+                <RadioButton GroupName="dev4"
+                             Content="{Binding Path=Loads[2], FallbackValue=50%, Converter={converters1:WattConverter}, ConverterParameter=50}"
+                             IsChecked="{Binding Path=DeviationHp, Mode=TwoWay, Converter={converters1:RadioConverter}, ConverterParameter=4}" />
             </StackPanel>
         </GroupBox>
 
 
         <GroupBox Header="{x:Static view:Monitoring._monitorDeviation1}" Grid.Row="1" Grid.Column="1" IsEnabled="False">
             <StackPanel Margin="5">
-                <RadioButton GroupName="dev0" Content="{Binding Path=Loads[8], FallbackValue=5%, Converter={converters1:WattConverter}, ConverterParameter=5}"
-                                     IsChecked="{Binding Path=DeviationLp, Mode=TwoWay, Converter={converters1:RadioConverter}, ConverterParameter=0}"  />
-                <RadioButton GroupName="dev1" Content="{Binding Path=Loads[8], FallbackValue=10%, Converter={converters1:WattConverter}, ConverterParameter=10}" 
-                                      IsChecked="{Binding Path=DeviationLp, Mode=TwoWay, Converter={converters1:RadioConverter}, ConverterParameter=1}"  />
-                <RadioButton GroupName="dev2" Content="{Binding Path=Loads[8], FallbackValue=20%, Converter={converters1:WattConverter}, ConverterParameter=20}" 
-                                      IsChecked="{Binding Path=DeviationLp, Mode=TwoWay, Converter={converters1:RadioConverter}, ConverterParameter=2}"  />
-                <RadioButton GroupName="dev3" Content="{Binding Path=Loads[8], FallbackValue=30%, Converter={converters1:WattConverter}, ConverterParameter=30}" 
-                                      IsChecked="{Binding Path=DeviationLp, Mode=TwoWay, Converter={converters1:RadioConverter}, ConverterParameter=3}"  />
-                <RadioButton GroupName="dev4" Content="{Binding Path=Loads[8], FallbackValue=50%, Converter={converters1:WattConverter}, ConverterParameter=50}" 
-                                      IsChecked="{Binding Path=DeviationLp, Mode=TwoWay, Converter={converters1:RadioConverter}, ConverterParameter=4}"  />
+                <RadioButton GroupName="dev0"
+                             Content="{Binding Path=Loads[8], FallbackValue=5%, Converter={converters1:WattConverter}, ConverterParameter=5}"
+                             IsChecked="{Binding Path=DeviationLp, Mode=TwoWay, Converter={converters1:RadioConverter}, ConverterParameter=0}" />
+                <RadioButton GroupName="dev1"
+                             Content="{Binding Path=Loads[8], FallbackValue=10%, Converter={converters1:WattConverter}, ConverterParameter=10}"
+                             IsChecked="{Binding Path=DeviationLp, Mode=TwoWay, Converter={converters1:RadioConverter}, ConverterParameter=1}" />
+                <RadioButton GroupName="dev2"
+                             Content="{Binding Path=Loads[8], FallbackValue=20%, Converter={converters1:WattConverter}, ConverterParameter=20}"
+                             IsChecked="{Binding Path=DeviationLp, Mode=TwoWay, Converter={converters1:RadioConverter}, ConverterParameter=2}" />
+                <RadioButton GroupName="dev3"
+                             Content="{Binding Path=Loads[8], FallbackValue=30%, Converter={converters1:WattConverter}, ConverterParameter=30}"
+                             IsChecked="{Binding Path=DeviationLp, Mode=TwoWay, Converter={converters1:RadioConverter}, ConverterParameter=3}" />
+                <RadioButton GroupName="dev4"
+                             Content="{Binding Path=Loads[8], FallbackValue=50%, Converter={converters1:WattConverter}, ConverterParameter=50}"
+                             IsChecked="{Binding Path=DeviationLp, Mode=TwoWay, Converter={converters1:RadioConverter}, ConverterParameter=4}" />
             </StackPanel>
         </GroupBox>
         <StackPanel Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" IsEnabled="False">
-            <GroupBox Header="{x:Static view:Monitoring._LowImpedanceMonitoring}" IsEnabled="False" >
+            <GroupBox Header="{x:Static view:Monitoring._LowImpedanceMonitoring}" IsEnabled="False">
 
 
                 <StackPanel Margin="5">
-                    <RadioButton Content="{x:Static view:Monitoring.Line100VOption}" IsChecked="{Binding Path=AmplifierCalibrationMode, 
+                    <RadioButton Content="{x:Static view:Monitoring.Line100VOption}"
+                                 IsChecked="{Binding Path=AmplifierCalibrationMode, 
                         Converter={converters1:EnumBooleanConverter}, ConverterParameter=Line100V}" />
-                    <RadioButton Content="{x:Static view:Monitoring.LowImpedanceOption}" IsChecked="{Binding Path=AmplifierCalibrationMode, 
+                    <RadioButton Content="{x:Static view:Monitoring.LowImpedanceOption}"
+                                 IsChecked="{Binding Path=AmplifierCalibrationMode, 
                         Converter={converters1:EnumBooleanConverter}, ConverterParameter=LowImpedance}" />
 
                 </StackPanel>
@@ -187,39 +213,49 @@
             </GroupBox>
             <GroupBox Header="{x:Static view:Monitoring.GbPilot}" Grid.Row="1" Grid.Column="2" Grid.RowSpan="2">
                 <StackPanel Margin="5" Name="Pilotfreq">
-                    <RadioButton Content="{x:Static view:Monitoring.Khz18}" IsChecked="{Binding Path=PilotFrequency, Mode=TwoWay, 
+                    <RadioButton Content="{x:Static view:Monitoring.Khz18}"
+                                 IsChecked="{Binding Path=PilotFrequency, Mode=TwoWay, 
                                  Converter={converters1:PilotToneConverter},
-                                 ConverterParameter=2}"  GroupName="freq4" />
+                                 ConverterParameter=2}"
+                                 GroupName="freq4" />
 
-                    <RadioButton Content="{x:Static view:Monitoring.Khz19}" IsChecked="{Binding Path=PilotFrequency, Mode=TwoWay, 
+                    <RadioButton Content="{x:Static view:Monitoring.Khz19}"
+                                 IsChecked="{Binding Path=PilotFrequency, Mode=TwoWay, 
                                  Converter={converters1:PilotToneConverter},
-                                 ConverterParameter=3}" GroupName="freq0"  />
-                    <RadioButton Content="{x:Static view:Monitoring.Khz20}" IsChecked="{Binding Path=PilotFrequency, Mode=TwoWay, 
+                                 ConverterParameter=3}"
+                                 GroupName="freq0" />
+                    <RadioButton Content="{x:Static view:Monitoring.Khz20}"
+                                 IsChecked="{Binding Path=PilotFrequency, Mode=TwoWay, 
                                  Converter={converters1:PilotToneConverter},
-                                 ConverterParameter=4}" GroupName="freq1"  />
-                    <RadioButton Content="{x:Static view:Monitoring.Khz21}" IsChecked="{Binding Path=PilotFrequency, Mode=TwoWay, 
+                                 ConverterParameter=4}"
+                                 GroupName="freq1" />
+                    <RadioButton Content="{x:Static view:Monitoring.Khz21}"
+                                 IsChecked="{Binding Path=PilotFrequency, Mode=TwoWay, 
                                  Converter={converters1:PilotToneConverter},
-                                 ConverterParameter=5}" GroupName="freq2"  />
-                    <RadioButton Content="{x:Static view:Monitoring.Khz22}" IsChecked="{Binding Path=PilotFrequency, Mode=TwoWay, 
+                                 ConverterParameter=5}"
+                                 GroupName="freq2" />
+                    <RadioButton Content="{x:Static view:Monitoring.Khz22}"
+                                 IsChecked="{Binding Path=PilotFrequency, Mode=TwoWay, 
                                  Converter={converters1:PilotToneConverter},
-                                 ConverterParameter=6}" GroupName="freq3"  />
+                                 ConverterParameter=6}"
+                                 GroupName="freq3" />
 
                 </StackPanel>
             </GroupBox>
             <GroupBox Header="{x:Static view:Monitoring.DeviationInfoTitle}">
-                <TextBlock Text="{x:Static view:Monitoring.DeviationInfo}" TextWrapping="Wrap" Width="200"></TextBlock>
+                <TextBlock Text="{x:Static view:Monitoring.DeviationInfo}" TextWrapping="Wrap" Width="200" />
             </GroupBox>
-            <GroupBox Header="{x:Static view:Monitoring.GbCalibrate}" Visibility="Collapsed" >
-                <StackPanel Margin="5" HorizontalAlignment="Center" >
-                    <Button Height="25" Width="140" Margin="5" Command="{Binding Path=CalibrateCommand}" 
-                            CommandParameter="{Binding}" Name="BtnCalibrate" Click="CalibrateButton" >
+            <GroupBox Header="{x:Static view:Monitoring.GbCalibrate}" Visibility="Collapsed">
+                <StackPanel Margin="5" HorizontalAlignment="Center">
+                    <Button Height="25" Width="140" Margin="5" Command="{Binding Path=CalibrateCommand}"
+                            CommandParameter="{Binding}" Name="BtnCalibrate" Click="CalibrateButton">
                         <Button.Content>
                             <TextBlock>
                                 <TextBlock.Text>
                                     <MultiBinding StringFormat="{x:Static view:Monitoring._monitorCalibrateZone}">
-                                        <Binding Path="Id"></Binding>
+                                        <Binding Path="Id" />
                                     </MultiBinding>
-                                    
+
                                 </TextBlock.Text>
 
                             </TextBlock>
@@ -228,10 +264,10 @@
                             <Style TargetType="{x:Type Button}">
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding ElementName=PfOff, Path=IsChecked}" Value="True">
-                                        <Setter Property="IsEnabled" Value="False"></Setter>
+                                        <Setter Property="IsEnabled" Value="False" />
                                     </DataTrigger>
                                     <DataTrigger Binding="{Binding ElementName=Pfk, Path=IsChecked}" Value="True">
-                                        <Setter Property="IsEnabled" Value="False"></Setter>
+                                        <Setter Property="IsEnabled" Value="False" />
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
@@ -244,9 +280,11 @@
             <GroupBox Header="{x:Static view:Monitoring.MonitoringOptions}">
                 <StackPanel>
 
-                    <CheckBox VerticalAlignment="Center"  IsChecked="{Binding Path=TestMode}"  Content="{x:Static view:Monitoring.TestModeEnable}" />
+                    <CheckBox VerticalAlignment="Center" IsChecked="{Binding Path=TestMode}"
+                              Content="{x:Static view:Monitoring.TestModeEnable}" />
 
-                    <CheckBox VerticalAlignment="Center" IsChecked="{Binding Path=KhzModeActivated}"  Content="{x:Static view:Monitoring.Enable1khzMeasure}" />
+                    <CheckBox VerticalAlignment="Center" IsChecked="{Binding Path=KhzModeActivated}"
+                              Content="{x:Static view:Monitoring.Enable1khzMeasure}" />
 
                 </StackPanel>
             </GroupBox>
@@ -254,18 +292,18 @@
 
             <GroupBox Header="{x:Static view:Monitoring.GbCalibrationOptions}">
                 <StackPanel Margin="5">
-                    <Button Height="25" Width="140" Margin="5" HorizontalAlignment="Center" Content="{x:Static view:Monitoring.Measure1k}" Grid.Row="12" 
+                    <Button Height="25" Width="140" Margin="5" HorizontalAlignment="Center"
+                            Content="{x:Static view:Monitoring.Measure1k}" Grid.Row="12"
                             Grid.Column="1" Grid.ColumnSpan="3"
-                        Command="{Binding Path=MeasureLoad}" CommandParameter="{Binding}" Click="MeasureButton" Name="BtnMeasureLoad"   >
-                    </Button>
+                            Command="{Binding Path=MeasureLoad}" CommandParameter="{Binding}" Click="MeasureButton"
+                            Name="BtnMeasureLoad" />
                 </StackPanel>
             </GroupBox>
-            <GroupBox Header="{x:Static view:Monitoring.GbPlayTestMessage}" IsEnabled="False" >
-                <StackPanel Margin="5" >
+            <GroupBox Header="{x:Static view:Monitoring.GbPlayTestMessage}" IsEnabled="False">
+                <StackPanel Margin="5">
 
 
-
-                    <ToggleButton Width="140" Height="25" IsChecked="{Binding Path=PlayTestTone}" Margin="5"  >
+                    <ToggleButton Width="140" Height="25" IsChecked="{Binding Path=PlayTestTone}" Margin="5">
                         <ToggleButton.Style>
                             <Style TargetType="ToggleButton">
                                 <Setter Property="Content" Value="{Binding Path=Play, ElementName=Monitoring}" />

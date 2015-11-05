@@ -1,3 +1,5 @@
+#region
+
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
@@ -8,19 +10,67 @@ using Microsoft.Research.DynamicDataDisplay.Charts.Navigation;
 using Microsoft.Research.DynamicDataDisplay.Charts.Shapes;
 using Microsoft.Research.DynamicDataDisplay.Navigation;
 
+#endregion
+
 namespace EscInstaller.UserControls
 {
     public class ChartChildrenPlotter : ChartPlotter
     {
+        public static readonly DependencyProperty PlotChildrenProperty = DependencyProperty.Register("PlotChildren",
+            typeof (ObservableCollection<IPlotterElement>),
+            typeof (ChartChildrenPlotter),
+            new PropertyMetadata(default(ObservableCollection<IPlotterElement>), (o, args) =>
+            {
+                var t = (ChartChildrenPlotter) o;
+                var n = args.NewValue as ObservableCollection<IPlotterElement>;
+                var old = args.OldValue as ObservableCollection<IPlotterElement>;
 
+                if (old != null)
+                {
+                    foreach (var plotterElement in old)
+                    {
+                        t.Children.Remove(plotterElement);
+                    }
+                    old.CollectionChanged -= t.t_CollectionChanged;
+                }
+
+                if (n != null)
+                {
+                    //s(args, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, n, old ?? new ObservableCollection<IPlotterElement>()));
+                    n.CollectionChanged += t.t_CollectionChanged;
+
+                    if (old != null)
+                    {
+                        t.t_CollectionChanged(null,
+                            new NotifyCollectionChangedEventArgs(
+                                NotifyCollectionChangedAction
+                                    .Replace, n, old));
+                    }
+                    else
+                    {
+                        t.t_CollectionChanged(null,
+                            new NotifyCollectionChangedEventArgs(
+                                NotifyCollectionChangedAction.Add,
+                                n));
+                    }
+                }
+            }));
+
+        public static readonly DependencyProperty VisibleAreaProperty = DependencyProperty.Register(
+            "VisibleArea", typeof (DataRect), typeof (ChartChildrenPlotter), new PropertyMetadata(default(DataRect),
+                (q, e) =>
+                {
+                    var s = (ChartChildrenPlotter) q;
+                    s.Visible = (DataRect) e.NewValue;
+                }));
 
         public ChartChildrenPlotter()
         {
-            Children.RemoveAll(typeof(Legend));
-            Children.RemoveAll(typeof(DefaultContextMenu));
-            Children.RemoveAll(typeof(KeyboardNavigation));
-            Children.RemoveAll(typeof(AxisNavigation));
-            Children.RemoveAll(typeof(MouseNavigation));
+            Children.RemoveAll(typeof (Legend));
+            Children.RemoveAll(typeof (DefaultContextMenu));
+            Children.RemoveAll(typeof (KeyboardNavigation));
+            Children.RemoveAll(typeof (AxisNavigation));
+            Children.RemoveAll(typeof (MouseNavigation));
 
             var tp = new NumericTicksProvider();
 
@@ -29,51 +79,23 @@ namespace EscInstaller.UserControls
             MainVerticalAxis = new VerticalAxis
             {
                 TicksProvider = tp,
-                LabelProvider = new ToStringLabelProvider(),
+                LabelProvider = new ToStringLabelProvider()
             };
-
-
         }
 
-        public static readonly DependencyProperty PlotChildrenProperty = DependencyProperty.Register("PlotChildren", typeof(ObservableCollection<IPlotterElement>),
-                                        typeof(ChartChildrenPlotter), new PropertyMetadata(default(ObservableCollection<IPlotterElement>), (o, args) =>
-                                                                 {
-                                                                     var t = (ChartChildrenPlotter)o;
-                                                                     var n = args.NewValue as ObservableCollection<IPlotterElement>;
-                                                                     var old = args.OldValue as ObservableCollection<IPlotterElement>;
+        public DataRect VisibleArea
+        {
+            get { return (DataRect) GetValue(VisibleAreaProperty); }
+            set { SetValue(VisibleAreaProperty, value); }
+        }
 
-                                                                     if (old != null)
-                                                                     {
-                                                                         foreach (var plotterElement in old)
-                                                                         {
-                                                                             t.Children.Remove(plotterElement);
-                                                                         }
-                                                                         old.CollectionChanged -= t.t_CollectionChanged;
-                                                                     }
+        public ObservableCollection<IPlotterElement> PlotChildren
+        {
+            get { return (ObservableCollection<IPlotterElement>) GetValue(PlotChildrenProperty); }
+            set { SetValue(PlotChildrenProperty, value); }
+        }
 
-                                                                     if (n != null)
-                                                                     {
-                                                                         //s(args, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, n, old ?? new ObservableCollection<IPlotterElement>()));
-                                                                         n.CollectionChanged += t.t_CollectionChanged;
-
-                                                                         if (old != null)
-                                                                         {
-                                                                             t.t_CollectionChanged(null,
-                                                                                 new NotifyCollectionChangedEventArgs(
-                                                                                     NotifyCollectionChangedAction
-                                                                                         .Replace, n, old));
-                                                                         }
-                                                                         else
-                                                                         {
-                                                                             t.t_CollectionChanged(null,
-                                                                                 new NotifyCollectionChangedEventArgs(
-                                                                                     NotifyCollectionChangedAction.Add,
-                                                                                     n));
-                                                                         }
-                                                                     }
-                                                                 }));
-
-        void t_CollectionChanged(object sender, NotifyCollectionChangedEventArgs eventArgs)
+        private void t_CollectionChanged(object sender, NotifyCollectionChangedEventArgs eventArgs)
         {
             if (eventArgs.NewItems != null)
                 foreach (var result in eventArgs.NewItems.Cast<IPlotterElement>())
@@ -97,38 +119,17 @@ namespace EscInstaller.UserControls
                 }
             if (eventArgs.Action == NotifyCollectionChangedAction.Reset)
             {
-                var q = Children.OfType<DraggablePoint>().Cast<IPlotterElement>().Concat(Children.OfType<LineGraph>()).ToArray();
+                var q =
+                    Children.OfType<DraggablePoint>()
+                        .Cast<IPlotterElement>()
+                        .Concat(Children.OfType<LineGraph>())
+                        .ToArray();
 
                 foreach (var plotterElement1 in q)
                 {
                     Children.Remove(plotterElement1);
                 }
             }
-        }
-
-
-        public static readonly DependencyProperty VisibleAreaProperty = DependencyProperty.Register(
-            "VisibleArea", typeof(DataRect), typeof(ChartChildrenPlotter), new PropertyMetadata(default(DataRect),
-                (q, e) =>
-                {
-                    var s = (ChartChildrenPlotter)q;
-                    s.Visible = (DataRect)e.NewValue;
-                }));
-
-        public DataRect VisibleArea
-        {
-            get { return (DataRect)GetValue(VisibleAreaProperty); }
-            set { SetValue(VisibleAreaProperty, value); }
-        }
-
-        
-
-
-
-        public ObservableCollection<IPlotterElement> PlotChildren
-        {
-            get { return (ObservableCollection<IPlotterElement>)GetValue(PlotChildrenProperty); }
-            set { SetValue(PlotChildrenProperty, value); }
         }
     }
 }

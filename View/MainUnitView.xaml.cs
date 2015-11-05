@@ -1,4 +1,6 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -10,6 +12,7 @@ using System.Windows.Media.Animation;
 using EscInstaller.ViewModel;
 using Microsoft.Research.DynamicDataDisplay;
 
+#endregion
 
 namespace EscInstaller.View
 {
@@ -18,19 +21,18 @@ namespace EscInstaller.View
     /// </summary>
     public partial class MainUnitView
     {
+        private double _bottomGbFrom;
+
         public MainUnitView()
         {
             InitializeComponent();
-
         }
 
         private void UIElement_OnMouseDown(object sender, MouseButtonEventArgs e)
         {
-            var z = (MainUnitViewModel)DataContext;
+            var z = (MainUnitViewModel) DataContext;
             z.ItemsControlClick();
         }
-
-        private double _bottomGbFrom;
 
         private void GroupBoxBottom_OnTargetUpdated(object sender, DataTransferEventArgs e)
         {
@@ -44,7 +46,6 @@ namespace EscInstaller.View
                 From = _bottomGbFrom,
                 To = child.DesiredSize.Height + 10,
                 Duration = new Duration(TimeSpan.FromSeconds(1)),
-
                 EasingFunction = new ExponentialEase()
                 {
                     EasingMode = EasingMode.EaseOut
@@ -60,22 +61,15 @@ namespace EscInstaller.View
             sb.Completed += sb_Completed;
             sb.Begin();
 
-            var z = (MainUnitViewModel)DataContext;
+            var z = (MainUnitViewModel) DataContext;
             if (z == null) return;
             z.OnPanelSelectionChanged();
         }
 
-
-
-
-        void sb_Completed(object sender, EventArgs e)
+        private void sb_Completed(object sender, EventArgs e)
         {
             _bottomGbFrom = GroupBoxBottom.ActualHeight;
         }
-
-
-
-
     }
 
     public static class AnimationHelper
@@ -84,15 +78,15 @@ namespace EscInstaller.View
         {
             if (depObj != null)
             {
-                for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
+                for (var i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
                 {
-                    DependencyObject child = VisualTreeHelper.GetChild(depObj, i);
+                    var child = VisualTreeHelper.GetChild(depObj, i);
                     if (child != null && child is T)
                     {
-                        yield return (T)child;
+                        yield return (T) child;
                     }
 
-                    foreach (T childOfChild in FindVisualChildren<T>(child))
+                    foreach (var childOfChild in FindVisualChildren<T>(child))
                     {
                         yield return childOfChild;
                     }
@@ -105,25 +99,23 @@ namespace EscInstaller.View
     internal class AnimatedBorder : Border
     {
         public static readonly DependencyProperty AnimateToHeightProperty = DependencyProperty.Register(
-            "AnimateToHeight", typeof(Double), typeof(AnimatedBorder), new PropertyMetadata(default(Double),
-                (o, args) => HeightAnimation((double)args.NewValue, (FrameworkElement)o)));
+            "AnimateToHeight", typeof (double), typeof (AnimatedBorder), new PropertyMetadata(default(double),
+                (o, args) => HeightAnimation((double) args.NewValue, (FrameworkElement) o)));
 
-        public Double AnimateToHeight
+        public double AnimateToHeight
         {
-            get { return (Double)GetValue(AnimateToHeightProperty); }
+            get { return (double) GetValue(AnimateToHeightProperty); }
             set { SetValue(AnimateToHeightProperty, value); }
         }
 
         internal static void HeightAnimation(double newHeight, FrameworkElement dependencyObject)
         {
-
             var from = dependencyObject.Height.IsNotNaN() ? dependencyObject.Height : 0;
             var animation = new DoubleAnimation
             {
                 From = from,
                 To = newHeight,
                 Duration = new Duration(TimeSpan.FromSeconds(1)),
-
                 EasingFunction = new ExponentialEase
                 {
                     EasingMode = EasingMode.EaseOut
@@ -139,6 +131,4 @@ namespace EscInstaller.View
             sb.Begin();
         }
     }
-
-
 }

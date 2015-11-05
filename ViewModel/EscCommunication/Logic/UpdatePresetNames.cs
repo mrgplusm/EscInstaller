@@ -1,8 +1,12 @@
+#region
+
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Common.Commodules;
 using Common.Model;
+
+#endregion
 
 namespace EscInstaller.ViewModel.EscCommunication.Logic
 {
@@ -35,7 +39,6 @@ namespace EscInstaller.ViewModel.EscCommunication.Logic
             }
             Main.OnPresetNamesUpdated();
         }
-
 
         /// <summary>
         ///     Reconstruct the system names by splitting byte array

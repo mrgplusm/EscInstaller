@@ -1,4 +1,6 @@
-﻿using System.Globalization;
+﻿#region
+
+using System.Globalization;
 using System.Threading;
 using System.Timers;
 using System.Windows;
@@ -7,6 +9,9 @@ using Common;
 using EscInstaller.ImportSpeakers;
 using EscInstaller.ViewModel;
 using Microsoft.Win32;
+using Timer = System.Timers.Timer;
+
+#endregion
 
 namespace EscInstaller
 {
@@ -16,13 +21,35 @@ namespace EscInstaller
     public partial class App
     {
         private static Mutex _m;
+        private Timer _saveFileTimer;
+
+        private App()
+        {
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
+            FrameworkElement.LanguageProperty.OverrideMetadata(typeof (FrameworkElement),
+                new FrameworkPropertyMetadata(XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag)));
+
+            SaveBackupFileInit();
+            //#if !DEBUG
+            //          if (IsSingleInstance())
+            //        {
+            OpenRegKey();
 
 
-        private System.Timers.Timer _saveFileTimer;
+            return;
+            //      }
+            MessageBox.Show("The installer/monitor software is already running", "Allready open",
+                MessageBoxButton.OK, MessageBoxImage.Error);
+            Current.Shutdown();
+            //#endif
+
+            //DispatcherHelper.Initialize();
+        }
 
         private void SaveBackupFileInit()
         {
-            _saveFileTimer = new System.Timers.Timer { AutoReset = true, Enabled = true, Interval = 300000 };
+            _saveFileTimer = new Timer {AutoReset = true, Enabled = true, Interval = 300000};
             _saveFileTimer.Elapsed += SaveFileTimerElapsed;
         }
 
@@ -38,36 +65,8 @@ namespace EscInstaller
             SpeakerMethods.SaveSpeakerlib();
         }
 
-        private App()
-        {
-            Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
-            Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
-            FrameworkElement.LanguageProperty.OverrideMetadata(typeof(FrameworkElement),
-                new FrameworkPropertyMetadata(XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag)));
-
-            SaveBackupFileInit();
-            //#if !DEBUG
-            //          if (IsSingleInstance())
-            //        {
-            OpenRegKey();
-
-            
-
-            return;
-            //      }
-            MessageBox.Show("The installer/monitor software is already running", "Allready open",
-                            MessageBoxButton.OK, MessageBoxImage.Error);
-            Current.Shutdown();
-            //#endif
-
-            //DispatcherHelper.Initialize();
-        }
-
-
         private static bool IsSingleInstance()
         {
-
-
             try
             {
                 // Try to open existing mutex.

@@ -1,8 +1,12 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.ComponentModel;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+
+#endregion
 
 namespace EscInstaller.UserControls
 {
@@ -20,7 +24,7 @@ namespace EscInstaller.UserControls
                     // load styles resources
                     var rd = new ResourceDictionary();
                     rd.Source = new Uri(Path.Combine(Environment.CurrentDirectory, "../../Style/GrayedOutImagge.xaml"),
-                                        UriKind.Absolute);
+                        UriKind.Absolute);
                     Resources.MergedDictionaries.Add(rd);
 
                     // load any other resources this control needs such as Converters

@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,6 +8,8 @@ using Common;
 using Common.Commodules;
 using Common.Model;
 using EscInstaller.ViewModel.Connection;
+
+#endregion
 
 namespace EscInstaller.ViewModel.EscCommunication.Logic
 {
@@ -32,7 +36,6 @@ namespace EscInstaller.ViewModel.EscCommunication.Logic
                 yield return new SetGainSlider(result.Id, result.OutputGain, SliderType.Output);
             }
         }
-
 
         public async Task SetSliders(IProgress<DownloadProgress> iProgress)
         {

@@ -1,28 +1,27 @@
-﻿<UserControl 
-    
-        
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+﻿<UserControl
+
+
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"    
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"                     
-        x:Class="EscInstaller.View.InputNameView"
-    
-        mc:Ignorable="d" 
-        
-        xmlns:uc="clr-namespace:EscInstaller.UserControls"
-        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"              
-        xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
-        xmlns:converters="clr-namespace:EscInstaller.Converters"
-        xmlns:overView="clr-namespace:EscInstaller.ViewModel.OverView"
-        xmlns:view="clr-namespace:EscInstaller.View"
-        xmlns:converters1="clr-namespace:Common.Converters;assembly=Common"
-        d:DataContext="{d:DesignInstance Type=overView:BlInputName, IsDesignTimeCreatable=True}"            
-    >
+
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    x:Class="EscInstaller.View.InputNameView"
+
+    mc:Ignorable="d"
+
+    xmlns:uc="clr-namespace:EscInstaller.UserControls"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+    xmlns:converters="clr-namespace:EscInstaller.Converters"
+    xmlns:overView="clr-namespace:EscInstaller.ViewModel.OverView"
+    xmlns:view="clr-namespace:EscInstaller.View"
+    xmlns:converters1="clr-namespace:Common.Converters;assembly=Common"
+    d:DataContext="{d:DesignInstance Type=overView:BlInputName, IsDesignTimeCreatable=True}">
 
     <UserControl.Resources>
 
-        <Style TargetType="RadioButton"  >
+        <Style TargetType="RadioButton">
             <Setter Property="Width" Value="49" />
             <Setter Property="HorizontalContentAlignment" Value="Right" />
         </Style>
@@ -50,12 +49,15 @@
 
             <!--Input name settings-->
 
-            <GroupBox Header="{x:Static view:InputName._inputGroupInputName}" Grid.Row="0" Grid.Column="0"  >
-                <StackPanel Margin="5" Orientation="Vertical" >
+            <GroupBox Header="{x:Static view:InputName._inputGroupInputName}" Grid.Row="0" Grid.Column="0">
+                <StackPanel Margin="5" Orientation="Vertical">
 
-                    <uc:CharsTextBox CountedText="{Binding Path=NameOfInput}" x:Name="UcCharsText" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5" />
+                    <uc:CharsTextBox CountedText="{Binding Path=NameOfInput}" x:Name="UcCharsText"
+                                     VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5" />
 
-                    <CheckBox IsChecked="{Binding Path=CopyNameOutput}" Content="{x:Static view:InputName._inputCopyToOutput}" Margin="5" VerticalAlignment="Bottom" >
+                    <CheckBox IsChecked="{Binding Path=CopyNameOutput}"
+                              Content="{x:Static view:InputName._inputCopyToOutput}" Margin="5"
+                              VerticalAlignment="Bottom">
                         <CheckBox.ToolTip>
                             <TextBlock Text="{x:Static view:InputName._inputCopyToOutput}" />
                         </CheckBox.ToolTip>
@@ -63,36 +65,43 @@
                 </StackPanel>
             </GroupBox>
 
-            <GroupBox Header="{x:Static view:InputName.Sens}" Grid.Row="1" Grid.Column="0"  >
-                <StackPanel Margin="5" Orientation="Vertical" VerticalAlignment="Top" 
-                                IsEnabled="{Binding Path=InputsensitivityIsEnabled}">
-                    <RadioButton IsChecked="{Binding Path=InputSens, ConverterParameter=High, Converter={converters1:EnumBooleanConverter}}"  Content="+3dB" />
-                    <RadioButton IsChecked="{Binding Path=InputSens, ConverterParameter=None, Converter={converters1:EnumBooleanConverter}}"  Content=" 0dB" />
-                    <RadioButton IsChecked="{Binding Path=InputSens, ConverterParameter=Low, Converter={converters1:EnumBooleanConverter}}"  Content="-10dB"/>
+            <GroupBox Header="{x:Static view:InputName.Sens}" Grid.Row="1" Grid.Column="0">
+                <StackPanel Margin="5" Orientation="Vertical" VerticalAlignment="Top"
+                            IsEnabled="{Binding Path=InputsensitivityIsEnabled}">
+                    <RadioButton
+                        IsChecked="{Binding Path=InputSens, ConverterParameter=High, Converter={converters1:EnumBooleanConverter}}"
+                        Content="+3dB" />
+                    <RadioButton
+                        IsChecked="{Binding Path=InputSens, ConverterParameter=None, Converter={converters1:EnumBooleanConverter}}"
+                        Content=" 0dB" />
+                    <RadioButton
+                        IsChecked="{Binding Path=InputSens, ConverterParameter=Low, Converter={converters1:EnumBooleanConverter}}"
+                        Content="-10dB" />
                 </StackPanel>
             </GroupBox>
 
-            <GroupBox Grid.Row="0" Header="{x:Static view:InputName.InputGain}" Grid.Column="3" Grid.RowSpan="2"  >
+            <GroupBox Grid.Row="0" Header="{x:Static view:InputName.InputGain}" Grid.Column="3" Grid.RowSpan="2">
                 <StackPanel Margin="5">
                     <uc:UcSlider SliderValue="{Binding Path=InputSlider}" />
                 </StackPanel>
             </GroupBox>
 
-            <GroupBox Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" Header="{x:Static view:InputName.VuMeterSettings}"  >
+            <GroupBox Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" Header="{x:Static view:InputName.VuMeterSettings}">
                 <uc:VuMeterControl />
             </GroupBox>
 
-            <GroupBox Grid.Row="1" Header="{x:Static view:InputName._InputNameAuxSlider}" Grid.Column="1" Visibility="Collapsed" >
+            <GroupBox Grid.Row="1" Header="{x:Static view:InputName._InputNameAuxSlider}" Grid.Column="1"
+                      Visibility="Collapsed">
                 <StackPanel Margin="5">
 
-                    <uc:UcSlider SliderValue="{Binding Path=MonitorSlider}"             />
+                    <uc:UcSlider SliderValue="{Binding Path=MonitorSlider}" />
                 </StackPanel>
                 <GroupBox.Style>
                     <Style TargetType="{x:Type GroupBox}">
-                        <Setter Property="Visibility" Value="Collapsed"></Setter>
+                        <Setter Property="Visibility" Value="Collapsed" />
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding RouteAux}" Value="True">
-                                <Setter Property="Visibility" Value="Visible"></Setter>
+                                <Setter Property="Visibility" Value="Visible" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -102,11 +111,6 @@
         </Grid>
 
     </StackPanel>
-
-
-
-
-
 
 
 </UserControl>

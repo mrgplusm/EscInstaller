@@ -1,5 +1,9 @@
+#region
+
 using System.Collections.ObjectModel;
 using EscInstaller.ViewModel.EscCommunication.downloadItems;
+
+#endregion
 
 namespace EscInstaller.ViewModel.EscCommunication
 {

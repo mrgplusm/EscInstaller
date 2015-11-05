@@ -1,37 +1,37 @@
-﻿<UserControl x:Class="EscInstaller.View.ExternalInputView"  
-              
+﻿<UserControl x:Class="EscInstaller.View.ExternalInputView"
+
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:userControls="clr-namespace:EscInstaller.UserControls"
              xmlns:overView="clr-namespace:EscInstaller.ViewModel.OverView"
              xmlns:sdCard="clr-namespace:EscInstaller.ViewModel.SDCard"
              xmlns:view="clr-namespace:EscInstaller.View"
-             mc:Ignorable="d" 
-          
-             d:DataContext="{d:DesignInstance  overView:BlExtInput, IsDesignTimeCreatable=True}"
-             >
+             mc:Ignorable="d"
+
+             d:DataContext="{d:DesignInstance  overView:BlExtInput, IsDesignTimeCreatable=True}">
 
 
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto"  />
-            <ColumnDefinition Width="Auto"  />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="200" />
             <RowDefinition Height="30" />
         </Grid.RowDefinitions>
 
-        <TextBlock Text="{x:Static view:ExternalInput.ExternalInputFooter}" Grid.Row="1" TextWrapping="Wrap" Grid.ColumnSpan="2" />
+        <TextBlock Text="{x:Static view:ExternalInput.ExternalInputFooter}" Grid.Row="1" TextWrapping="Wrap"
+                   Grid.ColumnSpan="2" />
 
         <ItemsControl ItemsSource="{Binding Path=Sliders}" Grid.Row="0" Grid.Column="0">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
 
-                    <StackPanel Orientation="Horizontal"></StackPanel>
+                    <StackPanel Orientation="Horizontal" />
 
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
@@ -44,21 +44,21 @@
             </ItemsControl.ItemTemplate>
         </ItemsControl>
 
-        <StackPanel Grid.Row="0" Grid.Column="2" >
+        <StackPanel Grid.Row="0" Grid.Column="2">
             <StackPanel.Resources>
-                <DataTemplate  DataType="{x:Type sdCard:SdFileVM}" >
+                <DataTemplate DataType="{x:Type sdCard:SdFileVM}">
                     <StackPanel Orientation="Horizontal" Name="stp">
-                        <TextBlock  >
+                        <TextBlock>
                             <TextBlock.Style>
                                 <Style TargetType="TextBlock">
-                                    <Setter Property="Text" Value="{Binding Path=Name}"></Setter>
+                                    <Setter Property="Text" Value="{Binding Path=Name}" />
                                     <Style.Triggers>
                                         <MultiDataTrigger>
                                             <MultiDataTrigger.Conditions>
-                                                <Condition Binding="{Binding Path=IsOnCard}" Value="False"></Condition>
+                                                <Condition Binding="{Binding Path=IsOnCard}" Value="False" />
                                             </MultiDataTrigger.Conditions>
                                             <MultiDataTrigger.Setters>
-                                                <Setter Property="Foreground" Value="Coral"></Setter>
+                                                <Setter Property="Foreground" Value="Coral" />
                                             </MultiDataTrigger.Setters>
                                         </MultiDataTrigger>
                                     </Style.Triggers>
@@ -70,17 +70,14 @@
                 </DataTemplate>
 
 
-
-
-
             </StackPanel.Resources>
-            <view:UcAlarmlert/>
+            <view:UcAlarmlert />
             <StackPanel.Style>
                 <Style TargetType="StackPanel">
                     <!--<Setter Property="Visibility" Value="Collapsed"></Setter>-->
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding Path=MainUnitView.Id}" Value="0">
-                            <Setter Property="Visibility" Value="Visible"></Setter>
+                            <Setter Property="Visibility" Value="Visible" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>

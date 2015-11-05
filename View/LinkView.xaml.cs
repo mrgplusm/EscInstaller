@@ -1,7 +1,4 @@
-﻿using System.Windows;
-using System.Windows.Input;
-
-namespace EscInstaller.View
+﻿namespace EscInstaller.View
 {
     /// <summary>
     ///     Interaction logic for Linking.xaml
@@ -13,8 +10,6 @@ namespace EscInstaller.View
             //DataContext = ((ViewModelLocator)Application.Current.Resources["Locator"])
             //    .Link(Guid.NewGuid());
             InitializeComponent();
-        
         }
-
     }
 }

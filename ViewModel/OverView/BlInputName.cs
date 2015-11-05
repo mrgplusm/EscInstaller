@@ -1,25 +1,29 @@
+#region
+
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using Common;
+using Common.Commodules;
 using Common.Model;
 using EscInstaller.View;
 using EscInstaller.ViewModel.Connection;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
-using Common;
-using Common.Commodules;
-using System;
-using System.Collections.Generic;
+
+#endregion
 
 namespace EscInstaller.ViewModel.OverView
 {
     public class BlInputName : VuMeterControl
     {
-
         public const int Width = 110;
         public const int XLocation = 0;
         private readonly FlowModel _flow;
         private readonly MainUnitViewModel _main;
+        private List<SnapShot> _snapShots;
 
         public BlInputName(FlowModel flow, MainUnitViewModel main)
             : base(main)
@@ -40,7 +44,7 @@ namespace EscInstaller.ViewModel.OverView
             {
                 return new RelayCommand(() =>
                 {
-                    _main.VuMeter.SetVuChannel(_flow.Id % 12);
+                    _main.VuMeter.SetVuChannel(_flow.Id%12);
                     _main.VuMeter.StartVu();
                 });
             }
@@ -48,34 +52,12 @@ namespace EscInstaller.ViewModel.OverView
 
         public override bool VuActivated
         {
-            get
-            {
-                return _main.VuMeter.ChannelId == _flow.Id%12 && _main.VuMeter.IsActive;
-            }
+            get { return _main.VuMeter.ChannelId == _flow.Id%12 && _main.VuMeter.IsActive; }
         }
-
-        void Receiver_DspMirrorUpdated(object sender, EventArgs e)
-        {
-            RaisePropertyChanged(() => InputSlider);
-        }
-
-        void Receiver_PresetNamesUpdated(object sender, EventArgs e)
-        {
-            RaisePropertyChanged(() => NameOfInput);
-        }
-
-        private void ReceiverOnSensitivityDownloaded(object sender, EventArgs eventArgs)
-        {
-            RaisePropertyChanged(() => InputSens);
-        }
-
 
         public override int Id
         {
-            get
-            {
-                return _flow.Id;
-            }
+            get { return _flow.Id; }
         }
 
         public int DisplayId
@@ -83,29 +65,19 @@ namespace EscInstaller.ViewModel.OverView
             get { return _flow.Id + 1; }
         }
 
-        private List<SnapShot> _snapShots;
-
-
         public override string SettingName
         {
             get { return string.Format(InputName.BlockInput, _flow.Id + 1); }
         }
 
-        public override void SetYLocation()
-        {
-            var row = Id % 12;
-            var yspace = row > 3 ? (InnerSpace + RowHeight) * (row > 7 ? 2 : 1) : 0;
-            Location.Y = RowHeight * row + yspace;
-        }
-
-        public sealed override List<SnapShot> Snapshots
+        public override sealed List<SnapShot> Snapshots
         {
             get
             {
                 return _snapShots ?? (_snapShots = new List<SnapShot>()
-                                                       {                                                           
-                                                           new SnapShot(this) {Offset = {X = Size.X, Y = 17}},
-                                                       });
+                {
+                    new SnapShot(this) {Offset = {X = Size.X, Y = 17}}
+                });
             }
         }
 
@@ -114,15 +86,9 @@ namespace EscInstaller.ViewModel.OverView
             get { return new Point(Width, UnitHeight); }
         }
 
-
-
-
         public virtual string NameOfInput
         {
-            get
-            {
-                return _flow.NameOfInput;
-            }
+            get { return _flow.NameOfInput; }
             set
             {
                 _flow.NameOfInput = value;
@@ -139,8 +105,6 @@ namespace EscInstaller.ViewModel.OverView
             }
         }
 
-
-
         public bool InputsensitivityIsEnabled
         {
             get
@@ -148,14 +112,6 @@ namespace EscInstaller.ViewModel.OverView
                 bool b;
                 return bool.TryParse(LibraryData.Settings["InputsensitivityIsEnabled"], out b) && b;
             }
-        }
-
-
-        private void UpdateOutputName()
-        {
-            var t = _main.DiagramObjects.OfType<BlOutput>().FirstOrDefault(i => i.Id == Id);
-            if (t != null)
-                t.UpdateName();
         }
 
         //checkbox
@@ -177,7 +133,6 @@ namespace EscInstaller.ViewModel.OverView
                 {
                     Console.WriteLine(e);
                 }
-
             }
         }
 
@@ -212,14 +167,14 @@ namespace EscInstaller.ViewModel.OverView
                 if (_main.DataModel.InputSensitivity == null
                     || _main.DataModel.InputSensitivity.Count < 12 || _flow.Id > GenericMethods.StartCountFrom)
                     return InputSens.None;
-                return _main.DataModel.InputSensitivity[_flow.Id % 12];
+                return _main.DataModel.InputSensitivity[_flow.Id%12];
             }
             set
             {
                 if (_main.DataModel.InputSensitivity == null
                     || _main.DataModel.InputSensitivity.Count < 12 || _flow.Id > GenericMethods.StartCountFrom)
                     return;
-                _main.DataModel.InputSensitivity[_flow.Id % 12] = value;
+                _main.DataModel.InputSensitivity[_flow.Id%12] = value;
                 RaisePropertyChanged(() => InputSens);
                 CommunicationViewModel.AddData(new SetInputSensitivity(_flow.Id, value));
             }
@@ -231,20 +186,46 @@ namespace EscInstaller.ViewModel.OverView
             get { return _flow.InputSlider; }
             set
             {
-                CommunicationViewModel.AddData(new SetGainSlider(_flow.Id, (int)value, SliderType.Input));
-                _flow.InputSlider = (int)value;
+                CommunicationViewModel.AddData(new SetGainSlider(_flow.Id, (int) value, SliderType.Input));
+                _flow.InputSlider = (int) value;
             }
         }
 
-
-
         public bool IsAlert
         {
-            get { return (_flow.Id >= GenericMethods.StartCountFrom && (_flow.Id - GenericMethods.StartCountFrom) % 5 == 1); }
+            get
+            {
+                return (_flow.Id >= GenericMethods.StartCountFrom && (_flow.Id - GenericMethods.StartCountFrom)%5 == 1);
+            }
         }
 
+        private void Receiver_DspMirrorUpdated(object sender, EventArgs e)
+        {
+            RaisePropertyChanged(() => InputSlider);
+        }
 
+        private void Receiver_PresetNamesUpdated(object sender, EventArgs e)
+        {
+            RaisePropertyChanged(() => NameOfInput);
+        }
 
+        private void ReceiverOnSensitivityDownloaded(object sender, EventArgs eventArgs)
+        {
+            RaisePropertyChanged(() => InputSens);
+        }
+
+        public override void SetYLocation()
+        {
+            var row = Id%12;
+            var yspace = row > 3 ? (InnerSpace + RowHeight)*(row > 7 ? 2 : 1) : 0;
+            Location.Y = RowHeight*row + yspace;
+        }
+
+        private void UpdateOutputName()
+        {
+            var t = _main.DiagramObjects.OfType<BlOutput>().FirstOrDefault(i => i.Id == Id);
+            if (t != null)
+                t.UpdateName();
+        }
     }
-
 }

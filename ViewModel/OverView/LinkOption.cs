@@ -1,61 +1,54 @@
-using System.IO;
+#region
+
 using Common.Commodules;
 using Common.Model;
 using EscInstaller.ViewModel.Connection;
 using GalaSoft.MvvmLight;
 
+#endregion
+
 namespace EscInstaller.ViewModel.OverView
 {
     public class LinkOption : ViewModelBase
     {
-        private readonly FlowModel _flow;
-        private readonly MainUnitViewModel _main;
         private readonly BlLink _linkViewModel;
-
+        private readonly MainUnitViewModel _main;
 
         public LinkOption(FlowModel flow, MainUnitViewModel main, BlLink linkViewModel)
         {
-            _flow = flow;
+            Flow = flow;
             _main = main;
             _linkViewModel = linkViewModel;
         }
 
         public int LinkId
         {
-            get { return _flow.Id % 12 + 1; }
+            get { return Flow.Id%12 + 1; }
         }
 
-        public FlowModel Flow
-        {
-            get { return _flow; }
-        }
+        public FlowModel Flow { get; }
 
         public int Path
         {
-            get
-            {
-                return (int)_flow.Path;
-            }
+            get { return (int) Flow.Path; }
             set
             {
-                _flow.Path = (LinkTo)value;
-                _main.UpdateLineLink(_flow);
+                Flow.Path = (LinkTo) value;
+                _main.UpdateLineLink(Flow);
                 RaisePropertyChanged(() => Path);
-                _linkViewModel.OnLinkChanged(new LinkChangedEventArgs { Flow = Flow });
-                CommunicationViewModel.AddData(new SetLinkDemux(_flow.Id, LinkTo.Previous));
+                _linkViewModel.OnLinkChanged(new LinkChangedEventArgs {Flow = Flow});
+                CommunicationViewModel.AddData(new SetLinkDemux(Flow.Id, LinkTo.Previous));
             }
         }
 
         public LinkTo LinkPath
         {
-            get { return _flow.Path; }
+            get { return Flow.Path; }
         }
 
         public bool IsDelayLinkEnabled
         {
-            get { return _flow.Id % 12 > 1 && _flow.Id % 12 < 4; }
+            get { return Flow.Id%12 > 1 && Flow.Id%12 < 4; }
         }
-
-
     }
 }

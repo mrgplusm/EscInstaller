@@ -1,25 +1,23 @@
 ﻿<Window x:Class="EscInstaller.View.SdMessageCardView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
         xmlns:io="clr-namespace:System.IO;assembly=mscorlib"
         xmlns:behaviors="clr-namespace:EscInstaller.Behaviors"
         xmlns:sdCard="clr-namespace:EscInstaller.ViewModel.SDCard"
         xmlns:view="clr-namespace:EscInstaller.View"
-        mc:Ignorable="d" 
-            
-         DataContext="{Binding SdLibraryEditor, Source={StaticResource Locator}}"
+        mc:Ignorable="d"
+
+        DataContext="{Binding SdLibraryEditor, Source={StaticResource Locator}}"
         Title="{x:Static view:SdMessageCard.SdMessageCardView}" SizeToContent="WidthAndHeight" MinHeight="300"
-        Icon="../Icons/Sd-Card-128.png" 
-        
-        >
+        Icon="../Icons/Sd-Card-128.png">
     <Window.Resources>
         <DataTemplate DataType="{x:Type DataGridTemplateColumn}" x:Key="TmplPlay">
             <Button Command="{Binding Path=PlayTrack}">
-                <Image Source="../Icons/Play-32.png" Width="15" Height="15" >
+                <Image Source="../Icons/Play-32.png" Width="15" Height="15">
                     <Image.ToolTip>
                         <ToolTip>
                             <StackPanel>
@@ -33,7 +31,7 @@
 
         <DataTemplate DataType="{x:Type DataGridTemplateColumn}" x:Key="TmplStop">
             <Button Command="{Binding Path=StopTrack}">
-                <Image Source="../Icons/Stop-32.png" Width="15" Height="15" >
+                <Image Source="../Icons/Stop-32.png" Width="15" Height="15">
                     <Image.ToolTip>
                         <ToolTip>
                             <StackPanel>
@@ -52,7 +50,7 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
 
-    <Grid >
+    <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
@@ -67,12 +65,12 @@
         </Grid.RowDefinitions>
 
 
-        <Canvas VerticalAlignment="Stretch" Height="23" Grid.Row="1" Background="Red" >
+        <Canvas VerticalAlignment="Stretch" Height="23" Grid.Row="1" Background="Red">
             <Canvas.Style>
                 <Style TargetType="Canvas">
                     <Setter Property="Visibility" Value="Collapsed" />
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding Path=SystemIsOpen}" >
+                        <DataTrigger Binding="{Binding Path=SystemIsOpen}">
                             <Setter Property="Visibility" Value="Visible" />
                         </DataTrigger>
                     </Style.Triggers>
@@ -81,9 +79,9 @@
             <TextBlock Text="{x:Static view:SdMessageCard.SystemIsNotOpenWarning}" />
         </Canvas>
         <ToolBarTray Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
-            <ToolBar >
+            <ToolBar>
 
-                <ComboBox ItemsSource="{Binding Drives}" IsSynchronizedWithCurrentItem="True" x:Name="CbbDrives" >
+                <ComboBox ItemsSource="{Binding Drives}" IsSynchronizedWithCurrentItem="True" x:Name="CbbDrives">
                     <ComboBox.ItemTemplate>
                         <DataTemplate DataType="{x:Type io:DriveInfo}">
                             <StackPanel Orientation="Horizontal" Margin="5,0,0,5">
@@ -94,30 +92,35 @@
                     </ComboBox.ItemTemplate>
                 </ComboBox>
 
-                <Button Command="{Binding Path=FileManager}" CommandParameter="{Binding ElementName=TabControl, Path=SelectedItem}" >
+                <Button Command="{Binding Path=FileManager}"
+                        CommandParameter="{Binding ElementName=TabControl, Path=SelectedItem}">
                     <Image Source="../Icons/Open-32.png" Width="15" Height="15" />
                     <Button.ToolTip>
                         <TextBlock Text="{x:Static view:SdMessageCard.DragDropButton}" />
                     </Button.ToolTip>
                 </Button>
 
-                <Button Command="{Binding Path=WriteToSdCard}" BorderThickness="1" Background="Gray" BorderBrush="DarkGray" 
-                       CommandParameter="{Binding ElementName=TabControl, Path=SelectedItem}"  Content="{x:Static view:SdMessageCard.SaveContentToSdCard}" >
+                <Button Command="{Binding Path=WriteToSdCard}" BorderThickness="1" Background="Gray"
+                        BorderBrush="DarkGray"
+                        CommandParameter="{Binding ElementName=TabControl, Path=SelectedItem}"
+                        Content="{x:Static view:SdMessageCard.SaveContentToSdCard}">
                     <Button.Style>
                         <Style TargetType="{x:Type Button}">
                             <Setter Property="IsEnabled" Value="False" />
 
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding ElementName=TabControl, Path=SelectedItem.AllMandatorySelected}" Value="true">
-                                    <Setter Property="BorderThickness" Value="1"></Setter>
-                                    <Setter Property="IsEnabled" Value="True"></Setter>
+                                <DataTrigger
+                                    Binding="{Binding ElementName=TabControl, Path=SelectedItem.AllMandatorySelected}"
+                                    Value="true">
+                                    <Setter Property="BorderThickness" Value="1" />
+                                    <Setter Property="IsEnabled" Value="True" />
                                     <DataTrigger.EnterActions>
                                         <BeginStoryboard>
                                             <Storyboard>
                                                 <ColorAnimation To="Green" From="Gold"
-                                                                Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)" 
-                                                                Duration="0:0:1.0" RepeatBehavior="Forever" FillBehavior="Stop" AutoReverse="True">
-                                                </ColorAnimation>
+                                                                Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"
+                                                                Duration="0:0:1.0" RepeatBehavior="Forever"
+                                                                FillBehavior="Stop" AutoReverse="True" />
                                             </Storyboard>
                                         </BeginStoryboard>
                                     </DataTrigger.EnterActions>
@@ -130,7 +133,7 @@
                         <TextBlock Text="{x:Static view:SdMessageCard.WriteToSdCard}" />
                     </Button.ToolTip>
                 </Button>
-                <Button Command="{Binding Path=CancelWrite}" >
+                <Button Command="{Binding Path=CancelWrite}">
                     <Image Source="../Icons/Cancel-32.png" Width="15" Height="15" Style="{StaticResource GrOut}" />
                     <Button.ToolTip>
                         <TextBlock Text="{x:Static view:SdMessageCard.CancelWrite}" />
@@ -138,19 +141,22 @@
                 </Button>
 
                 <Separator />
-                <TextBlock Margin="10,3,0,0" >
+                <TextBlock Margin="10,3,0,0">
                     <TextBlock.Style>
                         <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="Foreground" Value="Red"></Setter>
-                            <Setter Property="FontWeight" Value="Bold"></Setter>
-                            <Setter Property="Text" Value="Select track for alarm message 1 and 2"></Setter>
+                            <Setter Property="Foreground" Value="Red" />
+                            <Setter Property="FontWeight" Value="Bold" />
+                            <Setter Property="Text" Value="Select track for alarm message 1 and 2" />
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding ElementName=TabControl, Path=SelectedItem.AllMandatorySelected}" Value="true">
-                                    <Setter Property="Text" Value="Add optional messages and press button to copy to SDcard"></Setter>
-                                    <Setter Property="Foreground" Value="Black"></Setter>
-                                    <Setter Property="FontWeight" Value="Normal"></Setter>
-                                    <Setter Property="FontStyle" Value="Italic"></Setter>
-                                    <Setter Property="Foreground" Value="Blue"></Setter>
+                                <DataTrigger
+                                    Binding="{Binding ElementName=TabControl, Path=SelectedItem.AllMandatorySelected}"
+                                    Value="true">
+                                    <Setter Property="Text"
+                                            Value="Add optional messages and press button to copy to SDcard" />
+                                    <Setter Property="Foreground" Value="Black" />
+                                    <Setter Property="FontWeight" Value="Normal" />
+                                    <Setter Property="FontStyle" Value="Italic" />
+                                    <Setter Property="Foreground" Value="Blue" />
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
@@ -160,13 +166,14 @@
             </ToolBar>
         </ToolBarTray>
 
-        <TabControl ItemsSource="{Binding Path=MessagesVms}" SelectedIndex="{Binding Path=SelectedTabIndex}" Grid.Row="2" Grid.Column="1" Name="TabControl" >
+        <TabControl ItemsSource="{Binding Path=MessagesVms}" SelectedIndex="{Binding Path=SelectedTabIndex}"
+                    Grid.Row="2" Grid.Column="1" Name="TabControl">
             <TabControl.ItemContainerStyle>
                 <Style TargetType="TabItem">
-                    <Setter Property="Visibility" Value="Collapsed"></Setter>
+                    <Setter Property="Visibility" Value="Collapsed" />
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding Path=IsVisible}" Value="True">
-                            <Setter Property="Visibility" Value="Visible"></Setter>
+                            <Setter Property="Visibility" Value="Visible" />
                         </DataTrigger>
                     </Style.Triggers>
 
@@ -174,22 +181,25 @@
             </TabControl.ItemContainerStyle>
             <TabControl.ItemTemplate>
                 <DataTemplate DataType="sdCard:SdCardVm">
-                    <TextBlock Text="{Binding Path=Header}"></TextBlock>
+                    <TextBlock Text="{Binding Path=Header}" />
                 </DataTemplate>
             </TabControl.ItemTemplate>
             <TabControl.ContentTemplate>
                 <DataTemplate DataType="sdCard:SdCardVm">
-                    <Border VerticalAlignment="Stretch" Background="Pink" >
+                    <Border VerticalAlignment="Stretch" Background="Pink">
                         <i:Interaction.Behaviors>
-                            <behaviors:BorderDropBehaviour/>
+                            <behaviors:BorderDropBehaviour />
                         </i:Interaction.Behaviors>
 
-                        <DataGrid HorizontalAlignment="Left" VerticalAlignment="Top" AutoGenerateColumns="False" ItemsSource="{Binding Path=Messages}" 
-                      ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.CanContentScroll="True" AlternatingRowBackground="GhostWhite"
-                  AllowDrop="True" x:Name="GdSd" CanUserResizeRows="False" BorderThickness="0" CanUserSortColumns="False" 
-                  HeadersVisibility="Column" >
+                        <DataGrid HorizontalAlignment="Left" VerticalAlignment="Top" AutoGenerateColumns="False"
+                                  ItemsSource="{Binding Path=Messages}"
+                                  ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                                  ScrollViewer.CanContentScroll="True" AlternatingRowBackground="GhostWhite"
+                                  AllowDrop="True" x:Name="GdSd" CanUserResizeRows="False" BorderThickness="0"
+                                  CanUserSortColumns="False"
+                                  HeadersVisibility="Column">
                             <i:Interaction.Behaviors>
-                                <behaviors:DataGridDropBehaviour/>
+                                <behaviors:DataGridDropBehaviour />
                             </i:Interaction.Behaviors>
 
 
@@ -198,11 +208,12 @@
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
 
-                                            <Image Source="../Icons/align_just.png" Width="20" Height="15" Margin="0" >
+                                            <Image Source="../Icons/align_just.png" Width="20" Height="15" Margin="0">
                                                 <Image.ToolTip>
                                                     <ToolTip>
                                                         <StackPanel>
-                                                            <TextBlock Text="{x:Static view:SdMessageCard.MoveThisTrack}" />
+                                                            <TextBlock
+                                                                Text="{x:Static view:SdMessageCard.MoveThisTrack}" />
 
                                                         </StackPanel>
                                                     </ToolTip>
@@ -220,11 +231,12 @@
 
                                 <DataGridTemplateColumn Width="150">
                                     <DataGridTemplateColumn.Header>
-                                        <TextBlock Text="{x:Static view:SdMessageCard.TrackName}"></TextBlock>
+                                        <TextBlock Text="{x:Static view:SdMessageCard.TrackName}" />
                                     </DataGridTemplateColumn.Header>
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBox Text="{Binding Path=LongFileName}" MaxLength="8" Margin="0" Padding="0" >
+                                            <TextBox Text="{Binding Path=LongFileName}" MaxLength="8" Margin="0"
+                                                     Padding="0">
                                                 <i:Interaction.Behaviors>
                                                     <behaviors:FrameworkElementDragBehavior />
                                                 </i:Interaction.Behaviors>
@@ -234,16 +246,19 @@
                                 </DataGridTemplateColumn>
 
                                 <DataGridTemplateColumn CellTemplate="{StaticResource TmplPlay}" />
-                                <DataGridTemplateColumn CellTemplate="{StaticResource TmplStop}"/>
+                                <DataGridTemplateColumn CellTemplate="{StaticResource TmplStop}" />
                                 <DataGridTemplateColumn Width="Auto">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <Button Command="{Binding  RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type DataGrid}}, 
-                                Path=DataContext.Remove}" CommandParameter="{Binding}">
-                                                <Image Source="../Icons/Button-Remove-icon.png" Width="15" Height="15" >
+                                            <Button
+                                                Command="{Binding  RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type DataGrid}}, 
+                                Path=DataContext.Remove}"
+                                                CommandParameter="{Binding}">
+                                                <Image Source="../Icons/Button-Remove-icon.png" Width="15" Height="15">
                                                     <Image.ToolTip>
                                                         <ToolTip>
-                                                            <TextBlock Text="{x:Static view:SdMessageCard.RemoveMessages}" />
+                                                            <TextBlock
+                                                                Text="{x:Static view:SdMessageCard.RemoveMessages}" />
                                                         </ToolTip>
                                                     </Image.ToolTip>
                                                 </Image>
@@ -254,7 +269,7 @@
 
                             </DataGrid.Columns>
 
-                           
+
                         </DataGrid>
                     </Border>
 
@@ -262,17 +277,18 @@
             </TabControl.ContentTemplate>
 
         </TabControl>
-        <GroupBox Header="{x:Static view:SdMessageCard.PredefinedHeader}" Grid.Row="2"  Grid.Column="0">
+        <GroupBox Header="{x:Static view:SdMessageCard.PredefinedHeader}" Grid.Row="2" Grid.Column="0">
 
             <DataGrid ItemsSource="{Binding Path=PreDefinedMessages}" AutoGenerateColumns="False"
-                      ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.CanContentScroll="True" AlternatingRowBackground="GhostWhite"
-                   CanUserResizeRows="False" BorderThickness="0" CanUserSortColumns="False" 
-                  HeadersVisibility="Column" >
+                      ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.CanContentScroll="True"
+                      AlternatingRowBackground="GhostWhite"
+                      CanUserResizeRows="False" BorderThickness="0" CanUserSortColumns="False"
+                      HeadersVisibility="Column">
                 <DataGrid.Columns>
                     <DataGridTemplateColumn>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Image Source="../Icons/align_just.png" Width="15" Height="15" >
+                                <Image Source="../Icons/align_just.png" Width="15" Height="15">
                                     <Image.ToolTip>
                                         <ToolTip>
                                             <StackPanel>
@@ -289,21 +305,20 @@
 
                     </DataGridTemplateColumn>
 
-                    <DataGridTextColumn IsReadOnly="True" Width="100" Binding="{Binding Path=LongFileName}" 
-                                    Header="{x:Static view:SdMessageCard.TrackName}"  >
+                    <DataGridTextColumn IsReadOnly="True" Width="100" Binding="{Binding Path=LongFileName}"
+                                        Header="{x:Static view:SdMessageCard.TrackName}" />
 
-                    </DataGridTextColumn>
-
-                    <DataGridTemplateColumn  CellTemplate="{StaticResource TmplPlay}" />
-                    <DataGridTemplateColumn CellTemplate="{StaticResource TmplStop}"/>
+                    <DataGridTemplateColumn CellTemplate="{StaticResource TmplPlay}" />
+                    <DataGridTemplateColumn CellTemplate="{StaticResource TmplStop}" />
                 </DataGrid.Columns>
             </DataGrid>
 
         </GroupBox>
-       
+
 
         <ProgressBar Minimum="0" Maximum="100" Value="{Binding Path=ProgressValue}" Height="20"
-                     VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="3" Orientation="Horizontal" Grid.ColumnSpan="2"
+                     VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="3" Orientation="Horizontal"
+                     Grid.ColumnSpan="2"
                      Grid.Column="0" />
     </Grid>
 

@@ -1,9 +1,9 @@
-﻿using System.Diagnostics;
-using GalaSoft.MvvmLight;
-using System;
+﻿#region
+
 using System.Windows;
 using System.Windows.Media;
 
+#endregion
 
 namespace EscInstaller.ViewModel.OverView
 {
@@ -11,33 +11,13 @@ namespace EscInstaller.ViewModel.OverView
     {
         Red,
         Gray,
-        Brown,
+        Brown
     }
 
     public class SnapShot : DiagramData
     {
-        public DiagramData Parent { get; set; }
-
-
-        public SnapType SnapType { get; set; }
-
-        private BindablePoint _offset;
-        public BindablePoint Offset
-        {
-            get { return _offset ?? (_offset = new BindablePoint()); }
-        }
-
         private bool _isConnected;
-        public bool IsConnected
-        {
-            get { return _isConnected; }
-            set
-            {
-                _isConnected = value;
-                RaisePropertyChanged(() => IsConnected);
-
-            }
-        }
+        private BindablePoint _offset;
 
         public SnapShot(DiagramData parent)
         {
@@ -45,12 +25,22 @@ namespace EscInstaller.ViewModel.OverView
             Offset.OnValueChanged += Calculate;
         }
 
-        public void Calculate()
+        public DiagramData Parent { get; set; }
+        public SnapType SnapType { get; set; }
+
+        public BindablePoint Offset
         {
-            // Parent.Size.X  Parent.Size.Y
-            Location.Value = Point.Add(Parent.Location.Value, new Vector(Offset.X, Offset.Y));
-            Location.ValueChanged();
-            
+            get { return _offset ?? (_offset = new BindablePoint()); }
+        }
+
+        public bool IsConnected
+        {
+            get { return _isConnected; }
+            set
+            {
+                _isConnected = value;
+                RaisePropertyChanged(() => IsConnected);
+            }
         }
 
         public virtual Brush Color
@@ -64,5 +54,12 @@ namespace EscInstaller.ViewModel.OverView
         }
 
         public int RowId { get; set; } //used with channel link
+
+        public void Calculate()
+        {
+            // Parent.Size.X  Parent.Size.Y
+            Location.Value = Point.Add(Parent.Location.Value, new Vector(Offset.X, Offset.Y));
+            Location.ValueChanged();
+        }
     }
 }

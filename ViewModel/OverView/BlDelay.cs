@@ -1,27 +1,26 @@
+#region
+
 using System;
-using System.Collections.Generic;
 using System.Windows;
+using Common.Commodules;
 using Common.Model;
 using EscInstaller.View;
-using Common;
-using Common.Commodules;
 using EscInstaller.ViewModel.Connection;
+
+#endregion
 
 namespace EscInstaller.ViewModel.OverView
 {
     public sealed class BlDelay : SnapDiagramData
     {
-
-        private readonly MainUnitViewModel _main;
-        private readonly FlowModel _flow;
         public const int Width = 45;
         public const int XLocation = BlLink.Width + Distance + BlLink.XLocation;
+        private readonly MainUnitViewModel _main;
 
         public BlDelay(MainUnitViewModel main, FlowModel flow)
         {
-
             _main = main;
-            _flow = flow;
+            DataModel = flow;
             Location.X = XLocation;
             Location.Y = RowHeight;
             _main.DelayChanged += () => RaisePropertyChanged(() => DisplaySetting);
@@ -31,7 +30,7 @@ namespace EscInstaller.ViewModel.OverView
         {
             get
             {
-                switch (_flow.Id % 12)
+                switch (DataModel.Id%12)
                 {
                     case 1:
                         return _main.DataModel.DelayMilliseconds1.ToString("N0") + " ms";
@@ -43,14 +42,11 @@ namespace EscInstaller.ViewModel.OverView
             }
         }
 
-        public FlowModel DataModel
-        {
-            get { return _flow; }
-        }
+        public FlowModel DataModel { get; }
 
         public override int Id
         {
-            get { return _flow.Id; }
+            get { return DataModel.Id; }
         }
 
         public override string SettingName
@@ -58,20 +54,9 @@ namespace EscInstaller.ViewModel.OverView
             get { return Delay._delayBlockTitle; }
         }
 
-        public override void SetYLocation()
-        {
-            var row = Id % 12;
-            var yspace = row > 3 ? (InnerSpace + RowHeight) * (row > 7 ? 2 : 1) : 0;
-            Location.Y = RowHeight * row + yspace;
-        }       
-
         public double Delayms1
         {
-            get
-            {
-
-                return _main.DataModel.DelayMilliseconds1;
-            }
+            get { return _main.DataModel.DelayMilliseconds1; }
             set
             {
                 if (Math.Abs(_main.DataModel.DelayMilliseconds1 - value) < .7) return;
@@ -84,11 +69,7 @@ namespace EscInstaller.ViewModel.OverView
 
         public double Delayms2
         {
-            get
-            {
-
-                return _main.DataModel.DelayMilliseconds2;
-            }
+            get { return _main.DataModel.DelayMilliseconds2; }
             set
             {
                 if (Math.Abs(_main.DataModel.DelayMilliseconds2 - value) < .7) return;
@@ -97,6 +78,40 @@ namespace EscInstaller.ViewModel.OverView
                 UpdateDisplayValue();
                 CommunicationViewModel.AddData(new SetDelay(2, Delayms2, _main.Id));
             }
+        }
+
+        public double MaxDelay
+        {
+            get { return SetDelay.MaxSingleDelay; }
+        }
+
+        public double MaxMeter
+        {
+            get { return SetDelay.Meter*MaxDelay; }
+        }
+
+        public double MaxFeet
+        {
+            get { return SetDelay.Feet*MaxDelay; }
+        }
+
+        //todo: implement mcu
+        public bool ChainDelays
+        {
+            get { return _main.DataModel.ChainDelays; }
+            set { _main.DataModel.ChainDelays = value; }
+        }
+
+        public override Point Size
+        {
+            get { return new Point(Width, UnitHeight); }
+        }
+
+        public override void SetYLocation()
+        {
+            var row = Id%12;
+            var yspace = row > 3 ? (InnerSpace + RowHeight)*(row > 7 ? 2 : 1) : 0;
+            Location.Y = RowHeight*row + yspace;
         }
 
         public void UpdateName()
@@ -109,40 +124,5 @@ namespace EscInstaller.ViewModel.OverView
             if (_main.DelayChanged != null)
                 _main.DelayChanged();
         }
-
-        public double MaxDelay
-        {
-            get { return SetDelay.MaxSingleDelay; }
-        }
-
-        public double MaxMeter
-        {
-            get { return SetDelay.Meter * MaxDelay; }
-        }
-
-        public double MaxFeet
-        {
-            get { return SetDelay.Feet * MaxDelay; }
-        }
-
-        //todo: implement mcu
-        public bool ChainDelays
-        {
-            get
-            {
-                return _main.DataModel.ChainDelays;
-            }
-            set
-            {
-                _main.DataModel.ChainDelays = value;
-            }
-        }
-
-
-        public override Point Size
-        {
-            get { return new Point(Width, UnitHeight); }
-        }
-
     }
 }

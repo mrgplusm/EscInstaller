@@ -1,4 +1,6 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -7,32 +9,73 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
-using Common.Model;
 using Common;
+using Common.Model;
 using EscInstaller.Properties;
 using EscInstaller.ViewModel.Settings.Peq;
 using Microsoft.Win32;
+
+#endregion
 
 namespace EscInstaller.ImportSpeakers
 {
     public static class SpeakerMethods
     {
+        public const string SpeakerFileName = @"\SpeakerLib.xml";
+
+        public static readonly Dictionary<string, FilterType> FTypes = new Dictionary<string, FilterType>
+        {
+            {"PEQ", FilterType.Peaking},
+            {"HighShelf", FilterType.HighShelf},
+            {"LowShelf", FilterType.LowShelf},
+            {"Notch", FilterType.Notch},
+            {"HighPass", FilterType.ButterworthHp},
+            {"LowPass", FilterType.ButterworthLp}
+        };
+
+        // private static readonly SimpleAes Crypto = new SimpleAes();
+
+        public static readonly string UserDir = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) +
+                                                @"\ESCController";
+
+        public static readonly string MasterFile = AppDomain.CurrentDomain.BaseDirectory + SpeakerFileName;
+        public static readonly List<SpeakerDataModel> SystemLibrary = new List<SpeakerDataModel>();
+        public static readonly List<SpeakerDataModel> UserLibrary = new List<SpeakerDataModel>();
+        private static ObservableCollection<SpeakerDataViewModel> _library;
+
+        static SpeakerMethods()
+        {
+            CreateSystemLibrary();
+            CreateUserLibrary();
+        }
+
+        public static ObservableCollection<SpeakerDataViewModel> Library
+        {
+            get
+            {
+                if (_library != null) return _library;
+
+                _library = new ObservableCollection<SpeakerDataViewModel>(
+                    SystemLibrary.Select(tt => new SpeakerDataViewModel(tt))
+                        .Concat(UserLibrary.Select(sl => new SpeakerDataViewModel(sl))));
+
+                return _library;
+            }
+        }
 
         public static bool Import(SpeakerDataViewModel speaker)
         {
-
-
             var dlg = new OpenFileDialog
             {
                 Filter = "Peq files (*.peq)|*.peq|Seq files (*.seq)|*.seq",
                 DefaultExt = "Peq files (*.peq)|*.peq|Seq files (*.seq)|*.seq"
             };
 
-            if (!String.IsNullOrWhiteSpace(Settings.Default.RecentLocationImport))
+            if (!string.IsNullOrWhiteSpace(Settings.Default.RecentLocationImport))
                 dlg.InitialDirectory = Settings.Default.RecentLocationImport;
 
             var q = dlg.ShowDialog();
-            if (!q.HasValue || !q.Value || String.IsNullOrWhiteSpace(dlg.FileName)) return false;
+            if (!q.HasValue || !q.Value || string.IsNullOrWhiteSpace(dlg.FileName)) return false;
 
             Settings.Default.RecentLocationImport = dlg.FileName;
             Settings.Default.Save();
@@ -46,16 +89,16 @@ namespace EscInstaller.ImportSpeakers
                 switch (ext)
                 {
                     case "seq":
-                        {
-                            var t = FileManagement.OpenEqFile<Speaker>(dlg.FileName);
-                            sp = ParseParametricEq(t);
-                        }
+                    {
+                        var t = FileManagement.OpenEqFile<Speaker>(dlg.FileName);
+                        sp = ParseParametricEq(t);
+                    }
                         break;
                     case "peq":
-                        {
-                            var t = FileManagement.OpenEqFile<ParametricEQ>(dlg.FileName);
-                            sp = ParseParametricEq(t);
-                        }
+                    {
+                        var t = FileManagement.OpenEqFile<ParametricEQ>(dlg.FileName);
+                        sp = ParseParametricEq(t);
+                    }
                         break;
                 }
             }
@@ -72,19 +115,19 @@ namespace EscInstaller.ImportSpeakers
             MessageBoxResult res;
             if (speaker.Biquads < 1) res = MessageBoxResult.OK;
             else if (sp.PEQ.RequiredBiquads() + speaker.RequiredBiquads <=
-                (int)speaker.SpeakerPeqType)
+                     (int) speaker.SpeakerPeqType)
             {
                 res =
                     MessageBox.Show("Would you like to replace the old configuration? (Press no to add to existing)",
-                                    "Import",
-                                    MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
+                        "Import",
+                        MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
             }
             else
             {
                 res =
                     MessageBox.Show("Would you like to replace the old configuration?",
-                                    "Import",
-                                    MessageBoxButton.OKCancel, MessageBoxImage.Question);
+                        "Import",
+                        MessageBoxButton.OKCancel, MessageBoxImage.Question);
             }
 
             switch (res)
@@ -105,19 +148,6 @@ namespace EscInstaller.ImportSpeakers
             speaker.RedrawMasterLine();
             return true;
         }
-
-
-
-
-        public static readonly Dictionary<string, FilterType> FTypes = new Dictionary<string, FilterType>
-        {
-                {"PEQ", FilterType.Peaking},
-                {"HighShelf", FilterType.HighShelf},
-                {"LowShelf", FilterType.LowShelf},
-                {"Notch", FilterType.Notch},
-                {"HighPass", FilterType.ButterworthHp},
-                {"LowPass", FilterType.ButterworthLp},
-            };
 
         public static SpeakerDataModel ParseParametricEq(Speaker speaker)
         {
@@ -143,14 +173,13 @@ namespace EscInstaller.ImportSpeakers
             return ret;
         }
 
-
         public static SpeakerDataModel ParseParametricEq(ParametricEQ speaker)
         {
-            var ret = new SpeakerDataModel { PEQ = new List<PeqDataModel>() };
-            for (var i = 1; ; i++)
+            var ret = new SpeakerDataModel {PEQ = new List<PeqDataModel>()};
+            for (var i = 1;; i++)
             {
                 var t = Create(speaker.Property.Where(s => EndNumber(s.name, i))
-                                      .ToDictionary(k => k.name.Substring(0, k.name.Length - 1).ToLower(), k => k.value));
+                    .ToDictionary(k => k.name.Substring(0, k.name.Length - 1).ToLower(), k => k.value));
                 if (t == null) break;
                 ret.PEQ.Add(t);
             }
@@ -160,53 +189,52 @@ namespace EscInstaller.ImportSpeakers
         private static PeqDataModel Create(Bandpass bandfileter, bool isHighpass)
         {
             return new PeqDataModel
-                {
-                    IsEnabled = !bandfileter.ByPass,
-                    Order = GetOrder(bandfileter.filterType),
-                    FilterType = isHighpass ? FilterType.ButterworthHp : FilterType.ButterworthLp,
-                    Frequency = bandfileter.freq
-                };
+            {
+                IsEnabled = !bandfileter.ByPass,
+                Order = GetOrder(bandfileter.filterType),
+                FilterType = isHighpass ? FilterType.ButterworthHp : FilterType.ButterworthLp,
+                Frequency = bandfileter.freq
+            };
         }
 
         private static PeqDataModel Create(SpeakerPEQBand speakerPeqBand)
         {
             return new PeqDataModel
-                {
-                    IsEnabled = !speakerPeqBand.ByPass,
-                    FilterType = speakerPeqBand.FilterType,
-                    Frequency = speakerPeqBand.freq,
-                    BandWidth = VerifyBandWidth(speakerPeqBand.width, speakerPeqBand.FilterType),
-                    Boost = VerifyBoost(speakerPeqBand.gain),
-                };
+            {
+                IsEnabled = !speakerPeqBand.ByPass,
+                FilterType = speakerPeqBand.FilterType,
+                Frequency = speakerPeqBand.freq,
+                BandWidth = VerifyBandWidth(speakerPeqBand.width, speakerPeqBand.FilterType),
+                Boost = VerifyBoost(speakerPeqBand.gain)
+            };
         }
-
 
         private static int GetOrder(string bandFilter)
         {
             var r = new Regex("[0-9]{1,2}");
-            return Int32.Parse(r.Match(bandFilter).Value, CultureInfo.InvariantCulture) / 3;
+            return int.Parse(r.Match(bandFilter).Value, CultureInfo.InvariantCulture)/3;
         }
 
         private static PeqDataModel Create(IDictionary<string, string> speakerPeqBand)
         {
             if (speakerPeqBand == null || speakerPeqBand.Count < 6) return null;
             return new PeqDataModel
-                {
-                    IsEnabled = !Boolean.Parse(speakerPeqBand["bypass"]),
-                    FilterType = FTypes[speakerPeqBand["type"]],
-                    Frequency = Double.Parse(speakerPeqBand["freq"], CultureInfo.InvariantCulture),
-                    BandWidth =
-                        VerifyBandWidth(Double.Parse(speakerPeqBand["qbw"], CultureInfo.InvariantCulture).Bw(),
-                                        FTypes[speakerPeqBand["type"]]),
-                    Boost = VerifyBoost(Double.Parse(speakerPeqBand["gain"], CultureInfo.InvariantCulture)),
-                    Order = GetOrder(speakerPeqBand["cut"]),
-                };
+            {
+                IsEnabled = !bool.Parse(speakerPeqBand["bypass"]),
+                FilterType = FTypes[speakerPeqBand["type"]],
+                Frequency = double.Parse(speakerPeqBand["freq"], CultureInfo.InvariantCulture),
+                BandWidth =
+                    VerifyBandWidth(double.Parse(speakerPeqBand["qbw"], CultureInfo.InvariantCulture).Bw(),
+                        FTypes[speakerPeqBand["type"]]),
+                Boost = VerifyBoost(double.Parse(speakerPeqBand["gain"], CultureInfo.InvariantCulture)),
+                Order = GetOrder(speakerPeqBand["cut"])
+            };
         }
 
         private static bool EndNumber(string input, int n)
         {
             int o;
-            return Int32.TryParse(input.Last() + "", out o) && o == n;
+            return int.TryParse(input.Last() + "", out o) && o == n;
         }
 
         private static double VerifyBandWidth(double bw, FilterType filter)
@@ -224,7 +252,7 @@ namespace EscInstaller.ImportSpeakers
         }
 
         /// <summary>
-        /// Reorder id's of speakerEq library
+        ///     Reorder id's of speakerEq library
         /// </summary>
         public static void ReorderIds()
         {
@@ -232,42 +260,6 @@ namespace EscInstaller.ImportSpeakers
             foreach (var q in Library)
             {
                 q.Id = id++;
-
-            }
-        }
-
-
-        static SpeakerMethods()
-        {
-            CreateSystemLibrary();
-            CreateUserLibrary();
-        }
-
-        public const string SpeakerFileName = @"\SpeakerLib.xml";
-
-        // private static readonly SimpleAes Crypto = new SimpleAes();
-
-        public static readonly string UserDir = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) +
-                                                @"\ESCController";
-
-
-        public static readonly string MasterFile = AppDomain.CurrentDomain.BaseDirectory + SpeakerFileName;
-
-        public static readonly List<SpeakerDataModel> SystemLibrary = new List<SpeakerDataModel>();
-        public static readonly List<SpeakerDataModel> UserLibrary = new List<SpeakerDataModel>();
-
-        private static ObservableCollection<SpeakerDataViewModel> _library;
-        public static ObservableCollection<SpeakerDataViewModel> Library
-        {
-            get
-            {
-                if (_library != null) return _library;
-
-                _library = new ObservableCollection<SpeakerDataViewModel>(
-                    SystemLibrary.Select(tt => new SpeakerDataViewModel(tt))
-                        .Concat(UserLibrary.Select(sl => new SpeakerDataViewModel(sl))));
-
-                return _library;
             }
         }
 
@@ -285,13 +277,13 @@ namespace EscInstaller.ImportSpeakers
             }
         }
 
-
         public static void SaveSpeakerlib()
         {
             if (!Library.Any(s => s.IsCustom)) return;
             try
             {
-                FileManagement.SaveCustomSpeakers(Library.Where(q => q.IsCustom).Select(n => n.DataModel), UserDir + SpeakerFileName);
+                FileManagement.SaveCustomSpeakers(Library.Where(q => q.IsCustom).Select(n => n.DataModel),
+                    UserDir + SpeakerFileName);
             }
             catch (Exception e)
             {
@@ -320,7 +312,6 @@ namespace EscInstaller.ImportSpeakers
             }
             catch (Exception e)
             {
-
                 Debug.WriteLine("User speaker library access " + e);
             }
         }

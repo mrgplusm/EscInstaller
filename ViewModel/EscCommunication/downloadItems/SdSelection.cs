@@ -1,5 +1,9 @@
+#region
+
 using System.Threading.Tasks;
 using EscInstaller.ViewModel.EscCommunication.Logic;
+
+#endregion
 
 namespace EscInstaller.ViewModel.EscCommunication.downloadItems
 {

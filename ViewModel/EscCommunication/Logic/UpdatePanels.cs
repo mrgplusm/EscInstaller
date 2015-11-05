@@ -1,7 +1,11 @@
+#region
+
 using System.Collections;
 using System.Linq;
 using Common;
 using Common.Model;
+
+#endregion
 
 namespace EscInstaller.ViewModel.EscCommunication.Logic
 {

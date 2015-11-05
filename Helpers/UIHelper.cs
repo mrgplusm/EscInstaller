@@ -1,13 +1,17 @@
-﻿using System.Windows;
+﻿#region
+
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+
+#endregion
 
 namespace EscInstaller.View
 {
     internal static class UIHelper
     {
         /// <summary>
-        /// Get the UIElement that is in the container at the point specified
+        ///     Get the UIElement that is in the container at the point specified
         /// </summary>
         /// <param name="container"></param>
         /// <param name="position"></param>
@@ -30,14 +34,14 @@ namespace EscInstaller.View
         }
 
         /// <summary>
-        /// Determines if the relative position is above the UIElement in the coordinate
+        ///     Determines if the relative position is above the UIElement in the coordinate
         /// </summary>
         /// <param name="i"></param>
         /// <param name="relativePosition"></param>
         /// <returns></returns>
         internal static bool IsPositionAboveElement(UIElement i, Point relativePosition)
         {
-            return relativePosition.Y < ((FrameworkElement)i).ActualHeight / 2;
+            return relativePosition.Y < ((FrameworkElement) i).ActualHeight/2;
         }
     }
 }

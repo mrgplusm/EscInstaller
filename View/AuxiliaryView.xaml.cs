@@ -1,5 +1,8 @@
-﻿using System.Windows;
+﻿#region
+
 using System.Windows.Controls;
+
+#endregion
 
 namespace EscInstaller.View
 {

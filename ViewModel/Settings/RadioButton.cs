@@ -1,12 +1,15 @@
+#region
+
 using System;
 using GalaSoft.MvvmLight;
+
+#endregion
 
 namespace EscInstaller.ViewModel.Settings
 {
     public class RadioButton : ViewModelBase
     {
         private readonly Action _onCheck;
-
         private string _content;
         private bool _isChecked;
         private bool _isEnabled;

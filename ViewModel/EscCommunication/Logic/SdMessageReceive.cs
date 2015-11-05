@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -5,6 +7,8 @@ using Common;
 using Common.Commodules;
 using Common.Model;
 using EscInstaller.ViewModel.Connection;
+
+#endregion
 
 namespace EscInstaller.ViewModel.EscCommunication.Logic
 {
@@ -68,7 +72,7 @@ namespace EscInstaller.ViewModel.EscCommunication.Logic
             iProgress.Report(new DownloadProgress
             {
                 Progress = ++_sdMessagePackages,
-                Total = _messageCount,
+                Total = _messageCount
             });
         }
     }

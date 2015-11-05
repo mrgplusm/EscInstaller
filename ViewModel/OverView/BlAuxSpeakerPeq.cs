@@ -1,19 +1,27 @@
+#region
+
+using System;
 using System.Linq;
 using System.Windows;
 using Common;
 using Common.Model;
 using EscInstaller.View;
-using EscInstaller.ViewModel.Settings;
 using EscInstaller.ViewModel.Settings.Peq;
+
+#endregion
 
 namespace EscInstaller.ViewModel.OverView
 {
     public sealed class BlAuxSpeakerPeq : PeqBaseViewModel
     {
+        public const int Width = BlSpeakerPeq.Width;
+        public const int XLocation = BlDelay.Width + Distance + BlDelay.XLocation;
+        private readonly CardModel _card;
+        private SpeakerDataViewModel _currentSpeaker;
         //readonly FlowModel _flow;
 
         /// <summary>
-        /// design time creation
+        ///     design time creation
         /// </summary>
 #if DEBUG
         public BlAuxSpeakerPeq()
@@ -24,10 +32,6 @@ namespace EscInstaller.ViewModel.OverView
         }
 #endif
 
-        private readonly CardModel _card;
-
-        public const int Width = BlSpeakerPeq.Width;
-        public const int XLocation = BlDelay.Width + Distance + BlDelay.XLocation;
         public BlAuxSpeakerPeq(MainUnitViewModel main, CardModel card)
             : base(main)
         {
@@ -35,16 +39,6 @@ namespace EscInstaller.ViewModel.OverView
 
             _card = card;
             main.PresetNamesUpdated += Receiver_PresetNamesUpdated;
-        }
-
-        void Receiver_PresetNamesUpdated(object sender, System.EventArgs e)
-        {
-            RaisePropertyChanged(() => DisplaySetting);
-        }
-
-        public void UpdateName()
-        {
-            RaisePropertyChanged(() => DisplaySetting);
         }
 
         public override int Id
@@ -55,11 +49,6 @@ namespace EscInstaller.ViewModel.OverView
         public override string SettingName
         {
             get { return string.Format(SpeakerLibrary.Title, _card.Id + 1); }
-        }
-
-        public override void SetYLocation()
-        {
-            Location.Y = (InnerSpace + RowHeight * 5) * _card.Id + RowHeight * 4;
         }
 
         public override string DisplaySetting
@@ -76,9 +65,6 @@ namespace EscInstaller.ViewModel.OverView
             get { return new Point(Width, UnitHeight); }
         }
 
-
-
-        private SpeakerDataViewModel _currentSpeaker;
         public override SpeakerDataViewModel CurrentSpeaker
         {
             get
@@ -95,11 +81,24 @@ namespace EscInstaller.ViewModel.OverView
             }
         }
 
-
-
         protected override int PresetId
         {
             get { return _card.Id + 12; }
+        }
+
+        private void Receiver_PresetNamesUpdated(object sender, EventArgs e)
+        {
+            RaisePropertyChanged(() => DisplaySetting);
+        }
+
+        public void UpdateName()
+        {
+            RaisePropertyChanged(() => DisplaySetting);
+        }
+
+        public override void SetYLocation()
+        {
+            Location.Y = (InnerSpace + RowHeight*5)*_card.Id + RowHeight*4;
         }
     }
 }

@@ -1,14 +1,17 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using Common;
 using Common.Commodules;
 using Common.Model;
 
+#endregion
+
 namespace EscInstaller.ViewModel.Settings.Peq
 {
     public abstract class FilterLogicBase : FilterBase
     {
-
         private readonly SpeakerDataModel _model;
         protected readonly int FlowId;
 
@@ -20,14 +23,14 @@ namespace EscInstaller.ViewModel.Settings.Peq
 
             if (PEQDataModel.Biquads == null)
                 throw new Exception("No biquads are defined for this filter");
-            if (new[] { PEQDataModel }.RequiredBiquads() > PEQDataModel.Biquads.Count)
+            if (new[] {PEQDataModel}.RequiredBiquads() > PEQDataModel.Biquads.Count)
                 throw new Exception("Not enough biquads are defined for this filter");
         }
 
         /// <summary>
-        /// Sends a multi biquad passband filter
-        /// there should be enough biquads assigned to this filter
-        /// </summary>                
+        ///     Sends a multi biquad passband filter
+        ///     there should be enough biquads assigned to this filter
+        /// </summary>
         public abstract IEnumerable<PeqParam> GetParamData();
 
         protected PeqParam GetSosParamPackage(SOS sos, int biquad)
@@ -58,7 +61,7 @@ namespace EscInstaller.ViewModel.Settings.Peq
             yield return new SetE2PromExt(mcuId, data, redAddress);
 
             //if biquad consists out of more biquads remove their redundancy data
-            for (int i = 1; i < PEQDataModel.Biquads.Count; i++)
+            for (var i = 1; i < PEQDataModel.Biquads.Count; i++)
             {
                 yield return new SetE2PromExt(mcuId, RedundancyToBytes(), GetRedundancyAddress(i));
             }

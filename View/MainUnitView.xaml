@@ -1,9 +1,9 @@
 ﻿<UserControl x:Class="EscInstaller.View.MainUnitView"
-        
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d"
              xmlns:viewModel="clr-namespace:EscInstaller.ViewModel"
              xmlns:view="clr-namespace:EscInstaller.View"
@@ -12,28 +12,27 @@
              xmlns:common1="clr-namespace:Common;assembly=Common"
              xmlns:settings="clr-namespace:EscInstaller.ViewModel.Settings"
              xmlns:escInstaller="clr-namespace:EscInstaller"
-             
-             d:DataContext="{d:DesignInstance viewModel:MainUnitViewModel, IsDesignTimeCreatable=True}"             
-             >
+
+             d:DataContext="{d:DesignInstance viewModel:MainUnitViewModel, IsDesignTimeCreatable=True}">
 
     <UserControl.Resources>
 
 
-        <Style TargetType="TextBlock" x:Key="txtH" >
+        <Style TargetType="TextBlock" x:Key="txtH">
             <!--<Setter Property="Padding" Value="5,0,5,0"></Setter>-->
-            <Setter Property="FontFamily" Value="Lucida Console"></Setter>
-            <Setter Property="FontSize" Value="11"></Setter>
+            <Setter Property="FontFamily" Value="Lucida Console" />
+            <Setter Property="FontSize" Value="11" />
             <Setter Property="Height" Value="11" />
-            <Setter Property="Foreground" Value="White"></Setter>
+            <Setter Property="Foreground" Value="White" />
         </Style>
 
-        <Style TargetType="{x:Type Border}" x:Key="BrdInactive" >
-            <Setter Property="CornerRadius" Value="3" ></Setter>
-            <Setter Property="BorderThickness" Value="1" ></Setter>
+        <Style TargetType="{x:Type Border}" x:Key="BrdInactive">
+            <Setter Property="CornerRadius" Value="3" />
+            <Setter Property="BorderThickness" Value="1" />
             <Setter Property="BorderBrush" Value="Gray" />
             <Setter Property="Effect">
                 <Setter.Value>
-                    <DropShadowEffect Color="LightGray" BlurRadius="3" ShadowDepth="1"></DropShadowEffect>
+                    <DropShadowEffect Color="LightGray" BlurRadius="3" ShadowDepth="1" />
                 </Setter.Value>
             </Setter>
             <Setter Property="Background" Value="White" />
@@ -49,10 +48,12 @@
                     <Setter Property="Border.Background" Value="LightBlue" />
                 </Trigger>
 
-                <Trigger Property="Border.IsEnabled" Value="False" >
+                <Trigger Property="Border.IsEnabled" Value="False">
                     <Setter Property="Border.Background" Value="LightGray" />
                 </Trigger>
-                <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=IsSelected}" Value="true">
+                <DataTrigger
+                    Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=IsSelected}"
+                    Value="true">
                     <Setter Property="Border.Background" Value="LightCoral" />
                 </DataTrigger>
 
@@ -60,11 +61,9 @@
         </Style>
 
 
-
-
         <DataTemplate DataType="{x:Type overView:LineViewModel}">
 
-            <Path StrokeThickness="2" x:Name="Line" Focusable="False" >
+            <Path StrokeThickness="2" x:Name="Line" Focusable="False">
 
                 <Path.Style>
                     <Style TargetType="{x:Type Path}">
@@ -78,10 +77,12 @@
                             <DataTrigger Binding="{Binding End}" Value="{x:Null}">
                                 <Setter Property="Visibility" Value="Collapsed" />
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding Path=LineType}" Value="{x:Static overView:LineType.PublicAddress}">
+                            <DataTrigger Binding="{Binding Path=LineType}"
+                                         Value="{x:Static overView:LineType.PublicAddress}">
                                 <Setter Property="Stroke" Value="DarkGray" />
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding Path=LineType}" Value="{x:Static overView:LineType.LinkLine}">
+                            <DataTrigger Binding="{Binding Path=LineType}"
+                                         Value="{x:Static overView:LineType.LinkLine}">
                                 <Setter Property="Data" Value="{Binding Geometry}" />
                             </DataTrigger>
                         </Style.Triggers>
@@ -90,82 +91,82 @@
             </Path>
         </DataTemplate>
 
-        <DataTemplate DataType="{x:Type overView:BlInputName}" >
-            <Border Width="{Binding Size.X}" Height="{Binding Size.Y}" Style="{StaticResource ResourceKey=Brd}" >
+        <DataTemplate DataType="{x:Type overView:BlInputName}">
+            <Border Width="{Binding Size.X}" Height="{Binding Size.Y}" Style="{StaticResource ResourceKey=Brd}">
                 <StackPanel>
                     <TextBlock Style="{StaticResource ResourceKey=txtH}">
                         <TextBlock.Background>
                             <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                                 <LinearGradientBrush.GradientStops>
                                     <GradientStop Color="Black" Offset="0" />
-                                    <GradientStop Color="White" Offset="2"   />
+                                    <GradientStop Color="White" Offset="2" />
                                 </LinearGradientBrush.GradientStops>
                             </LinearGradientBrush>
                         </TextBlock.Background>
 
                         <TextBlock.Text>
-                            <MultiBinding StringFormat="{x:Static escInstaller:Main.BlInputName}" >
+                            <MultiBinding StringFormat="{x:Static escInstaller:Main.BlInputName}">
                                 <Binding Path="DisplayId" />
                             </MultiBinding>
                         </TextBlock.Text>
                     </TextBlock>
-                    <TextBlock Padding="6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
+                    <TextBlock Padding="6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                                Text="{Binding Path=NameOfInput}" FontFamily="Lucida Console" FontSize="11" />
                 </StackPanel>
             </Border>
         </DataTemplate>
 
-        <DataTemplate DataType="{x:Type overView:BlToneControl}" >
-            <Border Width="{Binding Size.X}" Height="{Binding Size.Y}" Style="{StaticResource ResourceKey=Brd}"  >
-                <StackPanel >
+        <DataTemplate DataType="{x:Type overView:BlToneControl}">
+            <Border Width="{Binding Size.X}" Height="{Binding Size.Y}" Style="{StaticResource ResourceKey=Brd}">
+                <StackPanel>
                     <TextBlock Style="{StaticResource ResourceKey=txtH}" Text="{x:Static escInstaller:Main.BlTcontrl}">
                         <TextBlock.Background>
                             <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                                 <LinearGradientBrush.GradientStops>
-                                    <GradientStop Color="DarkGreen" Offset="0"   />
-                                    <GradientStop Color="White" Offset="2"   />
+                                    <GradientStop Color="DarkGreen" Offset="0" />
+                                    <GradientStop Color="White" Offset="2" />
                                 </LinearGradientBrush.GradientStops>
                             </LinearGradientBrush>
                         </TextBlock.Background>
 
 
                     </TextBlock>
-                    <TextBlock Padding="6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
+                    <TextBlock Padding="6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                                Text="{Binding Path=DisplaySetting}" FontFamily="Lucida Console" FontSize="11" />
                 </StackPanel>
             </Border>
         </DataTemplate>
 
-        <DataTemplate DataType="{x:Type overView:BlDelay}" >
-            <Border Width="{Binding Size.X}" Height="{Binding Size.Y}" Style="{StaticResource ResourceKey=Brd}"  >
-                <StackPanel >
+        <DataTemplate DataType="{x:Type overView:BlDelay}">
+            <Border Width="{Binding Size.X}" Height="{Binding Size.Y}" Style="{StaticResource ResourceKey=Brd}">
+                <StackPanel>
                     <TextBlock Style="{StaticResource ResourceKey=txtH}" Text="{x:Static escInstaller:Main.BlDelay}">
                         <TextBlock.Background>
                             <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                                 <LinearGradientBrush.GradientStops>
-                                    <GradientStop Color="DeepSkyBlue" Offset="0"   />
-                                    <GradientStop Color="White" Offset="2"   />
+                                    <GradientStop Color="DeepSkyBlue" Offset="0" />
+                                    <GradientStop Color="White" Offset="2" />
                                 </LinearGradientBrush.GradientStops>
                             </LinearGradientBrush>
                         </TextBlock.Background>
 
 
                     </TextBlock>
-                    <TextBlock Padding="6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
+                    <TextBlock Padding="6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                                Text="{Binding Path=DisplaySetting}" FontFamily="Lucida Console" FontSize="11" />
                 </StackPanel>
             </Border>
         </DataTemplate>
 
-        <DataTemplate DataType="{x:Type overView:BlLink}" >
-            <Border Width="{Binding Size.X}" Height="{Binding Size.Y}" Style="{StaticResource ResourceKey=Brd}" >
-                <StackPanel >
+        <DataTemplate DataType="{x:Type overView:BlLink}">
+            <Border Width="{Binding Size.X}" Height="{Binding Size.Y}" Style="{StaticResource ResourceKey=Brd}">
+                <StackPanel>
                     <TextBlock Style="{StaticResource ResourceKey=txtH}" Text="{x:Static escInstaller:Main.LinkMatrix}">
                         <TextBlock.Background>
                             <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                                 <LinearGradientBrush.GradientStops>
-                                    <GradientStop Color="DarkRed" Offset="0"   />
-                                    <GradientStop Color="White" Offset="2"   />
+                                    <GradientStop Color="DarkRed" Offset="0" />
+                                    <GradientStop Color="White" Offset="2" />
                                 </LinearGradientBrush.GradientStops>
                             </LinearGradientBrush>
                         </TextBlock.Background>
@@ -174,19 +175,20 @@
                     <ItemsControl ItemsSource="{Binding Path=VcaControllers}" HorizontalAlignment="Left">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <StackPanel ></StackPanel>
+                                <StackPanel />
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <!--Canvas Width="10" Height="10" Background="Red" Margin="20"></Canvas>-->
-                                <Image Source="../Icons/vca3.png" Name="image" Width="25" Margin="5,0,10,10" Height="25">
+                                <Image Source="../Icons/vca3.png" Name="image" Width="25" Margin="5,0,10,10"
+                                       Height="25">
                                     <Image.Style>
                                         <Style TargetType="{x:Type Image}">
-                                            <Setter Property="Visibility" Value="Collapsed"></Setter>
+                                            <Setter Property="Visibility" Value="Collapsed" />
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding Path=IsAvailable}" Value="True" >
-                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                <DataTrigger Binding="{Binding Path=IsAvailable}" Value="True">
+                                                    <Setter Property="Visibility" Value="Visible" />
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
@@ -201,34 +203,36 @@
             </Border>
         </DataTemplate>
 
-        <DataTemplate DataType="{x:Type overView:BlExtInput}" >
-            <Border  Width="{Binding Size.X}" Height="{Binding Size.Y}"  Style="{StaticResource ResourceKey=Brd}" >
-                <StackPanel >
+        <DataTemplate DataType="{x:Type overView:BlExtInput}">
+            <Border Width="{Binding Size.X}" Height="{Binding Size.Y}" Style="{StaticResource ResourceKey=Brd}">
+                <StackPanel>
                     <TextBlock Style="{StaticResource ResourceKey=txtH}" Text="{Binding Path=BlockName}">
                         <TextBlock.Background>
                             <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                                 <LinearGradientBrush.GradientStops>
-                                    <GradientStop Color="DarkOliveGreen" Offset="0"   />
-                                    <GradientStop Color="White" Offset="2"   />
+                                    <GradientStop Color="DarkOliveGreen" Offset="0" />
+                                    <GradientStop Color="White" Offset="2" />
                                 </LinearGradientBrush.GradientStops>
                             </LinearGradientBrush>
                         </TextBlock.Background>
                     </TextBlock>
-                    <TextBlock Padding="6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
+                    <TextBlock Padding="6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                                Text="{Binding Path=DisplaySetting}" FontFamily="Lucida Console" FontSize="11" />
                 </StackPanel>
             </Border>
         </DataTemplate>
 
-        <DataTemplate DataType="{x:Type overView:BlEmergency}" >
-            <Border  Width="{Binding Size.X}" Height="{Binding Size.Y, NotifyOnTargetUpdated=True}"  Style="{StaticResource ResourceKey=Brd}" Focusable="True"  >
-                <StackPanel >
-                    <TextBlock Style="{StaticResource ResourceKey=txtH}" Text="{x:Static escInstaller:Main.EmergencyInputs}">
+        <DataTemplate DataType="{x:Type overView:BlEmergency}">
+            <Border Width="{Binding Size.X}" Height="{Binding Size.Y, NotifyOnTargetUpdated=True}"
+                    Style="{StaticResource ResourceKey=Brd}" Focusable="True">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource ResourceKey=txtH}"
+                               Text="{x:Static escInstaller:Main.EmergencyInputs}">
                         <TextBlock.Background>
                             <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                                 <LinearGradientBrush.GradientStops>
-                                    <GradientStop Color="DarkMagenta" Offset="0"   />
-                                    <GradientStop Color="White" Offset="2"   />
+                                    <GradientStop Color="DarkMagenta" Offset="0" />
+                                    <GradientStop Color="White" Offset="2" />
                                 </LinearGradientBrush.GradientStops>
                             </LinearGradientBrush>
                         </TextBlock.Background>
@@ -239,15 +243,16 @@
         </DataTemplate>
 
 
-        <DataTemplate DataType="{x:Type overView:BlSpeakerPeq}" >
-            <Border Width="{Binding Size.X}" Height="{Binding Size.Y}" Style="{StaticResource ResourceKey=Brd}" >
-                <StackPanel >
-                    <TextBlock Text="{x:Static escInstaller:Main._lspBlockTitle}" Style="{StaticResource ResourceKey=txtH}"  >
+        <DataTemplate DataType="{x:Type overView:BlSpeakerPeq}">
+            <Border Width="{Binding Size.X}" Height="{Binding Size.Y}" Style="{StaticResource ResourceKey=Brd}">
+                <StackPanel>
+                    <TextBlock Text="{x:Static escInstaller:Main._lspBlockTitle}"
+                               Style="{StaticResource ResourceKey=txtH}">
                         <TextBlock.Background>
                             <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                                 <LinearGradientBrush.GradientStops>
-                                    <GradientStop Color="MediumBlue" Offset="0"   />
-                                    <GradientStop Color="White" Offset="2"   />
+                                    <GradientStop Color="MediumBlue" Offset="0" />
+                                    <GradientStop Color="White" Offset="2" />
                                 </LinearGradientBrush.GradientStops>
                             </LinearGradientBrush>
                         </TextBlock.Background>
@@ -259,16 +264,17 @@
             </Border>
         </DataTemplate>
 
-        <DataTemplate DataType="{x:Type overView:BlAuxSpeakerPeq}" >
+        <DataTemplate DataType="{x:Type overView:BlAuxSpeakerPeq}">
 
-            <Border Width="{Binding Size.X}" Height="{Binding Size.Y}" Style="{StaticResource ResourceKey=Brd}"  >
-                <StackPanel >
-                    <TextBlock Text="{x:Static escInstaller:Main._lspBlockTitle}" Style="{StaticResource ResourceKey=txtH}"  >
+            <Border Width="{Binding Size.X}" Height="{Binding Size.Y}" Style="{StaticResource ResourceKey=Brd}">
+                <StackPanel>
+                    <TextBlock Text="{x:Static escInstaller:Main._lspBlockTitle}"
+                               Style="{StaticResource ResourceKey=txtH}">
                         <TextBlock.Background>
                             <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                                 <LinearGradientBrush.GradientStops>
-                                    <GradientStop Color="DeepPink" Offset="0"   />
-                                    <GradientStop Color="White" Offset="2"   />
+                                    <GradientStop Color="DeepPink" Offset="0" />
+                                    <GradientStop Color="White" Offset="2" />
                                 </LinearGradientBrush.GradientStops>
                             </LinearGradientBrush>
                         </TextBlock.Background>
@@ -281,68 +287,68 @@
 
         </DataTemplate>
 
-        <DataTemplate DataType="{x:Type overView:BlMonitor}" >
-            <Border Width="{Binding Size.X}" Height="{Binding Size.Y}"  Style="{StaticResource ResourceKey=Brd}" >
-                <StackPanel >
-                    <TextBlock Style="{StaticResource ResourceKey=txtH}" Text="{x:Static escInstaller:Main.BlMonitor}" >
+        <DataTemplate DataType="{x:Type overView:BlMonitor}">
+            <Border Width="{Binding Size.X}" Height="{Binding Size.Y}" Style="{StaticResource ResourceKey=Brd}">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource ResourceKey=txtH}" Text="{x:Static escInstaller:Main.BlMonitor}">
                         <TextBlock.Background>
                             <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                                 <LinearGradientBrush.GradientStops>
-                                    <GradientStop Color="Red" Offset="0"   />
-                                    <GradientStop Color="White" Offset="2"   />
+                                    <GradientStop Color="Red" Offset="0" />
+                                    <GradientStop Color="White" Offset="2" />
                                 </LinearGradientBrush.GradientStops>
                             </LinearGradientBrush>
                         </TextBlock.Background>
 
 
                     </TextBlock>
-                    <TextBlock Padding="6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
+                    <TextBlock Padding="6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                                Text="{Binding Path=DisplaySetting}" FontFamily="Lucida Console" FontSize="11" />
                 </StackPanel>
             </Border>
         </DataTemplate>
 
-        <DataTemplate DataType="{x:Type overView:BlOutput}" >
-            <Border  Width="{Binding Size.X}" Height="{Binding Size.Y}"  Style="{StaticResource ResourceKey=Brd}" >
-                <StackPanel >
-                    <TextBlock Style="{StaticResource ResourceKey=txtH}"  >
+        <DataTemplate DataType="{x:Type overView:BlOutput}">
+            <Border Width="{Binding Size.X}" Height="{Binding Size.Y}" Style="{StaticResource ResourceKey=Brd}">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource ResourceKey=txtH}">
                         <TextBlock.Background>
                             <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                                 <LinearGradientBrush.GradientStops>
-                                    <GradientStop Color="Black" Offset="0"   />
-                                    <GradientStop Color="White" Offset="2"   />
+                                    <GradientStop Color="Black" Offset="0" />
+                                    <GradientStop Color="White" Offset="2" />
                                 </LinearGradientBrush.GradientStops>
                             </LinearGradientBrush>
                         </TextBlock.Background>
                         <TextBlock.Text>
                             <MultiBinding StringFormat="{x:Static escInstaller:Main.BlOutputName}">
-                                <Binding Path="DisplayId"></Binding>
+                                <Binding Path="DisplayId" />
                             </MultiBinding>
 
                         </TextBlock.Text>
 
                     </TextBlock>
-                    <TextBlock Padding="6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
+                    <TextBlock Padding="6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                                Text="{Binding Path=NameOfOutput}" FontFamily="Lucida Console" FontSize="11" />
                 </StackPanel>
             </Border>
         </DataTemplate>
 
-        <DataTemplate DataType="{x:Type overView:BlAuxiliary}" >
-            <Border  Width="{Binding Size.X}" Height="{Binding Size.Y}"  Style="{StaticResource ResourceKey=Brd}" >
-                <StackPanel >
+        <DataTemplate DataType="{x:Type overView:BlAuxiliary}">
+            <Border Width="{Binding Size.X}" Height="{Binding Size.Y}" Style="{StaticResource ResourceKey=Brd}">
+                <StackPanel>
                     <TextBlock Style="{StaticResource ResourceKey=txtH}">
                         <TextBlock.Text>
                             <MultiBinding StringFormat="{x:Static escInstaller:Main.BlAuxiliary}">
-                                <Binding Path="DisplayId"></Binding>
+                                <Binding Path="DisplayId" />
                             </MultiBinding>
 
                         </TextBlock.Text>
                         <TextBlock.Background>
                             <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                                 <LinearGradientBrush.GradientStops>
-                                    <GradientStop Color="DarkOrange" Offset="0"   />
-                                    <GradientStop Color="White" Offset="2"   />
+                                    <GradientStop Color="DarkOrange" Offset="0" />
+                                    <GradientStop Color="White" Offset="2" />
                                 </LinearGradientBrush.GradientStops>
                             </LinearGradientBrush>
                         </TextBlock.Background>
@@ -354,20 +360,21 @@
             </Border>
         </DataTemplate>
 
-        <DataTemplate DataType="{x:Type overView:BlSpeaker}" >
+        <DataTemplate DataType="{x:Type overView:BlSpeaker}">
             <StackPanel Orientation="Horizontal" Focusable="False">
-                <Image Source="../Icons/speaker-volume-none-icon.png" ></Image>
-                <TextBlock Margin="0,3,0,0" Text="{Binding Path=LoadDisplay}" FontFamily="Lucida Console" FontSize="11"  />
+                <Image Source="../Icons/speaker-volume-none-icon.png" />
+                <TextBlock Margin="0,3,0,0" Text="{Binding Path=LoadDisplay}" FontFamily="Lucida Console" FontSize="11" />
             </StackPanel>
         </DataTemplate>
 
-        <DataTemplate DataType="{x:Type overView:BlBackupAmp}" >
-            <Border  Width="{Binding Size.X}" Height="{Binding Size.Y}"  Style="{StaticResource ResourceKey=BrdInactive}" Focusable="False" >
-                <StackPanel >
-                    <TextBlock Style="{StaticResource ResourceKey=txtH}"  >
+        <DataTemplate DataType="{x:Type overView:BlBackupAmp}">
+            <Border Width="{Binding Size.X}" Height="{Binding Size.Y}" Style="{StaticResource ResourceKey=BrdInactive}"
+                    Focusable="False">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource ResourceKey=txtH}">
                         <TextBlock.Text>
                             <MultiBinding StringFormat="{x:Static escInstaller:Main.BlBackupAmp}">
-                                <Binding Path="DisplayId"></Binding>
+                                <Binding Path="DisplayId" />
                             </MultiBinding>
 
                         </TextBlock.Text>
@@ -375,8 +382,8 @@
                         <TextBlock.Background>
                             <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                                 <LinearGradientBrush.GradientStops>
-                                    <GradientStop Color="OrangeRed" Offset="0"   />
-                                    <GradientStop Color="White" Offset="2"   />
+                                    <GradientStop Color="OrangeRed" Offset="0" />
+                                    <GradientStop Color="White" Offset="2" />
                                 </LinearGradientBrush.GradientStops>
                             </LinearGradientBrush>
                         </TextBlock.Background>
@@ -386,42 +393,48 @@
             </Border>
         </DataTemplate>
 
-        <DataTemplate DataType="{x:Type overView:BlSpMatrix}" >
-            <Border  Width="{Binding Size.X}" Height="{Binding Size.Y}" Style="{StaticResource ResourceKey=Brd}" BorderBrush="Black" >
+        <DataTemplate DataType="{x:Type overView:BlSpMatrix}">
+            <Border Width="{Binding Size.X}" Height="{Binding Size.Y}" Style="{StaticResource ResourceKey=Brd}"
+                    BorderBrush="Black">
                 <TextBlock Margin="0 0 0 0">
                     <TextBlock.Text>
                         <MultiBinding StringFormat="{x:Static escInstaller:Main.LoudSpeakerMatrix}">
-                            <Binding Path="DisplayId"></Binding>
+                            <Binding Path="DisplayId" />
                         </MultiBinding>
 
                     </TextBlock.Text>
                     <TextBlock.LayoutTransform>
-                        <RotateTransform Angle="-90"></RotateTransform>
+                        <RotateTransform Angle="-90" />
                     </TextBlock.LayoutTransform>
                 </TextBlock>
             </Border>
         </DataTemplate>
 
-        <DataTemplate DataType="{x:Type overView:BlAmplifier}" >
+        <DataTemplate DataType="{x:Type overView:BlAmplifier}">
 
 
-            <Border Focusable="False" Width="{Binding Size.X}" Height="{Binding Size.Y}" Style="{StaticResource ResourceKey=BrdInactive}" BorderBrush="Black" Name="Border" >
+            <Border Focusable="False" Width="{Binding Size.X}" Height="{Binding Size.Y}"
+                    Style="{StaticResource ResourceKey=BrdInactive}" BorderBrush="Black" Name="Border">
 
                 <Image VerticalAlignment="Center" HorizontalAlignment="Center">
                     <Image.Style>
                         <Style TargetType="{x:Type Image}">
-                            <Setter Property="Stretch" Value="Uniform"></Setter>
+                            <Setter Property="Stretch" Value="Uniform" />
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding Path=OperationMode}" Value="{x:Static commodules:AmplifierOperationMode.Unknown}">
+                                <DataTrigger Binding="{Binding Path=OperationMode}"
+                                             Value="{x:Static commodules:AmplifierOperationMode.Unknown}">
                                     <Setter Property="Source" Value="../Icons/FFFFFF-0.8.png" />
                                 </DataTrigger>
-                                <DataTrigger Binding="{Binding Path=OperationMode}" Value="{x:Static commodules:AmplifierOperationMode.Single50V}">
+                                <DataTrigger Binding="{Binding Path=OperationMode}"
+                                             Value="{x:Static commodules:AmplifierOperationMode.Single50V}">
                                     <Setter Property="Source" Value="../Icons/mono.png" />
                                 </DataTrigger>
-                                <DataTrigger Binding="{Binding Path=OperationMode}" Value="{x:Static commodules:AmplifierOperationMode.Bridged100V}">
+                                <DataTrigger Binding="{Binding Path=OperationMode}"
+                                             Value="{x:Static commodules:AmplifierOperationMode.Bridged100V}">
                                     <Setter Property="Source" Value="../Icons/bridged.png" />
                                 </DataTrigger>
-                                <DataTrigger Binding="{Binding Path=OperationMode}" Value="{x:Static commodules:AmplifierOperationMode.Trafo}">
+                                <DataTrigger Binding="{Binding Path=OperationMode}"
+                                             Value="{x:Static commodules:AmplifierOperationMode.Trafo}">
                                     <Setter Property="Source" Value="../Icons/transformer.png" />
                                 </DataTrigger>
                             </Style.Triggers>
@@ -437,15 +450,15 @@
         </DataTemplate>
 
 
-        <DataTemplate DataType="{x:Type overView:BlInputPeq}" >
-            <Border  Width="{Binding Size.X}" Height="{Binding Size.Y}"  Style="{StaticResource ResourceKey=Brd}" >
-                <StackPanel >
-                    <TextBlock Style="{StaticResource ResourceKey=txtH}" Text="{Binding Path=SettingName}" >
+        <DataTemplate DataType="{x:Type overView:BlInputPeq}">
+            <Border Width="{Binding Size.X}" Height="{Binding Size.Y}" Style="{StaticResource ResourceKey=Brd}">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource ResourceKey=txtH}" Text="{Binding Path=SettingName}">
                         <TextBlock.Background>
                             <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                                 <LinearGradientBrush.GradientStops>
-                                    <GradientStop Color="Green" Offset="0"   />
-                                    <GradientStop Color="White" Offset="2"   />
+                                    <GradientStop Color="Green" Offset="0" />
+                                    <GradientStop Color="White" Offset="2" />
                                 </LinearGradientBrush.GradientStops>
                             </LinearGradientBrush>
                         </TextBlock.Background>
@@ -459,22 +472,25 @@
 
 
         <DataTemplate DataType="{x:Type overView:SnapShot}">
-            <Canvas IsEnabled="{Binding IsSelected,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}}}">
+            <Canvas
+                IsEnabled="{Binding IsSelected,RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}}}">
 
-                <Path StrokeThickness="1" Stroke="Black" >
+                <Path StrokeThickness="1" Stroke="Black">
                     <Path.Data>
-                        <RectangleGeometry  Rect="0,0 4 4" />
+                        <RectangleGeometry Rect="0,0 4 4" />
                     </Path.Data>
                     <Path.Style>
                         <Style TargetType="{x:Type Path}">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding Path=SnapType}" Value="{x:Static overView:SnapType.Red}" >
+                                <DataTrigger Binding="{Binding Path=SnapType}" Value="{x:Static overView:SnapType.Red}">
                                     <Setter Property="Fill" Value="Red" />
                                 </DataTrigger>
-                                <DataTrigger Binding="{Binding Path=SnapType}" Value="{x:Static overView:SnapType.Brown}" >
+                                <DataTrigger Binding="{Binding Path=SnapType}"
+                                             Value="{x:Static overView:SnapType.Brown}">
                                     <Setter Property="Fill" Value="Brown" />
                                 </DataTrigger>
-                                <DataTrigger Binding="{Binding Path=SnapType}" Value="{x:Static overView:SnapType.Gray}" >
+                                <DataTrigger Binding="{Binding Path=SnapType}"
+                                             Value="{x:Static overView:SnapType.Gray}">
                                     <Setter Property="Fill" Value="Gray" />
                                 </DataTrigger>
 
@@ -495,8 +511,10 @@
         </Grid.RowDefinitions>
 
         <ListBox Grid.Row="0" Grid.Column="0"
-                 ItemsSource="{Binding Path=DiagramObjects, NotifyOnTargetUpdated=True}" ScrollViewer.VerticalScrollBarVisibility="Visible" 
-                         ScrollViewer.HorizontalScrollBarVisibility="Auto" SelectedItem="{Binding Path=SelectedObject}" MouseDown="UIElement_OnMouseDown" Name="Box">
+                 ItemsSource="{Binding Path=DiagramObjects, NotifyOnTargetUpdated=True}"
+                 ScrollViewer.VerticalScrollBarVisibility="Visible"
+                 ScrollViewer.HorizontalScrollBarVisibility="Auto" SelectedItem="{Binding Path=SelectedObject}"
+                 MouseDown="UIElement_OnMouseDown" Name="Box">
 
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -518,9 +536,9 @@
                         </Setter.Value>
                     </Setter>
 
-                    <Setter Property="Canvas.Top" Value="{Binding Location.Y}"></Setter>
-                    <Setter Property="Canvas.ZIndex" Value="{Binding Path=ZIndex}"></Setter>
-                    <Setter Property="Canvas.Left" Value="{Binding Location.X}"></Setter>
+                    <Setter Property="Canvas.Top" Value="{Binding Location.Y}" />
+                    <Setter Property="Canvas.ZIndex" Value="{Binding Path=ZIndex}" />
+                    <Setter Property="Canvas.Left" Value="{Binding Location.X}" />
                     <Setter Property="RenderTransformOrigin" Value="0.5,0.5" />
 
                     <Setter Property="RenderTransform">
@@ -531,7 +549,7 @@
 
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding Path=IsEnabled}" Value="False">
-                            <Setter Property="Focusable" Value="False"></Setter>
+                            <Setter Property="Focusable" Value="False" />
                         </DataTrigger>
                     </Style.Triggers>
 
@@ -541,10 +559,11 @@
                 <Style TargetType="{x:Type ListBox}">
                     <Setter Property="Background" Value="White" />
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding Path=ConnectType}" Value="{x:Static common1:ConnectType.Ethernet}" >
+                        <DataTrigger Binding="{Binding Path=ConnectType}"
+                                     Value="{x:Static common1:ConnectType.Ethernet}">
                             <Setter Property="Background" Value="#BFDFFD" />
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding Path=ConnectType}" Value="{x:Static common1:ConnectType.USB}" >
+                        <DataTrigger Binding="{Binding Path=ConnectType}" Value="{x:Static common1:ConnectType.USB}">
                             <Setter Property="Background" Value="#BFFFDF" />
                         </DataTrigger>
                     </Style.Triggers>
@@ -556,11 +575,10 @@
         </ListBox>
 
         <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
-            <GroupBox Content="{Binding SelectedObject}" x:Name="GroupBoxBottom" 
-                  Header="{Binding SelectedObject.SettingName,FallbackValue='[Select an Element]', NotifyOnTargetUpdated=True}" 
-                  BorderBrush="LightGray"
-                  TargetUpdated="GroupBoxBottom_OnTargetUpdated"
-                  >
+            <GroupBox Content="{Binding SelectedObject}" x:Name="GroupBoxBottom"
+                      Header="{Binding SelectedObject.SettingName,FallbackValue='[Select an Element]', NotifyOnTargetUpdated=True}"
+                      BorderBrush="LightGray"
+                      TargetUpdated="GroupBoxBottom_OnTargetUpdated">
 
                 <GroupBox.Resources>
                     <DataTemplate DataType="{x:Type overView:BlExtInput}">
@@ -612,7 +630,8 @@
             </GroupBox>
         </ScrollViewer>
 
-        <StackPanel Orientation="Horizontal" Background="#E2DFDF" Focusable="False" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left">
+        <StackPanel Orientation="Horizontal" Background="#E2DFDF" Focusable="False" Grid.Row="2" Grid.Column="0"
+                    HorizontalAlignment="Left">
             <Button Command="{Binding Path=AddNewCard}" Content="{x:Static escInstaller:Main._mainAddNewCard}" />
             <Button Command="{Binding Path=RemoveLastCard}" Content="{x:Static escInstaller:Main._mainRemoveCard}" />
         </StackPanel>

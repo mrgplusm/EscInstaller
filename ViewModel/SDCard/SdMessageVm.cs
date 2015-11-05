@@ -1,7 +1,8 @@
+#region
+
 using System;
 using System.IO;
 using System.Windows;
-using System.Windows.Documents;
 using System.Windows.Input;
 using Common.Model;
 using EscInstaller.View;
@@ -10,36 +11,131 @@ using GalaSoft.MvvmLight.CommandWpf;
 using NAudio.Wave;
 using File = TagLib.File;
 
+#endregion
+
 namespace EscInstaller.ViewModel.SDCard
 {
     public enum MessageType
     {
         Abcd,
         Alarm,
-        Preannounce,
+        Preannounce
     }
 
 
     public class SdMessageViewModel : ViewModelBase, IEquatable<SdMessageViewModel>, IDragable
     {
-        private readonly SdCardMessageModel _model;
-        File _v;
+        private readonly string[] _nonf =
+        {
+            "Not Found!", "Wrong format", "Corrupt file", "Not an mp3 file",
+            "Filename is empty"
+        };
+
+        private bool _initialized;
+        private Mp3FileReader _reader;
+        private File _v;
+        private WaveOut _waveOut; // or WaveOutEvent()
+        public Action RemoveThis;
 
         public SdMessageViewModel(SdCardMessageModel model)
         {
-            _model = model;
+            DataModel = model;
         }
 
-        public SdCardMessageModel DataModel
+        public SdCardMessageModel DataModel { get; }
+
+        public string Location
         {
-            get { return _model; }
+            get { return DataModel.Location; }
+        }
+
+        public bool ParsedCorrect
+        {
+            get { return _v != null && !_v.PossiblyCorrupt; }
+        }
+
+        public string TrackLength
+        {
+            get
+            {
+                string error;
+                if (InitializeForPlay(out error))
+                    return (_v == null) ? string.Empty : _v.Properties.Duration.ToString();
+                return "0";
+            }
+        }
+
+        public string LongFileName
+        {
+            get
+            {
+                //return user filename if any
+                if (!string.IsNullOrWhiteSpace(DataModel.LongFileName))
+                    return DataModel.LongFileName;
+                //if no filename is specified by user, try to use filename instead
+                if (string.IsNullOrWhiteSpace(DataModel.Location)) return string.Empty;
+                try
+                {
+                    return Path.GetFileNameWithoutExtension(DataModel.Location);
+                }
+                catch (ArgumentException ae)
+                {
+                    Console.WriteLine(ae.Message);
+                }
+                //neither of the above worked out, this file is not put on sdcard by cardmanager
+                //this is used as a selection creteria by sdcard manager whether to display this object
+                return string.Empty;
+            }
+            set
+            {
+                DataModel.LongFileName = value;
+                RaisePropertyChanged(() => LongFileName);
+            }
+        }
+
+        public ICommand PlayTrack
+        {
+            get
+            {
+                return new RelayCommand(Playtrack,
+                    () => _waveOut == null || ((_waveOut != null && _waveOut.PlaybackState != PlaybackState.Playing)));
+            }
+        }
+
+        public ICommand StopTrack
+        {
+            get
+            {
+                return new RelayCommand(Stoptrack, () => _waveOut != null
+                                                         && _reader != null &&
+                                                         _waveOut.PlaybackState == PlaybackState.Playing);
+            }
+        }
+
+        public Type DataType
+        {
+            get { return typeof (SdMessageViewModel); }
+        }
+
+        public void Remove()
+        {
+            if (RemoveThis != null)
+                RemoveThis();
+        }
+
+        public bool Equals(SdMessageViewModel other)
+        {
+            if (other == null) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return other.Location == Location
+                   && other.LongFileName == LongFileName;
         }
 
         public override int GetHashCode()
         {
             unchecked
             {
-                return (_model != null ? _model.GetHashCode() : 0) * 23;
+                return (DataModel != null ? DataModel.GetHashCode() : 0)*23;
             }
         }
 
@@ -60,36 +156,8 @@ namespace EscInstaller.ViewModel.SDCard
             return Equals(obj as SdMessageViewModel);
         }
 
-        public string Location
-        {
-            get { return _model.Location; }
-        }
-
-        public bool ParsedCorrect
-        {
-            get
-            {
-                return _v != null && !_v.PossiblyCorrupt;
-            }
-        }
-
-        public string TrackLength
-        {
-            get
-            {
-                string error;
-                if (InitializeForPlay(out error))
-                    return (_v == null) ? string.Empty : _v.Properties.Duration.ToString();
-                return "0";
-            }
-        }
-
-        private readonly string[] _nonf = { "Not Found!", "Wrong format", "Corrupt file", "Not an mp3 file", "Filename is empty" };
-
-
-        private bool _initialized;
         /// <summary>
-        /// Call this method to play track. Returns false if not playable
+        ///     Call this method to play track. Returns false if not playable
         /// </summary>
         /// <param name="error"></param>
         /// <returns></returns>
@@ -100,13 +168,13 @@ namespace EscInstaller.ViewModel.SDCard
                 error = string.Empty;
                 return true;
             }
-            if (string.IsNullOrWhiteSpace(_model.Location))
+            if (string.IsNullOrWhiteSpace(DataModel.Location))
             {
                 error = _nonf[4];
                 return false;
             }
 
-            if (!System.IO.File.Exists(_model.Location))
+            if (!System.IO.File.Exists(DataModel.Location))
             {
                 error = "file does not exist";
                 return false;
@@ -114,7 +182,7 @@ namespace EscInstaller.ViewModel.SDCard
 
             try
             {
-                _v = File.Create(_model.Location);
+                _v = File.Create(DataModel.Location);
             }
             catch (Exception e)
             {
@@ -134,7 +202,7 @@ namespace EscInstaller.ViewModel.SDCard
 
             try
             {
-                _reader = new Mp3FileReader(_model.Location);
+                _reader = new Mp3FileReader(DataModel.Location);
                 _waveOut.Init(_reader);
                 //_waveOut.Play();
             }
@@ -168,60 +236,13 @@ namespace EscInstaller.ViewModel.SDCard
             return true;
         }
 
-        public string LongFileName
-        {
-            get
-            {
-                //return user filename if any
-                if (!string.IsNullOrWhiteSpace(_model.LongFileName))
-                    return _model.LongFileName;
-                //if no filename is specified by user, try to use filename instead
-                if (string.IsNullOrWhiteSpace(_model.Location)) return string.Empty;
-                try
-                {
-                    return Path.GetFileNameWithoutExtension(_model.Location);
-                }
-                catch (ArgumentException ae)
-                {
-                    Console.WriteLine(ae.Message);
-                }
-                //neither of the above worked out, this file is not put on sdcard by cardmanager
-                //this is used as a selection creteria by sdcard manager whether to display this object
-                return string.Empty;
-            }
-            set
-            {
-                _model.LongFileName = value;
-                RaisePropertyChanged(() => LongFileName);
-            }
-        }
-
-        public ICommand PlayTrack
-        {
-            get
-            {
-                return new RelayCommand(Playtrack, () => _waveOut == null || ((_waveOut != null && _waveOut.PlaybackState != PlaybackState.Playing)));
-            }
-        }
-
-        public ICommand StopTrack
-        {
-            get
-            {
-                return new RelayCommand(Stoptrack, () => _waveOut != null
-                    && _reader != null && _waveOut.PlaybackState == PlaybackState.Playing);
-            }
-        }
-
-        private Mp3FileReader _reader;
-        WaveOut _waveOut; // or WaveOutEvent()
-
         private void Playtrack()
         {
             string error;
             if (!InitializeForPlay(out error))
             {
-                MessageBox.Show(string.Format(SdMessageCard.ErrorPlayMessage, error), SdMessageCard.ErrorPlayTitle, MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(string.Format(SdMessageCard.ErrorPlayMessage, error), SdMessageCard.ErrorPlayTitle,
+                    MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
             if (_waveOut.PlaybackState != PlaybackState.Playing)
@@ -234,27 +255,6 @@ namespace EscInstaller.ViewModel.SDCard
             if (!InitializeForPlay(out error)) return;
             if (_waveOut.PlaybackState != PlaybackState.Stopped)
                 _waveOut.Stop();
-        }
-
-        public bool Equals(SdMessageViewModel other)
-        {
-            if (other == null) return false;
-            if (ReferenceEquals(this, other)) return true;
-            return other.Location == Location
-                && other.LongFileName == LongFileName;
-        }
-
-        public Type DataType
-        {
-            get { return typeof(SdMessageViewModel); }
-        }
-
-        public Action RemoveThis;
-
-        public void Remove()
-        {
-            if (RemoveThis != null)
-                RemoveThis();
         }
     }
 }

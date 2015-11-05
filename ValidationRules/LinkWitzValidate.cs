@@ -1,5 +1,9 @@
+#region
+
 using System.Globalization;
 using System.Windows.Controls;
+
+#endregion
 
 namespace EscInstaller.ValidationRules
 {

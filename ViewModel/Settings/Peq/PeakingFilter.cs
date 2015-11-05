@@ -1,6 +1,10 @@
+#region
+
 using System.Collections.Generic;
 using Common;
 using Common.Model;
+
+#endregion
 
 namespace EscInstaller.ViewModel.Settings.Peq
 {
@@ -9,7 +13,6 @@ namespace EscInstaller.ViewModel.Settings.Peq
         public PeakingFilter(PeqDataModel peq)
             : base(peq)
         {
-
         }
 
         public override IEnumerable<SOS> FilterData
@@ -26,16 +29,8 @@ namespace EscInstaller.ViewModel.Settings.Peq
 
         public override FilterType FilterType
         {
-            get
-            {
-                return FilterType.Peaking;
-            }
-            set
-            {
-
-            }
+            get { return FilterType.Peaking; }
+            set { }
         }
-
-
     }
 }

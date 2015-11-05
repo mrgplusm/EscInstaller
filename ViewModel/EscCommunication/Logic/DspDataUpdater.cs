@@ -1,8 +1,12 @@
+#region
+
 using System.Linq;
 using Common;
 using Common.Commodules;
 using Common.Converters;
 using Common.Model;
+
+#endregion
 
 namespace EscInstaller.ViewModel.EscCommunication.Logic
 {

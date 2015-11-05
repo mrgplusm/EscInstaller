@@ -1,9 +1,13 @@
+#region
+
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+
+#endregion
 
 namespace EscInstaller.ViewModel.EscCommunication
 {
@@ -23,7 +27,6 @@ namespace EscInstaller.ViewModel.EscCommunication
 
         protected MainViewModel Main { get; private set; }
 
-
         public bool AllFromAllSources
         {
             get { return _allFromAllSources; }
@@ -34,7 +37,6 @@ namespace EscInstaller.ViewModel.EscCommunication
                 RaisePropertyChanged(() => AllFromAllSources);
             }
         }
-
 
         public bool DownloadFinished
         {
@@ -49,7 +51,6 @@ namespace EscInstaller.ViewModel.EscCommunication
         }
 
         public abstract ObservableCollection<Downloader> Escs { get; }
-
 
         public ICommand StartDownload
         {

@@ -1,7 +1,11 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using GalaSoft.MvvmLight;
+
+#endregion
 
 namespace EscInstaller.ViewModel.EscCommunication
 {
@@ -56,7 +60,6 @@ namespace EscInstaller.ViewModel.EscCommunication
             itemtoDownload.SelectDownload(true);
         }
 
-
         private void SubItemChecked(object sender, EventArgs eventArgs)
         {
             _allChecked = ItemstoDownload.All(d => d.DoDownload);
@@ -80,7 +83,6 @@ namespace EscInstaller.ViewModel.EscCommunication
             foreach (var itemtoDownload in ItemstoDownload) itemtoDownload.SelectDownload(value);
         }
 
-
         private void itemtoDownload_DownloadCompleted(object sender, EventArgs e)
         {
             if (ItemstoDownload.Where(q => q.DoDownload).All(s => s.ReceiveCompleted))
@@ -100,7 +102,6 @@ namespace EscInstaller.ViewModel.EscCommunication
             var handler = DownloadItemStateChanged;
             if (handler != null) handler(this, EventArgs.Empty);
         }
-
 
         public async void StartDownload()
         {

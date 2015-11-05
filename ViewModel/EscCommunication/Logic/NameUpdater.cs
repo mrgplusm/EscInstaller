@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -5,6 +7,8 @@ using System.Threading.Tasks;
 using Common.Commodules;
 using Common.Model;
 using EscInstaller.ViewModel.Connection;
+
+#endregion
 
 namespace EscInstaller.ViewModel.EscCommunication.Logic
 {
@@ -31,7 +35,7 @@ namespace EscInstaller.ViewModel.EscCommunication.Logic
                 _flows.Select(result => new[]
                 {
                     new NameUpdate(result.Id, result.NameOfInput, NameType.Input),
-                    new NameUpdate(result.Id, result.NameOfOutput, NameType.Output),
+                    new NameUpdate(result.Id, result.NameOfOutput, NameType.Output)
                 }).SelectMany(io => io));
 
             CommunicationViewModel.AddData(list);
@@ -46,7 +50,6 @@ namespace EscInstaller.ViewModel.EscCommunication.Logic
                 });
             }
         }
-
 
         public async Task SetPeqNames(IProgress<DownloadProgress> iProgress)
         {

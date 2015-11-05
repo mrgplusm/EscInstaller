@@ -1,12 +1,20 @@
+#region
+
 using System;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.CommandWpf;
+
+#endregion
 
 namespace EscInstaller.ViewModel.OverView
 {
     public abstract class VuMeterControl : SnapDiagramData
     {
         private readonly MainUnitViewModel _main;
+        private DateTime _lastVuMeasure;
+        private double _vuMeterAvarage;
+        private double _vuMeterCurrent;
+        private double _vuMeterMax;
 
         protected VuMeterControl(MainUnitViewModel main)
         {
@@ -17,25 +25,6 @@ namespace EscInstaller.ViewModel.OverView
             main.VuMeter.VuMeterActivated += VuMeter_VuMeterActivated;
             main.VuMeter.VuDataReceived += VuMeter_VuDataReceived;
         }
-
-        void VuMeter_VuDataReceived(object sender, VuDataReceivedEventArgs e)
-        {
-            if (!VuActivated) return;
-            VuMeterCurrent = e.Last;
-            VuMeterAvarage = e.Avarage;
-            VuMeterMax = e.Max;
-            LastVuMeasure = e.LastVuMeasure;
-        }
-
-        void VuMeter_VuMeterActivated(object sender, EventArgs e)
-        {
-            RaisePropertyChanged(() => VuActivated);
-        }
-
-        private double _vuMeterCurrent;
-        private double _vuMeterAvarage;
-        private double _vuMeterMax;
-        private DateTime _lastVuMeasure;
 
         public double VuMeterCurrent
         {
@@ -79,17 +68,24 @@ namespace EscInstaller.ViewModel.OverView
 
         public ICommand StopVu
         {
-            get
-            {
-                return new RelayCommand(() =>
-                {
-                    _main.VuMeter.StopVuMeter();
-
-                });
-            }
+            get { return new RelayCommand(() => { _main.VuMeter.StopVuMeter(); }); }
         }
 
         public abstract ICommand StartVu { get; }
         public abstract bool VuActivated { get; }
+
+        private void VuMeter_VuDataReceived(object sender, VuDataReceivedEventArgs e)
+        {
+            if (!VuActivated) return;
+            VuMeterCurrent = e.Last;
+            VuMeterAvarage = e.Avarage;
+            VuMeterMax = e.Max;
+            LastVuMeasure = e.LastVuMeasure;
+        }
+
+        private void VuMeter_VuMeterActivated(object sender, EventArgs e)
+        {
+            RaisePropertyChanged(() => VuActivated);
+        }
     }
 }

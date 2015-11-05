@@ -1,33 +1,32 @@
+#region
+
 using System;
 using System.Globalization;
 using System.Windows.Media;
 using GalaSoft.MvvmLight;
 
+#endregion
+
 namespace EscInstaller.ViewModel
 {
     public class MesHeader : ViewModelBase
     {
-        private readonly int _id;
         private readonly Func<bool> _isChecked;
         private bool _isMousePointer;
 
         public MesHeader(int id, Action<bool> change, Func<bool> isChecked)
         {
-            _id = id;
+            Id = id;
             Change = change;
             _isChecked = isChecked;
         }
 
-        public Action<bool> Change { get; private set; }
-
-        public int Id
-        {
-            get { return _id; }
-        }
+        public Action<bool> Change { get; }
+        public int Id { get; }
 
         public string DisplayId
         {
-            get { return (_id + 1).ToString(CultureInfo.InvariantCulture); }
+            get { return (Id + 1).ToString(CultureInfo.InvariantCulture); }
         }
 
         public bool IsChecked

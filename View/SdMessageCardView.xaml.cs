@@ -1,5 +1,9 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Windows;
+
+#endregion
 
 namespace EscInstaller.View
 {
@@ -14,15 +18,15 @@ namespace EscInstaller.View
         {
             Loaded += SmvLoaded;
             Closed += SmvClosed;
-            InitializeComponent();                        
+            InitializeComponent();
         }
 
-        static void SmvClosed(object sender, EventArgs e)
+        private static void SmvClosed(object sender, EventArgs e)
         {
             _openwindow = null;
         }
 
-        void SmvLoaded(object sender, RoutedEventArgs e)
+        private void SmvLoaded(object sender, RoutedEventArgs e)
         {
             if (_openwindow != null)
             {
@@ -33,5 +37,4 @@ namespace EscInstaller.View
             _openwindow = this;
         }
     }
-
 }

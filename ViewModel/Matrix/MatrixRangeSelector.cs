@@ -1,23 +1,25 @@
+#region
+
 using GalaSoft.MvvmLight;
+
+#endregion
 
 namespace EscInstaller.ViewModel.Matrix
 {
     public abstract class MatrixRangeSelector : ViewModelBase
     {
         private bool _isSelected;
-        public int Id { get; protected set; }
 
         protected MatrixRangeSelector(int id)
-        {     
+        {
             Id = id;
         }
 
+        public int Id { get; protected set; }
+
         public bool IsEnabled
         {
-            get
-            {
-                return !IsSelected;
-            }
+            get { return !IsSelected; }
         }
 
         public virtual bool IsSelected
@@ -25,7 +27,7 @@ namespace EscInstaller.ViewModel.Matrix
             get { return _isSelected; }
             set
             {
-                if(_isSelected == value) return;                
+                if (_isSelected == value) return;
                 _isSelected = value;
                 Update();
             }
@@ -38,7 +40,5 @@ namespace EscInstaller.ViewModel.Matrix
             RaisePropertyChanged(() => IsSelected);
             RaisePropertyChanged(() => IsEnabled);
         }
-
-
     }
 }

@@ -1,149 +1,89 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Common.Model;
-using EscInstaller.ViewModel.Connection;
-using EscInstaller.ViewModel.EscCommunication;
-using EscInstaller.ViewModel.EscCommunication.Logic;
-using EscInstaller.ViewModel.Settings;
-
-using EscInstaller.ViewModel.OverView;
 using Common;
 using Common.Commodules;
+using Common.Model;
+using EscInstaller.ViewModel.Connection;
+using EscInstaller.ViewModel.EscCommunication.Logic;
+using EscInstaller.ViewModel.OverView;
+using EscInstaller.ViewModel.Settings;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
-using CommunicationViewModel = EscInstaller.ViewModel.Connection.CommunicationViewModel;
-using ITabControl = EscInstaller.ViewModel.Connection.ITabControl;
 
+#endregion
 
 namespace EscInstaller.ViewModel
 {
     public sealed class MainUnitViewModel : ViewModelBase, ITabControl, IEquatable<MainUnitViewModel>
     {
-        internal EepromDataHandler EepromHandler { get; private set; }
-        internal VuMeter VuMeter { get; private set; }
-        public AlarmMessagesViewModel AlarmMessages { get; private set; }
+        private readonly MainViewModel _main;
+        private BusyDownloading _busyDownloading;
+        private ConnectType _connectType;
+        private ObservableCollection<DiagramData> _diagramObjects;
+        private BlLink _link;
+        private double _monitorSlider;
+        private double _progress;
+        private DiagramData _selectedObject;
+        public Action DelayChanged;
+        public Action ExtinputUpdate;
+        private IntervalSettingsViewModel v;
 
         public MainUnitViewModel(MainUnitModel mainUnit, MainViewModel main)
         {
             main.Communication.ConnectionModeChanged += Communication_ConnectionModeChanged;
-            _mainUnit = mainUnit;
+            DataModel = mainUnit;
             _main = main;
-            main.SystemChanged += UpdateName;                       
-            
+            main.SystemChanged += UpdateName;
+
             VuMeter = new VuMeter(this);
-            AlarmMessages = new AlarmMessagesViewModel(this);                       
+            AlarmMessages = new AlarmMessagesViewModel(this);
 
             UpdateConnectionMode();
         }
 
+#if DEBUG
         /// <summary>
-        /// Connection might allready be initialized
+        ///     Design instance
         /// </summary>
-        private void UpdateConnectionMode()
+        public MainUnitViewModel()
         {
-            ConnectType = (Connection != null && Connection.UnitId == Id) ? Connection.ConnectType : ConnectType.None;
-            _main.Communication.SetTriggers();
+            LibraryData.CreateEmptySystem();
+            DataModel = LibraryData.GetMainUnit(0);
+            _main = new MainViewModel();
         }
+#endif
+        internal EepromDataHandler EepromHandler { get; private set; }
+        internal VuMeter VuMeter { get; private set; }
+        public AlarmMessagesViewModel AlarmMessages { get; private set; }
 
         public ConnectionViewModel Connection
         {
             get { return _main.Communication.Connections.FirstOrDefault(d => d.UnitId == Id); }
         }
 
-        void Communication_ConnectionModeChanged(object sender, ConnectionModeChangedEventArgs e)
-        {
-            if (e.UnitId == Id)
-            {
-                ConnectType = e.Mode == ConnectMode.None ? ConnectType.None : e.Type;
-            }
-        }
-
-        public bool Equals(MainUnitViewModel other)
-        {
-            if (ReferenceEquals(other, null)) return false;
-            if (ReferenceEquals(this, other)) return true;
-            return Id == other.Id;
-        }
-
-        public override int GetHashCode()
-        {
-            return Id;
-        }
-
-        private readonly MainUnitModel _mainUnit;
-
-
-#if DEBUG
         /// <summary>
-        /// Design instance
-        /// </summary>
-        public MainUnitViewModel()
-        {
-            LibraryData.CreateEmptySystem();
-            _mainUnit = LibraryData.GetMainUnit(0);
-            _main = new MainViewModel();
-
-
-        }
-#endif
-
-
-
-        public void UpdateHardware()
-        {
-            UpdateGraphics();
-            UpdateLineLinks();
-            OnCardsUpdated(new MainUnitUpdatedEventArgs() { MainUnit = DataModel });
-        }
-
-        /// <summary>
-        /// used to temporary store timestamp when verifing
+        ///     used to temporary store timestamp when verifing
         /// </summary>
         public long Timestamp { get; set; }
 
-        private void UpdateName(object sender, SystemChangedEventArgs e)
-        {
-            RaisePropertyChanged(() => Name);
-        }
-
         public string Name
         {
-            get { return _mainUnit.Name; }
+            get { return DataModel.Name; }
             set
             {
-                _mainUnit.Name = value;
+                DataModel.Name = value;
                 RaisePropertyChanged(() => Name);
             }
         }
 
-        public event EventHandler PanelSelectionChanged;
-
-        internal void OnPanelSelectionChanged()
-        {
-            EventHandler handler = PanelSelectionChanged;
-            if (handler != null) handler(this, EventArgs.Empty);
-        }
-
-
-        private readonly MainViewModel _main;
-
-        public MainUnitModel DataModel
-        {
-            get { return _mainUnit; }
-        }
-
-        public event EventHandler MonitorSliderUpdated;
-
-        private void OnMonitorSliderUpdated()
-        {
-            EventHandler handler = MonitorSliderUpdated;
-            if (handler != null) handler(this, EventArgs.Empty);
-        }
+        public MainUnitModel DataModel { get; }
 
         public double MonitorSlider
         {
@@ -155,34 +95,15 @@ namespace EscInstaller.ViewModel
             }
         }
 
-        private IntervalSettingsViewModel v;
-        public void OpenMeasurementSettings()
-        {
-            SelectedObject = (v ?? (v = new IntervalSettingsViewModel(this)));
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(obj, null)) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            return Equals(obj as MainUnitViewModel);
-        }
-
-
-        private DiagramData _selectedObject;
         public DiagramData SelectedObject
         {
-            get
-            {
-                return _selectedObject;
-            }
+            get { return _selectedObject; }
             set
             {
                 _selectedObject = value;
                 RaisePropertyChanged(() => SelectedObject);
             }
         }
-
 
         public List<FlowModel> Flows
         {
@@ -201,6 +122,240 @@ namespace EscInstaller.ViewModel
                 _connectType = value;
                 RaisePropertyChanged(() => ConnectType);
             }
+        }
+
+        public List<SpeakerDataModel> SpeakerDataModels
+        {
+            get { return DataModel.SpeakerDataModels; }
+        }
+
+        public List<byte> DspCopy
+        {
+            get { return DataModel.DspCopy; }
+        }
+
+        public bool E2PromUpdateVisible
+        {
+            get
+            {
+                bool b;
+                return bool.TryParse(LibraryData.Settings["EepromUpdateEnabled"], out b) && b;
+            }
+        }
+
+        public ICommand AddNewCard
+        {
+            get
+            {
+                return new RelayCommand(
+                    () =>
+                    {
+                        if (DataModel.ExpansionCards > 1)
+                            return;
+                        DataModel.ExpansionCards++;
+
+                        DiagramObjects.OfType<BlLink>().First().Cards(DataModel.ExpansionCards);
+
+                        foreach (var n in DiagramObjects.OfType<BlExtInput>())
+                        {
+                            n.SetYLocation();
+                        }
+                        foreach (var n in DiagramObjects.OfType<BlInputPeq>())
+                        {
+                            n.SetYLocation();
+                        }
+
+
+                        DiagramObjects.OfType<BlEmergency>().First().SetYLocation();
+
+                        var lst =
+                            GenDiagramObjects(DataModel.Cards.First(i => i.Id == DataModel.ExpansionCards),
+                                DiagramObjects).ToArray();
+                        foreach (var n in lst)
+                        {
+                            DiagramObjects.Add(n);
+                        }
+                        OnCardsUpdated(new MainUnitUpdatedEventArgs() {MainUnit = DataModel});
+                    },
+                    () => DataModel.ExpansionCards < 2);
+            }
+        }
+
+        public ICommand RemoveLastCard
+        {
+            get
+            {
+                return new RelayCommand(() =>
+                {
+                    DataModel.ExpansionCards--;
+                    DiagramObjects.OfType<BlLink>().First().Cards(DataModel.ExpansionCards);
+
+                    foreach (var n in DiagramObjects.OfType<BlExtInput>())
+                    {
+                        n.SetYLocation();
+                    }
+                    foreach (var n in DiagramObjects.OfType<BlInputPeq>())
+                    {
+                        n.SetYLocation();
+                    }
+
+                    DiagramObjects.OfType<BlEmergency>().First().SetYLocation();
+
+                    var removelist = new List<DiagramData>();
+                    removelist.AddRange(
+                        DiagramObjects.OfType<BlInputName>().Where(s => s.Id%12/4 > DataModel.ExpansionCards));
+                    removelist.AddRange(
+                        DiagramObjects.OfType<BlSpeakerPeq>().Where(s => s.Id%12/4 > DataModel.ExpansionCards));
+                    removelist.AddRange(
+                        DiagramObjects.OfType<BlMonitor>().Where(s => s.Id%12/4 > DataModel.ExpansionCards));
+                    removelist.AddRange(
+                        DiagramObjects.OfType<BlOutput>().Where(s => s.Id%12/4 > DataModel.ExpansionCards));
+                    removelist.AddRange(
+                        DiagramObjects.OfType<BlSpeaker>().Where(s => s.Id%12/4 > DataModel.ExpansionCards));
+                    removelist.AddRange(
+                        DiagramObjects.OfType<BlAmplifier>().Where(s => s.Id%12/4 > DataModel.ExpansionCards));
+
+                    removelist.AddRange(
+                        DiagramObjects.OfType<BlAuxSpeakerPeq>().Where(s => s.Id > DataModel.ExpansionCards));
+                    removelist.AddRange(DiagramObjects.OfType<BlAuxiliary>().Where(s => s.Id > DataModel.ExpansionCards));
+                    removelist.AddRange(DiagramObjects.OfType<BlBackupAmp>().Where(s => s.Id > DataModel.ExpansionCards));
+                    removelist.AddRange(DiagramObjects.OfType<BlSpMatrix>().Where(s => s.Id > DataModel.ExpansionCards));
+
+
+                    foreach (var d in removelist.OfType<SnapDiagramData>())
+                    {
+                        d.RemoveChildren();
+                    }
+
+                    foreach (var diagramData in removelist)
+                    {
+                        DiagramObjects.Remove(diagramData);
+                    }
+                    OnCardsUpdated(new MainUnitUpdatedEventArgs() {MainUnit = DataModel});
+                }, (() => DataModel.ExpansionCards > 0));
+            }
+        }
+
+        public string DisplayValue
+        {
+            get { return (Id < 1) ? Main._mainMaster : string.Format(Main._mainSlave, Id); }
+        }
+
+        public ObservableCollection<DiagramData> DiagramObjects
+        {
+            get
+            {
+                return _diagramObjects ?? (_diagramObjects = new ObservableCollection<DiagramData>(GenDiagramObjects()));
+            }
+        }
+
+        public ICommand ButtonFinished
+        {
+            get { return new RelayCommand(() => { BusyDownloading = BusyDownloading.No; }); }
+        }
+
+        public double Progress
+        {
+            get { return _progress; }
+            set
+            {
+                _progress = value;
+                RaisePropertyChanged(() => Progress);
+            }
+        }
+
+        public BusyDownloading BusyDownloading
+        {
+            get
+            {
+                if (IsInDesignMode)
+                    return BusyDownloading.No;
+                return _busyDownloading;
+            }
+            set
+            {
+                _busyDownloading = value;
+                RaisePropertyChanged(() => BusyDownloading);
+            }
+        }
+
+        public bool Equals(MainUnitViewModel other)
+        {
+            if (ReferenceEquals(other, null)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return Id == other.Id;
+        }
+
+        public int Id
+        {
+            get { return DataModel.Id; }
+            set
+            {
+                DataModel.Id = value;
+                RaisePropertyChanged(() => Id);
+            }
+        }
+
+        /// <summary>
+        ///     Connection might allready be initialized
+        /// </summary>
+        private void UpdateConnectionMode()
+        {
+            ConnectType = (Connection != null && Connection.UnitId == Id) ? Connection.ConnectType : ConnectType.None;
+            _main.Communication.SetTriggers();
+        }
+
+        private void Communication_ConnectionModeChanged(object sender, ConnectionModeChangedEventArgs e)
+        {
+            if (e.UnitId == Id)
+            {
+                ConnectType = e.Mode == ConnectMode.None ? ConnectType.None : e.Type;
+            }
+        }
+
+        public override int GetHashCode()
+        {
+            return Id;
+        }
+
+        public void UpdateHardware()
+        {
+            UpdateGraphics();
+            UpdateLineLinks();
+            OnCardsUpdated(new MainUnitUpdatedEventArgs() {MainUnit = DataModel});
+        }
+
+        private void UpdateName(object sender, SystemChangedEventArgs e)
+        {
+            RaisePropertyChanged(() => Name);
+        }
+
+        public event EventHandler PanelSelectionChanged;
+
+        internal void OnPanelSelectionChanged()
+        {
+            var handler = PanelSelectionChanged;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
+
+        public event EventHandler MonitorSliderUpdated;
+
+        private void OnMonitorSliderUpdated()
+        {
+            var handler = MonitorSliderUpdated;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
+
+        public void OpenMeasurementSettings()
+        {
+            SelectedObject = (v ?? (v = new IntervalSettingsViewModel(this)));
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(obj, null)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            return Equals(obj as MainUnitViewModel);
         }
 
         public async Task<bool> TimestampIsEqual()
@@ -228,115 +383,9 @@ namespace EscInstaller.ViewModel
             return ret;
         }
 
-        public List<SpeakerDataModel> SpeakerDataModels
-        {
-            get
-            {
-                return _mainUnit.SpeakerDataModels;
-            }
-        }
-
-        public List<byte> DspCopy
-        {
-            get
-            {
-                return _mainUnit.DspCopy;
-            }
-        }
-
         public void ItemsControlClick()
         {
             SelectedObject = null;
-        }
-
-        public Action DelayChanged;
-        public Action ExtinputUpdate;
-
-        public bool E2PromUpdateVisible
-        {
-            get
-            {
-                bool b;
-                return bool.TryParse(LibraryData.Settings["EepromUpdateEnabled"], out b) && b;
-            }
-        }
-
-        public int Id
-        {
-            get { return _mainUnit.Id; }
-            set
-            {
-                _mainUnit.Id = value;
-                RaisePropertyChanged(() => Id);
-            }
-        }
-
-        public ICommand AddNewCard
-        {
-            get
-            {
-                return new RelayCommand(
-                    () =>
-                    {
-                        if (_mainUnit.ExpansionCards > 1)
-                            return;
-                        _mainUnit.ExpansionCards++;
-
-                        DiagramObjects.OfType<BlLink>().First().Cards(_mainUnit.ExpansionCards);
-
-                        foreach (var n in DiagramObjects.OfType<BlExtInput>()) { n.SetYLocation(); }
-                        foreach (var n in DiagramObjects.OfType<BlInputPeq>()) { n.SetYLocation(); }
-
-
-                        DiagramObjects.OfType<BlEmergency>().First().SetYLocation();
-
-                        var lst = GenDiagramObjects(_mainUnit.Cards.First(i => i.Id == _mainUnit.ExpansionCards), DiagramObjects).ToArray();
-                        foreach (var n in lst) { DiagramObjects.Add(n); }
-                        OnCardsUpdated(new MainUnitUpdatedEventArgs() { MainUnit = _mainUnit, });
-
-                    },
-                    () => _mainUnit.ExpansionCards < 2);
-            }
-        }
-
-        public ICommand RemoveLastCard
-        {
-            get
-            {
-                return new RelayCommand(() =>
-                {
-                    _mainUnit.ExpansionCards--;
-                    DiagramObjects.OfType<BlLink>().First().Cards(_mainUnit.ExpansionCards);
-
-                    foreach (var n in DiagramObjects.OfType<BlExtInput>()) { n.SetYLocation(); }
-                    foreach (var n in DiagramObjects.OfType<BlInputPeq>()) { n.SetYLocation(); }
-
-                    DiagramObjects.OfType<BlEmergency>().First().SetYLocation();
-
-                    var removelist = new List<DiagramData>();
-                    removelist.AddRange(DiagramObjects.OfType<BlInputName>().Where(s => s.Id % 12 / 4 > _mainUnit.ExpansionCards));
-                    removelist.AddRange(DiagramObjects.OfType<BlSpeakerPeq>().Where(s => s.Id % 12 / 4 > _mainUnit.ExpansionCards));
-                    removelist.AddRange(DiagramObjects.OfType<BlMonitor>().Where(s => s.Id % 12 / 4 > _mainUnit.ExpansionCards));
-                    removelist.AddRange(DiagramObjects.OfType<BlOutput>().Where(s => s.Id % 12 / 4 > _mainUnit.ExpansionCards));
-                    removelist.AddRange(DiagramObjects.OfType<BlSpeaker>().Where(s => s.Id % 12 / 4 > _mainUnit.ExpansionCards));
-                    removelist.AddRange(DiagramObjects.OfType<BlAmplifier>().Where(s => s.Id % 12 / 4 > _mainUnit.ExpansionCards));
-
-                    removelist.AddRange(DiagramObjects.OfType<BlAuxSpeakerPeq>().Where(s => s.Id > _mainUnit.ExpansionCards));
-                    removelist.AddRange(DiagramObjects.OfType<BlAuxiliary>().Where(s => s.Id > _mainUnit.ExpansionCards));
-                    removelist.AddRange(DiagramObjects.OfType<BlBackupAmp>().Where(s => s.Id > _mainUnit.ExpansionCards));
-                    removelist.AddRange(DiagramObjects.OfType<BlSpMatrix>().Where(s => s.Id > _mainUnit.ExpansionCards));
-
-
-                    foreach (var d in removelist.OfType<SnapDiagramData>()) { d.RemoveChildren(); }
-
-                    foreach (var diagramData in removelist)
-                    {
-                        DiagramObjects.Remove(diagramData);
-                    }
-                    OnCardsUpdated(new MainUnitUpdatedEventArgs() { MainUnit = _mainUnit });
-
-                }, (() => _mainUnit.ExpansionCards > 0));
-            }
         }
 
         public void UpdateGraphics()
@@ -345,42 +394,20 @@ namespace EscInstaller.ViewModel
             RaisePropertyChanged(() => DiagramObjects);
         }
 
-
-        public string DisplayValue
-        {
-            get
-            {
-                return (Id < 1) ? Main._mainMaster : string.Format(Main._mainSlave, Id);
-            }
-        }
-
-        private ObservableCollection<DiagramData> _diagramObjects;
-        public ObservableCollection<DiagramData> DiagramObjects
-        {
-            get
-            {
-                return _diagramObjects ?? (_diagramObjects = new ObservableCollection<DiagramData>(GenDiagramObjects()));
-            }
-        }
-
-        private BlLink _link;
-
         private IEnumerable<DiagramData> GenDiagramObjects()
         {
             var link = new BlLink(this);
-            var ret = new List<DiagramData> { link };
+            var ret = new List<DiagramData> {link};
             _link = link;
 
             var cards =
-                _mainUnit.Cards.Take(_mainUnit.ExpansionCards + 1)
-                    .Concat(_mainUnit.Cards.OfType<ExtensionCardModel>());
+                DataModel.Cards.Take(DataModel.ExpansionCards + 1)
+                    .Concat(DataModel.Cards.OfType<ExtensionCardModel>());
 
             ret.AddRange(cards.SelectMany(model => GenDiagramObjects(model, ret.ToList())));
 
             return ret;
         }
-
-
 
         private IEnumerable<DiagramData> GenDiagramObjects(CardBaseModel card, IEnumerable<DiagramData> currentObjects)
         {
@@ -391,7 +418,7 @@ namespace EscInstaller.ViewModel
                 lst.AddRange(GenFlow(flow, card as CardModel));
             }
 
-            if (card.GetType() == typeof(CardModel))
+            if (card.GetType() == typeof (CardModel))
             {
                 var l = new List<SnapDiagramData>
                 {
@@ -426,7 +453,7 @@ namespace EscInstaller.ViewModel
         }
 
         /// <summary>
-        /// Put lines of the emergency panels on screen
+        ///     Put lines of the emergency panels on screen
         /// </summary>
         /// <param name="objects"></param>
         /// <param name="link"></param>
@@ -434,30 +461,30 @@ namespace EscInstaller.ViewModel
         private static void LinesExtCardModel(List<DiagramData> objects, BlLink link, BlEmergency emergency)
         {
             if (emergency != null && link != null)
-                objects.Add(new LineViewModel(link, emergency, 30) { LineType = LineType.Special });
+                objects.Add(new LineViewModel(link, emergency, 30) {LineType = LineType.Special});
 
             var extinp = objects.OfType<BlExtInput>().ToArray();
             if (extinp.Length > 2)
-                objects.AddRange(new[] { 0, 1, 4 }.Select(n => new LineViewModel(extinp[n], emergency)));
+                objects.AddRange(new[] {0, 1, 4}.Select(n => new LineViewModel(extinp[n], emergency)));
 
-            var inpPeq = objects.OfType<BlInputPeq>().Join(extinp, q => q.Id, j => j.Id, (peq, extInput) => new { peq, extInput }).ToArray();
+            var inpPeq =
+                objects.OfType<BlInputPeq>()
+                    .Join(extinp, q => q.Id, j => j.Id, (peq, extInput) => new {peq, extInput})
+                    .ToArray();
             objects.AddRange(inpPeq.Select(n => new LineViewModel(n.peq, n.extInput)));
 
             objects.AddRange(objects.OfType<BlInputPeq>().Select(n => new LineViewModel(n, emergency)).ToArray());
         }
 
         /// <summary>
-        /// add lines to diagram
+        ///     add lines to diagram
         /// </summary>
         /// <param name="objects"></param>
         /// <param name="link"></param>
         private static void LinesCardModel(List<DiagramData> objects, BlLink link)
         {
-
-
-
             var t = objects.OfType<BlInputName>().Join(objects.OfType<BlToneControl>(), s => s.Id, q => q.Id, (b, c) =>
-                new LineViewModel(b, c) { LineType = LineType.PublicAddress }).ToArray();
+                new LineViewModel(b, c) {LineType = LineType.PublicAddress}).ToArray();
 
             objects.AddRange(t);
 
@@ -468,19 +495,22 @@ namespace EscInstaller.ViewModel
             {
                 if (tone.Length > 0)
                     objects.AddRange(
-                        tone.Select(q => new LineViewModel(q, link) { Id = q.Id }).OrderBy(n => n.Id).ToArray());
+                        tone.Select(q => new LineViewModel(q, link) {Id = q.Id}).OrderBy(n => n.Id).ToArray());
                 objects.AddRange(
                     delay
                         .Select(q => new LinkLineVm(link, q, link, q.Id))
                         .ToArray());
-                objects.AddRange(objects.OfType<BlSpeakerPeq>().Where(i => i.Id % 12 == 1 || i.Id % 12 == 2).OrderBy(i => i.Id).ToArray()
+                objects.AddRange(objects.OfType<BlSpeakerPeq>()
+                    .Where(i => i.Id%12 == 1 || i.Id%12 == 2)
+                    .OrderBy(i => i.Id)
+                    .ToArray()
                     .Join(delay, peq => peq.Id, blDelay => blDelay.Id, (peq, blDelay) =>
-                        new LineViewModel(peq, blDelay) { LineType = LineType.Emergency, Id = blDelay.Id }));
+                        new LineViewModel(peq, blDelay) {LineType = LineType.Emergency, Id = blDelay.Id}));
             }
 
-            var input = objects.OfType<BlInputName>().OrderBy(n => n.Id).Where(i => i.Id % 12 > 3).ToArray();
+            var input = objects.OfType<BlInputName>().OrderBy(n => n.Id).Where(i => i.Id%12 > 3).ToArray();
             if (input.Length > 0 && link != null)
-                objects.AddRange(input.Select(q => new LineViewModel(q, link) { LineType = LineType.PublicAddress }));
+                objects.AddRange(input.Select(q => new LineViewModel(q, link) {LineType = LineType.PublicAddress}));
 
             var outputs = objects.OfType<BlAmplifier>()
                 .Join(objects.OfType<BlOutput>(), s => s.Id, q => q.Id,
@@ -494,12 +524,16 @@ namespace EscInstaller.ViewModel
                     .ToArray());
 
             var speakerMatix = objects.OfType<BlAmplifier>()
-                .Join(objects.OfType<BlSpMatrix>(), s => s.Id % 12 / 4, q => q.Id, (b, c) => new LineViewModel(b, c))
+                .Join(objects.OfType<BlSpMatrix>(), s => s.Id%12/4, q => q.Id, (b, c) => new LineViewModel(b, c))
                 .ToArray();
             objects.AddRange(speakerMatix);
 
             if (link != null)
-                objects.AddRange(objects.OfType<BlAuxSpeakerPeq>().OrderBy(q => q.Id).Select(n => new LineViewModel(n, link) { Id = n.Id }).ToArray());
+                objects.AddRange(
+                    objects.OfType<BlAuxSpeakerPeq>()
+                        .OrderBy(q => q.Id)
+                        .Select(n => new LineViewModel(n, link) {Id = n.Id})
+                        .ToArray());
 
             objects.AddRange(
                 objects.OfType<BlAuxSpeakerPeq>().OrderBy(n => n.Id)
@@ -516,9 +550,9 @@ namespace EscInstaller.ViewModel
 
             var speakers = new List<BlSpeaker>[3];
 
-            speakers[0] = objects.OfType<BlSpeaker>().Where(i => i.Id % 12 < 4).ToList();
-            speakers[1] = objects.OfType<BlSpeaker>().Where(i => i.Id % 12 > 3 && i.Id % 12 < 8).ToList();
-            speakers[2] = objects.OfType<BlSpeaker>().Where(i => i.Id % 12 > 7).ToList();
+            speakers[0] = objects.OfType<BlSpeaker>().Where(i => i.Id%12 < 4).ToList();
+            speakers[1] = objects.OfType<BlSpeaker>().Where(i => i.Id%12 > 3 && i.Id%12 < 8).ToList();
+            speakers[2] = objects.OfType<BlSpeaker>().Where(i => i.Id%12 > 7).ToList();
 
             var backup = objects.OfType<BlBackupAmp>().FirstOrDefault();
 
@@ -541,13 +575,13 @@ namespace EscInstaller.ViewModel
                         objects.AddRange(speakers[i].Select(n => new LineViewModel(n, spMatrix[0])));
                 }
 
-            objects.AddRange(objects.OfType<BlSpeakerPeq>().Where(q => q.Id % 12 != 1 && q.Id % 12 != 2)
+            objects.AddRange(objects.OfType<BlSpeakerPeq>().Where(q => q.Id%12 != 1 && q.Id%12 != 2)
                 .Select(sp => new LinkLineVm(link, sp, link, sp.Id)).ToArray());
         }
 
         public void UpdateLineLinks()
         {
-            foreach (var result in _mainUnit.Cards.OfType<CardModel>().SelectMany(f => f.Flows))
+            foreach (var result in DataModel.Cards.OfType<CardModel>().SelectMany(f => f.Flows))
             {
                 UpdateLineLink(result);
             }
@@ -564,7 +598,7 @@ namespace EscInstaller.ViewModel
             {
                 z = DiagramObjects.OfType<BlDelay>().FirstOrDefault(i => i.Id == flow.Id - 1);
             }
-            else if (flow.Path == LinkTo.No || flow.Id % 12 < 4)
+            else if (flow.Path == LinkTo.No || flow.Id%12 < 4)
             {
                 z = DiagramObjects.OfType<BlLink>().FirstOrDefault();
             }
@@ -591,29 +625,27 @@ namespace EscInstaller.ViewModel
                 lst.Add(new BlSpeaker(flow, this, 0));
                 lst.Add(new BlSpeaker(flow, this, 1));
                 lst.Add(new BlAmplifier(flow));
-
             }
             if (flow.Id >= GenericMethods.StartCountFrom)
             {
                 lst.Add(new BlExtInput(flow, this, _main));
             }
 
-            if (flow.Id % 12 < 4 && flow.Id < GenericMethods.StartCountFrom)
+            if (flow.Id%12 < 4 && flow.Id < GenericMethods.StartCountFrom)
             {
                 lst.Add(new BlToneControl(flow));
-                if (flow.Id % 12 < 3 && flow.Id % 12 > 0)
+                if (flow.Id%12 < 3 && flow.Id%12 > 0)
                     lst.Add(new BlDelay(this, flow));
             }
 
-            if ((flow.Id % 5 == 2 || flow.Id % 5 == 3) &&
+            if ((flow.Id%5 == 2 || flow.Id%5 == 3) &&
                 flow.Id >= GenericMethods.StartCountFrom)
             {
                 lst.Add(new BlInputPeq(flow, this));
             }
 
-            if (flow.Id < GenericMethods.StartCountFrom && flow.Id % 12 % 4 == 0)
+            if (flow.Id < GenericMethods.StartCountFrom && flow.Id%12%4 == 0)
             {
-
             }
             foreach (var snapDiagramData in lst)
             {
@@ -623,55 +655,11 @@ namespace EscInstaller.ViewModel
             return lst;
         }
 
-        public ICommand ButtonFinished
-        {
-            get
-            {
-                return new RelayCommand(() =>
-                {
-                    BusyDownloading = BusyDownloading.No;
-                });
-            }
-        }
-
-        private double _progress;
-        public double Progress
-        {
-            get
-            {
-                return _progress;
-            }
-            set
-            {
-                _progress = value;
-                RaisePropertyChanged(() => Progress);
-            }
-        }
-
-        private BusyDownloading _busyDownloading;
-        private double _monitorSlider;
-        private ConnectType _connectType;
-
-        public BusyDownloading BusyDownloading
-        {
-            get
-            {
-                if (IsInDesignMode)
-                    return BusyDownloading.No;
-                return _busyDownloading;
-            }
-            set
-            {
-                _busyDownloading = value;
-                RaisePropertyChanged(() => BusyDownloading);
-            }
-        }
-
         public event EventHandler<MainUnitUpdatedEventArgs> CardsUpdated;
 
         private void OnCardsUpdated(MainUnitUpdatedEventArgs e)
         {
-            EventHandler<MainUnitUpdatedEventArgs> handler = CardsUpdated;
+            var handler = CardsUpdated;
             if (handler != null) handler(this, e);
         }
 
@@ -679,16 +667,15 @@ namespace EscInstaller.ViewModel
 
         public void OnSdCardMessagesReceived()
         {
-            EventHandler handler = SdCardMessagesReceived;
+            var handler = SdCardMessagesReceived;
             if (handler != null) handler(this, EventArgs.Empty);
-            
         }
 
         public event EventHandler SdCardPositionsReceived;
 
         public void OnSdCardPositionsReceived()
         {
-            EventHandler handler = SdCardPositionsReceived;
+            var handler = SdCardPositionsReceived;
             if (handler != null) handler(this, EventArgs.Empty);
         }
 
@@ -696,16 +683,15 @@ namespace EscInstaller.ViewModel
 
         public void OnKreisUpdated()
         {
-            EventHandler handler = KreisUpdated;
+            var handler = KreisUpdated;
             if (handler != null) handler(this, EventArgs.Empty);
         }
-
 
         public event EventHandler RedundancyUpdated;
 
         public void OnRedundancyUpdated()
         {
-            EventHandler handler = RedundancyUpdated;
+            var handler = RedundancyUpdated;
             if (handler != null) handler(this, EventArgs.Empty);
         }
 
@@ -713,7 +699,7 @@ namespace EscInstaller.ViewModel
 
         public void OnRoutingTableUpdated()
         {
-            EventHandler handler = RoutingTableUpdated;
+            var handler = RoutingTableUpdated;
             if (handler != null) handler(this, EventArgs.Empty);
         }
 
@@ -721,7 +707,7 @@ namespace EscInstaller.ViewModel
 
         public void OnPresetNamesUpdated()
         {
-            EventHandler handler = PresetNamesUpdated;
+            var handler = PresetNamesUpdated;
             if (handler != null) handler(this, EventArgs.Empty);
         }
 
@@ -729,7 +715,7 @@ namespace EscInstaller.ViewModel
 
         public void OnDspMirrorUpdated()
         {
-            EventHandler handler = DspMirrorUpdated;
+            var handler = DspMirrorUpdated;
             if (handler != null) handler(this, EventArgs.Empty);
         }
     }

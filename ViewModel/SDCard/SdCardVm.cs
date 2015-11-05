@@ -14,26 +14,28 @@ using EscInstaller.View;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 
-
 #endregion
 
 namespace EscInstaller.ViewModel.SDCard
 {
     public class SdCardVm : ViewModelBase, IDropable
     {
-        private readonly int _card;
-        public ObservableCollection<SdMessageViewModel> CardMessages { get; set; }
+        public static List<SdCardMessageModel> Unsavedmessages = new List<SdCardMessageModel>();
+        private bool _allMandatorySelected;
+        private ObservableCollection<SdMessageViewModel> _messages;
 
         /// <summary>
-        /// 1 == CardA
-        /// 2 == CardB
-        /// 3 == no project open
+        ///     1 == CardA
+        ///     2 == CardB
+        ///     3 == no project open
         /// </summary>
         /// <param name="card"></param>
         public SdCardVm(int card)
         {
-            _card = card;
+            Card = card;
         }
+
+        public ObservableCollection<SdMessageViewModel> CardMessages { get; set; }
 
         public bool AllMandatorySelected
         {
@@ -47,41 +49,76 @@ namespace EscInstaller.ViewModel.SDCard
 
         public string Header
         {
-            get { return _card == 0 ? "Card A" : _card == 1 ? "Card B" : "Not saved"; }
+            get { return Card == 0 ? "Card A" : Card == 1 ? "Card B" : "Not saved"; }
         }
 
         public ICommand Remove
         {
-            get
-            {
-                return new RelayCommand<SdMessageViewModel>(s => s.Remove());
-            }
+            get { return new RelayCommand<SdMessageViewModel>(s => s.Remove()); }
         }
 
         public ICommand AddPredefined
         {
-            get
-            {
-                return new RelayCommand<SdMessageViewModel>(message => AddMessages(new[] { message.LongFileName }));
-            }
+            get { return new RelayCommand<SdMessageViewModel>(message => AddMessages(new[] {message.LongFileName})); }
         }
 
         public bool IsVisible
         {
-            get { return (_card < 2 && LibraryData.SystemIsOpen) || (!LibraryData.SystemIsOpen && _card > 1); }
+            get { return (Card < 2 && LibraryData.SystemIsOpen) || (!LibraryData.SystemIsOpen && Card > 1); }
         }
 
+        public int Card { get; }
 
-        public int Card
+        private List<SdCardMessageModel> ControlMessages
         {
-            get { return _card; }
+            get
+            {
+                if (Card == 0)
+                    return LibraryData.FuturamaSys.MessagesCardA;
+                if (Card == 1)
+                    return LibraryData.FuturamaSys.MessagesCardB;
+
+                return Unsavedmessages;
+            }
         }
 
+        public ObservableCollection<SdMessageViewModel> Messages
+        {
+            get
+            {
+                if (_messages != null) return _messages;
 
-        private bool _allMandatorySelected;
+                _messages =
+                    new ObservableCollection<SdMessageViewModel>(ControlMessages.Select(n => new SdMessageViewModel(n)));
+
+                foreach (var q in _messages)
+                {
+                    q.RemoveThis = () =>
+                    {
+                        ControlMessages.Remove(q.DataModel);
+                        Messages.Remove(q);
+                    };
+                }
+
+                return _messages;
+            }
+        }
+
+        public Type DataType
+        {
+            get { return typeof (SdMessageViewModel); }
+        }
+
+        public void Drop(object data, int index = -1)
+        {
+            var d = data as SdMessageViewModel;
+            if (d == null) return;
+
+            InsertIntoList(d.DataModel, index);
+        }
 
         /// <summary>
-        /// Add a range of messages to the list
+        ///     Add a range of messages to the list
         /// </summary>
         /// <param name="paths">Path and filename of message to add</param>
         public void AddMessages(IEnumerable<string> paths)
@@ -104,7 +141,7 @@ namespace EscInstaller.ViewModel.SDCard
                     continue;
                 }
 
-                var model = new SdCardMessageModel { Location = path };
+                var model = new SdCardMessageModel {Location = path};
 
 
                 InsertIntoList(model, -1);
@@ -112,8 +149,9 @@ namespace EscInstaller.ViewModel.SDCard
 
             if (errorText.Length > 0)
             {
-                Application.Current.Dispatcher.Invoke(new Action(() => MessageBox.Show(errorText.ToString(), SdMessageCard.ErrorAddFileTitle,
-                    MessageBoxButton.OK, MessageBoxImage.Error)));
+                Application.Current.Dispatcher.Invoke(
+                    new Action(() => MessageBox.Show(errorText.ToString(), SdMessageCard.ErrorAddFileTitle,
+                        MessageBoxButton.OK, MessageBoxImage.Error)));
             }
         }
 
@@ -130,7 +168,7 @@ namespace EscInstaller.ViewModel.SDCard
             var newmodel = new SdCardMessageModel()
             {
                 Location = message.Location,
-                LongFileName = message.LongFileName,
+                LongFileName = message.LongFileName
             };
 
             if (insertAt > ControlMessages.Count) insertAt = ControlMessages.Count;
@@ -143,58 +181,6 @@ namespace EscInstaller.ViewModel.SDCard
                 ControlMessages.Remove(newmes.DataModel);
             };
             Messages.Insert(insertAt, newmes);
-
         }
-        
-        public static List<SdCardMessageModel> Unsavedmessages = new List<SdCardMessageModel>();
-
-        private List<SdCardMessageModel> ControlMessages
-        {
-            get
-            {
-                if (_card == 0)
-                    return LibraryData.FuturamaSys.MessagesCardA;
-                if (_card == 1)
-                    return LibraryData.FuturamaSys.MessagesCardB;
-
-                return Unsavedmessages;
-            }
-        }
-
-        public Type DataType
-        {
-            get { return typeof(SdMessageViewModel); }
-        }
-
-        public void Drop(object data, int index = -1)
-        {
-            var d = data as SdMessageViewModel;
-            if (d == null) return;
-
-            InsertIntoList(d.DataModel, index);
-        }
-
-        private ObservableCollection<SdMessageViewModel> _messages;
-        public ObservableCollection<SdMessageViewModel> Messages
-        {
-            get
-            {
-                if (_messages != null) return _messages;
-
-                _messages = new ObservableCollection<SdMessageViewModel>(ControlMessages.Select(n => new SdMessageViewModel(n)));
-
-                foreach (var q in _messages)
-                {
-                    q.RemoveThis = () =>
-                    {
-                        ControlMessages.Remove(q.DataModel);
-                        Messages.Remove(q);
-                    };
-                }
-
-                return _messages;
-            }
-        }
-
     }
 }

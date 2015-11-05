@@ -1,7 +1,11 @@
+#region
+
 using System;
 using System.Windows.Media;
 using Common.Model;
 using GalaSoft.MvvmLight;
+
+#endregion
 
 namespace EscInstaller.ViewModel
 {
@@ -10,19 +14,16 @@ namespace EscInstaller.ViewModel
         private readonly Action<int, int, int, bool> _changed;
         private readonly MesModuleModel _mesModule;
 
-
         public MesModuleViewModel(MesModuleModel model, Action<int, int, int, bool> changed)
         {
             _changed = changed;
             _mesModule = model;
         }
 
-
         public bool[] IsEnabled
         {
             get { return _mesModule.IsEnabled ?? (_mesModule.IsEnabled = new bool[3]); }
         }
-
 
         public bool IsEnabled1
         {
@@ -84,7 +85,6 @@ namespace EscInstaller.ViewModel
         {
             get { return _mesModule.ZoneId + 1; }
         }
-
 
         public Brush Color1
         {

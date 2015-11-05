@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿#region
+
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Configuration;
 using System.IO;
@@ -12,14 +14,31 @@ using EscInstaller.ViewModel.OverView;
 using GalaSoft.MvvmLight.CommandWpf;
 using Microsoft.Win32;
 
+#endregion
+
 namespace EscInstaller.ViewModel.Settings
 {
     public class IntervalSettingsViewModel : DiagramData
     {
+        private static readonly Dictionary<int, int> V220IntervalTable = new Dictionary<int, int>()
+        {
+            {1, 80},
+            {2, 40},
+            {3, 25},
+            {4, 20},
+            {5, 15}
+        };
+
+        private static readonly Dictionary<int, int> V48IntervalTable = new Dictionary<int, int>()
+        {
+            {1, 83},
+            {2, 41},
+            {3, 28}
+        };
+
         private readonly MainUnitViewModel _main;
         private ObservableCollection<AmountComboItem> _amounts220;
         private ObservableCollection<AmountComboItem> _amounts48;
-
 #if DEBUG
         public IntervalSettingsViewModel()
         {
@@ -35,10 +54,7 @@ namespace EscInstaller.ViewModel.Settings
 
         public string SettingName
         {
-            get
-            {
-                return "IntervalSettings";
-            }
+            get { return "IntervalSettings"; }
         }
 
         public ObservableCollection<AmountComboItem> ErrorAmounts220
@@ -48,7 +64,6 @@ namespace EscInstaller.ViewModel.Settings
                 return _amounts220 ?? (_amounts220 = new ObservableCollection<AmountComboItem>(Enumerable.Range(1, 5)
                     .Select(s => new AmountComboItem(s))));
             }
-
         }
 
         public ObservableCollection<AmountComboItem> ErrorAmounts48
@@ -60,51 +75,12 @@ namespace EscInstaller.ViewModel.Settings
             }
         }
 
-        public class AmountComboItem
-        {
-            private readonly int _value;
-
-
-            public AmountComboItem(int value)
-            {
-                _value = value;
-
-            }
-
-            public int Value
-            {
-                get { return _value; }
-            }
-
-            public string Display
-            {
-                get { return (_value).ToString("N0"); }
-            }
-        }
-
-        private static readonly Dictionary<int, int> V220IntervalTable = new Dictionary<int, int>()
-        {
-            {1,80},
-            {2,40},
-            {3,25},
-            {4,20},
-            {5,15},
-        };
-
-        private static readonly Dictionary<int, int> V48IntervalTable = new Dictionary<int, int>()
-        {
-            {1,83},
-            {2,41},
-            {3,28},            
-        };
-
-
         public ICommand UpdateE2Prom
         {
             get
             {
                 return new RelayCommand(() =>
-                {                    
+                {
                     var dlg = new OpenFileDialog();
                     dlg.ShowDialog();
                     if (string.IsNullOrEmpty(dlg.FileName))
@@ -113,17 +89,19 @@ namespace EscInstaller.ViewModel.Settings
 
                     const int expSize = 131072;
 
-                    byte[] bytes = File.ReadAllBytes(dlg.FileName);
+                    var bytes = File.ReadAllBytes(dlg.FileName);
                     if (bytes.Count() != expSize)
                     {
-                        MessageBox.Show(expSize + " bytes were expected while this file counts only " + bytes.Count() + " bytes",
-                                        "Wrong file size", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show(
+                            expSize + " bytes were expected while this file counts only " + bytes.Count() + " bytes",
+                            "Wrong file size", MessageBoxButton.OK, MessageBoxImage.Error);
                         return;
                     }
 
                     if (MessageBox.Show("The eeprom data of the selected file will be added to the send queue, " +
-                                    "once or if connected this is send to the MCU",
-                                    "Confirm update", MessageBoxButton.OKCancel, MessageBoxImage.Information) == MessageBoxResult.Cancel)
+                                        "once or if connected this is send to the MCU",
+                        "Confirm update", MessageBoxButton.OKCancel, MessageBoxImage.Information) ==
+                        MessageBoxResult.Cancel)
                         return;
 
                     //131072 == 2048*64
@@ -132,11 +110,11 @@ namespace EscInstaller.ViewModel.Settings
                     const int packets = 1081;
                     for (var i = 0; i < packets; i++)
                     {
-                        var chunk = bytes.Skip(chuncksize * i + start).Take(chuncksize).ToArray();
-                        CommunicationViewModel.AddData(new SetE2PromExt(_main.Id, chunk, (ushort)(chuncksize * i + start), true));
+                        var chunk = bytes.Skip(chuncksize*i + start).Take(chuncksize).ToArray();
+                        CommunicationViewModel.AddData(new SetE2PromExt(_main.Id, chunk, (ushort) (chuncksize*i + start),
+                            true));
                     }
                 },
-
                     () =>
                     {
                         bool b;
@@ -157,7 +135,6 @@ namespace EscInstaller.ViewModel.Settings
                     RaisePropertyChanged(() => Error220VInterval);
                 }
                 RaisePropertyChanged(() => Error220VAmount);
-
             }
         }
 
@@ -173,7 +150,6 @@ namespace EscInstaller.ViewModel.Settings
                     RaisePropertyChanged(() => Error48VInterval);
                 }
                 RaisePropertyChanged(() => Error48VAmount);
-
             }
         }
 
@@ -184,7 +160,6 @@ namespace EscInstaller.ViewModel.Settings
             {
                 _main.DataModel.Int220VInterval = value;
                 RaisePropertyChanged(() => Error220VInterval);
-
             }
         }
 
@@ -195,7 +170,6 @@ namespace EscInstaller.ViewModel.Settings
             {
                 _main.DataModel.Int48VInterval = value;
                 RaisePropertyChanged(() => Error48VInterval);
-
             }
         }
 
@@ -210,17 +184,7 @@ namespace EscInstaller.ViewModel.Settings
 
         public ICommand SendParameters
         {
-            get
-            {
-                return new RelayCommand(UpdateSettings1, () => Error48VAmount != null && Error220VAmount != null);
-            }
-
-        }
-
-        private void UpdateSettings1()
-        {
-
-            CommunicationViewModel.AddData(new SetMeasurement(_main.Id, Error48VInterval, Error220VInterval, Error48VAmount.Value, Error220VAmount.Value));
+            get { return new RelayCommand(UpdateSettings1, () => Error48VAmount != null && Error220VAmount != null); }
         }
 
         public override Point Size
@@ -230,17 +194,16 @@ namespace EscInstaller.ViewModel.Settings
 
         public string BoseVersion
         {
-            get
-            {
-                return _main.DataModel.BoseVersion;
-            }
+            get { return _main.DataModel.BoseVersion; }
         }
 
         public ICommand SetVersion
         {
             get
             {
-                return new RelayCommand(() => CommunicationViewModel.AddData(new SetBoseVersion(UserDefinedVerion, _main.Id)));
+                return
+                    new RelayCommand(
+                        () => CommunicationViewModel.AddData(new SetBoseVersion(UserDefinedVerion, _main.Id)));
             }
         }
 
@@ -248,7 +211,6 @@ namespace EscInstaller.ViewModel.Settings
         {
             get
             {
-
                 return new RelayCommand(async () =>
                 {
                     var q = new GetBoseVersion(_main.Id);
@@ -259,12 +221,31 @@ namespace EscInstaller.ViewModel.Settings
                     UserDefinedVerion = q.BoseVersion.Trim();
                     RaisePropertyChanged(() => BoseVersion);
                     RaisePropertyChanged(() => UserDefinedVerion);
-
-
                 });
             }
         }
 
         public string UserDefinedVerion { get; set; }
+
+        private void UpdateSettings1()
+        {
+            CommunicationViewModel.AddData(new SetMeasurement(_main.Id, Error48VInterval, Error220VInterval,
+                Error48VAmount.Value, Error220VAmount.Value));
+        }
+
+        public class AmountComboItem
+        {
+            public AmountComboItem(int value)
+            {
+                Value = value;
+            }
+
+            public int Value { get; }
+
+            public string Display
+            {
+                get { return (Value).ToString("N0"); }
+            }
+        }
     }
 }

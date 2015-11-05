@@ -1,6 +1,8 @@
-﻿using System.Windows;
+﻿#region
+
 using System.Windows.Controls;
-using System.Windows.Input;
+
+#endregion
 
 namespace EscInstaller.View
 {
@@ -12,7 +14,6 @@ namespace EscInstaller.View
         public DelayView()
         {
             InitializeComponent();
-         
         }
     }
 }

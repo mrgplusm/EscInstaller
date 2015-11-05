@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -5,13 +7,14 @@ using Common.Commodules;
 using Common.Model;
 using EscInstaller.ViewModel.Connection;
 
+#endregion
+
 namespace EscInstaller.ViewModel.EscCommunication.Logic
 {
     internal class SensitivityReceive
     {
         private readonly MainUnitModel _main;
         private readonly int _mcuId;
-
 
         public SensitivityReceive(int mcuId, MainUnitModel main)
         {

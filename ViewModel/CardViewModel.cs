@@ -1,8 +1,11 @@
-﻿using System.Collections;
+﻿#region
+
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Common.Model;
-using EscInstaller.ViewModel.Settings;
+
+#endregion
 
 namespace EscInstaller.ViewModel
 {
@@ -43,7 +46,7 @@ namespace EscInstaller.ViewModel
                 if (AttachedBackupAmps.Count < 3) return false;
                 //either card has its own backup, or first card has backup.                
                 return false; //todo: fix this
-                
+
                 //return AttachedBackupAmps[Id] || ((CardViewModel) MainUnitViewModel.Cards[0]).AttachedBackupAmps[Id];
             }
         }

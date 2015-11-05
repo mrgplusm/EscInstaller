@@ -1,4 +1,6 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -8,6 +10,8 @@ using Common.Commodules;
 using Common.Model;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+
+#endregion
 
 namespace EscInstaller.ViewModel.Connection
 {
@@ -23,44 +27,6 @@ namespace EscInstaller.ViewModel.Connection
 
         private int _tabIndex;
 
-        public static void AddData(IDispatchData data)
-        {
-            if (data == null) return;
-            var con = OpenConnections.FirstOrDefault(d => d.UnitId == data.DestinationAddress);
-            if (con != null)
-                con.Connection.EnQueue(data);
-        }
-
-        public static void AddData(IEnumerable<IDispatchData> data)
-        {
-            foreach (var dispatchData in data)
-            {
-                AddData(dispatchData);
-            }
-        }
-
-        public CommunicationViewModel()
-        {
-
-        }
-
-        public void UpdateConnections()
-        {
-            if (LibraryData.FuturamaSys.Connections == null) return;
-
-            foreach (var c in LibraryData.FuturamaSys.Connections.Select(model => new ConnectionViewModel(model)).Except(OpenConnections))
-            {
-                OpenConnections.Add(c);
-            }
-        }
-
-
-
-        public int Id
-        {
-            get { return 99; }
-        }
-
         public ObservableCollection<ConnectionViewModel> Connections
         {
             get
@@ -71,8 +37,7 @@ namespace EscInstaller.ViewModel.Connection
                     return new ObservableCollection<ConnectionViewModel>(new List<ConnectionViewModel>()
                     {
                         new ConnectionViewModel(new ConnectionModel()),
-                        new ConnectionViewModel(new ConnectionModel(){IsInDetailMode = true}),
-                        
+                        new ConnectionViewModel(new ConnectionModel() {IsInDetailMode = true})
                     });
                 }
 #endif
@@ -93,15 +58,13 @@ namespace EscInstaller.ViewModel.Connection
             }
         }
 
-
-
         public ICommand AddConnection
         {
             get
             {
-                return new RelayCommand<string>((q) =>
+                return new RelayCommand<string>(q =>
                 {
-                    var z = new ConnectionModel { IsNetConnect = (q == "net") };
+                    var z = new ConnectionModel {IsNetConnect = (q == "net")};
                     var vm = new ConnectionViewModel(z);
 
                     AttachConnectionEvents(vm);
@@ -112,6 +75,73 @@ namespace EscInstaller.ViewModel.Connection
                         LibraryData.FuturamaSys.Connections = new List<ConnectionModel>();
                     LibraryData.FuturamaSys.Connections.Add(z);
                 });
+            }
+        }
+
+        public ICommand RemoveConnection
+        {
+            get
+            {
+                return new RelayCommand<ConnectionViewModel>(s =>
+                {
+                    //stop connection
+                    s.EndConnection();
+
+                    //remove from view
+                    OpenConnections.Remove(s);
+
+                    if (!LibraryData.SystemIsOpen) return;
+                    if (LibraryData.FuturamaSys.Connections == null)
+                    {
+                        LibraryData.FuturamaSys.Connections = new List<ConnectionModel>();
+                        return;
+                    }
+                    LibraryData.FuturamaSys.Connections.Remove(s.DataModel);
+                });
+            }
+        }
+
+        public bool ReadDisclaimer
+        {
+            get { return Properties.Settings.Default.ReadCommunicationDisclaimer; }
+            set
+            {
+                Properties.Settings.Default.ReadCommunicationDisclaimer = value;
+                RaisePropertyChanged(() => ReadDisclaimer);
+            }
+        }
+
+        public int Id
+        {
+            get { return 99; }
+        }
+
+        public static void AddData(IDispatchData data)
+        {
+            if (data == null) return;
+            var con = OpenConnections.FirstOrDefault(d => d.UnitId == data.DestinationAddress);
+            if (con != null)
+                con.Connection.EnQueue(data);
+        }
+
+        public static void AddData(IEnumerable<IDispatchData> data)
+        {
+            foreach (var dispatchData in data)
+            {
+                AddData(dispatchData);
+            }
+        }
+
+        public void UpdateConnections()
+        {
+            if (LibraryData.FuturamaSys.Connections == null) return;
+
+            foreach (
+                var c in
+                    LibraryData.FuturamaSys.Connections.Select(model => new ConnectionViewModel(model))
+                        .Except(OpenConnections))
+            {
+                OpenConnections.Add(c);
             }
         }
 
@@ -127,7 +157,7 @@ namespace EscInstaller.ViewModel.Connection
             vm.Connection.UnitIdChanged -= Connection_ConnectModeChanged;
         }
 
-        void Connection_ConnectModeChanged(object sender, ConnectionModeChangedEventArgs c)
+        private void Connection_ConnectModeChanged(object sender, ConnectionModeChangedEventArgs c)
         {
             OnConnectionModeChanged(c);
         }
@@ -136,41 +166,8 @@ namespace EscInstaller.ViewModel.Connection
 
         protected virtual void OnConnectionModeChanged(ConnectionModeChangedEventArgs e)
         {
-            EventHandler<ConnectionModeChangedEventArgs> handler = ConnectionModeChanged;
+            var handler = ConnectionModeChanged;
             if (handler != null) handler(this, e);
-        }
-
-        public ICommand RemoveConnection
-        {
-            get
-            {
-                return new RelayCommand<ConnectionViewModel>(s =>
-                    {
-                        //stop connection
-                        s.EndConnection();
-
-                        //remove from view
-                        OpenConnections.Remove(s);
-
-                        if (!LibraryData.SystemIsOpen) return;
-                        if (LibraryData.FuturamaSys.Connections == null)
-                        {
-                            LibraryData.FuturamaSys.Connections = new List<ConnectionModel>();
-                            return;
-                        }
-                        LibraryData.FuturamaSys.Connections.Remove(s.DataModel);
-                    });
-            }
-        }
-
-        public bool ReadDisclaimer
-        {
-            get { return Properties.Settings.Default.ReadCommunicationDisclaimer; }
-            set
-            {
-                Properties.Settings.Default.ReadCommunicationDisclaimer = value;
-                RaisePropertyChanged(() => ReadDisclaimer);
-            }
         }
 
         public void SetTriggers()
@@ -182,6 +179,4 @@ namespace EscInstaller.ViewModel.Connection
             }
         }
     }
-
-
 }

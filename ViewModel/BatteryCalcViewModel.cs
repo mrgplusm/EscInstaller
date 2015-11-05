@@ -1,4 +1,5 @@
-﻿using System;
+﻿#region
+
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -8,17 +9,19 @@ using Common.Model;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 
+#endregion
+
 namespace EscInstaller.ViewModel
 {
     public class BatteryCalcViewModel : ViewModelBase
     {
         private static readonly List<AmplifierModel> GetAmplifiers = new List<AmplifierModel>
-            {
-                new AmplifierModel {Name = "Entero 8125", Id = 0, Efficiency = 0.75},
-                new AmplifierModel {Name = "Entero 4125", Id = 1, Efficiency = 0.85},
-                new AmplifierModel {Name = "Entero 8250", Id = 2, Efficiency = 0.65},
-                new AmplifierModel {Name = "Entero 4250", Id = 3, Efficiency = 0.80},
-            };
+        {
+            new AmplifierModel {Name = "Entero 8125", Id = 0, Efficiency = 0.75},
+            new AmplifierModel {Name = "Entero 4125", Id = 1, Efficiency = 0.85},
+            new AmplifierModel {Name = "Entero 8250", Id = 2, Efficiency = 0.65},
+            new AmplifierModel {Name = "Entero 4250", Id = 3, Efficiency = 0.80}
+        };
 
         private double _batteryPowerNeeded;
 
@@ -32,7 +35,6 @@ namespace EscInstaller.ViewModel
                 new ObservableCollection<AmplifierViewModel>(
                     LibraryData.FuturamaSys.Amplifiers.Select(s => new AmplifierViewModel(s)));
         }
-
 
         public double AgingFactor { get; set; }
         public double EscUnits { get; set; }
@@ -53,43 +55,40 @@ namespace EscInstaller.ViewModel
             get
             {
                 return new RelayCommand(() => BatteryPowerNeeded =
-                                              LibraryData.FuturamaSys.Amplifiers.Aggregate(0.0,
-                                                                                           (current, item) =>
-                                                                                           current +
-                                                                                           item.Loads.Sum(
-                                                                                               load => load.Load)*1/
-                                                                                           item.Efficiency));
+                    LibraryData.FuturamaSys.Amplifiers.Aggregate(0.0,
+                        (current, item) =>
+                            current +
+                            item.Loads.Sum(
+                                load => load.Load)*1/
+                            item.Efficiency));
             }
         }
 
         public ObservableCollection<AmplifierModel> ComboChoose { get; private set; }
-
-        public ObservableCollection<AmplifierViewModel> Amplifiers { get; private set; }
-
+        public ObservableCollection<AmplifierViewModel> Amplifiers { get; }
 
         public ICommand DeleteCommand
         {
             get
             {
-                return new RelayCommand<AmplifierViewModel>((s) =>
-                    {
-                        LibraryData.FuturamaSys.Amplifiers.Remove(s.DataModel);
-                        Amplifiers.Remove(s);
-                    }, (s) => Amplifiers.Count > 0);
+                return new RelayCommand<AmplifierViewModel>(s =>
+                {
+                    LibraryData.FuturamaSys.Amplifiers.Remove(s.DataModel);
+                    Amplifiers.Remove(s);
+                }, s => Amplifiers.Count > 0);
             }
         }
-
 
         public ICommand AddCommand
         {
             get
             {
-                return new RelayCommand<AmplifierModel>((s) =>
-                    {
-                        var amp = s;
-                        LibraryData.FuturamaSys.Amplifiers.Add(amp);
-                        Amplifiers.Add(new AmplifierViewModel(amp));
-                    });
+                return new RelayCommand<AmplifierModel>(s =>
+                {
+                    var amp = s;
+                    LibraryData.FuturamaSys.Amplifiers.Add(amp);
+                    Amplifiers.Add(new AmplifierViewModel(amp));
+                });
             }
         }
     }
@@ -97,10 +96,7 @@ namespace EscInstaller.ViewModel
 
     public class AmplifierViewModel
     {
-        private readonly double _efficiency;
         private readonly List<AmplifierLoadModel> _loads;
-        private readonly AmplifierModel _model;
-        private readonly String _name;
 
         public AmplifierViewModel(AmplifierModel model)
         {
@@ -109,26 +105,23 @@ namespace EscInstaller.ViewModel
                 model.Loads = new List<AmplifierLoadModel>();
             }
             _loads = model.Loads;
-            _name = model.Name;
-            _efficiency = model.Efficiency;
-            _model = model;
+            Name = model.Name;
+            Efficiency = model.Efficiency;
+            DataModel = model;
             Loads = new ObservableCollection<AmplifierLoadModel>(_loads);
         }
 
-        public AmplifierModel DataModel
-        {
-            get { return _model; }
-        }
+        public AmplifierModel DataModel { get; }
 
         public ICommand DeleteCommand
         {
             get
             {
-                return new RelayCommand<AmplifierLoadModel>((s) =>
-                    {
-                        _loads.Remove(s);
-                        Loads.Remove(s);
-                    });
+                return new RelayCommand<AmplifierLoadModel>(s =>
+                {
+                    _loads.Remove(s);
+                    Loads.Remove(s);
+                });
             }
         }
 
@@ -136,25 +129,17 @@ namespace EscInstaller.ViewModel
         {
             get
             {
-                return new RelayCommand<AmplifierLoadModel>((s) =>
-                    {
-                        var l = new AmplifierLoadModel();
-                        Loads.Add(l);
-                        _model.Loads.Add(l);
-                    }, (s) => Loads.Count < 9);
+                return new RelayCommand<AmplifierLoadModel>(s =>
+                {
+                    var l = new AmplifierLoadModel();
+                    Loads.Add(l);
+                    DataModel.Loads.Add(l);
+                }, s => Loads.Count < 9);
             }
         }
 
-        public ObservableCollection<AmplifierLoadModel> Loads { get; private set; }
-
-        public string Name
-        {
-            get { return _name; }
-        }
-
-        public Double Efficiency
-        {
-            get { return _efficiency; }
-        }
+        public ObservableCollection<AmplifierLoadModel> Loads { get; }
+        public string Name { get; }
+        public double Efficiency { get; }
     }
 }

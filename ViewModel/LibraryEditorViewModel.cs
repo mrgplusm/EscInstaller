@@ -1,4 +1,6 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.IO;
 using System.Linq;
 using System.Windows;
@@ -6,23 +8,19 @@ using System.Windows.Input;
 using Common;
 using Common.Model;
 using EscInstaller.ImportSpeakers;
-using EscInstaller.ViewModel.Settings;
+using EscInstaller.View;
+using EscInstaller.ViewModel.Connection;
 using EscInstaller.ViewModel.Settings.Peq;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
-using EscInstaller.View;
 using Microsoft.Win32;
-using ITabControl = EscInstaller.ViewModel.Connection.ITabControl;
+
+#endregion
 
 namespace EscInstaller.ViewModel
 {
     public class LibraryEditorViewModel : ViewModelBase, IDropable, ITabControl
     {
-        public LibraryEditorViewModel()
-        {
-
-        }
-
         public ICommand Importbutton
         {
             get
@@ -34,20 +32,6 @@ namespace EscInstaller.ViewModel
                     SpeakerMethods.Library.Add(z);
                 });
             }
-
-        }
-
-        public int Id
-        {
-            get { return 100; }
-        }
-
-
-        private static string GetDefaultPath()
-        {
-            return File.Exists(Properties.Settings.Default.RecentLocationSpeakersMaster) 
-                ? Properties.Settings.Default.RecentLocationSpeakersMaster 
-                : FileManagement.DefaultPath;
         }
 
         public ICommand SaveLibrary
@@ -55,54 +39,51 @@ namespace EscInstaller.ViewModel
             get
             {
                 return new RelayCommand(() =>
+                {
+                    var dlg = new SaveFileDialog
                     {
-                        var dlg = new SaveFileDialog
-                        {
-                            DefaultExt = ".xml",
-                            Filter = "Speaker library xml (.xml)|*.xml",
-                            InitialDirectory = GetDefaultPath(),
-                            AddExtension = true,
-                        };
+                        DefaultExt = ".xml",
+                        Filter = "Speaker library xml (.xml)|*.xml",
+                        InitialDirectory = GetDefaultPath(),
+                        AddExtension = true
+                    };
 
-                        if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.RecentLocationSpeakersMaster))
-                            dlg.InitialDirectory = Properties.Settings.Default.RecentLocationSpeakersMaster;
+                    if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.RecentLocationSpeakersMaster))
+                        dlg.InitialDirectory = Properties.Settings.Default.RecentLocationSpeakersMaster;
 
-                        var result = dlg.ShowDialog();
+                    var result = dlg.ShowDialog();
 
-                        if (!result.HasValue || !result.Value ||string.IsNullOrWhiteSpace(dlg.FileName)) return;
-                        Properties.Settings.Default.RecentLocationSpeakersMaster = dlg.FileName;
-                        Properties.Settings.Default.Save();
+                    if (!result.HasValue || !result.Value || string.IsNullOrWhiteSpace(dlg.FileName)) return;
+                    Properties.Settings.Default.RecentLocationSpeakersMaster = dlg.FileName;
+                    Properties.Settings.Default.Save();
 
 
-                        SpeakerMethods.ReorderIds();
-                        if (FileManagement.SaveCustomSpeakers(SpeakerMethods.Library.Select((n) => n.DataModel).ToList(), dlg.FileName))
-                            MessageBox.Show("Library saved", "Save", MessageBoxButton.OK,
-                                            MessageBoxImage.Information);
-                    });
+                    SpeakerMethods.ReorderIds();
+                    if (FileManagement.SaveCustomSpeakers(SpeakerMethods.Library.Select(n => n.DataModel).ToList(),
+                        dlg.FileName))
+                        MessageBox.Show("Library saved", "Save", MessageBoxButton.OK,
+                            MessageBoxImage.Information);
+                });
             }
         }
 
         public ICommand DeleteCommand
         {
-            get
-            {
-                return new RelayCommand<SpeakerDataViewModel>(p => SpeakerMethods.Library.Remove(p));
-            }
+            get { return new RelayCommand<SpeakerDataViewModel>(p => SpeakerMethods.Library.Remove(p)); }
         }
 
         public ICommand AddNewSpeaker
         {
             get
             {
-
-                return new RelayCommand(() => SpeakerMethods.Library.Add(new SpeakerDataViewModel(new SpeakerDataModel())));
+                return
+                    new RelayCommand(() => SpeakerMethods.Library.Add(new SpeakerDataViewModel(new SpeakerDataModel())));
             }
         }
 
-
         public Type DataType
         {
-            get { return typeof(SpeakerDataViewModel); }
+            get { return typeof (SpeakerDataViewModel); }
         }
 
         public void Drop(object data, int index = -1)
@@ -112,6 +93,18 @@ namespace EscInstaller.ViewModel
             {
                 SpeakerMethods.Library.Insert(index, item);
             }
+        }
+
+        public int Id
+        {
+            get { return 100; }
+        }
+
+        private static string GetDefaultPath()
+        {
+            return File.Exists(Properties.Settings.Default.RecentLocationSpeakersMaster)
+                ? Properties.Settings.Default.RecentLocationSpeakersMaster
+                : FileManagement.DefaultPath;
         }
     }
 }

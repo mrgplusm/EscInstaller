@@ -1,7 +1,11 @@
+#region
+
 using System;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+
+#endregion
 
 namespace EscInstaller.ViewModel
 {
@@ -13,7 +17,7 @@ namespace EscInstaller.ViewModel
         private readonly Action<int> _remove;
 
         public ReceiverData(Action<int, string> updateData, Func<ReceiverData, int> count, Func<int, string> current,
-                            Action<int> remove)
+            Action<int> remove)
         {
             _current = current;
             _remove = remove;
@@ -21,7 +25,7 @@ namespace EscInstaller.ViewModel
             _count = count;
         }
 
-        public String ReceiverAddress
+        public string ReceiverAddress
         {
             get { return _current.Invoke(_count.Invoke(this)); }
             set { _data.Invoke(_count.Invoke(this), value); }

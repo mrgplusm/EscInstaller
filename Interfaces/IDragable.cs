@@ -1,16 +1,20 @@
-﻿using System;
+﻿#region
+
+using System;
+
+#endregion
 
 namespace EscInstaller.View
 {
     public interface IDragable
     {
         /// <summary>
-        /// Type of the data item
+        ///     Type of the data item
         /// </summary>
         Type DataType { get; }
 
         /// <summary>
-        /// Remove the object from the collection
+        ///     Remove the object from the collection
         /// </summary>
         void Remove();
     }

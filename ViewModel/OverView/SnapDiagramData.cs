@@ -1,6 +1,9 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
 
+#endregion
 
 namespace EscInstaller.ViewModel.OverView
 {
@@ -12,39 +15,14 @@ namespace EscInstaller.ViewModel.OverView
         public const int SnapshotWidth = 41;
         public const int Distance = 10;
         public const int InnerSpace = 20;
-
+        private List<SnapShot> _snapShots;
+        public Action OnRemoveChildren;
         public abstract string SettingName { get; }
 
-        protected SnapDiagramData()
-        {
-            //Location.ValueChanged += RecalculateSnaps;
-        }
-        
-        protected void RecalculateSnaps()
-        {
-            foreach (var snapshot in Snapshots)
-            {
-                snapshot.Calculate();
-            }}
-
-        public abstract void SetYLocation();
-
-        public void RemoveChildren()
-        {
-            if (OnRemoveChildren != null)
-                OnRemoveChildren();
-        }
-
         /// <summary>
-        /// Specifies the flow id for this channel
+        ///     Specifies the flow id for this channel
         /// </summary>
         public abstract int Id { get; }
-
-
-        public Action OnRemoveChildren;
-
-
-        private List<SnapShot> _snapShots;
 
         public virtual List<SnapShot> Snapshots
         {
@@ -53,9 +31,25 @@ namespace EscInstaller.ViewModel.OverView
                 return _snapShots ?? (_snapShots = new List<SnapShot>
                 {
                     new SnapShot(this) {Offset = {X = 0, Y = SnapshotHeight}, RowId = 0},
-                    new SnapShot(this) {Offset = {X = Size.X, Y = SnapshotHeight}, RowId = 1},
+                    new SnapShot(this) {Offset = {X = Size.X, Y = SnapshotHeight}, RowId = 1}
                 });
             }
+        }
+
+        protected void RecalculateSnaps()
+        {
+            foreach (var snapshot in Snapshots)
+            {
+                snapshot.Calculate();
+            }
+        }
+
+        public abstract void SetYLocation();
+
+        public void RemoveChildren()
+        {
+            if (OnRemoveChildren != null)
+                OnRemoveChildren();
         }
     }
 }

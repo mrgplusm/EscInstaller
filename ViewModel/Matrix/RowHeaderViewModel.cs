@@ -1,25 +1,21 @@
-using System.Globalization;
-using Common.Model;
+#region
+
 using EscInstaller.ViewModel.OverView;
 using GalaSoft.MvvmLight;
+
+#endregion
 
 namespace EscInstaller.ViewModel.Matrix
 {
     public class RowHeaderViewModel : ViewModelBase
     {
-        private readonly BlOutput _blOutput;
-
-
         public RowHeaderViewModel(BlOutput flowModel)
         {
-            _blOutput = flowModel;
+            DataModel = flowModel;
         }
 
-        public BlOutput DataModel
-        {
-            get { return _blOutput; }
-        }
-        
+        public BlOutput DataModel { get; }
+
         public string HeaderName
         {
             get
@@ -29,9 +25,9 @@ namespace EscInstaller.ViewModel.Matrix
                     return "DesignName";
                 }
 
-                return string.IsNullOrWhiteSpace(_blOutput.NameOfOutput)
-                    ? "Output " + (_blOutput.Id + 1)
-                    : _blOutput.NameOfOutput;                
+                return string.IsNullOrWhiteSpace(DataModel.NameOfOutput)
+                    ? "Output " + (DataModel.Id + 1)
+                    : DataModel.NameOfOutput;
             }
         }
     }

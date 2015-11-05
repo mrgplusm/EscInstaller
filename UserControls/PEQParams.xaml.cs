@@ -1,15 +1,14 @@
-﻿using System;
-using System.ComponentModel;
-using System.IO;
-using System.Linq;
+﻿#region
+
+using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
-using EscInstaller.ViewModel.Settings;
 using EscInstaller.ViewModel.Settings.Peq;
 using Xceed.Wpf.Toolkit;
+
+#endregion
 
 namespace EscInstaller.UserControls
 {
@@ -18,17 +17,15 @@ namespace EscInstaller.UserControls
         public PEQParams()
         {
             InitializeComponent();
-
         }
 
         private void DataGridCellPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            Dgcpmlbd(sender,e);
+            Dgcpmlbd(sender, e);
         }
 
-
         /// <summary>
-        /// single click editing in datagrid
+        ///     single click editing in datagrid
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -81,7 +78,6 @@ namespace EscInstaller.UserControls
             var item = (PeqDataViewModel) row.Item;
             item.IsMouseOver = true;
         }
-
 
         private void RowMouseLeave(object sender, MouseEventArgs e)
         {

@@ -1,16 +1,16 @@
 ﻿<UserControl
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"            
-    
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:matrix="clr-namespace:EscInstaller.ViewModel.Matrix"
     xmlns:userControls="clr-namespace:EscInstaller.UserControls"
     xmlns:view="clr-namespace:EscInstaller.View"
     mc:Ignorable="d"
-    x:Class="EscInstaller.View.PanelView"      
+    x:Class="EscInstaller.View.PanelView"
     d:DataContext="{d:DesignInstance matrix:PanelViewModel, IsDesignTimeCreatable=True}"
-    Name="PanelViewWindow" >
+    Name="PanelViewWindow">
 
     <UserControl.Resources>
         <Style TargetType="{x:Type ToggleButton}">
@@ -18,13 +18,13 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="ToggleButton">
                         <Border x:Name="Overlay" BorderBrush="LightBlue" BorderThickness="1">
-                            <ContentPresenter/>
+                            <ContentPresenter />
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsEnabled" Value="false">
                                 <Setter TargetName="Overlay" Property="Background" Value="LightBlue" />
-                                <Setter Property="Foreground" Value="DarkBlue"></Setter>
-                                <Setter Property="FontWeight" Value="Bold"></Setter>
+                                <Setter Property="Foreground" Value="DarkBlue" />
+                                <Setter Property="FontWeight" Value="Bold" />
                             </Trigger>
                             <Trigger Property="Button.IsMouseOver" Value="True">
                                 <Trigger.Setters>
@@ -39,17 +39,16 @@
         </Style>
 
 
-
         <DataTemplate DataType="{x:Type matrix:ButtonRangeSelector}">
             <DataTemplate.Resources>
 
             </DataTemplate.Resources>
-            <ToggleButton IsEnabled="{Binding Path=IsEnabled}" IsChecked="{Binding Path=IsSelected}" 
-                                              Width="24" Height="110" Content="{Binding DisplayValue}" VerticalContentAlignment="Bottom" >
+            <ToggleButton IsEnabled="{Binding Path=IsEnabled}" IsChecked="{Binding Path=IsSelected}"
+                          Width="24" Height="110" Content="{Binding DisplayValue}" VerticalContentAlignment="Bottom">
                 <ToggleButton.ContentTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding}"   >
-                            <TextBlock.LayoutTransform >
+                        <TextBlock Text="{Binding}">
+                            <TextBlock.LayoutTransform>
                                 <RotateTransform Angle="-90" />
 
                             </TextBlock.LayoutTransform>
@@ -61,12 +60,9 @@
 
 
         <DataTemplate DataType="{x:Type matrix:McuSelector}">
-            <ToggleButton IsEnabled="{Binding Path=IsEnabled}" IsChecked="{Binding Path=IsSelected}" 
-                                                  Width="80" Content="{Binding DisplayValue}" Height="23" />
+            <ToggleButton IsEnabled="{Binding Path=IsEnabled}" IsChecked="{Binding Path=IsSelected}"
+                          Width="80" Content="{Binding DisplayValue}" Height="23" />
         </DataTemplate>
-
-
-
 
 
     </UserControl.Resources>
@@ -81,12 +77,11 @@
         </Grid.RowDefinitions>
 
 
-        <GroupBox Header="{x:Static view:Panel._matrixGroupZoneSelection}"  Grid.Column="0"  >
+        <GroupBox Header="{x:Static view:Panel._matrixGroupZoneSelection}" Grid.Column="0">
 
-            <StackPanel Orientation="Vertical"  Margin="5">
+            <StackPanel Orientation="Vertical" Margin="5">
 
                 <StackPanel Orientation="Horizontal">
-
 
 
                     <DockPanel>
@@ -94,7 +89,7 @@
 
                         <StackPanel DockPanel.Dock="Top" HorizontalAlignment="Right" Width="452">
                             <TextBlock Text="{x:Static view:Panel._ButtonRangeHeader}" VerticalAlignment="Center" />
-                            <ItemsControl ItemsSource="{Binding Path=ButtonRangeSelectors}"  >
+                            <ItemsControl ItemsSource="{Binding Path=ButtonRangeSelectors}">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <StackPanel Orientation="Horizontal" />
@@ -102,33 +97,38 @@
                                 </ItemsControl.ItemsPanel>
                             </ItemsControl>
 
-                            <TextBlock Margin="1" Background="LightBlue" FontSize="12" Foreground="DarkBlue" FontWeight="Bold" Height="20"  >
+                            <TextBlock Margin="1" Background="LightBlue" FontSize="12" Foreground="DarkBlue"
+                                       FontWeight="Bold" Height="20">
                                 <TextBlock.Style>
                                     <Style TargetType="{x:Type TextBlock}">
-                                        <Setter Property="Text" Value="{x:Static view:Panel._matrixSelectionSelectButton}"></Setter>
+                                        <Setter Property="Text"
+                                                Value="{x:Static view:Panel._matrixSelectionSelectButton}" />
 
                                         <Style.Triggers>
-                                            <DataTrigger Binding="{Binding ButtonStartId}" Value="16" >
-                                                <Setter Property="Text" Value="{x:Static matrix:PanelViewModel.PanelText}"></Setter>
+                                            <DataTrigger Binding="{Binding ButtonStartId}" Value="16">
+                                                <Setter Property="Text"
+                                                        Value="{x:Static matrix:PanelViewModel.PanelText}" />
 
                                             </DataTrigger>
-                                            <DataTrigger Binding="{Binding ButtonStartId}" Value="17" >
-                                                <Setter Property="Text" Value="{x:Static view:Panel._matrixSelectionFDSContacts}"></Setter>
+                                            <DataTrigger Binding="{Binding ButtonStartId}" Value="17">
+                                                <Setter Property="Text"
+                                                        Value="{x:Static view:Panel._matrixSelectionFDSContacts}" />
 
                                             </DataTrigger>
-                                            
+
                                         </Style.Triggers>
                                     </Style>
                                 </TextBlock.Style>
                             </TextBlock>
                         </StackPanel>
-                        <StackPanel Orientation="Horizontal" DockPanel.Dock="Left" >
-                            <TextBlock Text="{x:Static view:Panel._matrixScrollSelSystemZone}" VerticalAlignment="Bottom" Width="251" >
+                        <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
+                            <TextBlock Text="{x:Static view:Panel._matrixScrollSelSystemZone}"
+                                       VerticalAlignment="Bottom" Width="251">
                                 <TextBlock.LayoutTransform>
                                     <RotateTransform Angle="-90" />
                                 </TextBlock.LayoutTransform>
                             </TextBlock>
-                            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalAlignment="Bottom" Height="251" >
+                            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalAlignment="Bottom" Height="251">
                                 <ItemsControl ItemsSource="{Binding Path=McuSelectors}">
                                     <ItemsControl.ItemsPanel>
                                         <ItemsPanelTemplate>
@@ -139,8 +139,9 @@
                             </ScrollViewer>
                         </StackPanel>
 
-                        <Border HorizontalAlignment="Left" VerticalAlignment="Top" BorderBrush="LightBlue" BorderThickness="1">
-                            <StackPanel >
+                        <Border HorizontalAlignment="Left" VerticalAlignment="Top" BorderBrush="LightBlue"
+                                BorderThickness="1">
+                            <StackPanel>
                                 <userControls:MatrixView />
                             </StackPanel>
                         </Border>
@@ -153,10 +154,10 @@
             <view:SdMessages />
             <StackPanel.Style>
                 <Style TargetType="{x:Type StackPanel}">
-                    <Setter Property="Visibility" Value="Collapsed"></Setter>
+                    <Setter Property="Visibility" Value="Collapsed" />
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding Path=ButtonStartId}" Value="16">
-                            <Setter Property="StackPanel.Visibility" Value="Visible"></Setter>
+                            <Setter Property="StackPanel.Visibility" Value="Visible" />
                         </DataTrigger>
 
                     </Style.Triggers>

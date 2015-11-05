@@ -1,7 +1,11 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.ComponentModel;
 using System.Windows;
 using EscInstaller.ViewModel;
+
+#endregion
 
 namespace EscInstaller
 {
@@ -30,6 +34,4 @@ namespace EscInstaller
                 e.Cancel = true;
         }
     }
-
-
 }

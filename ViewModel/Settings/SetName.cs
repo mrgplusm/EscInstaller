@@ -17,6 +17,6 @@ namespace EscInstaller.ViewModel.Settings
         BackupAmp,
 
         Compressor,
-        Peq3Band,
+        Peq3Band
     }
 }

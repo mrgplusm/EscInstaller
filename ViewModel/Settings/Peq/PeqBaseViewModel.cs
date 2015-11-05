@@ -1,4 +1,6 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows;
@@ -9,14 +11,14 @@ using EscInstaller.ViewModel.Connection;
 using EscInstaller.ViewModel.OverView;
 using GalaSoft.MvvmLight.CommandWpf;
 
+#endregion
+
 namespace EscInstaller.ViewModel.Settings.Peq
 {
     public abstract class PeqBaseViewModel : SnapDiagramData
     {
-
-
         protected readonly MainUnitViewModel Main;
-
+        private SpeakerDataViewModel _librarySpeaker;
 
         protected PeqBaseViewModel(MainUnitViewModel main)
         {
@@ -28,19 +30,7 @@ namespace EscInstaller.ViewModel.Settings.Peq
             main.PresetNamesUpdated += EepromHandlerOnPresetNamesUpdated;
         }
 
-        private void EepromHandlerOnPresetNamesUpdated(object sender, EventArgs eventArgs)
-        {
-            CurrentSpeaker.UpdateSpeakerName();
-        }
-
-        private void EepromHandlerOnSpeakerRedundancyDataUpdated(object sender, EventArgs eventArgs)
-        {
-            CurrentSpeaker.RefreshBiquads();
-        }
-
         public abstract SpeakerDataViewModel CurrentSpeaker { get; }
-
-
 
         public ICommand LoadButton
         {
@@ -54,14 +44,14 @@ namespace EscInstaller.ViewModel.Settings.Peq
                 return new RelayCommand(() =>
                 {
                     if (MessageBox.Show("Are you sure to remove this speaker?",
-                                        "Remove Speaker",
-                                        MessageBoxButton.YesNo, MessageBoxImage.Question) ==
+                        "Remove Speaker",
+                        MessageBoxButton.YesNo, MessageBoxImage.Question) ==
                         MessageBoxResult.Yes)
 
                         SpeakerMethods.Library.Remove(LibrarySpeaker);
                 }, () =>
-                       LibrarySpeaker != null &&
-                       LibrarySpeaker.IsCustom
+                    LibrarySpeaker != null &&
+                    LibrarySpeaker.IsCustom
                     );
             }
         }
@@ -70,8 +60,6 @@ namespace EscInstaller.ViewModel.Settings.Peq
         {
             get { return new RelayCommand(SavePeq); }
         }
-
-        private SpeakerDataViewModel _librarySpeaker;
 
         /// <summary>
         ///     currently selected speaker
@@ -86,28 +74,7 @@ namespace EscInstaller.ViewModel.Settings.Peq
             }
         }
 
-        private void SavePeq()
-        {
-
-            if (SpeakerMethods.Library.Any(i => i.SpeakerName == CurrentSpeaker.SpeakerName))
-            {
-                MessageBox.Show(SpeakerLibrary.SpeakerExistsMessage, SpeakerLibrary.SpeakerExistsTitle,
-                                MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            var s = CurrentSpeaker.DataModel.Clone();
-            SpeakerMethods.Library.Add(new SpeakerDataViewModel(s) { IsCustom = true });
-            MessageBox.Show(SpeakerLibrary.SavedSucces, SpeakerLibrary.SavedSuccesTitle, MessageBoxButton.OK,
-                            MessageBoxImage.Information);
-        }
-
-        #region Nested type: CurrentSpeakerChange
-
-        #endregion
-
         protected abstract int PresetId { get; }
-
 
         public ICommand ImportButton
         {
@@ -127,6 +94,33 @@ namespace EscInstaller.ViewModel.Settings.Peq
 
         public abstract string DisplaySetting { get; }
 
+        private void EepromHandlerOnPresetNamesUpdated(object sender, EventArgs eventArgs)
+        {
+            CurrentSpeaker.UpdateSpeakerName();
+        }
 
+        private void EepromHandlerOnSpeakerRedundancyDataUpdated(object sender, EventArgs eventArgs)
+        {
+            CurrentSpeaker.RefreshBiquads();
+        }
+
+        private void SavePeq()
+        {
+            if (SpeakerMethods.Library.Any(i => i.SpeakerName == CurrentSpeaker.SpeakerName))
+            {
+                MessageBox.Show(SpeakerLibrary.SpeakerExistsMessage, SpeakerLibrary.SpeakerExistsTitle,
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            var s = CurrentSpeaker.DataModel.Clone();
+            SpeakerMethods.Library.Add(new SpeakerDataViewModel(s) {IsCustom = true});
+            MessageBox.Show(SpeakerLibrary.SavedSucces, SpeakerLibrary.SavedSuccesTitle, MessageBoxButton.OK,
+                MessageBoxImage.Information);
+        }
+
+        #region Nested type: CurrentSpeakerChange
+
+        #endregion
     }
 }

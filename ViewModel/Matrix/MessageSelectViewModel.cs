@@ -1,29 +1,32 @@
+#region
+
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
+using Common;
 using EscInstaller.View;
-using EscInstaller.ViewModel.Connection;
-using EscInstaller.ViewModel.EscCommunication;
 using EscInstaller.ViewModel.EscCommunication.Logic;
 using EscInstaller.ViewModel.SDCard;
 using GalaSoft.MvvmLight;
-using Common;
 using GalaSoft.MvvmLight.CommandWpf;
+
+#endregion
 
 namespace EscInstaller.ViewModel.Matrix
 {
     /// <summary>
-    /// Used to represent the one of the three ABCD panel selections
+    ///     Used to represent the one of the three ABCD panel selections
     /// </summary>
     public class MessageSelectViewModel : ViewModelBase
     {
         //public const int SelectionB = Common.Commodules.MessageSelection.SelectionB;
 
-        private readonly string[] _headerkeys = { "_matrixGroupFire", "_matrixGroupEvac", "_matrixGroupFDS" };
-        private readonly MainUnitViewModel _main;
+        private readonly string[] _headerkeys = {"_matrixGroupFire", "_matrixGroupEvac", "_matrixGroupFDS"};
         private readonly int _id;
-
+        private readonly MainUnitViewModel _main;
+        private ObservableCollection<SdFileVM> _mesA;
+        private ObservableCollection<SdFileVM> _mesB;
 
         public MessageSelectViewModel(MainUnitViewModel main, int id)
         {
@@ -31,26 +34,6 @@ namespace EscInstaller.ViewModel.Matrix
             _id = id;
             main.SdCardMessagesReceived += Receiver_SdCardMessagesReceived;
             main.SdCardPositionsReceived += ReceiverOnSdCardPositionsReceived;
-        }
-
-        private void ReceiverOnSdCardPositionsReceived(object sender, EventArgs eventArgs)
-        {
-            RaisePropertyChanged(() => ButtonA1);
-            RaisePropertyChanged(() => ButtonA2);
-            RaisePropertyChanged(() => ButtonB1);
-            RaisePropertyChanged(() => ButtonB2);
-            RaisePropertyChanged(() => ButtonC1);
-            RaisePropertyChanged(() => ButtonC2);
-            RaisePropertyChanged(() => ButtonD1);
-            RaisePropertyChanged(() => ButtonD2);
-        }
-
-        void Receiver_SdCardMessagesReceived(object sender, EventArgs eventArgs)
-        {            
-            foreach (var sdFileVM in MesA.Concat(MesB))
-            {
-                sdFileVM.UpdateName();
-            }
         }
 
         public string HeaderKey
@@ -62,8 +45,6 @@ namespace EscInstaller.ViewModel.Matrix
             }
         }
 
-
-        private ObservableCollection<SdFileVM> _mesA;
         public ObservableCollection<SdFileVM> MesA
         {
             get
@@ -71,11 +52,12 @@ namespace EscInstaller.ViewModel.Matrix
                 return _mesA ??
                        (_mesA =
                            new ObservableCollection<SdFileVM>(
-                               LibraryData.FuturamaSys.SdFilesA.OrderByDescending(i => i.Position == 0xff).ThenBy(i => i.Position).Select(n => new SdFileVM(n, 0))));
+                               LibraryData.FuturamaSys.SdFilesA.OrderByDescending(i => i.Position == 0xff)
+                                   .ThenBy(i => i.Position)
+                                   .Select(n => new SdFileVM(n, 0))));
             }
         }
 
-        private ObservableCollection<SdFileVM> _mesB;
         public ObservableCollection<SdFileVM> MesB
         {
             get
@@ -83,7 +65,8 @@ namespace EscInstaller.ViewModel.Matrix
                 return _mesB ??
                        (_mesB =
                            new ObservableCollection<SdFileVM>(
-                               LibraryData.FuturamaSys.SdFilesB.Where(n => n.Position < 0xff).Select(n => new SdFileVM(n, 1))));
+                               LibraryData.FuturamaSys.SdFilesB.Where(n => n.Position < 0xff)
+                                   .Select(n => new SdFileVM(n, 1))));
             }
         }
 
@@ -118,7 +101,7 @@ namespace EscInstaller.ViewModel.Matrix
             {
                 if (value == null) return;
                 LibraryData.FuturamaSys.Messages[_id].ButtonA1 = value.Position;
-                OnSelectionChanged(_id * 4 + 0);
+                OnSelectionChanged(_id*4 + 0);
 
                 SendMessages();
             }
@@ -143,7 +126,7 @@ namespace EscInstaller.ViewModel.Matrix
                 if (value == null) return;
                 LibraryData.FuturamaSys.Messages[_id].ButtonB1 = value.Position;
 
-                OnSelectionChanged(_id * 4 + 1);
+                OnSelectionChanged(_id*4 + 1);
                 SendMessages();
             }
         }
@@ -167,7 +150,7 @@ namespace EscInstaller.ViewModel.Matrix
             {
                 if (value == null) return;
                 LibraryData.FuturamaSys.Messages[_id].ButtonC1 = value.Position;
-                OnSelectionChanged(_id * 4 + 2);
+                OnSelectionChanged(_id*4 + 2);
                 SendMessages();
             }
         }
@@ -190,7 +173,7 @@ namespace EscInstaller.ViewModel.Matrix
             {
                 if (value == null) return;
                 LibraryData.FuturamaSys.Messages[_id].ButtonD1 = value.Position;
-                OnSelectionChanged(_id * 4 + 3);
+                OnSelectionChanged(_id*4 + 3);
                 SendMessages();
             }
         }
@@ -207,21 +190,39 @@ namespace EscInstaller.ViewModel.Matrix
             }
         }
 
+        private void ReceiverOnSdCardPositionsReceived(object sender, EventArgs eventArgs)
+        {
+            RaisePropertyChanged(() => ButtonA1);
+            RaisePropertyChanged(() => ButtonA2);
+            RaisePropertyChanged(() => ButtonB1);
+            RaisePropertyChanged(() => ButtonB2);
+            RaisePropertyChanged(() => ButtonC1);
+            RaisePropertyChanged(() => ButtonC2);
+            RaisePropertyChanged(() => ButtonD1);
+            RaisePropertyChanged(() => ButtonD2);
+        }
+
+        private void Receiver_SdCardMessagesReceived(object sender, EventArgs eventArgs)
+        {
+            foreach (var sdFileVM in MesA.Concat(MesB))
+            {
+                sdFileVM.UpdateName();
+            }
+        }
+
         /// <summary>
-        /// Occurs when user selects one of the messages
+        ///     Occurs when user selects one of the messages
         /// </summary>
         public event EventHandler<int> SelectionChanged;
 
         protected virtual void OnSelectionChanged(int e)
         {
-            EventHandler<int> handler = SelectionChanged;
+            var handler = SelectionChanged;
             if (handler != null) handler(this, e);
         }
 
-
         public async void SendMessages()
         {
-
             if (!LibraryData.SystemIsOpen) return;
             if (LibraryData.FuturamaSys.Messages == null || LibraryData.FuturamaSys.Messages.Count < 3) return;
             var q = new MessageSelector(_main.DataModel);
@@ -232,6 +233,5 @@ namespace EscInstaller.ViewModel.Matrix
     public class MessageSelectionChangedEventArgs
     {
         public int ButtonId;
-
     }
 }

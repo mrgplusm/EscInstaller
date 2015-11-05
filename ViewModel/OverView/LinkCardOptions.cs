@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -5,13 +7,16 @@ using Common.Model;
 using EscInstaller.ViewModel.Settings;
 using GalaSoft.MvvmLight;
 
+#endregion
+
 namespace EscInstaller.ViewModel.OverView
 {
     public class LinkCardOption : ViewModelBase
     {
         private readonly CardModel _card;
-        private readonly MainUnitViewModel _main;
         private readonly BlLink _link;
+        private readonly MainUnitViewModel _main;
+        private ObservableCollection<AuxLinkOption> _auxLinkOptions;
 
         public LinkCardOption(CardModel card, MainUnitViewModel main, BlLink link)
         {
@@ -26,9 +31,6 @@ namespace EscInstaller.ViewModel.OverView
             get { return (_card.Id + 1).ToString("N0"); }
         }
 
-        
-
-        private ObservableCollection<AuxLinkOption> _auxLinkOptions;
         public ObservableCollection<AuxLinkOption> AuxLinkOptions
         {
             get

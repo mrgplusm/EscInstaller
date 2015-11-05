@@ -1,7 +1,4 @@
-﻿using System.Windows;
-using System.Windows.Input;
-
-namespace EscInstaller.View
+﻿namespace EscInstaller.View
 {
     /// <summary>
     ///     Interaction logic for InputEqView.xaml
@@ -10,7 +7,6 @@ namespace EscInstaller.View
     {
         public ToneControlView()
         {
-
             InitializeComponent();
         }
     }

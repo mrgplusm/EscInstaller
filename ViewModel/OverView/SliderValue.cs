@@ -1,3 +1,5 @@
+#region
+
 using System;
 using Common;
 using Common.Commodules;
@@ -5,12 +7,14 @@ using Common.Model;
 using EscInstaller.ViewModel.Connection;
 using GalaSoft.MvvmLight;
 
+#endregion
+
 namespace EscInstaller.ViewModel.OverView
 {
     public class SliderValue : ViewModelBase, IEquatable<SliderValue>
     {
-        private readonly FlowModel _flow;
         private readonly BlExtInput _extInput;
+        private readonly FlowModel _flow;
         private bool _useVu;
 
         public SliderValue(FlowModel flow, BlExtInput extInput)
@@ -19,39 +23,21 @@ namespace EscInstaller.ViewModel.OverView
             _extInput = extInput;
         }
 
-        public void UpdateValue()
-        {
-            RaisePropertyChanged(() => Value);
-        }
-
         public double Value
         {
             get { return _flow.InputSlider; }
             set
             {
-                _flow.InputSlider = value; RaisePropertyChanged(() => Value);
+                _flow.InputSlider = value;
+                RaisePropertyChanged(() => Value);
                 _extInput.OnValueUpdate();
-                CommunicationViewModel.AddData(new SetGainSlider(_flow.Id, (int)value, SliderType.Input));
+                CommunicationViewModel.AddData(new SetGainSlider(_flow.Id, (int) value, SliderType.Input));
             }
         }
 
         public string Header
         {
-            get { return BlExtInput.Names[(_flow.Id - GenericMethods.StartCountFrom) % 5]; }
-        }
-
-        public event EventHandler UseVuUpdated;
-
-        protected virtual void OnUseVuUpdated()
-        {
-            EventHandler handler = UseVuUpdated;
-            if (handler != null) handler(this, EventArgs.Empty);
-        }
-
-        public void UpdateUseVu(bool value)
-        {
-            _useVu = value;
-            RaisePropertyChanged(()=> UseVu);
+            get { return BlExtInput.Names[(_flow.Id - GenericMethods.StartCountFrom)%5]; }
         }
 
         public bool UseVu
@@ -77,6 +63,25 @@ namespace EscInstaller.ViewModel.OverView
             return Equals(_flow.Id, other._flow.Id);
         }
 
+        public void UpdateValue()
+        {
+            RaisePropertyChanged(() => Value);
+        }
+
+        public event EventHandler UseVuUpdated;
+
+        protected virtual void OnUseVuUpdated()
+        {
+            var handler = UseVuUpdated;
+            if (handler != null) handler(this, EventArgs.Empty);
+        }
+
+        public void UpdateUseVu(bool value)
+        {
+            _useVu = value;
+            RaisePropertyChanged(() => UseVu);
+        }
+
         public override int GetHashCode()
         {
             return (_flow != null ? _flow.GetHashCode() : 0);
@@ -86,7 +91,5 @@ namespace EscInstaller.ViewModel.OverView
         {
             return Equals(obj as SliderValue);
         }
-
-
     }
 }

@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +9,8 @@ using Common.Commodules;
 using Common.Model;
 using EscInstaller.ViewModel.Connection;
 using EscInstaller.ViewModel.Settings.Peq;
+
+#endregion
 
 namespace EscInstaller.ViewModel.EscCommunication.Logic
 {
@@ -30,7 +34,7 @@ namespace EscInstaller.ViewModel.EscCommunication.Logic
             {
                 {SpeakerPeqType.BiquadsPreset, Main.Id*12},
                 {SpeakerPeqType.BiquadsAux, Main.Id*12},
-                {SpeakerPeqType.BiquadsMic, 2 + Main.Id*5 + GenericMethods.StartCountFrom},
+                {SpeakerPeqType.BiquadsMic, 2 + Main.Id*5 + GenericMethods.StartCountFrom}
             };
 
             return flowOffsets.SelectMany(offset => GetPresetData(offset.Value, offset.Key));

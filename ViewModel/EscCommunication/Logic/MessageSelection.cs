@@ -1,9 +1,13 @@
+#region
+
 using System;
 using System.Threading.Tasks;
 using Common;
 using Common.Commodules;
 using Common.Model;
 using EscInstaller.ViewModel.Connection;
+
+#endregion
 
 namespace EscInstaller.ViewModel.EscCommunication.Logic
 {

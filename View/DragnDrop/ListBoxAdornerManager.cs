@@ -1,8 +1,10 @@
-﻿using System.Diagnostics;
+﻿#region
+
 using System.Windows;
 using System.Windows.Documents;
-using Common.Helpers;
 using EscInstaller.Adorners;
+
+#endregion
 
 namespace EscInstaller.View.DragnDrop
 {
@@ -10,18 +12,18 @@ namespace EscInstaller.View.DragnDrop
     {
         private readonly AdornerLayer _adornerLayer;
         private ListBoxAdorner _adorner;
+        private UIElement _lastElement;
 
         internal ListBoxAdornerManager(AdornerLayer layer)
         {
             _adornerLayer = layer;
         }
 
-        private UIElement _lastElement;
-
         internal void Update(UIElement adornedElement, bool isAboveElement)
         {
             //exit if nothing changed
-            if (_lastElement != null && _lastElement.Equals(adornedElement) && _adorner.IsAboveElement == isAboveElement) return;
+            if (_lastElement != null && _lastElement.Equals(adornedElement) && _adorner.IsAboveElement == isAboveElement)
+                return;
             _lastElement = adornedElement;
 
             if (_adorner == null)
@@ -34,6 +36,5 @@ namespace EscInstaller.View.DragnDrop
             if (_adorner != null)
                 _adornerLayer.Remove(_adorner);
         }
-
     }
 }

@@ -1,36 +1,38 @@
-﻿using System;
+﻿#region
+
 using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
 using Common;
+using EscInstaller.ViewModel.Connection;
 using EscInstaller.ViewModel.OverView;
-using CommunicationViewModel = EscInstaller.ViewModel.Connection.CommunicationViewModel;
+
+#endregion
 
 namespace EscInstaller.View
 {
-
-
-
     /// <summary>
     ///     Interaction logic for MonitoringView.xaml
     /// </summary>
     public partial class MonitoringView
     {
-
-        private enum ButtonType
-        {
-            Calibrate,
-            Measure,
-        }
-
         private static readonly Thread Thread = Thread.CurrentThread;
 
         public MonitoringView()
         {
             InitializeComponent();
+        }
 
+        public string Play
+        {
+            get { return View.Monitoring._monitorPlay; }
+        }
+
+        public string Stop
+        {
+            get { return View.Monitoring._monitorStop; }
         }
 
         private void CalibrateButton(object sender, RoutedEventArgs e)
@@ -38,18 +40,18 @@ namespace EscInstaller.View
             ButtonAction(sender, ButtonType.Calibrate);
         }
 
-
         private void MeasureButton(object sender, RoutedEventArgs e)
         {
             ButtonAction(sender, ButtonType.Measure);
         }
+
         private void ButtonAction(object sender, ButtonType button)
         {
             if (CommunicationViewModel.OpenConnections.All(q => q.ConnectMode != ConnectMode.Install))
                 return;
-            var t = (Button)sender;
+            var t = (Button) sender;
             var oldText = t.Content;
-            var dc = (BlMonitor)t.CommandParameter;
+            var dc = (BlMonitor) t.CommandParameter;
 
             t.IsEnabled = false;
 
@@ -82,36 +84,26 @@ namespace EscInstaller.View
 
                 for (var i = 0; i < wt; i++)
                 {
-                    int i1 = i;
+                    var i1 = i;
                     fromThread.Invoke(
-                        new Action(() =>
-                        {
-                            t.Content = "Wait " + (wt - i1) + "s...";
-                        }));
+                        () => { t.Content = "Wait " + (wt - i1) + "s..."; });
                     if (quit) break;
                     Thread.Sleep(1000);
                 }
-                fromThread.Invoke(new Action(() =>
+                fromThread.Invoke(() =>
                 {
                     t.IsEnabled = true;
                     t.Content = oldText;
-                }));
-
-            }) { IsBackground = true };
+                });
+            }) {IsBackground = true};
 
             a.Start();
         }
 
-        public string Play
+        private enum ButtonType
         {
-            get { return View.Monitoring._monitorPlay; }
+            Calibrate,
+            Measure
         }
-
-        public string Stop
-        {
-            get { return View.Monitoring._monitorStop; }
-        }
-
-        
     }
 }

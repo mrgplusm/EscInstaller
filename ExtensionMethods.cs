@@ -1,4 +1,6 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -9,20 +11,19 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Security.Cryptography;
 using System.Text;
 using System.Windows;
 using System.Windows.Markup;
-using System.Windows.Media;
-using Common;
-using Common.Commodules;
-using EscInstaller.ViewModel.Settings;
+using Expression = System.Linq.Expressions.Expression;
+
+#endregion
 
 namespace EscInstaller
 {
     public static class ExtensionMethods
     {
+        private static readonly Random Random = new Random((int) DateTime.Now.Ticks); //thanks to McAden
 
         public static string GetHash<T>(this object instance) where T : HashAlgorithm, new()
         {
@@ -96,8 +97,6 @@ namespace EscInstaller
             window.WindowState = WindowState.Normal;
         }
 
-        private static readonly Random Random = new Random((int) DateTime.Now.Ticks); //thanks to McAden
-
         public static string RandomString(this int size)
         {
             var builder = new StringBuilder();
@@ -136,46 +135,18 @@ namespace EscInstaller
         }
 
         /// <summary>
-        ///   Reference Article http://www.codeproject.com/KB/tips/SerializedObjectCloner.aspx
-        /// 
-        ///   Provides a method for performing a deep copy of an object.
-        ///   Binary Serialization is used to perform the copy.
+        ///     Reference Article http://www.codeproject.com/KB/tips/SerializedObjectCloner.aspx
+        ///     Provides a method for performing a deep copy of an object.
+        ///     Binary Serialization is used to perform the copy.
         /// </summary>
         /// <summary>
-        ///   Perform a deep Copy of the object.
+        ///     Perform a deep Copy of the object.
         /// </summary>
         /// <typeparam name="T"> The type of object being copied. </typeparam>
         /// <param name="source"> The object instance to copy. </param>
         /// <returns> The copied object. </returns>
-        //public static T Clone<T>(this T source)
-        //{
-        //    if (!typeof(T).IsSerializable)
-        //    {
-        //        throw new ArgumentException("The type must be serializable.", "source");
-        //    }
-
-        //    // Don't serialize a null object, simply return the default for that object
-        //    if (ReferenceEquals(source, null))
-        //    {
-        //        return default(T);
-        //    }
-
-        //    IFormatter formatter = new BinaryFormatter();
-        //    Stream stream = new MemoryStream();
-        //    using (stream)
-        //    {
-        //        formatter.Serialize(stream, source);
-        //        stream.Seek(0, SeekOrigin.Begin);
-        //        return (T)formatter.Deserialize(stream);
-        //    }
-        //}
-
-
-         
-  
-
         /// <summary>
-        ///   garbage
+        ///     garbage
         /// </summary>
         /// <typeparam name="T"> </typeparam>
         /// <returns> </returns>
@@ -197,7 +168,7 @@ namespace EscInstaller
             return enumValList;
         }
 
-        public static MemberInfo GetMemberInfo(this System.Linq.Expressions.Expression expression)
+        public static MemberInfo GetMemberInfo(this Expression expression)
         {
             MemberExpression operand;
             var lambdaExpression = (LambdaExpression) expression;
@@ -213,9 +184,8 @@ namespace EscInstaller
             return operand.Member;
         }
 
-
         /// <summary>
-        ///   garbage
+        ///     garbage
         /// </summary>
         /// <param name="value"> </param>
         /// <returns> </returns>
@@ -243,8 +213,7 @@ namespace EscInstaller
 
             if (clone is T)
                 return (T) clone;
-            else
-                return null;
+            return null;
         }
 
         public static T HashPop<T>(this HashSet<T> hashSet)
@@ -254,10 +223,8 @@ namespace EscInstaller
             return q;
         }
 
-
         [DllImport("kernel32.dll", SetLastError = true)]
-        public static extern int GetShortPathName(String pathName, StringBuilder shortName, int cbShortName);
-
+        public static extern int GetShortPathName(string pathName, StringBuilder shortName, int cbShortName);
 
         public static ObservableCollection<T> RemoveAll<T>(
             this ObservableCollection<T> coll, Func<T, bool> condition)
@@ -271,8 +238,5 @@ namespace EscInstaller
 
             return coll;
         }
-
-    
-    
     }
 }

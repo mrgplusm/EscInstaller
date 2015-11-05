@@ -1,23 +1,21 @@
-﻿using System.Windows.Controls;
-using System.Windows.Input;
-using GalaSoft.MvvmLight.CommandWpf;
-using GalaSoft.MvvmLight;
+﻿#region
+
 using System.Windows;
-using System.Collections.Generic;
+using GalaSoft.MvvmLight;
+
+#endregion
 
 namespace EscInstaller.ViewModel.OverView
 {
-
     public abstract class DiagramData : ViewModelBase
     {
+        private bool _animateWhenLoaded;
+        private BindablePoint _location;
         public abstract Point Size { get; }
 
         public virtual int ZIndex
         {
-            get
-            {
-                return 0;
-            }
+            get { return 0; }
         }
 
         public virtual bool AnimateWhenLoaded
@@ -32,23 +30,12 @@ namespace EscInstaller.ViewModel.OverView
 
         public virtual bool IsEnabled
         {
-            get
-            {
-                return true;
-            }
+            get { return true; }
         }
-
-        private BindablePoint _location;
-        private bool _animateWhenLoaded;
 
         public virtual BindablePoint Location
         {
-            get
-            {
-                return _location ?? (_location = new BindablePoint());
-            }
+            get { return _location ?? (_location = new BindablePoint()); }
         }
     }
-
-
 }

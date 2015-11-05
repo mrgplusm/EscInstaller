@@ -1,5 +1,9 @@
+#region
+
 using System.Linq;
 using EscInstaller.ViewModel.Settings.Peq;
+
+#endregion
 
 namespace EscInstaller.ViewModel.EscCommunication.Logic
 {

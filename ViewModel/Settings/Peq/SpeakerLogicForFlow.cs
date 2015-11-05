@@ -1,8 +1,12 @@
+#region
+
 using System.Collections.Generic;
 using System.Linq;
 using Common;
 using Common.Commodules;
 using Common.Model;
+
+#endregion
 
 namespace EscInstaller.ViewModel.Settings.Peq
 {
@@ -23,7 +27,6 @@ namespace EscInstaller.ViewModel.Settings.Peq
 
         public IEnumerable<SetE2PromExt> GetEmtptyRedundancyData(IEnumerable<int> biquads)
         {
-
             return
                 biquads.Select(
                     bq =>
@@ -38,7 +41,7 @@ namespace EscInstaller.ViewModel.Settings.Peq
         }
 
         /// <summary>
-        /// Get total dsp values for every biquad
+        ///     Get total dsp values for every biquad
         /// </summary>
         /// <returns></returns>
         public IEnumerable<PeqParam> DspData()
@@ -47,7 +50,7 @@ namespace EscInstaller.ViewModel.Settings.Peq
         }
 
         /// <summary>
-        /// Get dsp data for specific parameter
+        ///     Get dsp data for specific parameter
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
@@ -57,7 +60,7 @@ namespace EscInstaller.ViewModel.Settings.Peq
         }
 
         /// <summary>
-        /// Get redundancy data for specific parameter
+        ///     Get redundancy data for specific parameter
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
@@ -75,10 +78,10 @@ namespace EscInstaller.ViewModel.Settings.Peq
         }
 
         /// <summary>
-        /// Dsp Data
-        /// Redundancy data
-        /// Empty dsp data for empty biquads
-        /// Empty redundancy data for empty biquads
+        ///     Dsp Data
+        ///     Redundancy data
+        ///     Empty dsp data for empty biquads
+        ///     Empty redundancy data for empty biquads
         /// </summary>
         /// <returns></returns>
         public IEnumerable<IDispatchData> TotalSpeakerData()
@@ -114,7 +117,5 @@ namespace EscInstaller.ViewModel.Settings.Peq
                     return new CrossoverLogic(model, Model, _flowId);
             }
         }
-
-
     }
 }

@@ -1,5 +1,9 @@
-﻿using EscInstaller.ViewModel.EscCommunication.downloadItems;
+﻿#region
+
+using EscInstaller.ViewModel.EscCommunication.downloadItems;
 using EscInstaller.ViewModel.EscCommunication.UploadItem;
+
+#endregion
 
 namespace EscInstaller.ViewModel.EscCommunication
 {

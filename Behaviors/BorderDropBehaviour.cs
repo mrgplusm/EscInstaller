@@ -1,14 +1,17 @@
+#region
+
 using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interactivity;
 using EscInstaller.View;
 
+#endregion
+
 namespace EscInstaller.Behaviors
 {
     public class BorderDropBehaviour : Behavior<Border>
     {
-
         private Type _dataType; //the type of the data that can be dropped into this control
 
         protected override void OnAttached()
@@ -21,17 +24,15 @@ namespace EscInstaller.Behaviors
             AssociatedObject.DragEnter += AssociatedObject_DragEnter;
         }
 
-        void AssociatedObject_DragOver(object sender, DragEventArgs e)
+        private void AssociatedObject_DragOver(object sender, DragEventArgs e)
         {
             e.Handled = true;
             if (_dataType != null)
             {
-
             }
-           
         }
 
-        void AssociatedObject_Drop(object sender, DragEventArgs e)
+        private void AssociatedObject_Drop(object sender, DragEventArgs e)
         {
             //remove the data from the source
             var source = e.Data.GetData(_dataType) as IDragable;
@@ -44,14 +45,14 @@ namespace EscInstaller.Behaviors
             e.Handled = true;
         }
 
-        void AssociatedObject_DragEnter(object sender, DragEventArgs e)
+        private void AssociatedObject_DragEnter(object sender, DragEventArgs e)
         {
             e.Handled = true;
             if (_dataType != null) return;
             //if the DataContext implements IDropable, record the data type that can be dropped
             if (AssociatedObject.DataContext == null) return;
             if (AssociatedObject.DataContext as IDropable == null) return;
-            _dataType = ((IDropable)AssociatedObject.DataContext).DataType;
+            _dataType = ((IDropable) AssociatedObject.DataContext).DataType;
         }
     }
 }

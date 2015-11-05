@@ -1,13 +1,17 @@
+#region
+
 using System;
 using System.Diagnostics;
 using System.Linq;
 using Common;
 using Common.Model;
 
+#endregion
+
 namespace EscInstaller
 {
     public static class UnitFinder
-    {       
+    {
         public static bool TryGetFlowFromId(int id, FuturamaSysModel model, out FlowModel flow)
         {
             if (model == null)
@@ -46,10 +50,11 @@ namespace EscInstaller
             flow = card.Flows.FirstOrDefault(s => s.Id == id);
             return true;
         }
+
         public static int GetCardIdFromFlowId(int id)
         {
             if (id >= GenericMethods.StartCountFrom) return 3;
-            var flowId = (int)Math.Floor((id % 12) / 4.0);
+            var flowId = (int) Math.Floor((id%12)/4.0);
             return flowId;
         }
     }

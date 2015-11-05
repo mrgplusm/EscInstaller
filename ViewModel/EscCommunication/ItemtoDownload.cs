@@ -1,7 +1,11 @@
+#region
+
 using System;
 using System.Threading.Tasks;
 using EscInstaller.ViewModel.EscCommunication.Logic;
 using GalaSoft.MvvmLight;
+
+#endregion
 
 namespace EscInstaller.ViewModel.EscCommunication
 {
@@ -11,7 +15,6 @@ namespace EscInstaller.ViewModel.EscCommunication
         private bool _doDownload;
         private double _progressBar;
         private bool _receiveCompleted;
-
 
         protected ItemtoDownload(MainUnitViewModel main)
         {
@@ -35,7 +38,6 @@ namespace EscInstaller.ViewModel.EscCommunication
         ///     to execute when this item is selected
         /// </summary>
         public abstract Task Function { get; }
-
 
         public bool ReceiveCompleted
         {

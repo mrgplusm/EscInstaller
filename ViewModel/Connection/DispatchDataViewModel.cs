@@ -1,30 +1,69 @@
+#region
+
 using System;
 using Common.Commodules;
 using GalaSoft.MvvmLight;
+
+#endregion
 
 namespace EscInstaller.ViewModel.Connection
 {
     public class DispatchDataViewModel : ViewModelBase, IEquatable<DispatchDataViewModel>
     {
-        private readonly IDispatchData _data;
-
         public DispatchDataViewModel(IDispatchData data)
         {
-            _data = data;            
-            _data.Error += (q, r) =>
-                {
-                    RaisePropertyChanged(() => ErrorMessage);
-                    RaisePropertyChanged(() => HasErrors);
-                };
+            DataModel = data;
+            DataModel.Error += (q, r) =>
+            {
+                RaisePropertyChanged(() => ErrorMessage);
+                RaisePropertyChanged(() => HasErrors);
+            };
 
-            _data.Dispatched += () => RaisePropertyChanged(() => IsDispatched);            
-        }        
+            DataModel.Dispatched += () => RaisePropertyChanged(() => IsDispatched);
+        }
+
+        public DateTime CreationDate
+        {
+            get { return DataModel.CreationDate; }
+        }
+
+        public string ErrorMessage
+        {
+            get { return DataModel.ErrorMessage; }
+        }
+
+        public int DestinationAddress
+        {
+            get { return DataModel.DestinationAddress; }
+        }
+
+        public bool HasErrors
+        {
+            get { return !DataModel.ErrorMessage.Equals(string.Empty); }
+        }
+
+        public int Id
+        {
+            get { return DataModel.Id; }
+        }
+
+        public string ModuleName
+        {
+            get { return DataModel.ModuleName; }
+        }
+
+        public bool IsDispatched
+        {
+            get { return DataModel.IsDispatched; }
+        }
+
+        public IDispatchData DataModel { get; }
 
         public bool Equals(DispatchDataViewModel other)
         {
             if (other == null) return false;
             if (ReferenceEquals(this, other)) return true;
-            return _data.Equals(other._data);
+            return DataModel.Equals(other.DataModel);
         }
 
         public override bool Equals(object obj)
@@ -39,52 +78,12 @@ namespace EscInstaller.ViewModel.Connection
 
         public override int GetHashCode()
         {
-            return _data.GetHashCode();
-        }
-
-        public DateTime CreationDate
-        {
-            get { return _data.CreationDate; }
-        }
-
-        public string ErrorMessage
-        {
-            get { return _data.ErrorMessage; }
-        }
-
-        public int DestinationAddress
-        {
-            get { return _data.DestinationAddress; }
-        }
-
-        public bool HasErrors
-        {
-            get { return !_data.ErrorMessage.Equals(string.Empty); }
-        }
-
-        public int Id
-        {
-            get { return _data.Id; }
-        }
-
-        public string ModuleName
-        {
-            get { return _data.ModuleName; }
-        }
-
-        public bool IsDispatched
-        {
-            get { return _data.IsDispatched; }
-        }
-
-        public IDispatchData DataModel
-        {
-            get { return _data; }
+            return DataModel.GetHashCode();
         }
 
         public void Remove()
         {
-            _data.OnRemove();
+            DataModel.OnRemove();
         }
     }
 }

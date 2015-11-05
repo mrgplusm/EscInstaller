@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -5,6 +7,8 @@ using Common;
 using Common.Commodules;
 using Common.Model;
 using EscInstaller.ViewModel.Connection;
+
+#endregion
 
 namespace EscInstaller.ViewModel.EscCommunication.Logic
 {
@@ -21,7 +25,7 @@ namespace EscInstaller.ViewModel.EscCommunication.Logic
             //sensitivity
             _inputSensitivityPackages = 0;
             bool b;
-            if (!Boolean.TryParse(LibraryData.Settings["InputsensitivityIsEnabled"], out b) || !b) return;
+            if (!bool.TryParse(LibraryData.Settings["InputsensitivityIsEnabled"], out b) || !b) return;
             if (Main.InputSensitivity == null) return;
 
             var lst =

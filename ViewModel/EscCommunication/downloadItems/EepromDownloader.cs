@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +9,8 @@ using Common.Commodules;
 using EscInstaller.ViewModel.Connection;
 using EscInstaller.ViewModel.EscCommunication.Logic;
 
+#endregion
+
 namespace EscInstaller.ViewModel.EscCommunication.downloadItems
 {
     public class EepromDownloader
@@ -15,7 +19,6 @@ namespace EscInstaller.ViewModel.EscCommunication.downloadItems
         private readonly List<byte> _dspCopy;
         private readonly Dictionary<E2PromArea, int> _eepromReceivePackages = new Dictionary<E2PromArea, int>();
         private readonly int _mcuid;
-
 
         public EepromDownloader(List<byte> dspCopy, int mcuid, E2PromArea area)
         {

@@ -1,5 +1,8 @@
+#region
+
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -9,13 +12,16 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Threading;
 using Common;
+using Common.Commodules;
 using Common.Model;
 using EscInstaller.ImportSpeakers;
 using EscInstaller.UserControls;
 using EscInstaller.View;
 using EscInstaller.View.Communication;
+using EscInstaller.ViewModel.Connection;
 using EscInstaller.ViewModel.EscCommunication;
 using EscInstaller.ViewModel.EscCommunication.Logic;
 using EscInstaller.ViewModel.Matrix;
@@ -23,11 +29,7 @@ using EscInstaller.ViewModel.SDCard;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 
-using Common.Commodules;
-using System.Collections.ObjectModel;
-using CommunicationViewModel = EscInstaller.ViewModel.Connection.CommunicationViewModel;
-using ConnectionViewModel = EscInstaller.ViewModel.Connection.ConnectionViewModel;
-using ITabControl = EscInstaller.ViewModel.Connection.ITabControl;
+#endregion
 
 namespace EscInstaller.ViewModel
 {
@@ -36,24 +38,21 @@ namespace EscInstaller.ViewModel
         No,
         ToEsc,
         FromEsc,
-        WaitAcknowledge,
+        WaitAcknowledge
     }
 
 
     public class MainViewModel : ViewModelBase
     {
-        private readonly ObservableCollection<ITabControl> _tabs = new ObservableCollection<ITabControl>();
         private readonly RecentFilesLogic _recentFilesLogic;
-
-        private readonly CommunicationViewModel _comViewModel = new CommunicationViewModel();
-
+        private readonly ObservableCollection<ITabControl> _tabs = new ObservableCollection<ITabControl>();
+        private ITabControl _selectedTab;
 
         public MainViewModel()
         {
             if (Application.Current != null)
                 Application.Current.Exit += (sender, args) =>
                 {
-
                     //close connections 
                     DisconnectAllUnists();
 
@@ -62,15 +61,14 @@ namespace EscInstaller.ViewModel
 
                     //save project settings
                     Properties.Settings.Default.Save();
-
                 };
             _recentFilesLogic = new RecentFilesLogic(this);
 
-            Thread dispThread = Thread.CurrentThread;
+            var dispThread = Thread.CurrentThread;
             Dispatcher.FromThread(dispThread);
 
 
-            _tabs.Add(_comViewModel);
+            _tabs.Add(Communication);
 
 
 #if DEBUG
@@ -82,27 +80,7 @@ namespace EscInstaller.ViewModel
 #endif
         }
 
-        public CommunicationViewModel Communication
-        {
-            get { return _comViewModel; }
-        }
-
-
-        private static void DisconnectAllUnists()
-        {
-            var any = false;
-            var str = new StringBuilder();
-            str.AppendLine();
-            foreach (var connectionVm in CommunicationViewModel.OpenConnections.Where(c => c.ConnectMode == ConnectMode.Install))
-            {
-                any = true;
-                str.AppendLine(connectionVm.Ipaddress);
-                connectionVm.Connection.Disconnect();
-            }
-            if (!any) return;
-            MessageBox.Show(string.Format(Main.DisconnectedUnits, str), Main.DisconnectedUnitsTitle,
-                    MessageBoxButton.OK, MessageBoxImage.Information, MessageBoxResult.OK);
-        }
+        public CommunicationViewModel Communication { get; } = new CommunicationViewModel();
 
         public string FileName
         {
@@ -129,17 +107,16 @@ namespace EscInstaller.ViewModel
             get
             {
                 return new RelayCommand(() =>
-                    {
-                        if (!IsInDcOperation) LibraryData.FuturamaSys.IsInDcOperation = true;
-                        else if (MessageBox.Show(Main.lowvoltQuestion, Main.lowvoltQuestionTitle,
-                                                 MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No) ==
-                                 MessageBoxResult.Yes)
-                            LibraryData.FuturamaSys.IsInDcOperation = false;
-                        RaisePropertyChanged(() => IsInDcOperation);
-                    }, () => LibraryData.SystemIsOpen);
+                {
+                    if (!IsInDcOperation) LibraryData.FuturamaSys.IsInDcOperation = true;
+                    else if (MessageBox.Show(Main.lowvoltQuestion, Main.lowvoltQuestionTitle,
+                        MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No) ==
+                             MessageBoxResult.Yes)
+                        LibraryData.FuturamaSys.IsInDcOperation = false;
+                    RaisePropertyChanged(() => IsInDcOperation);
+                }, () => LibraryData.SystemIsOpen);
             }
         }
-
 
         public bool IsInDcOperation
         {
@@ -163,44 +140,134 @@ namespace EscInstaller.ViewModel
             }
         }
 
-
-        private readonly ObservableCollection<MenuItem> _recentFiles = new ObservableCollection<MenuItem>();
-        public ObservableCollection<MenuItem> RecentFiles
-        {
-            get { return _recentFiles; }
-        }
-
-
+        public ObservableCollection<MenuItem> RecentFiles { get; } = new ObservableCollection<MenuItem>();
         //Remove main unit
-        public ICommand RemoveMainUnitCommand
+        public ICommand RemoveMainUnitCommand => new RelayCommand<MainUnitViewModel>(RemoveMainUnit, q => q?.Id > 0);
+
+        public ICommand OpenMeasureMentSettings
+            => new RelayCommand<MainUnitViewModel>(m => m.OpenMeasurementSettings(), q => q?.Id > -1);
+
+        public ICommand SendUnitDataToEsc => new RelayCommand(TimeStampAsync);
+
+        public ICommand DownloadFromEsc
         {
             get
             {
-                return new RelayCommand<MainUnitViewModel>(RemoveMainUnit, q =>
-                    {
-                        if (q == null) return false; return q.Id > 0;
-                    });
+                return
+                    new RelayCommand(async
+                        () =>
+                        {
+                            if (!SystemIsOpen())
+                                return;
+
+                            if (!AreConnections()) return;
+                            var q = await InformUserTimestampAsync(false);
+                            if (!q) return;
+
+                            GetSystem();
+                        });
             }
         }
 
-        public ICommand OpenMeasureMentSettings
+        public ICommand OpenFile => new RelayCommand<string>(Open);
+
+        public ICommand SaveAs
         {
             get
             {
-                return new RelayCommand<MainUnitViewModel>(m => m.OpenMeasurementSettings(), q =>
+                return new RelayCommand(() =>
                 {
-                    //    return true;
-                    if (q == null) return false; return q.Id > -1;
+                    if (IsInDesignMode) return;
+                    var q = new SystemFileSaveAs();
+                    q.Save();
+                }, () => LibraryData.SystemIsOpen);
+            }
+        }
+
+        public ICommand OpenAbout
+        {
+            get
+            {
+                return new RelayCommand(() => Dispatcher.CurrentDispatcher.BeginInvoke(
+                    new Action(
+                        () =>
+                            MessageBox.Show(Main.AboutwindowText + Environment.NewLine +
+                                            Assembly.GetExecutingAssembly().GetName().Version,
+                                Main.AboutWindowTitle, MessageBoxButton.OK, MessageBoxImage.Information,
+                                MessageBoxResult.OK, MessageBoxOptions.None))));
+            }
+        }
+
+        public string AppVersion => Assembly.GetExecutingAssembly().GetName().Version.ToString();
+
+        public string[] InstallerVersion => LibraryData.FuturamaSys == null
+            ? null
+            : new[]
+            {
+                LibraryData.FuturamaSys.CreatedInstallerVersion, LibraryData.FuturamaSys.LastSavedInstallerVersion
+            };
+
+        public ICommand OpenSdCardMannager
+        {
+            get
+            {
+                return new RelayCommand(() =>
+                {
+                    var t = new SdLibraryEditorViewModel();
+                    var z = new SdMessageCardView {DataContext = t};
+                    z.Show();
                 });
             }
         }
 
-        public ICommand SendUnitDataToEsc
+        public ICommand OpenSpeakerLibEditor
         {
             get
             {
-                return new RelayCommand(TimeStampAsync);
+                return new RelayCommand(() => _tabs.Add(new LibraryEditorViewModel()),
+                    () => !_tabs.Any(q => q is LibraryEditorViewModel));
             }
+        }
+
+        public ITabControl SelectedTab
+        {
+            get { return _selectedTab; }
+            set
+            {
+                _selectedTab = value;
+                RaisePropertyChanged(() => SelectedTab);
+            }
+        }
+
+        public ICommand CloseFile => new RelayCommand(() => Close(), () => LibraryData.SystemIsOpen);
+        public ICommand InsertNewUnit => new RelayCommand(AddMainUnit, () => LibraryData.SystemIsOpen);
+
+        public ICommand NewSystem
+        {
+            get { return new RelayCommand(() => New()); }
+        }
+
+        public ICommand Exit
+        {
+            get { return new RelayCommand(() => ExitCommand()); }
+        }
+
+        private static void DisconnectAllUnists()
+        {
+            var any = false;
+            var str = new StringBuilder();
+            str.AppendLine();
+            foreach (
+                var connectionVm in
+                    CommunicationViewModel.OpenConnections.Where(c => c.ConnectMode == ConnectMode.Install))
+            {
+                any = true;
+                str.AppendLine(connectionVm.Ipaddress);
+                connectionVm.Connection.Disconnect();
+            }
+            if (!any) return;
+            MessageBox.Show(string.Format(Main.DisconnectedUnits, str), Main.DisconnectedUnitsTitle,
+                MessageBoxButton.OK, MessageBoxImage.Information, MessageBoxResult.OK);
         }
 
         private async void TimeStampAsync()
@@ -224,15 +291,13 @@ namespace EscInstaller.ViewModel
                 var nq = new DownloadView
                 {
                     Title = "UPLOAD to ESC: GUI => ESC",
-                    Background = System.Windows.Media.Brushes.LightCoral
+                    Background = Brushes.LightCoral
                 };
-                var qq = new CommunicationSend(this);//  EscCommunicationBase(this);
+                var qq = new CommunicationSend(this); //  EscCommunicationBase(this);
                 nq.DataContext = qq;
                 nq.Show();
             }
-
         }
-
 
         private async Task<bool> InformUserTimestampAsync(bool isUploadText)
         {
@@ -246,7 +311,9 @@ namespace EscInstaller.ViewModel
                 str.AppendLine(" - " + mainUnitViewModel.Name);
             }
 
-            var ret = MessageBox.Show(string.Format(isUploadText ? Main.TimestampVerifyUpload : Main.TimestampVerifyDownload, str), Main.TimestampVerifyTitle,
+            var ret = MessageBox.Show(
+                string.Format(isUploadText ? Main.TimestampVerifyUpload : Main.TimestampVerifyDownload, str),
+                Main.TimestampVerifyTitle,
                 MessageBoxButton.OKCancel, MessageBoxImage.Exclamation) != MessageBoxResult.Cancel;
             if (!ret) return false;
             //update timestamp in datamodel if user confirms to do so
@@ -256,8 +323,8 @@ namespace EscInstaller.ViewModel
         }
 
         /// <summary>
-        /// Set timestamp for all units when this is not already done. 
-        /// Otherwise put downloaded esc timestamp in designfile.
+        ///     Set timestamp for all units when this is not already done.
+        ///     Otherwise put downloaded esc timestamp in designfile.
         /// </summary>
         /// <param name="mainunits"></param>
         private static void UpdateTimestampConnectedUnits(IEnumerable<MainUnitViewModel> mainunits)
@@ -267,7 +334,7 @@ namespace EscInstaller.ViewModel
                 //if no timestamp ever made avaiable, create one
                 if (mainUnitViewModel.Timestamp == 0)
                 {
-                    var d = new TimeStampUpdater(mainUnitViewModel.DataModel);                    
+                    var d = new TimeStampUpdater(mainUnitViewModel.DataModel);
                     CommunicationViewModel.AddData(d.TimeStamp());
                 }
                 else
@@ -276,7 +343,7 @@ namespace EscInstaller.ViewModel
         }
 
         /// <summary>
-        /// Checks timestamps 
+        ///     Checks timestamps
         /// </summary>
         /// <returns>true in case timestamp does compare</returns>
         private async Task<List<MainUnitViewModel>> VerifyIntegratyAsync()
@@ -285,7 +352,7 @@ namespace EscInstaller.ViewModel
             foreach (var tab in TabCollection.OfType<MainUnitViewModel>()
                 .Where(model => model.ConnectType != ConnectType.None))
             {
-                MainUnitViewModel tab1 = tab;
+                var tab1 = tab;
                 var q = await Task.Run(() => tab1.TimestampIsEqual());
                 if (q) continue; //checksum O.K.
 
@@ -295,41 +362,21 @@ namespace EscInstaller.ViewModel
             return list;
         }
 
-        public ICommand DownloadFromEsc
-        {
-            get
-            {
-                return
-                    new RelayCommand(async
-                        () =>
-                        {
-
-                            if (!SystemIsOpen())
-                                return;
-
-                            if (!AreConnections()) return;
-                            var q = await InformUserTimestampAsync(false);
-                            if (!q) return;
-
-                            GetSystem();
-                        });
-            }
-        }
-
         private void GetSystem()
         {
-
-
-            foreach (var s in CommunicationViewModel.OpenConnections.Where(s => s.ConnectMode == ConnectMode.Install).Select(n => n.UnitId)
-                            .Except(TabCollection.OfType<MainUnitViewModel>().Select(u => u.Id)))
+            foreach (
+                var s in
+                    CommunicationViewModel.OpenConnections.Where(s => s.ConnectMode == ConnectMode.Install)
+                        .Select(n => n.UnitId)
+                        .Except(TabCollection.OfType<MainUnitViewModel>().Select(u => u.Id)))
             {
                 AddMainUnit(s);
             }
 
             var nq = new DownloadView();
             nq.Title = "Download to PC ESC => GUI";
-            nq.Background = System.Windows.Media.Brushes.LightGreen;
-            var qq = new CommunicationReceive(this);//  EscCommunicationBase(this);
+            nq.Background = Brushes.LightGreen;
+            var qq = new CommunicationReceive(this); //  EscCommunicationBase(this);
             nq.DataContext = qq;
             nq.Show();
         }
@@ -344,7 +391,8 @@ namespace EscInstaller.ViewModel
 
         private bool AreConnections()
         {
-            if (TabCollection.OfType<MainUnitViewModel>().Any(model => model.ConnectType != ConnectType.None)) return true;
+            if (TabCollection.OfType<MainUnitViewModel>().Any(model => model.ConnectType != ConnectType.None))
+                return true;
             MessageBox.Show(Main.MessageBoxNoConnectionText, Main.MessageBoxNoConnectionTitle, MessageBoxButton.OK,
                 MessageBoxImage.Exclamation);
             SelectedTab = TabCollection.FirstOrDefault(n => n is CommunicationViewModel);
@@ -365,118 +413,8 @@ namespace EscInstaller.ViewModel
         private void RemoveMainUnit(MainUnitViewModel m)
         {
             if (MessageBox.Show(Main._mainMSGDelUnitConfirmation, Main._mainMSGDelUnitTitle,
-                                MessageBoxButton.OKCancel, MessageBoxImage.Question) == MessageBoxResult.OK)
+                MessageBoxButton.OKCancel, MessageBoxImage.Question) == MessageBoxResult.OK)
                 RemoveUnit(m);
-        }
-
-
-        public ICommand OpenFile
-        {
-            get { return new RelayCommand<string>(Open); }
-        }
-
-        public ICommand SaveAs
-        {
-            get
-            {
-                return new RelayCommand(() =>
-                {
-                    if (IsInDesignMode) return;
-                    var q = new SystemFileSaveAs();
-                    q.Save();
-
-                }, () => LibraryData.SystemIsOpen);
-            }
-        }
-
-        public ICommand OpenAbout
-        {
-            get
-            {
-                return new RelayCommand(() => Dispatcher.CurrentDispatcher.BeginInvoke(
-                    new Action(
-                        () =>
-                        MessageBox.Show(Main.AboutwindowText + Environment.NewLine +
-                                        Assembly.GetExecutingAssembly().GetName().Version,
-                                        Main.AboutWindowTitle, MessageBoxButton.OK, MessageBoxImage.Information,
-                                        MessageBoxResult.OK, MessageBoxOptions.None))));
-            }
-        }
-
-        public string AppVersion
-        {
-            get { return Assembly.GetExecutingAssembly().GetName().Version.ToString(); }
-        }
-
-        public string[] InstallerVersion
-        {
-            get
-            {
-                return LibraryData.FuturamaSys == null ? null : new[]
-                {
-                    LibraryData.FuturamaSys.CreatedInstallerVersion, LibraryData.FuturamaSys.LastSavedInstallerVersion
-                };
-            }
-        }
-
-
-
-        public ICommand OpenSdCardMannager
-        {
-            get
-            {
-                return new RelayCommand(() =>
-                    {
-                        var t = new SdLibraryEditorViewModel();
-                        var z = new SdMessageCardView { DataContext = t };
-                        z.Show();
-
-                    });
-            }
-        }
-
-        public ICommand OpenSpeakerLibEditor
-        {
-            get { return new RelayCommand(() => _tabs.Add(new LibraryEditorViewModel()), () => !_tabs.Any(q => q is LibraryEditorViewModel)); }
-        }
-
-        private ITabControl _selectedTab;
-        public ITabControl SelectedTab
-        {
-            get { return _selectedTab; }
-            set
-            {
-                _selectedTab = value;
-                RaisePropertyChanged(() => SelectedTab);
-            }
-        }
-
-        public ICommand CloseFile
-        {
-            get { return new RelayCommand(() => Close(), () => LibraryData.SystemIsOpen); }
-        }
-
-
-
-        public ICommand InsertNewUnit
-        {
-            get
-            {                
-                return new RelayCommand(AddMainUnit, () => LibraryData.SystemIsOpen);
-            }
-        }
-
-        public ICommand NewSystem
-        {
-            get { return new RelayCommand(() => New()); }
-        }
-
-        public ICommand Exit
-        {
-            get
-            {
-                return new RelayCommand(() => ExitCommand());
-            }
         }
 
         public bool ExitCommand()
@@ -493,14 +431,13 @@ namespace EscInstaller.ViewModel
             return true;
         }
 
-
         public static void AddData(IDispatchData data)
         {
             CommunicationViewModel.AddData(data);
         }
 
         /// <summary>
-        /// Create a new system
+        ///     Create a new system
         /// </summary>
         /// <returns>true if file creation succeeded, false if user cancelled or otherwise</returns>
         private bool New()
@@ -536,7 +473,7 @@ namespace EscInstaller.ViewModel
         }
 
         /// <summary>
-        /// Adds al the mainunits and the matrix tab
+        ///     Adds al the mainunits and the matrix tab
         /// </summary>
         private async void AddMainUnitsToTab()
         {
@@ -548,15 +485,14 @@ namespace EscInstaller.ViewModel
             SelectedTab = TabCollection.FirstOrDefault(i => i.Id == 0);
 
             TabCollection.Add(new PanelViewModel(this));
-            TabCollection.Add(_comViewModel);
+            TabCollection.Add(Communication);
         }
 
         /// <summary>
-        /// Opens esc file
+        ///     Opens esc file
         /// </summary>
         private void Open(string filename)
         {
-
             var initialDirectory = string.Empty;
             if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.RecentLocationProject))
                 initialDirectory = Properties.Settings.Default.RecentLocationProject;
@@ -576,7 +512,7 @@ namespace EscInstaller.ViewModel
             catch (Exception e)
             {
                 MessageBox.Show(e.Message, "Could't open file", MessageBoxButton.OK, MessageBoxImage.Error,
-                                MessageBoxResult.OK);
+                    MessageBoxResult.OK);
                 return;
             }
 
@@ -591,7 +527,7 @@ namespace EscInstaller.ViewModel
 
             LibraryData.OpenSystem(t);
 
-            _comViewModel.UpdateConnections();
+            Communication.UpdateConnections();
             RaisePropertyChanged(() => InstallerVersion);
             _recentFilesLogic.AddFile(filename);
             AddMainUnitsToTab();
@@ -602,7 +538,8 @@ namespace EscInstaller.ViewModel
         public void AddConnections()
         {
             if (!LibraryData.SystemIsOpen) return;
-            if (LibraryData.FuturamaSys.Connections == null) LibraryData.FuturamaSys.Connections = new List<ConnectionModel>();
+            if (LibraryData.FuturamaSys.Connections == null)
+                LibraryData.FuturamaSys.Connections = new List<ConnectionModel>();
             foreach (var connection in LibraryData.FuturamaSys.Connections)
             {
                 var q = new ConnectionViewModel(connection);
@@ -636,7 +573,6 @@ namespace EscInstaller.ViewModel
             return true;
         }
 
-
         /// <summary>
         ///     adds a new mainunit to the system
         /// </summary>
@@ -653,7 +589,7 @@ namespace EscInstaller.ViewModel
             var newunit = new MainUnitViewModel(mu, this);
 
             TabCollection.Add(newunit);
-            OnSystemChanged(new SystemChangedEventArgs() { NewMainUnit = newunit });
+            OnSystemChanged(new SystemChangedEventArgs() {NewMainUnit = newunit});
         }
 
         private void AddMainUnit(int id)
@@ -666,8 +602,6 @@ namespace EscInstaller.ViewModel
             if (!TabCollection.Contains(escview))
                 TabCollection.Add(escview);
         }
-
-
 
         public void RemoveUnit(MainUnitViewModel mainUnit)
         {
@@ -684,9 +618,9 @@ namespace EscInstaller.ViewModel
 
         protected virtual void OnSystemChanged(SystemChangedEventArgs e)
         {
-            EventHandler<SystemChangedEventArgs> handler = SystemChanged;
+            var handler = SystemChanged;
             if (handler != null) handler(this, e);
-        }        
+        }
     }
 
     public class SystemChangedEventArgs : EventArgs

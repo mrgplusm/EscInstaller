@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -6,11 +8,12 @@ using System.Windows.Interactivity;
 using EscInstaller.View;
 using EscInstaller.View.DragnDrop;
 
+#endregion
 
 namespace EscInstaller.Behaviors
 {
     /// <summary>
-    /// For enabling Drop on Datagrid
+    ///     For enabling Drop on Datagrid
     /// </summary>
     public class DataGridDropBehaviour : Behavior<DataGrid>
     {
@@ -26,10 +29,9 @@ namespace EscInstaller.Behaviors
             AssociatedObject.DragOver += AssociatedObject_DragOver;
             AssociatedObject.DragLeave += AssociatedObject_DragLeave;
             AssociatedObject.Drop += AssociatedObject_Drop;
-
         }
 
-        void AssociatedObject_Drop(object sender, DragEventArgs e)
+        private void AssociatedObject_Drop(object sender, DragEventArgs e)
         {
             e.Handled = true;
             if (_insertAdornerManager != null)
@@ -60,28 +62,26 @@ namespace EscInstaller.Behaviors
 
             //drop the data
             var target = AssociatedObject.DataContext as IDropable;
-            if (target != null) target.Drop(e.Data.GetData(_dataType), dropIndex);            
+            if (target != null) target.Drop(e.Data.GetData(_dataType), dropIndex);
         }
 
-        void AssociatedObject_DragLeave(object sender, DragEventArgs e)
+        private void AssociatedObject_DragLeave(object sender, DragEventArgs e)
         {
-            e.Handled = true;            
+            e.Handled = true;
             //check conditions are right to leave adorner
             //if ((e.Data.GetDataPresent(_dataType)) && (sender as ItemsControl != null)) return;
             //otherwise remove it
-             if (_insertAdornerManager != null)
-                    _insertAdornerManager.Clear();
-            
+            if (_insertAdornerManager != null)
+                _insertAdornerManager.Clear();
         }
 
-        void AssociatedObject_DragOver(object sender, DragEventArgs e)
+        private void AssociatedObject_DragOver(object sender, DragEventArgs e)
         {
             var update = false;
             var isAboveElement = false;
             UIElement droppedOverItem = null;
             try
             {
-
                 e.Handled = true;
                 if (_dataType == null) return;
                 if (!e.Data.GetDataPresent(_dataType)) return;
@@ -106,7 +106,7 @@ namespace EscInstaller.Behaviors
             }
         }
 
-        void AssociatedObject_DragEnter(object sender, DragEventArgs e)
+        private void AssociatedObject_DragEnter(object sender, DragEventArgs e)
         {
             e.Handled = true;
 
@@ -120,12 +120,12 @@ namespace EscInstaller.Behaviors
             if (AssociatedObject.DataContext == null) return;
             if (AssociatedObject.DataContext as IDropable != null)
             {
-                _dataType = ((IDropable)AssociatedObject.DataContext).DataType;
+                _dataType = ((IDropable) AssociatedObject.DataContext).DataType;
             }
         }
 
         /// <summary>
-        /// Provides feedback on if the data can be dropped
+        ///     Provides feedback on if the data can be dropped
         /// </summary>
         /// <param name="e"></param>
         private void SetDragDropEffects(DragEventArgs e)
