@@ -3,6 +3,7 @@
 using System;
 using System.Collections;
 using System.Linq;
+using System.Windows.Forms;
 using Common;
 using Common.Commodules;
 using Common.Model;
@@ -15,63 +16,89 @@ namespace EscInstaller.ViewModel.Matrix
 {
     public class MatrixCellViewModel : ViewModelBase
     {
-        private readonly ColumnHeaderViewModel _column;
         private readonly int _relativeFlowId;
         private MatrixCell _data;
+        private bool _isVisible;
+        private bool _isLinked;
+        private bool _alarm2Enabled;
 
-        public MatrixCellViewModel(ColumnHeaderViewModel column, int relativeFlowId)
+        public MatrixCellViewModel(int relativeFlowId, int mainUnitId, int buttonId)
         {
-            _column = column;
             _relativeFlowId = relativeFlowId;
 
+            _data = Data(mainUnitId * 12 + _relativeFlowId, buttonId);
+        }
 
-            _data = LibraryData.FuturamaSys.MatrixSelection.FirstOrDefault(b => b.ButtonId == 0
-                                                                                && b.FlowId == _relativeFlowId) ??
-                    new MatrixCell
-                    {
-                        ButtonId = 0,
-                        FlowId = _relativeFlowId,
-                        BroadcastMessage = BroadCastMessage.None
-                    };
+        public bool IsVisible
+        {
+            get { return _isVisible; }
+            set
+            {
+                _isVisible = value;
+                RaisePropertyChanged(() => IsVisible);
+            }
+        }
 
-            column.DataSourceChanged += column_DataSourceChanged;
-            //column.AlarmSelectionChanged += ColumnOnAlarmSelectionChanged;
-            column.CardsUpdated += (sender, args) => RaisePropertyChanged(() => IsVisible);
-            column.ColumEnabledChanged += (sender, args) => RaisePropertyChanged(() => IsEnabled);
+        public bool IsLinked
+        {
+            get { return _isLinked; }
+            set
+            {
+                _isLinked = value;
+                RaisePropertyChanged(() => IsEnabled);
+            }
         }
 
         public bool IsEnabled
         {
             get
             {
-                var bllink =
-                    Link().LinkOptions.FirstOrDefault(d => d.Flow.Id == (_relativeFlowId + _column.MainUnit.Id * 12));
-                if (bllink != null && bllink.LinkPath != LinkTo.No && bllink.Flow.Id != 0) return false;
+                if (_isLinked) return false;
 
                 if (ButtonId < 192 || ButtonId > 203) return true;
-                if (LibraryData.FuturamaSys.Messages == null) return true;
 
-                var bitArray = new BitArray(12);
-                var i = 0;
-                if (LibraryData.FuturamaSys.Messages == null)
-                    return false;
-                foreach (var message in LibraryData.FuturamaSys.Messages)
-                {
-                    bitArray[i++] = message.ButtonA1 == 0xff;
-                    bitArray[i++] = message.ButtonB1 == 0xff;
-                    bitArray[i++] = message.ButtonC1 == 0xff;
-                    bitArray[i++] = message.ButtonD1 == 0xff;
-                }
-
-                return bitArray[ButtonId - 192];
+                return LibraryData.FuturamaSys.Messages == null || ABCDUsed();
             }
+        }
+
+        public void UpdateEnabled()
+        {
+            RaisePropertyChanged(() => IsEnabled);
+        }
+
+        private bool ABCDUsed()
+        {
+            var bitArray = new BitArray(12);
+            var i = 0;
+            if (LibraryData.FuturamaSys.Messages == null)
+                return false;
+            foreach (var message in LibraryData.FuturamaSys.Messages)
+            {
+                bitArray[i++] = message.ButtonA1 == 0xff;
+                bitArray[i++] = message.ButtonB1 == 0xff;
+                bitArray[i++] = message.ButtonC1 == 0xff;
+                bitArray[i++] = message.ButtonD1 == 0xff;
+            }
+
+            return bitArray[ButtonId - 192];
         }
 
         public int ButtonId => _data.ButtonId;
 
         public int FlowId => _data.FlowId;
 
-        public bool Alarm2Enabled => _column.AnyAlarm1(new[] { this }) && IsEnabled;
+        public bool Alarm2Enabled
+        {
+            get
+            {
+                return _alarm2Enabled && IsEnabled;
+            }
+            set
+            {
+                _alarm2Enabled = value;
+                RaisePropertyChanged(()=> Alarm2Enabled);
+            }
+        }
 
         public event EventHandler<MessageSelectionEventArgs> Changed;
 
@@ -88,10 +115,8 @@ namespace EscInstaller.ViewModel.Matrix
 
         private void TriggerChange()
         {
-            OnChanged(new MessageSelectionEventArgs() { MainUnitId = _column.MainUnit.Id, ButtonId = ButtonId, FlowId = FlowId, NewValue = _data.BroadcastMessage });
+            OnChanged(new MessageSelectionEventArgs() { ButtonId = ButtonId, FlowId = FlowId, NewValue = _data.BroadcastMessage });
         }
-
-        public bool IsVisible => _column.MainUnit.DataModel.ExpansionCards * 4 + 4 > _data.FlowId % 12;
 
         public bool Alarm
         {
@@ -104,20 +129,17 @@ namespace EscInstaller.ViewModel.Matrix
             }
         }
 
-        public void ColumnOnAlarmSelectionChanged()
+        public void MessageSelectionChanged(object sender, MessageSelectionEventArgs e)
         {
-            _data.BroadcastMessage = _column.AllAlarm1 ? BroadCastMessage.Alarm1 : BroadCastMessage.None;
+           if(!e.ColumnSelection) return;
+           if(_data.BroadcastMessage == e.NewValue) return;
+            _data.BroadcastMessage = e.NewValue;
 
             RaisePropertyChanged(() => Alarm);
             RaisePropertyChanged(() => Alert);
         }
 
-        public void UpdateAlarm2Enabled()
-        {
-            RaisePropertyChanged(() => Alarm2Enabled);
-        }
-
-        private void column_DataSourceChanged(object sender, DataSourceChangedEventArgs e)
+        public void column_DataSourceChanged(DataSourceChangedEventArgs e)
         {
             if (IsInDesignMode)
             {
@@ -135,12 +157,6 @@ namespace EscInstaller.ViewModel.Matrix
             RaisePropertyChanged(() => IsEnabled);
             RaisePropertyChanged(() => Alarm2Enabled);
             RaisePropertyChanged(() => ButtonId);
-        }
-
-        //todo: attach handler
-        private BlLink Link()
-        {
-            return _column.MainUnit.DiagramObjects.OfType<BlLink>().FirstOrDefault();
         }
 
         private static MatrixCell Data(int flowId, int buttonId)

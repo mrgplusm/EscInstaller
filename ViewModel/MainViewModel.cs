@@ -575,12 +575,14 @@ namespace EscInstaller.ViewModel
         {
             if (!LibraryData.SystemIsOpen) return true;
 
+#if !DEBUG
             if (!IsInDesignMode)
             {
                 var qq = new SystemFileSaveAsk();
                 if (!qq.Save())
                     return false;
             }
+#endif
 
             LibraryData.CloseProject();
             TabCollection.RemoveAll(q => q is MainUnitViewModel || q is PanelViewModel);
