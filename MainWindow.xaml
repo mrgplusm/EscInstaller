@@ -151,12 +151,6 @@
 
 
             <MenuItem Header="{x:Static escInstaller:Main._mainHelp}">
-                <MenuItem Header="{x:Static escInstaller:Main._mainHelpUserManual}" InputGestureText="F1"
-                          IsEnabled="False">
-                    <MenuItem.Icon>
-                        <Image Source="Icons/Pdf-32.png" Width="15" Height="15" />
-                    </MenuItem.Icon>
-                </MenuItem>
                 <MenuItem Header="{x:Static escInstaller:Main._mainHelpAbout}" Command="{Binding Path=OpenAbout}">
                     <MenuItem.Icon>
                         <Image Source="Icons/Info_32.png" Width="15" Height="15" />
