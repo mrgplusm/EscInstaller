@@ -618,9 +618,7 @@
                     <DataTemplate DataType="{x:Type overView:BlSpMatrix}">
                         <view:LspMtrxView />
                     </DataTemplate>
-                    <DataTemplate DataType="{x:Type overView:BlEmergency}">
-                        <view:EmergencyPanelView />
-                    </DataTemplate>
+                    
                     <DataTemplate DataType="{x:Type settings:IntervalSettingsViewModel}">
                         <view:IntervalSettingsView />
                     </DataTemplate>

@@ -13,10 +13,7 @@ namespace EscInstaller.ViewModel.OverView
         private BindablePoint _location;
         public abstract Point Size { get; }
 
-        public virtual int ZIndex
-        {
-            get { return 0; }
-        }
+        public virtual int ZIndex => 0;
 
         public virtual bool AnimateWhenLoaded
         {
@@ -28,14 +25,8 @@ namespace EscInstaller.ViewModel.OverView
             }
         }
 
-        public virtual bool IsEnabled
-        {
-            get { return true; }
-        }
+        public virtual bool IsEnabled => true;
 
-        public virtual BindablePoint Location
-        {
-            get { return _location ?? (_location = new BindablePoint()); }
-        }
+        public virtual BindablePoint Location => _location ?? (_location = new BindablePoint());
     }
 }

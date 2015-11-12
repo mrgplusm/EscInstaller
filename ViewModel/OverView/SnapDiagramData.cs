@@ -24,17 +24,11 @@ namespace EscInstaller.ViewModel.OverView
         /// </summary>
         public abstract int Id { get; }
 
-        public virtual List<SnapShot> Snapshots
+        public virtual List<SnapShot> Snapshots => _snapShots ?? (_snapShots = new List<SnapShot>
         {
-            get
-            {
-                return _snapShots ?? (_snapShots = new List<SnapShot>
-                {
-                    new SnapShot(this) {Offset = {X = 0, Y = SnapshotHeight}, RowId = 0},
-                    new SnapShot(this) {Offset = {X = Size.X, Y = SnapshotHeight}, RowId = 1}
-                });
-            }
-        }
+            new SnapShot(this) {Offset = {X = 0, Y = SnapshotHeight}, RowId = 0},
+            new SnapShot(this) {Offset = {X = Size.X, Y = SnapshotHeight}, RowId = 1}
+        });
 
         protected void RecalculateSnaps()
         {
@@ -48,8 +42,7 @@ namespace EscInstaller.ViewModel.OverView
 
         public void RemoveChildren()
         {
-            if (OnRemoveChildren != null)
-                OnRemoveChildren();
+            OnRemoveChildren?.Invoke();
         }
     }
 }

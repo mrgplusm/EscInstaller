@@ -397,9 +397,6 @@
     <Compile Include="View\Communication\DownloadView.xaml.cs">
       <DependentUpon>DownloadView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\EmergencyPanelView.xaml.cs">
-      <DependentUpon>EmergencyPanelView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="View\ExternalInput.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -635,10 +632,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Communication\DownloadView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\EmergencyPanelView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
