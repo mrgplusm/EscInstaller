@@ -32,7 +32,7 @@ namespace EscInstaller.ViewModel.Matrix
 
         public MessageSelectViewModel(MainUnitViewModel main, int id)
         {
-            FillSelectionDic();
+          
             _main = main;
             _id = id;
             main.SdCardMessagesReceived += Receiver_SdCardMessagesReceived;
@@ -116,40 +116,10 @@ namespace EscInstaller.ViewModel.Matrix
         /// </summary>
         private readonly List<Action> _selectionUpdated = new List<Action>();
 
-        private void FillSelectionDic()
-        {
-            _selectionUpdated.Add(() =>
-            {
-                EnabledA = MessageIsEnabled(0);
-                RaisePropertyChanged(()=> EnabledA);
-            });
-            _selectionUpdated.Add(() =>
-            {
-                EnabledB = MessageIsEnabled(1);
-                RaisePropertyChanged(() => EnabledB);
-            });
-            _selectionUpdated.Add(() =>
-            {
-                EnabledC = MessageIsEnabled(2);
-                RaisePropertyChanged(() => EnabledC);
-            });
-            _selectionUpdated.Add(() =>
-            {
-                EnabledD = MessageIsEnabled(3);
-                RaisePropertyChanged(() => EnabledD);
-            });
-        }
+     
 
 
-        private bool MessageIsEnabled(int relativeId)
-        {
-            var buttonId = relativeId + 192 + _id*4;
-            return LibraryData.FuturamaSys.MatrixSelection
-                .Where( n => n.ButtonId == buttonId &&             
-                        n.FlowId >= _main.Id*12 && 
-                        n.FlowId < _main.Id * 12 +12)
-                .Any(n => n.BroadcastMessage == BroadCastMessage.Alarm1);
-        }
+       
 
         public void MatrixSelectionChanged(MessageSelectionEventArgs mea)
         {

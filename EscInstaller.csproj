@@ -290,7 +290,6 @@
     <Compile Include="ViewModel\OverView\BindablePoint.cs" />
     <Compile Include="ViewModel\OverView\BlAmplifier.cs" />
     <Compile Include="ViewModel\OverView\BlAuxSpeakerPeq.cs" />
-    <Compile Include="ViewModel\OverView\ChkVm.cs" />
     <Compile Include="ViewModel\OverView\BlSpMatrix.cs" />
     <Compile Include="ViewModel\OverView\BlDelay.cs" />
     <Compile Include="ViewModel\OverView\BlEmergency.cs" />
@@ -435,14 +434,6 @@
     </Compile>
     <Compile Include="Adorners\ListBoxAdorner.cs" />
     <Compile Include="View\DragnDrop\ListBoxAdornerManager.cs" />
-    <Compile Include="View\LspMtrx.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>LspMtrx.resx</DependentUpon>
-    </Compile>
-    <Compile Include="View\LspMtrxView.xaml.cs">
-      <DependentUpon>LspMtrxView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="View\MeasurementMatri.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -647,10 +638,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\LspMtrxView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="View\SdMessageCardView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -770,11 +757,6 @@
     <EmbeddedResource Include="View\Link.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Link.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="View\LspMtrx.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>LspMtrx.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="View\MeasurementMatri.resx">

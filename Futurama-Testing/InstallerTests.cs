@@ -218,30 +218,20 @@ namespace Futurama_Testing
         [TestMethod]
         public void RoutingUpdateTest()
         {
-            Assert.IsTrue(LibraryData.FuturamaSys.MatrixSelection.Count < 1);
-
-            //test unicity of hashlist
+            Assert.IsTrue(LibraryData.FuturamaSys.Selection.Count < 1);
+            
             for (var i = 0; i < 1000; i++)
             {
-                LibraryData.FuturamaSys.MatrixSelection.Add(new MatrixCell
-                {
-                    BroadcastMessage = BroadCastMessage.Alarm1,
-                    ButtonId = i / 12,
-                    FlowId = i
-                });
-                LibraryData.FuturamaSys.MatrixSelection.Add(new MatrixCell { FlowId = 1, ButtonId = 1 });
+                LibraryData.FuturamaSys.Selection[new MatrixCell(i, i/12)] = BroadCastMessage.Alarm1;                                
             }
-
-            Assert.IsTrue(LibraryData.FuturamaSys.MatrixSelection.All(n => n.BroadcastMessage != BroadCastMessage.Alarm2));
 
             for (int button = 0; button < 18; button++)
             {
                 for (int zone = 0; zone < 384; zone++)
                 {
                     var z = new RoutingTable(Enumerable.Range(button * 12, 12).ToArray(), zone / 12,
-                        LibraryData.FuturamaSys.MatrixSelection);
+                        LibraryData.FuturamaSys.Selection);
                     var data = z.CommandValue.ToArray();
-
 
                     for (int i = 0; i < 12; i++)
                     {

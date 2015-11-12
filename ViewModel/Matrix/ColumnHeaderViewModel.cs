@@ -26,7 +26,7 @@ namespace EscInstaller.ViewModel.Matrix
         /// </summary>
         private readonly int _relativeButtonId;
 
-        
+
         public ColumnHeaderViewModel(int relativeButtonId, MainUnitViewModel mainUnit, PanelViewModel panelViewModel)
         {
             _relativeButtonId = relativeButtonId;
@@ -36,7 +36,7 @@ namespace EscInstaller.ViewModel.Matrix
 
             Cells = new ObservableCollection<MatrixCellViewModel>(GenCells());
 
-            
+
             panelViewModel.ButtonChanged += PanelViewModelOnButtonChanged;
 
             panelViewModel.McuChanged += PanelViewModelOnMcuChanged;
@@ -44,7 +44,46 @@ namespace EscInstaller.ViewModel.Matrix
 
             AlarmSelectionChanged += SetAlarmSelectionChanged;
             mainUnit.RoutingTableUpdated += Receiver_EepromValuesReceived;
-            
+            DataSourceChanged += OnDataSourceChanged;
+
+            CardsUpdated += OnCardsUpdated;
+
+            ColumEnabledChanged += OnColumEnabledChanged;
+            AlarmSelectionChanged += OnAlarmSelectionChanged;
+
+        }
+
+        private void OnAlarmSelectionChanged(object sender, MessageSelectionEventArgs messageSelectionEventArgs)
+        {
+            foreach (var cell in Cells)
+            {
+                cell.MessageSelectionChanged(messageSelectionEventArgs);
+            }
+        }
+
+        private void OnColumEnabledChanged(object sender, EventArgs eventArgs)
+        {
+            foreach (var cell in Cells)
+            {
+                cell.UpdateEnabled();
+            }
+        }
+
+        private void OnCardsUpdated(object sender, EventArgs eventArgs)
+        {
+            foreach (var cell in Cells)
+            {
+                cell.IsVisible = GetVisibility(cell);
+            }
+        }
+
+        //update cells in this column
+        private void OnDataSourceChanged(object sender, DataSourceChangedEventArgs dataSourceChangedEventArgs)
+        {
+            for (var flow = 0; flow < 12; flow++)
+            {
+                Cells[flow].UpdatePosition(ButtonId, flow * MainUnit.Id);
+            }
         }
 
         public bool IsEnabled => Cells[0].IsEnabled;
@@ -56,7 +95,7 @@ namespace EscInstaller.ViewModel.Matrix
 
         public bool AnyAlarm1(MatrixCellViewModel[] exceptItem)
         {
-            return Cells.Except(exceptItem).Any(d => d.Alarm && d.FlowId < MainUnit.DataModel.ExpansionCards * 4 + 4);
+            return Cells.Except(exceptItem).Any(d => d.Alarm && d.FlowId % 12 < MainUnit.DataModel.ExpansionCards * 4 + 4);
         }
 
 
@@ -69,13 +108,17 @@ namespace EscInstaller.ViewModel.Matrix
                 _allAlarm = value;
                 var newv = _allAlarm ? BroadCastMessage.Alarm1 : BroadCastMessage.None;
                 //UpdateCells();
-                OnAlarmSelectionChanged(new MessageSelectionEventArgs() {ColumnSelection = true, ButtonId = ButtonId,
-                    NewValue = newv});
-            
+                OnAlarmSelectionChanged(new MessageSelectionEventArgs()
+                {
+                    ColumnSelection = true,
+                    ButtonId = ButtonId,
+                    NewValue = newv
+                });
+
             }
         }
 
-        
+
 
         /// <summary>
         ///     check if the culomn belongs to ABCD on fire/evac/fds module buttons
@@ -110,11 +153,11 @@ namespace EscInstaller.ViewModel.Matrix
         private void SetAlarmSelectionChanged(object sender, MessageSelectionEventArgs eventArgs)
         {
             SendData();
-            if(eventArgs.ColumnSelection) return;
+            if (eventArgs.ColumnSelection) return;
             UpdateColumnSelection();
         }
 
-        
+
 
         private void PanelViewModelOnMcuChanged(object sender, McuChangedEventArgs rangeChangedEventArgs)
         {
@@ -179,16 +222,13 @@ namespace EscInstaller.ViewModel.Matrix
 
 
         public event EventHandler<MessageSelectionEventArgs> AlarmSelectionChanged;
-
-
-
         public event EventHandler<DataSourceChangedEventArgs> DataSourceChanged;
 
 
         private void SendData()
         {
             CommunicationViewModel.AddData(new RoutingTable(new[] { ButtonId }, MainUnit.Id,
-                LibraryData.FuturamaSys.MatrixSelection));
+                LibraryData.FuturamaSys.Selection));
         }
 
         /// <summary>
@@ -219,34 +259,30 @@ namespace EscInstaller.ViewModel.Matrix
 
         private IEnumerable<MatrixCellViewModel> GenCells()
         {
-            for (var x = 0; x < 12; x++)
+            for (var flow = 0; flow < 12; flow++)
             {
-                var t = new MatrixCellViewModel(x, MainUnit.Id, ButtonId);
+                var t = new MatrixCellViewModel(ButtonId, flow * MainUnit.Id);
                 t.Changed += (sender, args) =>
                 {
                     OnAlarmSelectionChanged(args);
-                    UpdateAlarm2Enabled(sender,args);
+                    UpdateAlarm2Enabled(sender, args);
                 };
                 t.IsVisible = GetVisibility(t);
-                t.IsLinked = GetIsLinked(x);
+                t.IsLinked = GetIsLinked(flow);
 
-                CardsUpdated += (sender, args) => t.IsVisible = GetVisibility(t);
-                DataSourceChanged += (sender, args) => t.column_DataSourceChanged(args);
-                ColumEnabledChanged += (sender, args) => t.UpdateEnabled();
-                AlarmSelectionChanged += t.MessageSelectionChanged;
                 yield return t;
             }
         }
 
         private void UpdateAlarm2Enabled(object sender, MessageSelectionEventArgs args)
         {
-            var t = Cells.Except(new[] {sender as MatrixCellViewModel}) .Any(s => s.Alarm || !s.IsVisible || !s.IsEnabled);
+            var t = Cells.Except(new[] { sender as MatrixCellViewModel }).Any(s => s.Alarm || !s.IsVisible || !s.IsEnabled);
 
             foreach (var cell in Cells)
             {
                 cell.Alarm2Enabled = t;
             }
-            
+
         }
 
         private bool GetIsLinked(int flowId)

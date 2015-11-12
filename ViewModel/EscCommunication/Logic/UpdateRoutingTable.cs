@@ -38,22 +38,16 @@ namespace EscInstaller.ViewModel.EscCommunication.Logic
 
                 for (var zone = 0; zone < 12; zone++)
                 {
-                    var q = new MatrixCell
-
-                    {
-                        BroadcastMessage = alarm1[zone]
-                            ? BroadCastMessage.Alarm1
-                            : alarm2[zone] ? BroadCastMessage.Alarm2 : BroadCastMessage.None,
-                        ButtonId = button,
-                        FlowId = zone + (Main.Id*12)
-                    };
-
-
-                    LibraryData.FuturamaSys.MatrixSelection.Remove(q);
-                    LibraryData.FuturamaSys.MatrixSelection.Add(q);
+                    var q = new MatrixCell(button, zone + (Main.Id*12));
+                    
+                    LibraryData.FuturamaSys.Selection[q] = alarm1[zone]
+                        ? BroadCastMessage.Alarm1
+                        : alarm2[zone] ? BroadCastMessage.Alarm2 : BroadCastMessage.None;
                 }
             }
             Main.OnRoutingTableUpdated();
         }
+
+        
     }
 }
