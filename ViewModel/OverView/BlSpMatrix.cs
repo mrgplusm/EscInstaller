@@ -36,8 +36,6 @@ namespace EscInstaller.ViewModel.OverView
         {
             _main = new MainUnitViewModel();
             _card = new CardModel();
-
-            ChkVms = new ObservableCollection<ChkVm>(GenMatrix());
         }
 #endif
 
@@ -50,14 +48,10 @@ namespace EscInstaller.ViewModel.OverView
 
             if (main.DataModel.LoudSpeakerMatrix == null)
                 main.DataModel.LoudSpeakerMatrix = new Dictionary<int, int>();
-
-            ChkVms = new ObservableCollection<ChkVm>(GenMatrix());
+            
         }
 
-        public override bool IsEnabled
-        {
-            get { return true; }
-        }
+        public override bool IsEnabled => false;
 
         public override List<SnapShot> Snapshots
         {
@@ -90,10 +84,7 @@ namespace EscInstaller.ViewModel.OverView
             }
         }
 
-        public override int Id
-        {
-            get { return _card.Id; }
-        }
+        public override int Id => _card.Id;
 
         public string DisplayId
         {
@@ -101,37 +92,17 @@ namespace EscInstaller.ViewModel.OverView
             {
                 var baseId = _card.Id*4 + _main.Id*12;
 
-                return string.Format("{0}-{1}", baseId + 1, baseId + 4);
+                return $"{baseId + 1}-{baseId + 4}";
             }
         }
 
-        public override string SettingName
-        {
-            get { return "loudspeakermatrix"; }
-        }
+        public override string SettingName => "loudspeakermatrix";
 
-        public ObservableCollection<ChkVm> ChkVms { get; private set; }
-
-        public override Point Size
-        {
-            get { return new Point(Width, 3*RowHeight + UnitHeight); } //to be determined by system overview
-        }
+        public override Point Size => new Point(Width, 3*RowHeight + UnitHeight);
 
         public override void SetYLocation()
         {
             Location.Y = RowHeight*5*_card.Id + InnerSpace*_card.Id;
-        }
-
-        public IEnumerable<ChkVm> GenMatrix()
-        {
-            for (var i = 0; i < 4; i++)
-            {
-                for (var j = 0; j < 4; j++)
-                {
-                    yield return new LspNode(i, j, _card, _main.DataModel);
-                }
-                yield return new LspLeftHeader(i, _card, _main.DataModel);
-            }
-        }
+        }        
     }
 }

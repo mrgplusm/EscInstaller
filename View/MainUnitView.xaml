@@ -615,10 +615,7 @@
                     <DataTemplate DataType="{x:Type overView:BlToneControl}">
                         <view:ToneControlView />
                     </DataTemplate>
-                    <DataTemplate DataType="{x:Type overView:BlSpMatrix}">
-                        <view:LspMtrxView />
-                    </DataTemplate>
-                    
+
                     <DataTemplate DataType="{x:Type settings:IntervalSettingsViewModel}">
                         <view:IntervalSettingsView />
                     </DataTemplate>
