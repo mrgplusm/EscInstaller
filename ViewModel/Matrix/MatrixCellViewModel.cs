@@ -113,6 +113,7 @@ namespace EscInstaller.ViewModel.Matrix
 
         private void TriggerChange()
         {
+            LibraryData.FuturamaSys.Selection[_key] = _broadCastMessage;
             OnChanged(new MessageSelectionEventArgs() { ButtonId = _key.ButtonId, FlowId = _key.FlowId, NewValue = _broadCastMessage });
         }
 
@@ -123,6 +124,7 @@ namespace EscInstaller.ViewModel.Matrix
             {
                 if (value && _broadCastMessage == BroadCastMessage.Alarm1) return;
                 _broadCastMessage = (value) ? BroadCastMessage.Alarm1 : BroadCastMessage.None;
+                
                 TriggerChange();
             }
         }
