@@ -180,12 +180,7 @@ namespace EscInstaller.ViewModel
                     },
                     () => DataModel.ExpansionCards < 2);
             }
-        }
-
-        public void MatrixSelectionChanged(MessageSelectionEventArgs e)
-        {
-            AlarmMessages.MatrixSelectonChanged(e);
-        }
+        } 
 
         
 

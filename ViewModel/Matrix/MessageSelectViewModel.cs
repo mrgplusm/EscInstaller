@@ -113,31 +113,16 @@ namespace EscInstaller.ViewModel.Matrix
         /// 201 B   
         /// 202 C
         /// 203 D
-        /// </summary>
-        private readonly List<Action> _selectionUpdated = new List<Action>();
+        /// </summary>        
 
      
 
-
-       
-
-        public void MatrixSelectionChanged(MessageSelectionEventArgs mea)
-        {
-            if(mea.MainUnitId != _main.Id) return;
-            if(mea.ButtonId < 192 || mea.ButtonId > 204) return;
-
-            var updateId = (mea.ButtonId - 192) >> 2;
-
-            _selectionUpdated[updateId]();
-        }
+        
 
         /// <summary>
         /// Button ABCD alarm2 enabled 
         /// </summary>
-        public bool EnabledA { get; set; } = false;
-        public bool EnabledB { get; set; } = false;
-        public bool EnabledC { get; set; } = false;
-        public bool EnabledD { get; set; } = false;
+        
 
         public SdFileVM ButtonA1
         {
@@ -146,7 +131,7 @@ namespace EscInstaller.ViewModel.Matrix
             {
                 if (value == null) return;
                 LibraryData.FuturamaSys.Messages[_id].ButtonA1 = value.Position;
-                OnSelectionChanged(_id*4 + 0);
+                OnCardMessageChange(new CardMessageEventArgs() {ButtonId = _id * 4 + 0, SelectedMessage = value.Position});
 
                 SendMessages();
             }
@@ -171,7 +156,7 @@ namespace EscInstaller.ViewModel.Matrix
                 if (value == null) return;
                 LibraryData.FuturamaSys.Messages[_id].ButtonB1 = value.Position;
 
-                OnSelectionChanged(_id*4 + 1);
+                OnCardMessageChange(new CardMessageEventArgs() { ButtonId = _id * 4 + 1, SelectedMessage = value.Position });
                 SendMessages();
             }
         }
@@ -195,7 +180,7 @@ namespace EscInstaller.ViewModel.Matrix
             {
                 if (value == null) return;
                 LibraryData.FuturamaSys.Messages[_id].ButtonC1 = value.Position;
-                OnSelectionChanged(_id*4 + 2);
+                OnCardMessageChange(new CardMessageEventArgs() { ButtonId = _id * 4 + 2, SelectedMessage = value.Position });
                 SendMessages();
             }
         }
@@ -218,7 +203,7 @@ namespace EscInstaller.ViewModel.Matrix
             {
                 if (value == null) return;
                 LibraryData.FuturamaSys.Messages[_id].ButtonD1 = value.Position;
-                OnSelectionChanged(_id*4 + 3);
+                OnCardMessageChange(new CardMessageEventArgs() { ButtonId = _id * 4 + 3, SelectedMessage = value.Position });
                 SendMessages();
             }
         }
@@ -258,13 +243,9 @@ namespace EscInstaller.ViewModel.Matrix
         /// <summary>
         ///     Occurs when user selects one of the messages
         /// </summary>
-        public event EventHandler<int> SelectionChanged;
+        public event EventHandler<CardMessageEventArgs> CardMessageChange;
 
-        protected virtual void OnSelectionChanged(int e)
-        {
-            var handler = SelectionChanged;
-            if (handler != null) handler(this, e);
-        }
+        
 
         public async void SendMessages()
         {
@@ -274,11 +255,15 @@ namespace EscInstaller.ViewModel.Matrix
             await q.SetMessageData(new Progress<DownloadProgress>());
         }
 
-        
+        protected virtual void OnCardMessageChange(CardMessageEventArgs e)
+        {
+            CardMessageChange?.Invoke(this, e);
+        }
     }
 
-    public class MessageSelectionChangedEventArgs
+    public class CardMessageEventArgs
     {
-        public int ButtonId;
+        public int ButtonId { get; set; }
+        public int SelectedMessage { get; set; }
     }
 }

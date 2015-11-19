@@ -43,7 +43,7 @@
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <ComboBox ItemsSource="{Binding Path=MesB}" SelectedItem="{Binding Path=ButtonA2}"
-                                      Name="a2" IsEnabled="{Binding Path=EnabledA}" />
+                                      Name="a2"  />
                             <TextBlock Text="{x:Static view:Panel._matrixSelectAlert}" Name="ta2" />
                         </StackPanel>
 
@@ -57,7 +57,7 @@
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <ComboBox ItemsSource="{Binding Path=MesB}" SelectedItem="{Binding Path=ButtonB2}"
-                                      Name="b2"  IsEnabled="{Binding Path=EnabledB}" />
+                                      Name="b2"   />
                             <TextBlock Text="{x:Static view:Panel._matrixSelectAlert}" Name="tb2" />
 
                         </StackPanel>
@@ -71,7 +71,7 @@
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <ComboBox ItemsSource="{Binding Path=MesB}" SelectedItem="{Binding Path=ButtonC2}"
-                                      Name="c2"  IsEnabled="{Binding Path=EnabledC}" />
+                                      Name="c2"   />
                             <TextBlock Text="{x:Static view:Panel._matrixSelectAlert}" Name="tc2" />
 
                         </StackPanel>
@@ -85,7 +85,7 @@
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <ComboBox ItemsSource="{Binding Path=MesB}" SelectedItem="{Binding Path=ButtonD2}"
-                                      Name="d2"  IsEnabled="{Binding Path=EnabledD}" />
+                                      Name="d2"  />
                             <TextBlock Text="{x:Static view:Panel._matrixSelectAlert}" Name="td2" />
                         </StackPanel>
 

@@ -157,13 +157,5 @@ namespace EscInstaller.ViewModel
             var q = new MessageSelector(_main.DataModel);
             await q.SetMessageData(new Progress<DownloadProgress>());
         }
-
-        public void MatrixSelectonChanged(MessageSelectionEventArgs messageSelectionEventArgs)
-        {
-            foreach (var messageSelectViewModel in Messages)
-            {
-                messageSelectViewModel.MatrixSelectionChanged(messageSelectionEventArgs);
-            }
-        }
     }
 }

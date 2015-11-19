@@ -24,16 +24,10 @@ namespace EscInstaller.ViewModel.Matrix
             }
         }
 
-        public override string DisplayValue
-        {
-            get
-            {
-                return string.Format("{2}: {0} - {1}",
-                    (Id*12 + 1),
-                    (Id*12 + 12),
-                    Id == 0 ? "M" : "S" + Id);
-            }
-        }
+        public override string DisplayValue => string.Format("{2}: {0} - {1}",
+            (Id*12 + 1),
+            (Id*12 + 12),
+            Id == 0 ? "M" : "S" + Id);
 
         private void PanelOnMcuChanged(object sender, McuChangedEventArgs rangeChangedEventArgs)
         {

@@ -491,7 +491,7 @@ namespace EscInstaller.ViewModel
         private MainUnitViewModel MainUnitFactory(MainUnitModel m)
         {
             var ret = new MainUnitViewModel(m, this);
-            MessageSelectionChanged += (sender, args) => ret.MatrixSelectionChanged(args);
+            
             return ret;
         }
         
@@ -507,7 +507,7 @@ namespace EscInstaller.ViewModel
 
         
 
-        public event EventHandler<MessageSelectionEventArgs> MessageSelectionChanged;
+        public event EventHandler<SelectionEventArgs> MessageSelectionChanged;
 
         /// <summary>
         ///     Opens esc file
@@ -646,7 +646,7 @@ namespace EscInstaller.ViewModel
         }
 
 
-        protected virtual void OnMessageSelectionChanged(MessageSelectionEventArgs e)
+        protected virtual void OnMessageSelectionChanged(SelectionEventArgs e)
         {
             MessageSelectionChanged?.Invoke(this, e);
         }

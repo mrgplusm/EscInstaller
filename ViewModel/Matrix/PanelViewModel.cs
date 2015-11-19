@@ -131,7 +131,7 @@ namespace EscInstaller.ViewModel.Matrix
             }
         }
 
-        public event EventHandler<MessageSelectionEventArgs> MessageSelectionChanged;
+        public event EventHandler<SelectionEventArgs> MessageSelectionChanged;
 
         private void OnMcuChanged(object sender, McuChangedEventArgs rangeChangedEventArgs)
         {
@@ -179,7 +179,7 @@ namespace EscInstaller.ViewModel.Matrix
             ButtonChanged?.Invoke(this, e);
         }
 
-        protected virtual void OnMessageSelectionChanged(MessageSelectionEventArgs e)
+        protected virtual void OnMessageSelectionChanged(SelectionEventArgs e)
         {
             MessageSelectionChanged?.Invoke(this, e);
         }

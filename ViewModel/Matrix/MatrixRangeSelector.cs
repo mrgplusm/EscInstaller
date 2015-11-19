@@ -17,10 +17,7 @@ namespace EscInstaller.ViewModel.Matrix
 
         public int Id { get; protected set; }
 
-        public bool IsEnabled
-        {
-            get { return !IsSelected; }
-        }
+        public bool IsEnabled => !IsSelected;
 
         public virtual bool IsSelected
         {
