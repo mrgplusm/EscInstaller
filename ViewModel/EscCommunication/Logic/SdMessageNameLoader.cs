@@ -54,7 +54,7 @@ namespace EscInstaller.ViewModel.EscCommunication.Logic
                 if (!CheckName(download))
                     continue;
 
-                _sdFileModels[download.CardNumber][download.TrackNumber - 4].Name =
+                _sdFileModels[download.CardNumber][download.TrackNumber].Name =
                     download.TrackName;
                 break;
             }

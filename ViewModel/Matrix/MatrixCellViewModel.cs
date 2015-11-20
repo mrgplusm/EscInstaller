@@ -18,7 +18,7 @@ namespace EscInstaller.ViewModel.Matrix
     public class MatrixCellViewModel : ViewModelBase
     {
         private bool _isVisible;
-        private bool _isLinked;        
+        
         private BroadCastMessage _broadCastMessage;
 
         public MatrixCellViewModel(MatrixCell cell)

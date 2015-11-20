@@ -42,7 +42,7 @@ namespace EscInstaller.ViewModel.OverView
         private readonly MainUnitViewModel _main;
         private byte[] _ks;
         private double[] _l;
-        private bool _playTestTone;
+        
         public Action CalibrateFinished;
         public Action CalibrateStarted;
         public Action CalibrateUserCancel;
@@ -101,26 +101,7 @@ namespace EscInstaller.ViewModel.OverView
 
         public SdMessageViewModel SelectedMessage { get; set; }
         public string ReferenceValue { get; set; } = "4";
-
-        public bool PlayTestTone
-        {
-            get { return _playTestTone; }
-            set
-            {
-                //todo: implement this
-                //if (SelectedMessage == null) return;
-                //_playTestTone = value;
-                //TestToneEnabled = false;
-                //var z = new PlayTestMessage(_flow.Id, SelectedMessage.SdCardPosition, value);
-                //CommunicationViewModel.AddData(z);
-
-                ////get value for multiplexer
-                //var q = new GetDspValue(_main.Id, McuDat.DemuxAlarm[_flow.Id % 12]);
-                //q.ReceivedModule += ReceivedDemuxByte;
-                //q.Failure += (s) => { TestToneEnabled = true; };
-                //CommunicationViewModel.AddData(q);
-            }
-        }
+        
 
         public bool TestToneEnabled { get; set; } = true;
 

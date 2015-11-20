@@ -35,6 +35,7 @@ namespace EscInstaller.ViewModel
         public Action DelayChanged;
         public Action ExtinputUpdate;
         private IntervalSettingsViewModel v;
+        private double _canvasSize;
 
         public MainUnitViewModel(MainUnitModel mainUnit, MainViewModel main)
         {
@@ -47,6 +48,7 @@ namespace EscInstaller.ViewModel
             AlarmMessages = new AlarmMessagesViewModel(this);            
 
             UpdateConnectionMode();
+            CardsUpdated += (sender, args) => RaisePropertyChanged(() => CanvasSize);
         }
 
 #if DEBUG
@@ -63,6 +65,9 @@ namespace EscInstaller.ViewModel
         internal EepromDataHandler EepromHandler { get; private set; }
         internal VuMeter VuMeter { get; private set; }
         public AlarmMessagesViewModel AlarmMessages { get; private set; }
+
+
+        public double CanvasSize => 400d + DataModel.ExpansionCards * 200d;
 
         public ConnectionViewModel Connection
         {

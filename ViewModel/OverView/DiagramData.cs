@@ -2,6 +2,7 @@
 
 using System.Windows;
 using GalaSoft.MvvmLight;
+using Xceed.Wpf.Toolkit.Converters;
 
 #endregion
 
@@ -27,6 +28,7 @@ namespace EscInstaller.ViewModel.OverView
 
         public virtual bool IsEnabled => true;
 
-        public virtual BindablePoint Location => _location ?? (_location = new BindablePoint());
+        public virtual BindablePoint Location => _location ?? (_location = new BindablePoint());        
+        
     }
 }

@@ -5,7 +5,15 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d" x:Name="CharsText">
     <StackPanel Orientation="Horizontal">
+        <!--<Grid HorizontalAlignment="Left" VerticalAlignment="Top">
+            <Canvas>
+                <Canvas Background="Crimson" Left="2" Top="2" Width="10" Height="10" Grid.Column="0" Grid.Row="0"></Canvas>
+            </Canvas>
+            <Canvas>
+                <Canvas Background="Green" Left="8" Top="8" Width="10" Height="10" Grid.Column="0" Grid.Row="0"></Canvas>
+            </Canvas>
 
+        </Grid>-->
         <TextBox MaxLength="13" Height="25" Width="160"
                  Text="{Binding ElementName=CharsText, Path=CountedText, 
                 UpdateSourceTrigger=PropertyChanged}"

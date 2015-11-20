@@ -12,6 +12,7 @@ namespace EscInstaller.ViewModel.OverView
     {
         private Point _value;
         public Action OnValueChanged;
+        private Thickness _thickness;
 
         public virtual double X
         {
@@ -34,10 +35,13 @@ namespace EscInstaller.ViewModel.OverView
                 RaisePropertyChanged(() => Value);
                 RaisePropertyChanged(() => X);
                 RaisePropertyChanged(() => Y);
-
+                RaisePropertyChanged(() => Thickness);
                 ValueChanged();
             }
         }
+
+        public Thickness Thickness => new Thickness(0,0, 0, 0);
+        //public Thickness Thickness => new Thickness(Value.X, Value.Y, 0, 0);
 
         public void ValueChanged()
         {

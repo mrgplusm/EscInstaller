@@ -503,22 +503,23 @@
         </DataTemplate>
     </UserControl.Resources>
 
-    <Grid Name="Grid">
+    <Grid Name="Grid" VerticalAlignment="Top">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <ListBox Grid.Row="0" Grid.Column="0"
+        <ScrollViewer Grid.Row="0" Grid.Column="0" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+        <ListBox 
                  ItemsSource="{Binding Path=DiagramObjects, NotifyOnTargetUpdated=True}"
-                 ScrollViewer.VerticalScrollBarVisibility="Visible"
-                 ScrollViewer.HorizontalScrollBarVisibility="Auto" SelectedItem="{Binding Path=SelectedObject}"
+                 ScrollViewer.VerticalScrollBarVisibility="Hidden" Height="{Binding Path=CanvasSize}"
+                  SelectedItem="{Binding Path=SelectedObject}"
                  MouseDown="UIElement_OnMouseDown" Name="Box">
 
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <common1:SizeAbleCanvas IsItemsHost="True" Background="#01FFFFFF" />
+                    <Canvas IsItemsHost="True" Background="#01FFFFFF" />
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
             <ListBox.ItemContainerStyle>
@@ -535,10 +536,11 @@
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>
-
+                    
                     <Setter Property="Canvas.Top" Value="{Binding Location.Y}" />
-                    <Setter Property="Canvas.ZIndex" Value="{Binding Path=ZIndex}" />
                     <Setter Property="Canvas.Left" Value="{Binding Location.X}" />
+                    <Setter Property="Canvas.ZIndex" Value="{Binding Path=ZIndex}" />
+                    
                     <Setter Property="RenderTransformOrigin" Value="0.5,0.5" />
 
                     <Setter Property="RenderTransform">
@@ -573,6 +575,8 @@
 
 
         </ListBox>
+        </ScrollViewer>
+
 
         <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
             <GroupBox Content="{Binding SelectedObject}" x:Name="GroupBoxBottom"
