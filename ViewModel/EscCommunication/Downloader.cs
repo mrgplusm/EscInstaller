@@ -21,10 +21,7 @@ namespace EscInstaller.ViewModel.EscCommunication
             ItemstoDownload = new ObservableCollection<ItemtoDownload>();
         }
 
-        public string DisplayValue
-        {
-            get { return Main.DisplayValue; }
-        }
+        public string DisplayValue => Main.DisplayValue;
 
         /// <summary>
         ///     Download all items of this esc
@@ -74,23 +71,15 @@ namespace EscInstaller.ViewModel.EscCommunication
 
         protected virtual void OnAllItemsChecked()
         {
-            var handler = AllItemsChecked;
-            if (handler != null) handler(this, EventArgs.Empty);
+
+            AllItemsChecked?.Invoke(this, EventArgs.Empty);
         }
 
         private void CheckAllDownloadItems(bool value)
         {
             foreach (var itemtoDownload in ItemstoDownload) itemtoDownload.SelectDownload(value);
         }
-
-        private void itemtoDownload_DownloadCompleted(object sender, EventArgs e)
-        {
-            if (ItemstoDownload.Where(q => q.DoDownload).All(s => s.ReceiveCompleted))
-            {
-                EscDownloadCompleted = true;
-            }
-            OnDownloadItemStateChanged();
-        }
+        
 
         /// <summary>
         ///     One of the items finished downloading
@@ -98,9 +87,8 @@ namespace EscInstaller.ViewModel.EscCommunication
         public event EventHandler DownloadItemStateChanged;
 
         protected virtual void OnDownloadItemStateChanged()
-        {
-            var handler = DownloadItemStateChanged;
-            if (handler != null) handler(this, EventArgs.Empty);
+        {            
+            DownloadItemStateChanged?.Invoke(this, EventArgs.Empty);
         }
 
         public async void StartDownload()

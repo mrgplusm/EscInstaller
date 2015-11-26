@@ -81,8 +81,7 @@ namespace EscInstaller.ViewModel.EscCommunication
 
         protected virtual void OnDownloadClicked()
         {
-            var handler = DownloadClicked;
-            if (handler != null) handler(this, EventArgs.Empty);
+            DownloadClicked?.Invoke(this, EventArgs.Empty);            
         }
 
         public void SelectDownload(bool value)
@@ -96,8 +95,6 @@ namespace EscInstaller.ViewModel.EscCommunication
             return new Progress<DownloadProgress>(Report);
         }
 
-        protected virtual void Done()
-        {
-        }
+        protected virtual void Done() {}
     }
 }

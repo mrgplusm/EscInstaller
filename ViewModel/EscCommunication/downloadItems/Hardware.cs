@@ -14,10 +14,7 @@ namespace EscInstaller.ViewModel.EscCommunication.downloadItems
         {
         }
 
-        public override string ItemName
-        {
-            get { return "Hardware"; }
-        }
+        public override string ItemName => "Hardware";
 
         public override Task Function
         {

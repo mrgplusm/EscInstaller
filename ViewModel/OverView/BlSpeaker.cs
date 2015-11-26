@@ -1,5 +1,6 @@
 ﻿#region
 
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -27,43 +28,28 @@ namespace EscInstaller.ViewModel.OverView
 
             Location.X = XLocation + (line > 0 ? 15 : 5);
             UpdateLoads();
+            main.KreisUpdated += MainOnKreisUpdated;
         }
 
-        public override sealed BindablePoint Location
+        private void MainOnKreisUpdated(object sender, EventArgs eventArgs)
         {
-            get { return _location ?? (_location = new BindablePoint()); }
+            UpdateLoads();
         }
 
-        public override string SettingName
-        {
-            get { return string.Format("Speaker Line " + (Line > 0 ? "B" : "A"), _flow.Id + 1); }
-        }
+        public override sealed BindablePoint Location => _location ?? (_location = new BindablePoint());
 
-        public override sealed List<SnapShot> Snapshots
-        {
-            get
-            {
-                return _snapShots ?? (_snapShots = new List<SnapShot>()
-                {
-                    new SnapShot(this) {Offset = {X = 0, Y = 8}}
-                });
-            }
-        }
+        public override string SettingName => string.Format("Speaker Line " + (Line > 0 ? "B" : "A"), _flow.Id + 1);
 
-        public override int Id
+        public override sealed List<SnapShot> Snapshots => _snapShots ?? (_snapShots = new List<SnapShot>()
         {
-            get { return _flow.Id; }
-        }
+            new SnapShot(this) {Offset = {X = 0, Y = 8}}
+        });
 
-        public override Point Size
-        {
-            get { return new Point(Width, 8); }
-        }
+        public override int Id => _flow.Id;
 
-        public override bool IsEnabled
-        {
-            get { return false; }
-        }
+        public override Point Size => new Point(Width, 8);
+
+        public override bool IsEnabled => false;
 
         public int Line { get; }
 
@@ -80,10 +66,7 @@ namespace EscInstaller.ViewModel.OverView
             }
         }
 
-        public double Load
-        {
-            get { return _l[7 - Line]; }
-        }
+        public double Load => _l[1 - Line];
 
         public override void SetYLocation()
         {
