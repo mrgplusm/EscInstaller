@@ -83,6 +83,20 @@ namespace EscInstaller.ViewModel
 #endif
         }
 
+
+
+
+        public bool MeasurementSettingsEnabled
+        {
+            get
+            {
+                bool measurementSettingsEnabled;
+                return bool.TryParse(LibraryData.Settings["MeasurementSettingsEnabled"], out measurementSettingsEnabled) && measurementSettingsEnabled;
+            }
+        }
+
+
+
         public CommunicationViewModel Communication { get; } = new CommunicationViewModel();
 
         public string FileName
@@ -211,7 +225,7 @@ namespace EscInstaller.ViewModel
                 return new RelayCommand(() =>
                 {
                     var t = new SdLibraryEditorViewModel();
-                    var z = new SdMessageCardView {DataContext = t};
+                    var z = new SdMessageCardView { DataContext = t };
                     z.Show();
                 });
             }
@@ -285,14 +299,14 @@ namespace EscInstaller.ViewModel
             //}
             //else
             //{
-                var nq = new DownloadView
-                {
-                    Title = "UPLOAD to ESC: GUI => ESC",
-                    Background = Brushes.LightCoral
-                };
-                var qq = new CommunicationSend(this); //  EscCommunicationBase(this);
-                nq.DataContext = qq;
-                nq.Show();
+            var nq = new DownloadView
+            {
+                Title = "UPLOAD to ESC: GUI => ESC",
+                Background = Brushes.LightCoral
+            };
+            var qq = new CommunicationSend(this); //  EscCommunicationBase(this);
+            nq.DataContext = qq;
+            nq.Show();
             //}
         }
 
@@ -398,7 +412,7 @@ namespace EscInstaller.ViewModel
             return false;
         }
 
-        
+
 
         /// <summary>
         ///     Removes a slave from the system and reorders unit numbers and cardnumbers
@@ -474,7 +488,7 @@ namespace EscInstaller.ViewModel
 
             TabCollection.Clear();
             await Task.Delay(150);
-            
+
             foreach (var m in LibraryData.FuturamaSys.MainUnits) TabCollection.Add(MainUnitFactory(m));
             SelectedTab = TabCollection.FirstOrDefault(i => i.Id == 0);
 
@@ -485,21 +499,21 @@ namespace EscInstaller.ViewModel
         private MainUnitViewModel MainUnitFactory(MainUnitModel m)
         {
             var ret = new MainUnitViewModel(m, this);
-            
+
             return ret;
         }
-        
-        public PanelViewModel PanelViewFactory 
+
+        public PanelViewModel PanelViewFactory
         {
             get
             {
                 var ret = new PanelViewModel(this);
-                ret.MessageSelectionChanged += (sender, args) => OnMessageSelectionChanged(args);        
+                ret.MessageSelectionChanged += (sender, args) => OnMessageSelectionChanged(args);
                 return ret;
             }
         }
 
-        
+
 
         public event EventHandler<SelectionEventArgs> MessageSelectionChanged;
 
@@ -606,7 +620,7 @@ namespace EscInstaller.ViewModel
             var newunit = new MainUnitViewModel(mu, this);
 
             TabCollection.Add(newunit);
-            
+
         }
 
         private void AddMainUnit(int id)

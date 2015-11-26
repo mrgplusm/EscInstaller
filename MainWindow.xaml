@@ -121,7 +121,7 @@
                           Command="{Binding Path=EnableDcOperation}" IsCheckable="True" IsEnabled="False" />
 
                 <MenuItem Header="{x:Static escInstaller:Main.OpenMeasurementSettingsMenuEntry}"
-                          Command="{Binding Path=OpenMeasureMentSettings}">
+                          Command="{Binding Path=OpenMeasureMentSettings}" IsEnabled="{Binding Path=MeasurementSettingsEnabled}">
                     <MenuItem.Style>
                         <Style TargetType="{x:Type MenuItem}">
 
