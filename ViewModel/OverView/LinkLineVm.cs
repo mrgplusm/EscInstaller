@@ -1,5 +1,6 @@
 #region
 
+using System;
 using System.Windows;
 using System.Windows.Media;
 using Common.Commodules;
@@ -13,15 +14,16 @@ namespace EscInstaller.ViewModel.OverView
         private StreamGeometry _geometry1;
         private LinkTo _linkTo;
 
-        public LinkLineVm(SnapDiagramData first, SnapDiagramData second, SnapDiagramData InitialLink, int flowId,
+        public LinkLineVm(SnapDiagramData first, SnapDiagramData second, SnapDiagramData initialLink, int flowId,
             int? rowFirst = null, int? rowSecond = null)
             : base(first, second, rowFirst, rowSecond)
         {
+            if(first is BlDelay) throw new Exception("should be link");
             Id = flowId;
             LineType = LineType.LinkLine;
 
 
-            ChangePath(LinkTo.No, InitialLink);
+            ChangePath(LinkTo.No, initialLink);
 
             SetGeometry();
         }
@@ -48,7 +50,7 @@ namespace EscInstaller.ViewModel.OverView
             }
         }
 
-        public void ChangePath(LinkTo Path, SnapDiagramData linkTo)
+        public void ChangePath(LinkTo path, SnapDiagramData linkTo)
         {
             if (Id%12 == 0)
             {
@@ -58,12 +60,12 @@ namespace EscInstaller.ViewModel.OverView
 
             First = linkTo;
 
-            if (Path == LinkTo.No)
+            if (path == LinkTo.No)
             {
                 RowIdFirst = null;
             }
 
-            if (Path == LinkTo.Previous)
+            if (path == LinkTo.Previous)
             {
                 RowIdFirst = null;
                 if (Id%12 == 2)
@@ -75,13 +77,13 @@ namespace EscInstaller.ViewModel.OverView
                     RowIdFirst = Id%12 - 1;
                 }
             }
-            if (Path == LinkTo.PreviousWithDelay)
+            if (path == LinkTo.PreviousWithDelay)
             {
                 RowIdFirst = (Id%12 == 2) ? 1 : (int?) null;
                 RowIdSecond = 0;
             }
 
-            LinkTo = Path;
+            LinkTo = path;
         }
 
         private void SetGeometry()
@@ -108,6 +110,7 @@ namespace EscInstaller.ViewModel.OverView
                             case 3:
                                 ctx.LineTo(new Point(Start.Value.X - 5, Start.Value.Y), true, false);
                                 ctx.LineTo(new Point(Start.Value.X - 5, End.Value.Y), true, false);
+                                Console.WriteLine(Start.Value.X);
                                 break;
 
                             default:

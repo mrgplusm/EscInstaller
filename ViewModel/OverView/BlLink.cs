@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using Common;
@@ -49,50 +50,38 @@ namespace EscInstaller.ViewModel.OverView
 
                 Snapshots.Add(new SnapShot(this)
                 {
-                    Offset = {X = Size.X, Y = SnapshotHeight + RowHeight*x + _innerSpace(x)},
+                    Offset = {X = Width, Y = SnapshotHeight + RowHeight*x + _innerSpace(x)},
                     SnapType = SnapType.Red,
                     RowId = x
                 });
             }
 
             Snapshots.Add(new SnapShot(this) {Offset = {X = SnapshotWidth, Y = Size.Y}, RowId = 30});
+
+            foreach (var snapshot in Snapshots)
+            {
+                Debug.WriteLine("x = " + snapshot.Location.X + "y = " + snapshot.Location.Y);
+            }
         }
 
-        public override int Id
-        {
-            get { return 0; }
-        }
+        public override int Id => 0;
 
-        public override List<SnapShot> Snapshots
-        {
-            get { return _snapShots ?? (_snapShots = new List<SnapShot>()); }
-        }
+        public override List<SnapShot> Snapshots => _snapShots ?? (_snapShots = new List<SnapShot>());
 
         public ObservableCollection<VCAController> VcaControllers
         {
             get
             {
-                if (_vcaControllers == null && _main != null && _main.DataModel.Cards != null)
-                {
-                    _vcaControllers = new ObservableCollection<VCAController>();
-                    if (_main != null)
-                        _vcaControllers =
-                            new ObservableCollection<VCAController>(
-                                _main.DataModel.Cards.First().Flows.Select(n => new VCAController(n)));
-                }
+                if (_vcaControllers != null) return _vcaControllers;
+                var flows = _main?.DataModel.Cards.First().Flows.Select(n => new VCAController(n));
+                if (flows != null) _vcaControllers = new ObservableCollection<VCAController>(flows);
                 return _vcaControllers;
             }
         }
 
-        public override string SettingName
-        {
-            get { return Link._linkBlockTitle; }
-        }
+        public override string SettingName => Link._linkBlockTitle;
 
-        public override Point Size
-        {
-            get { return _size; }
-        }
+        public override Point Size => _size;
 
         public ObservableCollection<LinkOption> LinkOptions { get; set; }
 
@@ -123,6 +112,7 @@ namespace EscInstaller.ViewModel.OverView
         {
             if (count > 2) count = 2;
             if (count < 0) count = 0;
+            
             _size = new Point(Width, RowHeight*4 + UnitHeight + (RowHeight*5*count)
                                      + _main.DataModel.ExpansionCards*InnerSpace);
 
@@ -164,9 +154,8 @@ namespace EscInstaller.ViewModel.OverView
         public event EventHandler<LinkChangedEventArgs> LinkChanged;
 
         public void OnLinkChanged(LinkChangedEventArgs e)
-        {
-            var handler = LinkChanged;
-            if (handler != null) handler(this, e);
+        {            
+            LinkChanged?.Invoke(this, e);
         }
     }
 }

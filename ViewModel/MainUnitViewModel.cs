@@ -48,6 +48,7 @@ namespace EscInstaller.ViewModel
             AlarmMessages = new AlarmMessagesViewModel(this);            
 
             UpdateConnectionMode();
+            UpdateLineLinks();
             CardsUpdated += (sender, args) => RaisePropertyChanged(() => CanvasSize);
         }
 
@@ -598,7 +599,7 @@ namespace EscInstaller.ViewModel
 
             SnapDiagramData z = null;
 
-            if (flow.Path == LinkTo.Previous && (flow.Id == 2 || flow.Id == 3) || flow.Path == LinkTo.PreviousWithDelay)
+            if (flow.Path == LinkTo.Previous && (flow.Id%12 == 2 || flow.Id%12 == 3) || flow.Path == LinkTo.PreviousWithDelay)
             {
                 z = DiagramObjects.OfType<BlDelay>().FirstOrDefault(i => i.Id == flow.Id - 1);
             }
