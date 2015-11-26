@@ -687,8 +687,7 @@ namespace EscInstaller.ViewModel
 
         public void OnKreisUpdated()
         {
-            var handler = KreisUpdated;
-            if (handler != null) handler(this, EventArgs.Empty);
+            KreisUpdated?.Invoke(this, EventArgs.Empty);
         }
 
         public event EventHandler RedundancyUpdated;
