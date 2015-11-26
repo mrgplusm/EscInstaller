@@ -277,14 +277,14 @@ namespace EscInstaller.ViewModel
 
         private void SendUnitData()
         {
-            if (TabCollection.OfType<MainUnitViewModel>().All(model => model.ConnectType == ConnectType.None))
-            {
-                MessageBox.Show(Main.MessageBoxUploadText, Main.MessageBoxUploadTitle,
-                    MessageBoxButton.OK, MessageBoxImage.Question);
-                SwitchToCommunicationTab();
-            }
-            else
-            {
+            //if (Communication.Connections.All(model => model.ConnectType == ConnectType.None))
+            //{
+            //    MessageBox.Show(Main.MessageBoxUploadText, Main.MessageBoxUploadTitle,
+            //        MessageBoxButton.OK, MessageBoxImage.Question);
+            //    SelectedTab = TabCollection.FirstOrDefault(n => n is CommunicationViewModel);
+            //}
+            //else
+            //{
                 var nq = new DownloadView
                 {
                     Title = "UPLOAD to ESC: GUI => ESC",
@@ -293,7 +293,7 @@ namespace EscInstaller.ViewModel
                 var qq = new CommunicationSend(this); //  EscCommunicationBase(this);
                 nq.DataContext = qq;
                 nq.Show();
-            }
+            //}
         }
 
         private async Task<bool> InformUserTimestampAsync(bool isUploadText)
@@ -390,7 +390,7 @@ namespace EscInstaller.ViewModel
 
         private bool AreConnections()
         {
-            if (TabCollection.OfType<MainUnitViewModel>().Any(model => model.ConnectType != ConnectType.None))
+            if (Communication.Connections.Any(connection => connection.ConnectMode == ConnectMode.Install))
                 return true;
             MessageBox.Show(Main.MessageBoxNoConnectionText, Main.MessageBoxNoConnectionTitle, MessageBoxButton.OK,
                 MessageBoxImage.Exclamation);
@@ -398,13 +398,7 @@ namespace EscInstaller.ViewModel
             return false;
         }
 
-        private void SwitchToCommunicationTab()
-        {
-            var comm = TabCollection.OfType<CommunicationViewModel>().FirstOrDefault();
-            if (comm == null) return;
-            SelectedTab = comm;
-            comm.TabIndex = 0;
-        }
+        
 
         /// <summary>
         ///     Removes a slave from the system and reorders unit numbers and cardnumbers
@@ -612,7 +606,7 @@ namespace EscInstaller.ViewModel
             var newunit = new MainUnitViewModel(mu, this);
 
             TabCollection.Add(newunit);
-            OnSystemChanged(new SystemChangedEventArgs() {NewMainUnit = newunit});
+            
         }
 
         private void AddMainUnit(int id)
@@ -624,6 +618,7 @@ namespace EscInstaller.ViewModel
             var escview = new MainUnitViewModel(esc, this);
             if (!TabCollection.Contains(escview))
                 TabCollection.Add(escview);
+            OnSystemChanged(new SystemChangedEventArgs() { NewMainUnit = escview });
         }
 
         public void RemoveUnit(MainUnitViewModel mainUnit)

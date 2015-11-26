@@ -321,7 +321,7 @@ namespace EscInstaller.ViewModel.OverView
             var ret = new double[12];
             if (main.DspCopy.Count < 131070)
                 return Enumerable.Range(0, 12).Select(n => 0.0).ToArray();
-            var ks = main.DspCopy.Skip(McuDat.KreisInstall).Skip(flow.Id*72).Take(72).ToArray();
+            var ks = main.DspCopy.Skip(McuDat.KreisInstall).Skip(flow.Id%12*72).Take(72).ToArray();
             for (var g = 0; g < 2; g++)
             {
                 var start = 12 + g*18;

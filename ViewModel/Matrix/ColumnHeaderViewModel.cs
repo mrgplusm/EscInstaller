@@ -122,17 +122,17 @@ namespace EscInstaller.ViewModel.Matrix
             return LibraryData.FuturamaSys.Selection.Keys.Where(d => d.ButtonId == buttonId && keys(d.FlowId));
         }
 
-        public static IEnumerable<MatrixCell> ColumnSelection(int mainUnitId, int buttonId)
+        public static IEnumerable<MatrixCell> ColumnSelection(int mainUnitId, int buttonId, bool wholeColumn = false)
         {
             var mu = GenericMethods.GetMainUnit(mainUnitId);
             return CellsForUnit(mainUnitId, buttonId)
-                .Where(s => s.FlowId%12 < mu.ExpansionCards*4 + 4);
+                .Where(s => s.FlowId%12 < (wholeColumn ? 12 : mu.ExpansionCards*4 + 4));
         }
         
                 
         private static void UpdateColumn(BroadCastMessage message, int mainUnit, int buttonId)
         {
-            var cellSelection = ColumnSelection(mainUnit, buttonId).ToArray();
+            var cellSelection = ColumnSelection(mainUnit, buttonId, message == BroadCastMessage.None).ToArray();
 
             foreach (var matrixCell in cellSelection)
             {

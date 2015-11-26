@@ -510,10 +510,10 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <ScrollViewer Grid.Row="0" Grid.Column="0" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+        <ScrollViewer Grid.Row="0" Grid.Column="0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
         <ListBox 
                  ItemsSource="{Binding Path=DiagramObjects, NotifyOnTargetUpdated=True}"
-                 ScrollViewer.VerticalScrollBarVisibility="Hidden" Height="{Binding Path=CanvasSize}"
+                 ScrollViewer.VerticalScrollBarVisibility="Hidden" Height="{Binding Path=CanvasSize}" Width="1000"
                   SelectedItem="{Binding Path=SelectedObject}"
                  MouseDown="UIElement_OnMouseDown" Name="Box">
 
