@@ -135,9 +135,15 @@ namespace EscInstaller.ViewModel.Matrix
             return ColumnHeaderViewModel.CellsForUnit(mainUnitKey, Cell.ButtonId);
         }
 
+        public static BroadCastMessage TryGetSelection(MatrixCell cell)
+        {
+            BroadCastMessage dir;
+            return LibraryData.FuturamaSys.Selection.TryGetValue(cell, out dir) ? dir : BroadCastMessage.None;            
+        }
+
         private int Alarm1Count()
         {            
-            var valuesToSelect = ColumnKeys().Select(x => LibraryData.FuturamaSys.Selection[x]).ToList();
+            var valuesToSelect = ColumnKeys().Select(TryGetSelection).ToList();
 
             return (valuesToSelect.Count(d => d == BroadCastMessage.Alarm1));                        
         }

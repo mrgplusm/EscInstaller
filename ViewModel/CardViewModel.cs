@@ -17,21 +17,7 @@ namespace EscInstaller.ViewModel
             : base(card)
         {
             MainUnitViewModel = mainUnitViewModel;
-            _card = (CardModel) card;
-
-            //if (card.Flows == null || card.Flows.Count != 4) card.Flows = GenFlows(mainUnitViewModel.DataModel, Id);
-            //FlowsB = card.Flows.Select(flowModel => new FlowViewModel(flowModel, this)).ToList();
-
-            //if (BlockUnits == null)
-            //{
-            //    BlockUnits = new List<OverViewData>();
-            //    foreach (var t in FlowsB)
-            //    {
-            //        BlockUnits.AddRange(t.GetOverView);
-            //    }
-            //}
-
-            //BlockUnits.Add(new BlAuxiliary(this));
+            _card = (CardModel) card;            
         }
 
         public int LinkedChannel

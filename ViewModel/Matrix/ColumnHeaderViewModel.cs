@@ -117,9 +117,8 @@ namespace EscInstaller.ViewModel.Matrix
         }
 
         public static IEnumerable<MatrixCell> CellsForUnit(int mainUnitId, int buttonId)
-        {
-            Func<int, bool> keys = (id) => id >= mainUnitId * 12 && id < mainUnitId * 12 + 12;
-            return LibraryData.FuturamaSys.Selection.Keys.Where(d => d.ButtonId == buttonId && keys(d.FlowId));
+        {            
+            return Enumerable.Range(mainUnitId*12, 12).Select(n => new MatrixCell(n, buttonId));                     
         }
 
         public static IEnumerable<MatrixCell> ColumnSelection(int mainUnitId, int buttonId, bool wholeColumn = false)
@@ -269,7 +268,7 @@ namespace EscInstaller.ViewModel.Matrix
             //_allAlarm = Cells.All(n => n.Alarm || !n.IsVisible || !n.IsEnabled);
             _allAlarm =
                 ColumnSelection(MainUnit.Id, ButtonId)
-                    .Select(n => LibraryData.FuturamaSys.Selection[n])
+                    .Select(MatrixCellViewModel.TryGetSelection)
                     .All(n => n == BroadCastMessage.Alarm1);
             RaisePropertyChanged(() => AllAlarm1);
         }
