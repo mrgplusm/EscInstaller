@@ -4,11 +4,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.ServiceModel;
 using Common;
 using Common.Commodules;
 using Common.Model;
-using EscInstaller.ViewModel.OverView;
 using GalaSoft.MvvmLight;
 
 #endregion
@@ -18,13 +16,32 @@ namespace EscInstaller.ViewModel.Matrix
     public class MatrixCellViewModel : ViewModelBase
     {
         private bool _isVisible;
-        
         private BroadCastMessage _broadCastMessage;
+        private bool _alarm2Enabled;
+        private bool _isEnabled;
 
         public MatrixCellViewModel(MatrixCell cell)
         {
             Cell = cell;
             SetBroadCastMessage();
+            UpdateEnabled();
+        }
+
+        public BroadCastMessage BroadCastMessage
+        {
+            get { return _broadCastMessage; }
+            set
+            {
+                if (_broadCastMessage == value) return;
+                var old = _broadCastMessage;                
+                _broadCastMessage = value;
+                StoreChange();
+                if (old == BroadCastMessage.Alarm1 && Alarm1Count() < 1)
+                {
+                    SetNoMessageForColumn();
+                }
+                RaisePropertyChanged(() => BroadCastMessage);
+            }
         }
 
         public int FlowId => Cell.FlowId;
@@ -41,35 +58,47 @@ namespace EscInstaller.ViewModel.Matrix
             }
         }
 
-        
-
-        public bool IsLinked
+        private bool IsLinked()
         {
-            get
-            {
-
-                var flow = GenericMethods.GetFlowForId(Cell.FlowId);
-                return flow.Path != LinkTo.No;
-            }
-            
+            var flow = GenericMethods.GetFlowForId(Cell.FlowId);
+            return flow.Path != LinkTo.No;
         }
 
         public bool IsEnabled
         {
-            get
+            get { return _isEnabled; }
+            private set
             {
-                if (IsLinked) return false;
-
-                if (Cell.ButtonId < 192 || Cell.ButtonId > 203) return true;
-
-                return LibraryData.FuturamaSys.Messages == null || ABCDUsed();
+                if(_isEnabled == value) return;
+                _isEnabled = value;
+                RaisePropertyChanged(()=> IsEnabled);
             }
         }
 
+
+        private bool CellIsEnabled()
+        {
+            if (IsLinked()) return false;
+
+            if (Cell.ButtonId < 192 || Cell.ButtonId > 203) return true;
+
+            return LibraryData.FuturamaSys.Messages == null || ABCDUsed();
+        }
+
+        private bool CellAlarm2Enabled()
+        {
+            if (!IsEnabled) return false;
+
+            var count = Alarm1Count();
+            if (count < 1) return false;
+            return (count != 1) || (_broadCastMessage != BroadCastMessage.Alarm1);
+        }
+        
+
         public void UpdateEnabled()
-        {            
-            RaisePropertyChanged(() => IsEnabled);
-            RaisePropertyChanged(() => Alarm2Enabled);            
+        {
+            IsEnabled = CellIsEnabled();
+            Alarm2Enabled = CellAlarm2Enabled();            
         }
 
         private bool ABCDUsed()
@@ -88,77 +117,47 @@ namespace EscInstaller.ViewModel.Matrix
 
             return bitArray[Cell.ButtonId - 192];
         }
-        
+
         public bool Alarm2Enabled
         {
-            get
+            get { return _alarm2Enabled; }
+            private set
             {
-                if (!IsEnabled) return false;
-                
-                if (_alarm1Count < 1) return false;
-                if ((_alarm1Count == 1) && (_broadCastMessage == BroadCastMessage.Alarm1)) return false;
-                return true;
+                if (_alarm2Enabled == value) return;
+                _alarm2Enabled = value;
+                RaisePropertyChanged(()=> Alarm2Enabled);
             }
-            
         }
 
-        private int _alarm1Count;
-        private void UpdateAlarm1Count()
+        private IEnumerable<MatrixCell> ColumnKeys()
         {
             var mainUnitKey = GenericMethods.GetMainunitIdForFlowId(Cell.FlowId);
-            var cellSelection = CellsForUnit(mainUnitKey, Cell.ButtonId).ToArray();
-            var valuesToSelect = cellSelection.Select(x => LibraryData.FuturamaSys.Selection[x]).ToList();            
-
-            _alarm1Count = (valuesToSelect.Count(d => d == BroadCastMessage.Alarm1));
-            if (_alarm1Count < 1)
-            {
-                foreach (var matrixCell in cellSelection)
-                {
-                    LibraryData.FuturamaSys.Selection[matrixCell] = BroadCastMessage.None;
-                }
-                OnChanged(new SelectionEventArgs() { ButtonId = Cell.ButtonId, ColumnSelection = true, NewValue = BroadCastMessage.None, Alarm2Removed = true});
-            }
+            return ColumnHeaderViewModel.CellsForUnit(mainUnitKey, Cell.ButtonId);
         }
 
-        public static IEnumerable<MatrixCell> CellsForUnit(int mainUnitId, int buttonId)
+        private int Alarm1Count()
         {            
-            Func<int, bool> keys = (id) => id >= mainUnitId * 12 && id < mainUnitId * 12 + 12;
-            return LibraryData.FuturamaSys.Selection.Keys.Where(d => d.ButtonId == buttonId && keys(d.FlowId));
+            var valuesToSelect = ColumnKeys().Select(x => LibraryData.FuturamaSys.Selection[x]).ToList();
+
+            return (valuesToSelect.Count(d => d == BroadCastMessage.Alarm1));                        
+        }
+
+        private void SetNoMessageForColumn()
+        {
+            foreach (var matrixCell in ColumnKeys().ToArray())
+            {
+                LibraryData.FuturamaSys.Selection[matrixCell] = BroadCastMessage.None;
+            }
+            OnChanged(new SelectionEventArgs() { ButtonId = Cell.ButtonId, ColumnSelection = true, NewValue = BroadCastMessage.None, Alarm2Removed = true });            
         }
 
         public event EventHandler<SelectionEventArgs> Changed;
 
-        public bool Alert
-        {
-            get { return _broadCastMessage == BroadCastMessage.Alarm2; }
-            set
-            {
-                if (value && _broadCastMessage == BroadCastMessage.Alarm2) return;
-                _broadCastMessage = (value) ? BroadCastMessage.Alarm2 : BroadCastMessage.None;
-                
-                TriggerChange();
-                RaisePropertyChanged(() => Alarm);
-            }
-        }
-
-        private void TriggerChange()
+        private void StoreChange()
         {
             LibraryData.FuturamaSys.Selection[Cell] = _broadCastMessage;
 
             OnChanged(new SelectionEventArgs() { ButtonId = Cell.ButtonId, FlowId = Cell.FlowId, NewValue = _broadCastMessage });
-        }
-
-        public bool Alarm
-        {
-            get { return _broadCastMessage == BroadCastMessage.Alarm1; }
-            set
-            {
-                if (value && _broadCastMessage == BroadCastMessage.Alarm1) return;
-                _broadCastMessage = (value) ? BroadCastMessage.Alarm1 : BroadCastMessage.None;
-                
-                TriggerChange();
-                RaisePropertyChanged(()=> Alert);
-            }
         }
 
         public void MessageSelectionChanged(SelectionEventArgs e)
@@ -166,46 +165,38 @@ namespace EscInstaller.ViewModel.Matrix
             if (e.Alarm2Removed)
             {
                 _broadCastMessage = BroadCastMessage.None;
-                RaisePropertyChanged(()=> Alert);
+                RaisePropertyChanged(() => BroadCastMessage);
                 return;
             }
-                     
+
             if (e.ColumnSelection || (_broadCastMessage != e.NewValue && e.FlowId == Cell.FlowId && e.ButtonId == Cell.ButtonId))
-            {                                             
+            {
                 _broadCastMessage = e.NewValue;
-                RaisePropertyChanged(() => Alarm);
-                RaisePropertyChanged(() => Alert);         
+                RaisePropertyChanged(() => BroadCastMessage);
             }
-            
 
-            Alarm2Handler();
-
+            Alarm2Enabled = CellAlarm2Enabled();
         }
 
-        private void Alarm2Handler()
-        {
-            UpdateAlarm1Count();            
-            RaisePropertyChanged(() => Alarm2Enabled);
-        }
         
+
         public void UpdatePosition(MatrixCell key)
         {
             Cell = key;
 
-            SetBroadCastMessage();                        
-
-            RaisePropertyChanged(() => Alarm);
-            RaisePropertyChanged(() => Alert);
-            RaisePropertyChanged(() => IsEnabled);
-            RaisePropertyChanged(()=> Cell);
-            Alarm2Handler();
+            SetBroadCastMessage();
+            RaisePropertyChanged(() => BroadCastMessage);
+            UpdateEnabled();
+            RaisePropertyChanged(() => Cell);            
         }
 
         private void SetBroadCastMessage()
         {
+
             if (LibraryData.FuturamaSys.Selection.TryGetValue(Cell, out _broadCastMessage)) return;
+
             LibraryData.FuturamaSys.Selection.Add(Cell, BroadCastMessage.None);
-            _broadCastMessage = BroadCastMessage.None;
+            BroadCastMessage = BroadCastMessage.None;
         }
 
         protected virtual void OnChanged(SelectionEventArgs e)

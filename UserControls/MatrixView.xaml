@@ -29,13 +29,15 @@
 
             <Grid Height="20" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,1,1" Name="Grid1">
                 <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" VerticalAlignment="Center">
-                    <CheckBox IsChecked="{Binding Path=Alarm}" IsEnabled="{Binding Path=IsEnabled}">
+                    <CheckBox IsChecked="{Binding Path=BroadCastMessage, Converter={converters:BroadCastMessageAlarm1Converter}}" 
+                              IsEnabled="{Binding Path=IsEnabled}">
                         <CheckBox.Style>
                             <Style TargetType="{x:Type CheckBox}" />
                         </CheckBox.Style>
 
                     </CheckBox>
-                    <CheckBox IsChecked="{Binding Path=Alert}" IsEnabled="{Binding Path=Alarm2Enabled}">
+                    <CheckBox IsChecked="{Binding Path=BroadCastMessage, Converter={converters:BroadCastMessageAlarm2Converter}}" 
+                              IsEnabled="{Binding Path=Alarm2Enabled}">
                         <CheckBox.Style>
                             <Style TargetType="{x:Type CheckBox}">
                                 <Style.Triggers>

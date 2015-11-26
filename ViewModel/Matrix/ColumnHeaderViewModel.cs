@@ -50,7 +50,7 @@ namespace EscInstaller.ViewModel.Matrix
 
             CardMessageChange += OnColumEnabledChanged;
             AlarmSelectionChanged += OnAlarmSelectionChanged;
-
+            UpdateColumnSelection();
         }
 
         private void OnAlarmSelectionChanged(object sender, SelectionEventArgs selectionEventArgs)
@@ -94,12 +94,7 @@ namespace EscInstaller.ViewModel.Matrix
 
 
         public ObservableCollection<MatrixCellViewModel> Cells { get; }
-        public MainUnitViewModel MainUnit { get; private set; }
-
-        public bool AnyAlarm1(MatrixCellViewModel[] exceptItem)
-        {
-            return Cells.Except(exceptItem).Any(d => d.Alarm && d.FlowId % 12 < MainUnit.DataModel.ExpansionCards * 4 + 4);
-        }
+        public MainUnitViewModel MainUnit { get; private set; }        
 
         private bool _allAlarm;
         public bool AllAlarm1
@@ -110,7 +105,7 @@ namespace EscInstaller.ViewModel.Matrix
                 _allAlarm = value;
                 RaisePropertyChanged(()=> AllAlarm1);
                 var newv = _allAlarm ? BroadCastMessage.Alarm1 : BroadCastMessage.None;
-                UpdateColumn(AllAlarm1 ? BroadCastMessage.Alarm1 : BroadCastMessage.None);
+                UpdateColumn(AllAlarm1 ? BroadCastMessage.Alarm1 : BroadCastMessage.None, MainUnit.Id, ButtonId);
                 OnAlarmSelectionChanged(new SelectionEventArgs()
                 {
                     ColumnSelection = true,
@@ -121,12 +116,23 @@ namespace EscInstaller.ViewModel.Matrix
             }
         }
 
-        private void UpdateColumn(BroadCastMessage message)
+        public static IEnumerable<MatrixCell> CellsForUnit(int mainUnitId, int buttonId)
         {
-            var cellSelection =
-                MatrixCellViewModel.CellsForUnit(MainUnit.Id, ButtonId)
-                    .Where(s => s.FlowId%12 < MainUnit.DataModel.ExpansionCards*4 + 4).ToArray();
-            
+            Func<int, bool> keys = (id) => id >= mainUnitId * 12 && id < mainUnitId * 12 + 12;
+            return LibraryData.FuturamaSys.Selection.Keys.Where(d => d.ButtonId == buttonId && keys(d.FlowId));
+        }
+
+        public static IEnumerable<MatrixCell> ColumnSelection(int mainUnitId, int buttonId)
+        {
+            var mu = GenericMethods.GetMainUnit(mainUnitId);
+            return CellsForUnit(mainUnitId, buttonId)
+                .Where(s => s.FlowId%12 < mu.ExpansionCards*4 + 4);
+        }
+        
+                
+        private static void UpdateColumn(BroadCastMessage message, int mainUnit, int buttonId)
+        {
+            var cellSelection = ColumnSelection(mainUnit, buttonId).ToArray();
 
             foreach (var matrixCell in cellSelection)
             {
@@ -260,28 +266,29 @@ namespace EscInstaller.ViewModel.Matrix
 
         private void UpdateColumnSelection()
         {
-            _allAlarm = Cells.All(n => n.Alarm || !n.IsVisible || !n.IsEnabled);
+            //_allAlarm = Cells.All(n => n.Alarm || !n.IsVisible || !n.IsEnabled);
+            _allAlarm =
+                ColumnSelection(MainUnit.Id, ButtonId)
+                    .Select(n => LibraryData.FuturamaSys.Selection[n])
+                    .All(n => n == BroadCastMessage.Alarm1);
             RaisePropertyChanged(() => AllAlarm1);
-
         }
 
         private IEnumerable<MatrixCellViewModel> GenCells()
         {
             for (var flow = 0; flow < 12; flow++)
             {
-                var t = new MatrixCellViewModel(new MatrixCell(flow + MainUnit.Id * 12, ButtonId));
+                var t = new MatrixCellViewModel(new MatrixCell(flow + MainUnit.Id*12, ButtonId));
                 t.Changed += (sender, args) =>
                 {
-                    OnAlarmSelectionChanged(args);         
+                    OnAlarmSelectionChanged(args);
 
                 };
-                t.IsVisible = GetVisibility(t);                
+                t.IsVisible = GetVisibility(t);
 
                 yield return t;
             }
-        }        
-
-        
+        }
 
         private bool GetVisibility(MatrixCellViewModel t)
         {
