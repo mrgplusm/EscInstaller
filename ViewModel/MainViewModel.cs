@@ -319,7 +319,7 @@ namespace EscInstaller.ViewModel
             str.AppendLine();
             foreach (var mainUnitViewModel in affectedMainUnits)
             {
-                str.AppendLine(" - " + mainUnitViewModel.Name);
+                str.AppendLine(" - " + mainUnitViewModel.DisplayValue);
             }
 
             var ret = MessageBox.Show(

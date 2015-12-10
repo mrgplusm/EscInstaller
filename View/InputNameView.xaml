@@ -29,8 +29,7 @@
     </UserControl.Resources>
 
     <StackPanel>
-        <Grid Height="200">
-
+        <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />

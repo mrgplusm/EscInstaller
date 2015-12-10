@@ -72,16 +72,16 @@
                 <TextBlock Text="{x:Static view:Monitoring._monitorLoadAB}" FontStyle="Italic" Background="Orange"
                            Grid.Row="0" Grid.Column="3" />
 
-                <TextBox Text="{Binding Path=Loads[0]}" Grid.Column="1" Grid.Row="1"
+                <TextBox Text="{Binding Path=Loads[0], Converter={converters1:WattDisplayConverter} }" Grid.Column="1" Grid.Row="1"
                          Visibility="{Binding Flow.AmplifierOperationMode, Converter={converters1:NoWattWhenImpedance}}" />
-                <TextBox Text="{Binding Path=Loads[1]}" Grid.Column="2" Grid.Row="1"
+                <TextBox Text="{Binding Path=Loads[1], Converter={converters1:WattDisplayConverter}}" Grid.Column="2" Grid.Row="1"
                          Visibility="{Binding Flow.AmplifierOperationMode, Converter={converters1:NoWattWhenImpedance}}" />
-                <TextBox Text="{Binding Path=Loads[2]}" Grid.Column="3" Grid.Row="1"
+                <TextBox Text="{Binding Path=Loads[2], Converter={converters1:WattDisplayConverter}}" Grid.Column="3" Grid.Row="1"
                          Visibility="{Binding Flow.AmplifierOperationMode, Converter={converters1:NoWattWhenImpedance}}" />
 
-                <TextBox Text="{Binding Path=Loads[3]}" Grid.Column="1" Grid.Row="2" />
-                <TextBox Text="{Binding Path=Loads[4]}" Grid.Column="2" Grid.Row="2" />
-                <TextBox Text="{Binding Path=Loads[5]}" Grid.Column="3" Grid.Row="2" />
+                <TextBox Text="{Binding Path=Loads[3], Converter={converters1:OhmDisplayConverter}}" Grid.Column="1" Grid.Row="2" />
+                <TextBox Text="{Binding Path=Loads[4], Converter={converters1:OhmDisplayConverter}}" Grid.Column="2" Grid.Row="2" />
+                <TextBox Text="{Binding Path=Loads[5], Converter={converters1:OhmDisplayConverter}}" Grid.Column="3" Grid.Row="2" />
 
                 <TextBox Text="{Binding Path=MeasuredValues[0]}" Grid.Column="1" Grid.Row="3" Visibility="Collapsed" />
                 <TextBox Text="{Binding Path=MeasuredValues[4]}" Grid.Column="2" Grid.Row="3" Height="24"
@@ -130,24 +130,24 @@
                 <TextBlock Text="{x:Static view:Monitoring._monitorLoadAB}" FontStyle="Italic" Background="Orange"
                            Grid.Row="0" Grid.Column="4" />
 
-                <TextBox Text="{Binding Path=Loads[6]}" Grid.Column="2" Grid.Row="1"
+                <TextBox Text="{Binding Path=Loads[6], Converter={converters1:WattDisplayConverter}}" Grid.Column="2" Grid.Row="1"
                          Visibility="{Binding Flow.AmplifierOperationMode, Converter={converters1:NoWattWhenImpedance}}" />
-                <TextBox Text="{Binding Path=Loads[7]}" Grid.Column="3" Grid.Row="1"
+                <TextBox Text="{Binding Path=Loads[7], Converter={converters1:WattDisplayConverter}}" Grid.Column="3" Grid.Row="1"
                          Visibility="{Binding Flow.AmplifierOperationMode, Converter={converters1:NoWattWhenImpedance}}" />
-                <TextBox Text="{Binding Path=Loads[8]}" Grid.Column="4" Grid.Row="1"
+                <TextBox Text="{Binding Path=Loads[8], Converter={converters1:WattDisplayConverter}}" Grid.Column="4" Grid.Row="1"
                          Visibility="{Binding Flow.AmplifierOperationMode, Converter={converters1:NoWattWhenImpedance}}" />
 
-                <TextBox Text="{Binding Path=Loads[9]}" Grid.Column="2" Grid.Row="2" />
-                <TextBox Text="{Binding Path=Loads[10]}" Grid.Column="3" Grid.Row="2" />
-                <TextBox Text="{Binding Path=Loads[11]}" Grid.Column="4" Grid.Row="2" />
+                <TextBox Text="{Binding Path=Loads[9], Converter={converters1:OhmDisplayConverter}}" Grid.Column="2" Grid.Row="2" />
+                <TextBox Text="{Binding Path=Loads[10], Converter={converters1:OhmDisplayConverter}}" Grid.Column="3" Grid.Row="2" />
+                <TextBox Text="{Binding Path=Loads[11], Converter={converters1:OhmDisplayConverter}}" Grid.Column="4" Grid.Row="2" />
 
-                <TextBox Text="{Binding Path=MeasuredValues[2]}" Grid.Column="2" Grid.Row="3" Visibility="Collapsed" />
-                <TextBox Text="{Binding Path=MeasuredValues[6]}" Grid.Column="3" Grid.Row="3" Visibility="Collapsed" />
-                <TextBox Text="{Binding Path=MeasuredValues[10]}" Grid.Column="4" Grid.Row="3" Visibility="Collapsed" />
+                <TextBox Text="{Binding Path=MeasuredValues[2], Converter={converters1:WattDisplayConverter}}" Grid.Column="2" Grid.Row="3" Visibility="Collapsed" />
+                <TextBox Text="{Binding Path=MeasuredValues[6], Converter={converters1:WattDisplayConverter}}" Grid.Column="3" Grid.Row="3" Visibility="Collapsed" />
+                <TextBox Text="{Binding Path=MeasuredValues[10], Converter={converters1:WattDisplayConverter}}" Grid.Column="4" Grid.Row="3" Visibility="Collapsed" />
 
-                <TextBox Text="{Binding Path=MeasuredValues[3]}" Grid.Column="2" Grid.Row="4" Visibility="Collapsed" />
-                <TextBox Text="{Binding Path=MeasuredValues[7]}" Grid.Column="3" Grid.Row="4" Visibility="Collapsed" />
-                <TextBox Text="{Binding Path=MeasuredValues[11]}" Grid.Column="4" Grid.Row="4" Visibility="Collapsed" />
+                <TextBox Text="{Binding Path=MeasuredValues[3], Converter={converters1:OhmDisplayConverter}}" Grid.Column="2" Grid.Row="4" Visibility="Collapsed" />
+                <TextBox Text="{Binding Path=MeasuredValues[7], Converter={converters1:OhmDisplayConverter}}" Grid.Column="3" Grid.Row="4" Visibility="Collapsed" />
+                <TextBox Text="{Binding Path=MeasuredValues[11], Converter={converters1:OhmDisplayConverter}}" Grid.Column="4" Grid.Row="4" Visibility="Collapsed" />
 
 
                 <!--end low pilot frequency -->

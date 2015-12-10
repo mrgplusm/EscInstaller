@@ -37,7 +37,7 @@ namespace EscInstaller.View
 
         private void GroupBoxBottom_OnTargetUpdated(object sender, DataTransferEventArgs e)
         {
-            return;
+            return; //works incorrect when switching to matrix tab. Cannot find a solution now.
             var child = GroupBoxBottom.FindVisualChildren<Grid>().FirstOrDefault();
             if (child == null) return;
 

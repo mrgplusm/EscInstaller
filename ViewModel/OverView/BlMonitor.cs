@@ -280,7 +280,7 @@ namespace EscInstaller.ViewModel.OverView
 
         public override string SettingName
         {
-            get { return string.Empty; }
+            get { return string.Format(Monitoring.Title, Flow.Id + 1); }
         }
 
         private void ReceiverOnEepromReceived(object sender, EventArgs eventArgs)

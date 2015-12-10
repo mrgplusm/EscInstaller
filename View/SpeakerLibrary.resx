@@ -243,7 +243,7 @@
     <value>Close</value>
   </data>
   <data name="NotEnoughSpaceWarning" xml:space="preserve">
-    <value>The choosen speaker requires {0} bands, thile theres only space for {1} bands</value>
+    <value>The choosen speaker requires {0} bands, while there is only space for {1} bands</value>
   </data>
   <data name="NotEnoughSpaceWarningTitle" xml:space="preserve">
     <value>Not enough dsp biquads</value>

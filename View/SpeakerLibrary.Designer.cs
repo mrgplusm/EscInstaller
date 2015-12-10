@@ -412,7 +412,7 @@ namespace EscInstaller.View {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The choosen speaker requires {0} bands, thile theres only space for {1} bands.
+        ///   Looks up a localized string similar to The choosen speaker requires {0} bands, while there is only space for {1} bands.
         /// </summary>
         public static string NotEnoughSpaceWarning {
             get {

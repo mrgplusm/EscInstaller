@@ -124,8 +124,7 @@
     <value>Bass</value>
   </data>
   <data name="_toneBlockTitle" xml:space="preserve">
-    <value>Tone control</value>
-    <comment>Max 14 characters</comment>
+    <value>Tone control {0}</value>    
   </data>
   <data name="_toneGroupLevel" xml:space="preserve">
     <value>Level</value>

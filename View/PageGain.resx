@@ -133,7 +133,7 @@
     <value>Output {0}</value>
   </data>
   <data name="_outputBlockTitle" xml:space="preserve">
-    <value>Output</value>
+    <value>Output {0} </value>
   </data>
   <data name="_outputEnterName" xml:space="preserve">
     <value>Enter name</value>
