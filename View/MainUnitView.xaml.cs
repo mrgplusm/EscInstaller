@@ -26,6 +26,7 @@ namespace EscInstaller.View
         public MainUnitView()
         {
             InitializeComponent();
+            
         }
 
         private void UIElement_OnMouseDown(object sender, MouseButtonEventArgs e)
@@ -36,6 +37,7 @@ namespace EscInstaller.View
 
         private void GroupBoxBottom_OnTargetUpdated(object sender, DataTransferEventArgs e)
         {
+            return;
             var child = GroupBoxBottom.FindVisualChildren<Grid>().FirstOrDefault();
             if (child == null) return;
 
