@@ -45,7 +45,7 @@ namespace EscInstaller.ViewModel
             main.SystemChanged += UpdateName;
 
             VuMeter = new VuMeter(this);
-            AlarmMessages = new AlarmMessagesViewModel(this);            
+            AlarmMessages = new AlarmMessagesViewModel(this);
 
             UpdateConnectionMode();
             UpdateLineLinks();
@@ -176,19 +176,18 @@ namespace EscInstaller.ViewModel
                         DiagramObjects.OfType<BlEmergency>().First().SetYLocation();
 
                         var lst =
-                            GenDiagramObjects(DataModel.Cards.First(i => i.Id == DataModel.ExpansionCards),
-                                DiagramObjects).ToArray();
+                            GenDiagramObjects(DataModel.Cards.First(i => i.Id == DataModel.ExpansionCards)).ToArray();
                         foreach (var n in lst)
                         {
                             DiagramObjects.Add(n);
                         }
-                        OnCardsUpdated(new MainUnitUpdatedEventArgs() {MainUnit = DataModel});
+                        OnCardsUpdated(new MainUnitUpdatedEventArgs() { MainUnit = DataModel });
                     },
                     () => DataModel.ExpansionCards < 2);
             }
-        } 
+        }
 
-        
+
 
         public ICommand RemoveLastCard
         {
@@ -212,17 +211,17 @@ namespace EscInstaller.ViewModel
 
                     var removelist = new List<DiagramData>();
                     removelist.AddRange(
-                        DiagramObjects.OfType<BlInputName>().Where(s => s.Id%12/4 > DataModel.ExpansionCards));
+                        DiagramObjects.OfType<BlInputName>().Where(s => s.Id % 12 / 4 > DataModel.ExpansionCards));
                     removelist.AddRange(
-                        DiagramObjects.OfType<BlSpeakerPeq>().Where(s => s.Id%12/4 > DataModel.ExpansionCards));
+                        DiagramObjects.OfType<BlSpeakerPeq>().Where(s => s.Id % 12 / 4 > DataModel.ExpansionCards));
                     removelist.AddRange(
-                        DiagramObjects.OfType<BlMonitor>().Where(s => s.Id%12/4 > DataModel.ExpansionCards));
+                        DiagramObjects.OfType<BlMonitor>().Where(s => s.Id % 12 / 4 > DataModel.ExpansionCards));
                     removelist.AddRange(
-                        DiagramObjects.OfType<BlOutput>().Where(s => s.Id%12/4 > DataModel.ExpansionCards));
+                        DiagramObjects.OfType<BlOutput>().Where(s => s.Id % 12 / 4 > DataModel.ExpansionCards));
                     removelist.AddRange(
-                        DiagramObjects.OfType<BlSpeaker>().Where(s => s.Id%12/4 > DataModel.ExpansionCards));
+                        DiagramObjects.OfType<BlSpeaker>().Where(s => s.Id % 12 / 4 > DataModel.ExpansionCards));
                     removelist.AddRange(
-                        DiagramObjects.OfType<BlAmplifier>().Where(s => s.Id%12/4 > DataModel.ExpansionCards));
+                        DiagramObjects.OfType<BlAmplifier>().Where(s => s.Id % 12 / 4 > DataModel.ExpansionCards));
 
                     removelist.AddRange(
                         DiagramObjects.OfType<BlAuxSpeakerPeq>().Where(s => s.Id > DataModel.ExpansionCards));
@@ -240,7 +239,7 @@ namespace EscInstaller.ViewModel
                     {
                         DiagramObjects.Remove(diagramData);
                     }
-                    OnCardsUpdated(new MainUnitUpdatedEventArgs() {MainUnit = DataModel});
+                    OnCardsUpdated(new MainUnitUpdatedEventArgs() { MainUnit = DataModel });
                 }, (() => DataModel.ExpansionCards > 0));
             }
         }
@@ -331,7 +330,7 @@ namespace EscInstaller.ViewModel
         {
             UpdateGraphics();
             UpdateLineLinks();
-            OnCardsUpdated(new MainUnitUpdatedEventArgs() {MainUnit = DataModel});
+            OnCardsUpdated(new MainUnitUpdatedEventArgs() { MainUnit = DataModel });
         }
 
         private void UpdateName(object sender, SystemChangedEventArgs e)
@@ -339,9 +338,9 @@ namespace EscInstaller.ViewModel
             RaisePropertyChanged(() => Name);
         }
 
-        
 
-        
+
+
 
         public event EventHandler MonitorSliderUpdated;
 
@@ -402,19 +401,19 @@ namespace EscInstaller.ViewModel
         private IEnumerable<DiagramData> GenDiagramObjects()
         {
             var link = new BlLink(this);
-            var ret = new List<DiagramData> {link};
+            var ret = new List<DiagramData> { link };
             _link = link;
 
             var cards =
                 DataModel.Cards.Take(DataModel.ExpansionCards + 1)
                     .Concat(DataModel.Cards.OfType<ExtensionCardModel>());
 
-            ret.AddRange(cards.SelectMany(model => GenDiagramObjects(model, ret.ToList())));
+            ret.AddRange(cards.SelectMany(model => GenDiagramObjects(model)));
 
             return ret;
         }
 
-        private IEnumerable<DiagramData> GenDiagramObjects(CardBaseModel card, IEnumerable<DiagramData> currentObjects)
+        private IEnumerable<DiagramData> GenDiagramObjects(CardBaseModel card)
         {
             var lst = new List<DiagramData>();
 
@@ -423,15 +422,21 @@ namespace EscInstaller.ViewModel
                 lst.AddRange(GenFlow(flow, card as CardModel));
             }
 
-            if (card.GetType() == typeof (CardModel))
+            if (card.GetType() == typeof(CardModel))
             {
                 var l = new List<SnapDiagramData>
                 {
-                    new BlBackupAmp(this, (CardModel) card),
+
                     new BlAuxiliary(this, (CardModel) card),
                     new BlSpMatrix(this, (CardModel) card),
                     new BlAuxSpeakerPeq(this, (CardModel) card)
                 };
+
+                var cardModel = ((CardModel)card);
+                if (cardModel.AttachedBackupAmps != null && cardModel.AttachedBackupAmps.Cast<bool>().Contains(true))
+                {
+                    l.Add(new BlBackupAmp(this, (CardModel)card));
+                }
 
                 foreach (var snapDiagramData in l)
                 {
@@ -466,15 +471,15 @@ namespace EscInstaller.ViewModel
         private static void LinesExtCardModel(List<DiagramData> objects, BlLink link, BlEmergency emergency)
         {
             if (emergency != null && link != null)
-                objects.Add(new LineViewModel(link, emergency, 30) {LineType = LineType.Special});
+                objects.Add(new LineViewModel(link, emergency, 30) { LineType = LineType.Special });
 
             var extinp = objects.OfType<BlExtInput>().ToArray();
             if (extinp.Length > 2)
-                objects.AddRange(new[] {0, 1, 4}.Select(n => new LineViewModel(extinp[n], emergency)));
+                objects.AddRange(new[] { 0, 1, 4 }.Select(n => new LineViewModel(extinp[n], emergency)));
 
             var inpPeq =
                 objects.OfType<BlInputPeq>()
-                    .Join(extinp, q => q.Id, j => j.Id, (peq, extInput) => new {peq, extInput})
+                    .Join(extinp, q => q.Id, j => j.Id, (peq, extInput) => new { peq, extInput })
                     .ToArray();
             objects.AddRange(inpPeq.Select(n => new LineViewModel(n.peq, n.extInput)));
 
@@ -489,7 +494,7 @@ namespace EscInstaller.ViewModel
         private static void LinesCardModel(List<DiagramData> objects, BlLink link)
         {
             var t = objects.OfType<BlInputName>().Join(objects.OfType<BlToneControl>(), s => s.Id, q => q.Id, (b, c) =>
-                new LineViewModel(b, c) {LineType = LineType.PublicAddress}).ToArray();
+                new LineViewModel(b, c) { LineType = LineType.PublicAddress }).ToArray();
 
             objects.AddRange(t);
 
@@ -500,22 +505,22 @@ namespace EscInstaller.ViewModel
             {
                 if (tone.Length > 0)
                     objects.AddRange(
-                        tone.Select(q => new LineViewModel(q, link) {Id = q.Id}).OrderBy(n => n.Id).ToArray());
+                        tone.Select(q => new LineViewModel(q, link) { Id = q.Id }).OrderBy(n => n.Id).ToArray());
                 objects.AddRange(
                     delay
                         .Select(q => new LinkLineVm(link, q, link, q.Id))
                         .ToArray());
                 objects.AddRange(objects.OfType<BlSpeakerPeq>()
-                    .Where(i => i.Id%12 == 1 || i.Id%12 == 2)
+                    .Where(i => i.Id % 12 == 1 || i.Id % 12 == 2)
                     .OrderBy(i => i.Id)
                     .ToArray()
                     .Join(delay, peq => peq.Id, blDelay => blDelay.Id, (peq, blDelay) =>
-                        new LineViewModel(peq, blDelay) {LineType = LineType.Emergency, Id = blDelay.Id}));
+                        new LineViewModel(peq, blDelay) { LineType = LineType.Emergency, Id = blDelay.Id }));
             }
 
-            var input = objects.OfType<BlInputName>().OrderBy(n => n.Id).Where(i => i.Id%12 > 3).ToArray();
+            var input = objects.OfType<BlInputName>().OrderBy(n => n.Id).Where(i => i.Id % 12 > 3).ToArray();
             if (input.Length > 0 && link != null)
-                objects.AddRange(input.Select(q => new LineViewModel(q, link) {LineType = LineType.PublicAddress}));
+                objects.AddRange(input.Select(q => new LineViewModel(q, link) { LineType = LineType.PublicAddress }));
 
             var outputs = objects.OfType<BlAmplifier>()
                 .Join(objects.OfType<BlOutput>(), s => s.Id, q => q.Id,
@@ -529,7 +534,7 @@ namespace EscInstaller.ViewModel
                     .ToArray());
 
             var speakerMatix = objects.OfType<BlAmplifier>()
-                .Join(objects.OfType<BlSpMatrix>(), s => s.Id%12/4, q => q.Id, (b, c) => new LineViewModel(b, c))
+                .Join(objects.OfType<BlSpMatrix>(), s => s.Id % 12 / 4, q => q.Id, (b, c) => new LineViewModel(b, c))
                 .ToArray();
             objects.AddRange(speakerMatix);
 
@@ -537,7 +542,7 @@ namespace EscInstaller.ViewModel
                 objects.AddRange(
                     objects.OfType<BlAuxSpeakerPeq>()
                         .OrderBy(q => q.Id)
-                        .Select(n => new LineViewModel(n, link) {Id = n.Id})
+                        .Select(n => new LineViewModel(n, link) { Id = n.Id })
                         .ToArray());
 
             objects.AddRange(
@@ -555,9 +560,9 @@ namespace EscInstaller.ViewModel
 
             var speakers = new List<BlSpeaker>[3];
 
-            speakers[0] = objects.OfType<BlSpeaker>().Where(i => i.Id%12 < 4).ToList();
-            speakers[1] = objects.OfType<BlSpeaker>().Where(i => i.Id%12 > 3 && i.Id%12 < 8).ToList();
-            speakers[2] = objects.OfType<BlSpeaker>().Where(i => i.Id%12 > 7).ToList();
+            speakers[0] = objects.OfType<BlSpeaker>().Where(i => i.Id % 12 < 4).ToList();
+            speakers[1] = objects.OfType<BlSpeaker>().Where(i => i.Id % 12 > 3 && i.Id % 12 < 8).ToList();
+            speakers[2] = objects.OfType<BlSpeaker>().Where(i => i.Id % 12 > 7).ToList();
 
             var backup = objects.OfType<BlBackupAmp>().FirstOrDefault();
 
@@ -580,7 +585,7 @@ namespace EscInstaller.ViewModel
                         objects.AddRange(speakers[i].Select(n => new LineViewModel(n, spMatrix[0])));
                 }
 
-            objects.AddRange(objects.OfType<BlSpeakerPeq>().Where(q => q.Id%12 != 1 && q.Id%12 != 2)
+            objects.AddRange(objects.OfType<BlSpeakerPeq>().Where(q => q.Id % 12 != 1 && q.Id % 12 != 2)
                 .Select(sp => new LinkLineVm(link, sp, link, sp.Id)).ToArray());
         }
 
@@ -599,11 +604,11 @@ namespace EscInstaller.ViewModel
 
             SnapDiagramData z = null;
 
-            if (flow.Path == LinkTo.Previous && (flow.Id%12 == 2 || flow.Id%12 == 3) || flow.Path == LinkTo.PreviousWithDelay)
+            if (flow.Path == LinkTo.Previous && (flow.Id % 12 == 2 || flow.Id % 12 == 3) || flow.Path == LinkTo.PreviousWithDelay)
             {
                 z = DiagramObjects.OfType<BlDelay>().FirstOrDefault(i => i.Id == flow.Id - 1);
             }
-            else if (flow.Path == LinkTo.No || flow.Id%12 < 4)
+            else if (flow.Path == LinkTo.No || flow.Id % 12 < 4)
             {
                 z = DiagramObjects.OfType<BlLink>().FirstOrDefault();
             }
@@ -636,20 +641,20 @@ namespace EscInstaller.ViewModel
                 lst.Add(new BlExtInput(flow, this, _main));
             }
 
-            if (flow.Id%12 < 4 && flow.Id < GenericMethods.StartCountFrom)
+            if (flow.Id % 12 < 4 && flow.Id < GenericMethods.StartCountFrom)
             {
                 lst.Add(new BlToneControl(flow));
-                if (flow.Id%12 < 3 && flow.Id%12 > 0)
+                if (flow.Id % 12 < 3 && flow.Id % 12 > 0)
                     lst.Add(new BlDelay(this, flow));
             }
 
-            if ((flow.Id%5 == 2 || flow.Id%5 == 3) &&
+            if ((flow.Id % 5 == 2 || flow.Id % 5 == 3) &&
                 flow.Id >= GenericMethods.StartCountFrom)
             {
                 lst.Add(new BlInputPeq(flow, this));
             }
 
-            if (flow.Id < GenericMethods.StartCountFrom && flow.Id%12%4 == 0)
+            if (flow.Id < GenericMethods.StartCountFrom && flow.Id % 12 % 4 == 0)
             {
             }
             foreach (var snapDiagramData in lst)
@@ -721,7 +726,7 @@ namespace EscInstaller.ViewModel
         {
             var handler = DspMirrorUpdated;
             if (handler != null) handler(this, EventArgs.Empty);
-        }        
+        }
     }
 
     public class MainUnitUpdatedEventArgs : EventArgs

@@ -58,20 +58,11 @@ namespace EscInstaller.ViewModel.OverView
             _main.KreisUpdated += ReceiverOnEepromReceived;
         }
 
-        public override int Id
-        {
-            get { return Flow.Id; }
-        }
+        public override int Id => Flow.Id;
 
-        public string DisplaySetting
-        {
-            get
-            {
-                return Flow.HasAmplifier
-                    ? Flow.AmplifierOperationMode.ToString()
-                    : string.Empty;
-            }
-        }
+        public string DisplaySetting => Flow.HasAmplifier
+            ? Flow.AmplifierOperationMode.ToString()
+            : string.Empty;
 
         public FlowModel Flow { get; }
 
@@ -321,7 +312,7 @@ namespace EscInstaller.ViewModel.OverView
             var ret = new double[12];
             if (main.DspCopy.Count < 131070)
                 return Enumerable.Range(0, 12).Select(n => 0.0).ToArray();
-            var ks = main.DspCopy.Skip(McuDat.KreisInstall).Skip(flow.Id%12*72).Take(72).ToArray();
+            var ks = main.DspCopy.Skip(McuDat.KreisInstall).Skip((flow.Id%12)*72).Take(72).ToArray();
             for (var g = 0; g < 2; g++)
             {
                 var start = 12 + g*18;
@@ -358,8 +349,7 @@ namespace EscInstaller.ViewModel.OverView
                             break;
                     }
                 }
-            }
-            for (var i = 0; i < ret.Length; i++) if (ret[i] < 10) ret[i] = 0;
+            }            
 
             return ret;
         }
@@ -392,4 +382,5 @@ namespace EscInstaller.ViewModel.OverView
             Location.Y = RowHeight*row + yspace;
         }
     }
+
 }
