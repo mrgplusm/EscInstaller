@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.Serialization;
+using Common.Model;
 
 namespace Futurama.ViewModel
 {

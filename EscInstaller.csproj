@@ -1,25 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{0F13AB49-2595-472B-A7E0-D86A5C194553}</ProjectGuid>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{995168E3-A921-48A6-AECF-9652BDCCCFDD}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>EscInstaller</RootNamespace>
     <AssemblyName>EscInstaller</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <Utf8Output>true</Utf8Output>
-    <ExpressionBlendVersion>4.0.20525.0</ExpressionBlendVersion>
-    <PublishUrl>C:\Users\asuspc\Dropbox\Release\Installers\EscInstaller\</PublishUrl>
+    <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>false</UpdateEnabled>
@@ -29,31 +25,23 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <UpdateUrl>http://enterova.eu/updates/</UpdateUrl>
-    <SupportUrl>http://enterova.eu/</SupportUrl>
-    <TargetCulture>en</TargetCulture>
-    <ProductName>Entero VACIE installer software</ProductName>
-    <PublisherName>Bose GP Europe</PublisherName>
-    <SuiteName>Entero VACIE installer software</SuiteName>
-    <ApplicationRevision>1</ApplicationRevision>
-    <ApplicationVersion>0.12.0.%2a</ApplicationVersion>
+    <ApplicationRevision>9</ApplicationRevision>
+    <ApplicationVersion>13.3.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;INSTALLER</DefineConstants>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <UseVSHostingProcess>true</UseVSHostingProcess>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
@@ -61,32 +49,18 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>ESC.ico</ApplicationIcon>
+    <ManifestCertificateThumbprint>9E40EC69F7907A5C43667727EE25D1022AD26911</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>EscInstaller.App</StartupObject>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ManifestCertificateThumbprint>7BD7288D85E950B87C3D21B0A1266E22DFD5D953</ManifestCertificateThumbprint>
+    <ManifestKeyFile>EscInstaller_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <TargetZone>LocalIntranet</TargetZone>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SignManifests>false</SignManifests>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ManifestKeyFile>EscInstaller_TemporaryKey.pfx</ManifestKeyFile>
+    <SignManifests>true</SignManifests>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DynamicDataDisplay">
@@ -95,64 +69,62 @@
     <Reference Include="GalaSoft.MvvmLight">
       <HintPath>packages\MvvmLightLibs.5.2.0.0\lib\net45\GalaSoft.MvvmLight.dll</HintPath>
     </Reference>
-    <Reference Include="GalaSoft.MvvmLight.Extras">
-      <HintPath>packages\MvvmLightLibs.5.2.0.0\lib\net45\GalaSoft.MvvmLight.Extras.dll</HintPath>
-    </Reference>
-    <Reference Include="GalaSoft.MvvmLight.Platform">
-      <HintPath>packages\MvvmLightLibs.5.2.0.0\lib\net45\GalaSoft.MvvmLight.Platform.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Expression.Interactions">
-      <HintPath>..\packages\Unofficial.Blend.Interactivity.1.0.0\lib\net40\Microsoft.Expression.Interactions.dll</HintPath>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="Microsoft.Practices.ServiceLocation">
-      <HintPath>packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Windows.Design.Extensibility, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
-    <Reference Include="NAudio">
+    <Reference Include="Microsoft.Expression.Interactions, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="NAudio, Version=1.7.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\NAudio.1.7.3\lib\net35\NAudio.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="policy.2.0.taglib-sharp">
+    <Reference Include="policy.2.0.taglib-sharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=db62eba44689b5b0, processorArchitecture=MSIL">
       <HintPath>packages\taglib.2.1.0.0\lib\policy.2.0.taglib-sharp.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="PresentationFramework.Aero">
       <Private>True</Private>
     </Reference>
-    <Reference Include="ReachFramework" />
     <Reference Include="System" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.IdentityModel" />
-    <Reference Include="System.Management" />
     <Reference Include="System.Numerics" />
-    <Reference Include="System.Printing" />
     <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.ServiceModel" />
-    <Reference Include="System.Web.Extensions" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>packages\MvvmLightLibs.5.2.0.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
-    </Reference>
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
-    <Reference Include="taglib-sharp">
+    <Reference Include="taglib-sharp, Version=2.1.0.0, Culture=neutral, PublicKeyToken=db62eba44689b5b0, processorArchitecture=MSIL">
       <HintPath>packages\taglib.2.1.0.0\lib\taglib-sharp.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="UIAutomationProvider" />
-    <Reference Include="UIAutomationTypes" />
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="WindowsFormsIntegration" />
-    <Reference Include="Xceed.Wpf.Toolkit">
-      <HintPath>packages\Xceed.Wpf.Toolkit.2.8.15465.16500\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
+    <Reference Include="Xceed.Wpf.AvalonDock, Version=2.6.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>packages\Extended.Wpf.Toolkit.2.6\lib\net40\Xceed.Wpf.AvalonDock.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Aero, Version=2.6.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>packages\Extended.Wpf.Toolkit.2.6\lib\net40\Xceed.Wpf.AvalonDock.Themes.Aero.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Metro, Version=2.6.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>packages\Extended.Wpf.Toolkit.2.6\lib\net40\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.VS2010, Version=2.6.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>packages\Extended.Wpf.Toolkit.2.6\lib\net40\Xceed.Wpf.AvalonDock.Themes.VS2010.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xceed.Wpf.DataGrid, Version=2.6.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>packages\Extended.Wpf.Toolkit.2.6\lib\net40\Xceed.Wpf.DataGrid.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xceed.Wpf.Toolkit, Version=2.6.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>packages\Extended.Wpf.Toolkit.2.6\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -160,51 +132,87 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Adorners\FrameworkElementAdorner.cs" />
+    <Compile Include="Adorners\ListBoxAdorner.cs" />
+    <Compile Include="Behaviors\BorderDropBehaviour.cs" />
+    <Compile Include="Behaviors\DataGridDropBehaviour.cs" />
+    <Compile Include="Behaviors\FrameworkElementDragBehavior.cs" />
+    <Compile Include="Converters\AmplifierOpacityCvtr.cs" />
+    <Compile Include="Converters\BoolToCrimson.cs" />
     <Compile Include="Converters\IsMainUnitConverter.cs" />
-    <Compile Include="ViewModel\EscCommunication\downloadItems\CalibrationData.cs" />
-    <Compile Include="ViewModel\EscCommunication\downloadItems\DspDownload.cs" />
-    <Compile Include="ViewModel\EscCommunication\Logic\DspDataUpdater.cs" />
-    <Compile Include="ViewModel\EscCommunication\Logic\EepromRedundancyData.cs" />
-    <Compile Include="ViewModel\EscCommunication\Logic\TimeStampUpdater.cs" />
-    <Compile Include="ViewModel\EscCommunication\Logic\UpdatePanels.cs" />
-    <Compile Include="ViewModel\EscCommunication\Logic\UpdatePresetNames.cs" />
-    <Compile Include="ViewModel\EscCommunication\Logic\UpdateRoutingTable.cs" />
-    <Compile Include="ViewModel\EscCommunication\UploadItem\Auxlinks.cs" />
-    <Compile Include="ViewModel\EscCommunication\UploadItem\Delaysettings.cs" />
-    <Compile Include="ViewModel\EscCommunication\UploadItem\InputSensitivity.cs" />
-    <Compile Include="ViewModel\EscCommunication\UploadItem\Linelinks.cs" />
-    <Compile Include="ViewModel\EscCommunication\UploadItem\Matrixselection.cs" />
-    <Compile Include="ViewModel\EscCommunication\UploadItem\Messageselection.cs" />
-    <Compile Include="ViewModel\EscCommunication\UploadItem\Peqpresetnames.cs" />
-    <Compile Include="ViewModel\EscCommunication\UploadItem\PeqData.cs" />
-    <Compile Include="ViewModel\EscCommunication\UploadItem\InOutNames.cs" />
-    <Compile Include="ViewModel\EscCommunication\Logic\AuxLinker.cs" />
-    <Compile Include="ViewModel\EscCommunication\Logic\DelayUpdater.cs" />
-    <Compile Include="ViewModel\EscCommunication\Logic\DeviationUpdater.cs" />
-    <Compile Include="ViewModel\EscCommunication\Logic\EepromDataHandler.cs" />
-    <Compile Include="ViewModel\EscCommunication\downloadItems\EepromDownloader.cs" />
-    <Compile Include="ViewModel\EscCommunication\downloadItems\EepromToDownload.cs" />
-    <Compile Include="ViewModel\EscCommunication\Logic\EmergencySliders.cs" />
-    <Compile Include="ViewModel\EscCommunication\Logic\EscSender.cs" />
-    <Compile Include="ExtensionMethods.cs" />
-    <Compile Include="ImportSpeakers\SpeakerMethods.cs" />
+    <Compile Include="Converters\LinkClrCnvrt.cs" />
+    <Compile Include="Converters\PointsCnvtr.cs" />
+    <Compile Include="EscCommunication\CommunicationBase.cs" />
+    <Compile Include="EscCommunication\CommunicationReceive.cs" />
+    <Compile Include="EscCommunication\CommunicationSend.cs" />
+    <Compile Include="EscCommunication\Downloader.cs" />
+    <Compile Include="EscCommunication\downloadItems\CalibrationData.cs" />
+    <Compile Include="EscCommunication\downloadItems\DspDownload.cs" />
+    <Compile Include="EscCommunication\downloadItems\EepromDownloader.cs" />
+    <Compile Include="EscCommunication\downloadItems\EepromToDownload.cs" />
+    <Compile Include="EscCommunication\downloadItems\Hardware.cs" />
+    <Compile Include="EscCommunication\downloadItems\InstalledPanels.cs" />
+    <Compile Include="EscCommunication\downloadItems\MatrixSelection.cs" />
+    <Compile Include="EscCommunication\downloadItems\PresetNames.cs" />
+    <Compile Include="EscCommunication\downloadItems\SdMessages.cs" />
+    <Compile Include="EscCommunication\downloadItems\SdSelection.cs" />
+    <Compile Include="EscCommunication\downloadItems\Sensitivity.cs" />
+    <Compile Include="EscCommunication\downloadItems\SpeakerRedundancy.cs" />
+    <Compile Include="EscCommunication\ItemtoDownload.cs" />
+    <Compile Include="EscCommunication\Logic\AuxLinker.cs" />
+    <Compile Include="EscCommunication\Logic\DelayUpdater.cs" />
+    <Compile Include="EscCommunication\Logic\DeviationUpdater.cs" />
+    <Compile Include="EscCommunication\Logic\DspDataUpdater.cs" />
+    <Compile Include="EscCommunication\Logic\EepromDataHandler.cs" />
+    <Compile Include="EscCommunication\Logic\EepromRedundancyData.cs" />
+    <Compile Include="EscCommunication\Logic\EmergencySliders.cs" />
+    <Compile Include="EscCommunication\Logic\EscReceiver.cs" />
+    <Compile Include="EscCommunication\Logic\EscSender.cs" />
+    <Compile Include="EscCommunication\Logic\HardwareReceive.cs" />
+    <Compile Include="EscCommunication\Logic\InputSensitivityUpdater.cs" />
+    <Compile Include="EscCommunication\Logic\MatrixSender.cs" />
+    <Compile Include="EscCommunication\Logic\MessageSelection.cs" />
+    <Compile Include="EscCommunication\Logic\NameUpdater.cs" />
+    <Compile Include="EscCommunication\Logic\PeqUpload.cs" />
+    <Compile Include="EscCommunication\Logic\SdMessageNameLoader.cs" />
+    <Compile Include="EscCommunication\Logic\SdMessageReceive.cs" />
+    <Compile Include="EscCommunication\Logic\SensitivityReceive.cs" />
+    <Compile Include="EscCommunication\Logic\TimeStampUpdater.cs" />
+    <Compile Include="EscCommunication\Logic\ToneControlUpdater.cs" />
+    <Compile Include="EscCommunication\Logic\UpdatePanels.cs" />
+    <Compile Include="EscCommunication\Logic\UpdatePresetNames.cs" />
+    <Compile Include="EscCommunication\Logic\UpdateRoutingTable.cs" />
+    <Compile Include="EscCommunication\ReceiveData.cs" />
+    <Compile Include="EscCommunication\SendData.cs" />
+    <Compile Include="EscCommunication\UploadItem\Auxlinks.cs" />
+    <Compile Include="EscCommunication\UploadItem\Delaysettings.cs" />
+    <Compile Include="EscCommunication\UploadItem\GainSliders.cs" />
+    <Compile Include="EscCommunication\UploadItem\InOutNames.cs" />
+    <Compile Include="EscCommunication\UploadItem\InputSensitivity.cs" />
+    <Compile Include="EscCommunication\UploadItem\Linelinks.cs" />
+    <Compile Include="EscCommunication\UploadItem\Matrixselection.cs" />
+    <Compile Include="EscCommunication\UploadItem\Messageselection.cs" />
+    <Compile Include="EscCommunication\UploadItem\PeqData.cs" />
+    <Compile Include="EscCommunication\UploadItem\Peqpresetnames.cs" />
+    <Compile Include="EscCommunication\UploadItem\ToneControl.cs" />
+    <Compile Include="Helpers\UIHelper.cs" />
     <Compile Include="ImportSpeakers\ParametricEQ.cs" />
     <Compile Include="ImportSpeakers\Speaker.cs" />
+    <Compile Include="ImportSpeakers\SpeakerMethods.cs" />
+    <Compile Include="Interfaces\IDragable.cs" />
+    <Compile Include="Interfaces\IDropable.cs" />
     <Compile Include="Main.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Main.resx</DependentUpon>
     </Compile>
-    <Compile Include="Settings.cs" />
     <Compile Include="SliderExt.cs" />
+    <Compile Include="Style\OutlinedTextBlock.cs" />
     <Compile Include="UnitFinder.cs" />
     <Compile Include="UserControls\CharsTextBox.xaml.cs">
       <DependentUpon>CharsTextBox.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ChartChildrenPlotter.cs" />
-    <Compile Include="UserControls\CompressorGraph.xaml.cs">
-      <DependentUpon>CompressorGraph.xaml</DependentUpon>
-    </Compile>
     <Compile Include="UserControls\MatrixView.xaml.cs">
       <DependentUpon>MatrixView.xaml</DependentUpon>
     </Compile>
@@ -233,55 +241,51 @@
       <DependentUpon>VuMeterControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="ValidationRules\LinkWitzValidate.cs" />
-    <Compile Include="ValidationRules\RegexValidationRule.cs" />
     <Compile Include="ValidationRules\PortValidationRule.cs" />
+    <Compile Include="ValidationRules\RegexValidationRule.cs" />
     <Compile Include="ViewModel\AlarmMessagesViewModel.cs" />
-    <Compile Include="ViewModel\EscCommunication\CommunicationBase.cs" />
     <Compile Include="ViewModel\BatteryCalcViewModel.cs" />
-    <Compile Include="ViewModel\EscCommunication\Logic\EscReceiver.cs" />
+    <Compile Include="ViewModel\BroadcastButtonViewModel.cs" />
+    <Compile Include="ViewModel\CardBaseViewModel.cs" />
+    <Compile Include="ViewModel\CardViewModel.cs" />
     <Compile Include="ViewModel\Connection\CommunicationViewModel.cs" />
     <Compile Include="ViewModel\Connection\ConnectionViewModel.cs" />
     <Compile Include="ViewModel\Connection\DispatchDataViewModel.cs" />
-    <Compile Include="ViewModel\EscCommunication\CommunicationReceive.cs" />
-    <Compile Include="ViewModel\EscCommunication\CommunicationSend.cs" />
-    <Compile Include="ViewModel\EscCommunication\downloadItems\Hardware.cs" />
-    <Compile Include="ViewModel\EscCommunication\Logic\HardwareReceive.cs" />
-    <Compile Include="ViewModel\EscCommunication\downloadItems\InstalledPanels.cs" />
-    <Compile Include="ViewModel\EscCommunication\downloadItems\MatrixSelection.cs" />
-    <Compile Include="ViewModel\EscCommunication\Logic\InputSensitivityUpdater.cs" />
-    <Compile Include="ViewModel\EscCommunication\Logic\MatrixSender.cs" />
-    <Compile Include="ViewModel\EscCommunication\Logic\MessageSelection.cs" />
-    <Compile Include="ViewModel\EscCommunication\downloadItems\PresetNames.cs" />
-    <Compile Include="ViewModel\EscCommunication\Logic\NameUpdater.cs" />
-    <Compile Include="ViewModel\EscCommunication\Logic\SdMessageNameLoader.cs" />
-    <Compile Include="ViewModel\EscCommunication\Logic\SdMessageReceive.cs" />
-    <Compile Include="ViewModel\EscCommunication\downloadItems\SdMessages.cs" />
-    <Compile Include="ViewModel\EscCommunication\downloadItems\SdSelection.cs" />
-    <Compile Include="ViewModel\EscCommunication\Logic\ToneControlUpdater.cs" />
-    <Compile Include="ViewModel\EscCommunication\SendData.cs" />
-    <Compile Include="ViewModel\EscCommunication\Downloader.cs" />
-    <Compile Include="ViewModel\EscCommunication\ReceiveData.cs" />
-    <Compile Include="ViewModel\EscCommunication\ItemtoDownload.cs" />
-    <Compile Include="ViewModel\EscCommunication\downloadItems\Sensitivity.cs" />
-    <Compile Include="ViewModel\EscCommunication\Logic\SensitivityReceive.cs" />
-    <Compile Include="ViewModel\EscCommunication\downloadItems\SpeakerRedundancy.cs" />
-    <Compile Include="ViewModel\EscCommunication\Logic\PeqUpload.cs" />
-    <Compile Include="ViewModel\EscCommunication\UploadItem\GainSliders.cs" />
-    <Compile Include="ViewModel\EscCommunication\UploadItem\ToneControl.cs" />
+    <Compile Include="ViewModel\ErrorLineModel.cs" />
+    <Compile Include="ViewModel\ExtensionCardViewModel.cs" />
+    <Compile Include="ViewModel\IndependentDictionar.cs" />
     <Compile Include="ViewModel\LibraryEditorViewModel.cs" />
+    <Compile Include="ViewModel\MainUnitViewModel.cs" />
+    <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\Matrix\ButtonRangeSelector.cs" />
+    <Compile Include="ViewModel\Matrix\ButtonSelectViewModel.cs" />
+    <Compile Include="ViewModel\Matrix\ColumnHeaderViewModel.cs" />
+    <Compile Include="ViewModel\Matrix\MatrixCellViewModel.cs" />
+    <Compile Include="ViewModel\Matrix\MatrixRangeSelector.cs" />
     <Compile Include="ViewModel\Matrix\McuSelector.cs" />
+    <Compile Include="ViewModel\Matrix\MessageSelectViewModel.cs" />
+    <Compile Include="ViewModel\Matrix\PanelViewModel.cs" />
+    <Compile Include="ViewModel\Matrix\RowHeaderViewModel.cs" />
     <Compile Include="ViewModel\MesHeader.cs" />
     <Compile Include="ViewModel\MesModuleViewModel.cs" />
     <Compile Include="ViewModel\OverView\BindablePoint.cs" />
     <Compile Include="ViewModel\OverView\BlAmplifier.cs" />
+    <Compile Include="ViewModel\OverView\BlAuxiliary.cs" />
     <Compile Include="ViewModel\OverView\BlAuxSpeakerPeq.cs" />
-    <Compile Include="ViewModel\OverView\BlSpMatrix.cs" />
+    <Compile Include="ViewModel\OverView\BlBackupAmp.cs" />
     <Compile Include="ViewModel\OverView\BlDelay.cs" />
     <Compile Include="ViewModel\OverView\BlEmergency.cs" />
     <Compile Include="ViewModel\OverView\BlExtInput.cs" />
+    <Compile Include="ViewModel\OverView\BlInputName.cs" />
+    <Compile Include="ViewModel\OverView\BlInputPeq.cs" />
+    <Compile Include="ViewModel\OverView\BlLink.cs" />
+    <Compile Include="ViewModel\OverView\BlMonitor.cs" />
+    <Compile Include="ViewModel\OverView\BlOutput.cs" />
     <Compile Include="ViewModel\OverView\BlSpeaker.cs" />
-    <Compile Include="ViewModel\OverView\BlBackupAmp.cs" />
+    <Compile Include="ViewModel\OverView\BlSpeakerPeq.cs" />
+    <Compile Include="ViewModel\OverView\BlSpMatrix.cs" />
+    <Compile Include="ViewModel\OverView\BlToneControl.cs" />
+    <Compile Include="ViewModel\OverView\DiagramData.cs" />
     <Compile Include="ViewModel\OverView\EvacuationPanelViewModel.cs" />
     <Compile Include="ViewModel\OverView\FdsViewModel.cs" />
     <Compile Include="ViewModel\OverView\FirePanelViewModel.cs" />
@@ -298,46 +302,25 @@
     <Compile Include="ViewModel\OverView\VuMeterControl.cs" />
     <Compile Include="ViewModel\ReceiverData.cs" />
     <Compile Include="ViewModel\RecentFilesLogic.cs" />
+    <Compile Include="ViewModel\SDCard\SdCardVm.cs" />
     <Compile Include="ViewModel\SDCard\SdFileVM.cs" />
     <Compile Include="ViewModel\SDCard\SdLibraryEditorViewModel.cs" />
-    <Compile Include="ViewModel\SDCard\SdCardVm.cs" />
     <Compile Include="ViewModel\SDCard\SdMessageVm.cs" />
-    <Compile Include="ViewModel\Matrix\ButtonSelectViewModel.cs" />
-    <Compile Include="ViewModel\Matrix\MessageSelectViewModel.cs" />
-    <Compile Include="ViewModel\Matrix\MatrixRangeSelector.cs" />
-    <Compile Include="ViewModel\Matrix\PanelViewModel.cs" />
     <Compile Include="ViewModel\Settings\AuxLinkOption.cs" />
-    <Compile Include="ViewModel\OverView\BlAuxiliary.cs" />
-    <Compile Include="ViewModel\OverView\BlInputName.cs" />
-    <Compile Include="ViewModel\OverView\BlInputPeq.cs" />
-    <Compile Include="ViewModel\OverView\BlLink.cs" />
-    <Compile Include="ViewModel\OverView\BlMonitor.cs" />
-    <Compile Include="ViewModel\OverView\BlOutput.cs" />
-    <Compile Include="ViewModel\OverView\BlSpeakerPeq.cs" />
-    <Compile Include="ViewModel\OverView\BlToneControl.cs" />
+    <Compile Include="ViewModel\Settings\IntervalSettingsViewModel.cs" />
     <Compile Include="ViewModel\Settings\Peq\CrossoverLogic.cs" />
     <Compile Include="ViewModel\Settings\Peq\FilterBase.cs" />
     <Compile Include="ViewModel\Settings\Peq\FilterLogicBase.cs" />
     <Compile Include="ViewModel\Settings\Peq\PeakingFilter.cs" />
-    <Compile Include="ViewModel\Settings\Peq\PeqBaseViewModel.cs" />
     <Compile Include="ViewModel\Settings\Peq\PeakingLogic.cs" />
+    <Compile Include="ViewModel\Settings\Peq\PeqBaseViewModel.cs" />
     <Compile Include="ViewModel\Settings\Peq\PeqDataViewModel.cs" />
     <Compile Include="ViewModel\Settings\Peq\PeqField.cs" />
-    <Compile Include="ViewModel\OverView\DiagramData.cs" />
-    <Compile Include="ViewModel\Matrix\RowHeaderViewModel.cs" />
-    <Compile Include="ViewModel\Matrix\MatrixCellViewModel.cs" />
-    <Compile Include="ViewModel\CardViewModel.cs" />
-    <Compile Include="ViewModel\CardBaseViewModel.cs" />
-    <Compile Include="ViewModel\ExtensionCardViewModel.cs" />
-    <Compile Include="ViewModel\MainUnitViewModel.cs" />
-    <Compile Include="ViewModel\MainViewModel.cs" />
-    <Compile Include="ViewModel\Matrix\ColumnHeaderViewModel.cs" />
+    <Compile Include="ViewModel\Settings\Peq\SpeakerDataViewModel.cs" />
+    <Compile Include="ViewModel\Settings\Peq\SpeakerLogic.cs" />
     <Compile Include="ViewModel\Settings\Peq\SpeakerLogicForFlow.cs" />
     <Compile Include="ViewModel\Settings\RadioButton.cs" />
     <Compile Include="ViewModel\Settings\SetName.cs" />
-    <Compile Include="ViewModel\Settings\IntervalSettingsViewModel.cs" />
-    <Compile Include="ViewModel\Settings\Peq\SpeakerLogic.cs" />
-    <Compile Include="ViewModel\Settings\Peq\SpeakerDataViewModel.cs" />
     <Compile Include="ViewModel\SystelmFileOperator.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="View\AuxGainView.xaml.cs">
@@ -351,21 +334,23 @@
     <Compile Include="View\AuxiliaryView.xaml.cs">
       <DependentUpon>AuxiliaryView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\BatteryCalc.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>BatteryCalc.resx</DependentUpon>
-    </Compile>
     <Compile Include="View\Communication\Communication.Designer.cs">
-      <DependentUpon>Communication.resx</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
+      <DependentUpon>Communication.resx</DependentUpon>
     </Compile>
     <Compile Include="View\Communication\CommunicationView.xaml.cs">
       <DependentUpon>CommunicationView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Behaviors\BorderDropBehaviour.cs" />
-    <Compile Include="Behaviors\DataGridDropBehaviour.cs" />
+    <Compile Include="View\Communication\Download.xaml.cs">
+      <DependentUpon>Download.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Communication\DownloadView.xaml.cs">
+      <DependentUpon>DownloadView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Communication\SendList.xaml.cs">
+      <DependentUpon>SendList.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Delay.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -374,13 +359,14 @@
     <Compile Include="View\DelayView.xaml.cs">
       <DependentUpon>DelayView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Adorners\FrameworkElementAdorner.cs" />
-    <Compile Include="Behaviors\FrameworkElementDragBehavior.cs" />
-    <Compile Include="View\Communication\Download.xaml.cs">
-      <DependentUpon>Download.xaml</DependentUpon>
+    <Compile Include="View\DragnDrop\ListBoxAdornerManager.cs" />
+    <Compile Include="View\EmailView.xaml.cs">
+      <DependentUpon>EmailView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Communication\DownloadView.xaml.cs">
-      <DependentUpon>DownloadView.xaml</DependentUpon>
+    <Compile Include="View\EmergencyPanel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EmergencyPanel.resx</DependentUpon>
     </Compile>
     <Compile Include="View\ExternalInput.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -390,12 +376,13 @@
     <Compile Include="View\ExternalInputView.xaml.cs">
       <DependentUpon>ExternalInputView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Interfaces\IDragable.cs" />
-    <Compile Include="Interfaces\IDropable.cs" />
     <Compile Include="View\InputName.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>InputName.resx</DependentUpon>
+    </Compile>
+    <Compile Include="View\InputNameView.xaml.cs">
+      <DependentUpon>InputNameView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\InputPeq.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -410,6 +397,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>IntervalSettings.resx</DependentUpon>
     </Compile>
+    <Compile Include="View\IntervalSettingsView.xaml.cs">
+      <DependentUpon>IntervalSettingsView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\LibraryEditor.xaml.cs">
       <DependentUpon>LibraryEditor.xaml</DependentUpon>
     </Compile>
@@ -418,8 +408,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Link.resx</DependentUpon>
     </Compile>
-    <Compile Include="Adorners\ListBoxAdorner.cs" />
-    <Compile Include="View\DragnDrop\ListBoxAdornerManager.cs" />
+    <Compile Include="View\LinkView.xaml.cs">
+      <DependentUpon>LinkView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MainUnitView.xaml.cs">
+      <DependentUpon>MainUnitView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\MeasurementMatri.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -430,20 +424,24 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Monitoring.resx</DependentUpon>
     </Compile>
+    <Compile Include="View\MonitoringView.xaml.cs">
+      <DependentUpon>MonitoringView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\PageGain.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>PageGain.resx</DependentUpon>
+    </Compile>
+    <Compile Include="View\PageGainView.xaml.cs">
+      <DependentUpon>PageGainView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Panel.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Panel.resx</DependentUpon>
     </Compile>
-    <Compile Include="View\EmergencyPanel.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>EmergencyPanel.resx</DependentUpon>
+    <Compile Include="View\PanelView.xaml.cs">
+      <DependentUpon>PanelView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\SdMessageCard.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -456,9 +454,6 @@
     <Compile Include="View\SdMessages.xaml.cs">
       <DependentUpon>SdMessages.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Communication\SendList.xaml.cs">
-      <DependentUpon>SendList.xaml</DependentUpon>
-    </Compile>
     <Compile Include="View\SpeakerLibrary.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -466,9 +461,6 @@
     </Compile>
     <Compile Include="View\SpeakerLibraryView.xaml.cs">
       <DependentUpon>SpeakerLibraryView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\IntervalSettingsView.xaml.cs">
-      <DependentUpon>IntervalSettingsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\ToneControl.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -478,25 +470,6 @@
     <Compile Include="View\ToneControlView.xaml.cs">
       <DependentUpon>ToneControlView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\InputNameView.xaml.cs">
-      <DependentUpon>InputNameView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\LinkView.xaml.cs">
-      <DependentUpon>LinkView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\MainUnitView.xaml.cs">
-      <DependentUpon>MainUnitView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\PanelView.xaml.cs">
-      <DependentUpon>PanelView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\MonitoringView.xaml.cs">
-      <DependentUpon>MonitoringView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\PageGainView.xaml.cs">
-      <DependentUpon>PageGainView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Helpers\UIHelper.cs" />
     <Compile Include="View\UcAlarmlert.xaml.cs">
       <DependentUpon>UcAlarmlert.xaml</DependentUpon>
     </Compile>
@@ -508,6 +481,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ExtensionMethods.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -517,86 +491,94 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Style\CustomCombobox.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Style\GrayedOutImagge.xaml">
       <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Style\GroupBoxExpander.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Style\GlassButton.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Style\LinkButton.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="Style\GrayedOutImagge.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Style\GroupBoxExpander.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Style\LinkButton.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Style\StyleTest.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Style\ToggleButton.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="UserControls\CharsTextBox.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UserControls\CompressorGraph.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="UserControls\MatrixView.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="UserControls\PEQDisplay.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="UserControls\PEQParams.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="UserControls\PEQSpeakerList.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="UserControls\SliderVu.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="UserControls\UcEscNum.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="UserControls\UcSlider.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="UserControls\UcSpeakerLibrary.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="UserControls\VuMeterControl.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="View\AuxGainView.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="View\AuxiliaryView.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="View\Communication\CommunicationView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Communication\Download.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Communication\DownloadView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Communication\SendList.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -604,77 +586,69 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\Communication\Download.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="View\EmailView.xaml">
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Communication\DownloadView.xaml">
       <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\ExternalInputView.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\InputNameView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="View\InputPeqView.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\IntervalSettingsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="View\LibraryEditor.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\LinkView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\MainUnitView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\MonitoringView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\PageGainView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\PanelView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="View\SdMessageCardView.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="View\SdMessages.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Communication\SendList.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Page Include="View\SpeakerLibraryView.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\IntervalSettingsView.xaml">
       <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\ToneControlView.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\InputNameView.xaml">
       <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\LinkView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\MainUnitView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\PanelView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\MonitoringView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\PageGainView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\UcAlarmlert.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
@@ -694,42 +668,34 @@
     <EmbeddedResource Include="Main.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Main.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="View\Auxiliary.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Auxiliary.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="View\BatteryCalc.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>BatteryCalc.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="View\Communication\Communication.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Communication.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="View\Delay.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Delay.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\EmergencyPanel.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>EmergencyPanel.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="View\ExternalInput.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ExternalInput.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="View\InputName.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>InputName.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="View\InputPeq.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -738,63 +704,42 @@
     <EmbeddedResource Include="View\IntervalSettings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>IntervalSettings.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="View\Link.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Link.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="View\MeasurementMatri.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>MeasurementMatri.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="View\Monitoring.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Monitoring.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="View\PageGain.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>PageGain.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="View\Panel.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Panel.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="View\EmergencyPanel.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>EmergencyPanel.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="View\SdMessageCard.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>SdMessageCard.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="View\SpeakerLibrary.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>SpeakerLibrary.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="View\ToneControl.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ToneControl.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
-    <None Include="..\ConnectionLibrary\Icons\Thumbs.db">
-      <Link>Icons\Thumbs.db</Link>
-    </None>
-    <None Include="app.config">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="app.manifest" />
     <None Include="EscInstaller_TemporaryKey.pfx" />
+    <None Include="Icons\Thumbs.db" />
     <None Include="packages.config" />
-    <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>PublicSettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -802,25 +747,86 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <BootstrapperPackage Include=".NETFramework,Version=v4.5.1">
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\add-32.png" />
+    <Resource Include="Icons\align_just.png" />
+    <Resource Include="Icons\All-Right-Reserved-32.png" />
+    <Resource Include="Icons\batteryMusic.png" />
+    <Resource Include="Icons\batteryNoMusic.png" />
+    <Resource Include="Icons\bridged.png" />
+    <Resource Include="Icons\Button-Remove-icon.png" />
+    <Resource Include="Icons\Cancel-32.png" />
+    <Resource Include="Icons\Chart-Bar-Table-32.png" />
+    <Resource Include="Icons\check.png" />
+    <Resource Include="Icons\Close-32.png" />
+    <Resource Include="Icons\configure-32.png" />
+    <Resource Include="Icons\Data-Table-32.png" />
+    <Resource Include="Icons\Denmark-Flag.ico" />
+    <Resource Include="Icons\Devices-media-floppy-icon.png" />
+    <Resource Include="Icons\docs2-32.png" />
+    <Resource Include="Icons\Download-32.png" />
+    <Resource Include="Icons\edit-icon.png" />
+    <Resource Include="Icons\email-11-16.png" />
+    <Resource Include="Icons\email-32.png" />
+    <Resource Include="Icons\Equalizer-blue-48.png" />
+    <Resource Include="Icons\Equalizer-red-48.png" />
+    <Resource Include="Icons\Equalizer-yellow-48.png" />
+    <Resource Include="Icons\ESC.ico" />
+    <Resource Include="Icons\ESCexit.ico" />
+    <Resource Include="Icons\fail.png" />
+    <Resource Include="Icons\FFFFFF-0.8.png" />
+    <Resource Include="Icons\Folder-Write-128.png" />
+    <Resource Include="Icons\France-Flag.ico" />
+    <Resource Include="Icons\Germany-Flag.ico" />
+    <Resource Include="Icons\grid-dot-icon.png" />
+    <Resource Include="Icons\Info_32.png" />
+    <Resource Include="Icons\Install-red-32.png" />
+    <Resource Include="Icons\interdit-32.png" />
+    <Resource Include="Icons\Italy-Flag.ico" />
+    <Resource Include="Icons\link-128.png" />
+    <Resource Include="Icons\lp2prstlist.png" />
+    <Resource Include="Icons\Misc-Database-3-icon.png" />
+    <Resource Include="Icons\Misc-Download-Database-icon.png" />
+    <Resource Include="Icons\Misc-Upload-Database-icon.png" />
+    <Resource Include="Icons\Monitor-32.png" />
+    <Resource Include="Icons\Monitor-64.png" />
+    <Resource Include="Icons\mono.png" />
+    <Resource Include="Icons\Netherlands-Flag.ico" />
+    <Resource Include="Icons\New logo.bmp" />
+    <Resource Include="Icons\New-32.png" />
+    <Resource Include="Icons\Norway-Flag.ico" />
+    <Resource Include="Icons\Open-32.png" />
+    <Resource Include="Icons\Open.ico" />
+    <Resource Include="Icons\Pdf-32.png" />
+    <Resource Include="Icons\Play-32.png" />
+    <Resource Include="Icons\Poland-Flag.ico" />
+    <Resource Include="Icons\Refresh_128.png" />
+    <Resource Include="Icons\remove-from-database-icon.png" />
+    <Resource Include="Icons\Sd-Card-128.png" />
+    <Resource Include="Icons\Settings-64.png" />
+    <Resource Include="Icons\Spain-Flag.ico" />
+    <Resource Include="Icons\speaker-volume-none-icon.png" />
+    <Resource Include="Icons\Status-audio-volume-high-icon.png" />
+    <Resource Include="Icons\Stop-32.png" />
+    <Resource Include="Icons\Sweden-Flag.ico" />
+    <Resource Include="Icons\transformer.png" />
+    <Resource Include="Icons\UKFlag.ico" />
+    <Resource Include="Icons\Upload-32.png" />
+    <Resource Include="Icons\vca3.png" />
+    <Resource Include="Includes\SpeakerLib.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
       <Visible>False</Visible>
-      <ProductName>Microsoft .NET Framework 4.5.1 %28x86 and x64%29</ProductName>
+      <ProductName>Microsoft .NET Framework 4.5.2 %28x86 and x64%29</ProductName>
       <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
-      <Install>false</Install>
     </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
       <Visible>False</Visible>
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Windows.Installer.4.5">
-      <Visible>False</Visible>
-      <ProductName>Windows Installer 4.5</ProductName>
-      <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
@@ -830,216 +836,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="ESC.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="MessageShiftReceive.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="MessageShiftSend.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="SpeakerLib.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <Resource Include="..\ConnectionLibrary\Icons\add-32.png">
-      <Link>Icons\add-32.png</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\align_just.png">
-      <Link>Icons\align_just.png</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\All-Right-Reserved-32.png">
-      <Link>Icons\All-Right-Reserved-32.png</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\batteryMusic.png">
-      <Link>Icons\batteryMusic.png</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\batteryNoMusic.png">
-      <Link>Icons\batteryNoMusic.png</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\bridged.png">
-      <Link>Icons\bridged.png</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\Button-Remove-icon.png">
-      <Link>Icons\Button-Remove-icon.png</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\Cancel-32.png">
-      <Link>Icons\Cancel-32.png</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\Chart-Bar-Table-32.png">
-      <Link>Icons\Chart-Bar-Table-32.png</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\check.png">
-      <Link>Icons\check.png</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\Close-32.png">
-      <Link>Icons\Close-32.png</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\configure-32.png">
-      <Link>Icons\configure-32.png</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\Data-Table-32.png">
-      <Link>Icons\Data-Table-32.png</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\Denmark-Flag.ico">
-      <Link>Icons\Denmark-Flag.ico</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\Devices-media-floppy-icon.png">
-      <Link>Icons\Devices-media-floppy-icon.png</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\docs2-32.png">
-      <Link>Icons\docs2-32.png</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\Download-32.png">
-      <Link>Icons\Download-32.png</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\edit-icon.png">
-      <Link>Icons\edit-icon.png</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\email-11-16.png">
-      <Link>Icons\email-11-16.png</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\email-32.png">
-      <Link>Icons\email-32.png</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\Equalizer-blue-48.png">
-      <Link>Icons\Equalizer-blue-48.png</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\Equalizer-red-48.png">
-      <Link>Icons\Equalizer-red-48.png</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\Equalizer-yellow-48.png">
-      <Link>Icons\Equalizer-yellow-48.png</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\ESC.ico">
-      <Link>Icons\ESC.ico</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\ESCexit.ico">
-      <Link>Icons\ESCexit.ico</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\fail.png">
-      <Link>Icons\fail.png</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\Folder-Write-128.png">
-      <Link>Icons\Folder-Write-128.png</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\France-Flag.ico">
-      <Link>Icons\France-Flag.ico</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\Germany-Flag.ico">
-      <Link>Icons\Germany-Flag.ico</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\grid-dot-icon.png">
-      <Link>Icons\grid-dot-icon.png</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\Info_32.png">
-      <Link>Icons\Info_32.png</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\Install-red-32.png">
-      <Link>Icons\Install-red-32.png</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\interdit-32.png">
-      <Link>Icons\interdit-32.png</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\Italy-Flag.ico">
-      <Link>Icons\Italy-Flag.ico</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\link-128.png">
-      <Link>Icons\link-128.png</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\lp2prstlist.png">
-      <Link>Icons\lp2prstlist.png</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\Misc-Database-3-icon.png">
-      <Link>Icons\Misc-Database-3-icon.png</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\Misc-Download-Database-icon.png">
-      <Link>Icons\Misc-Download-Database-icon.png</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\Misc-Upload-Database-icon.png">
-      <Link>Icons\Misc-Upload-Database-icon.png</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\Monitor-32.png">
-      <Link>Icons\Monitor-32.png</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\Monitor-64.png">
-      <Link>Icons\Monitor-64.png</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\mono.png">
-      <Link>Icons\mono.png</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\Netherlands-Flag.ico">
-      <Link>Icons\Netherlands-Flag.ico</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\New logo.bmp">
-      <Link>Icons\New logo.bmp</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\New-32.png">
-      <Link>Icons\New-32.png</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\Norway-Flag.ico">
-      <Link>Icons\Norway-Flag.ico</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\Open-32.png">
-      <Link>Icons\Open-32.png</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\Open.ico">
-      <Link>Icons\Open.ico</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\Pdf-32.png">
-      <Link>Icons\Pdf-32.png</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\Play-32.png">
-      <Link>Icons\Play-32.png</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\Poland-Flag.ico">
-      <Link>Icons\Poland-Flag.ico</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\Refresh_128.png">
-      <Link>Icons\Refresh_128.png</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\remove-from-database-icon.png">
-      <Link>Icons\remove-from-database-icon.png</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\Sd-Card-128.png">
-      <Link>Icons\Sd-Card-128.png</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\Settings-64.png">
-      <Link>Icons\Settings-64.png</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\Spain-Flag.ico">
-      <Link>Icons\Spain-Flag.ico</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\speaker-volume-none-icon.png">
-      <Link>Icons\speaker-volume-none-icon.png</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\Status-audio-volume-high-icon.png">
-      <Link>Icons\Status-audio-volume-high-icon.png</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\Stop-32.png">
-      <Link>Icons\Stop-32.png</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\Sweden-Flag.ico">
-      <Link>Icons\Sweden-Flag.ico</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\transformer.png">
-      <Link>Icons\transformer.png</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\UKFlag.ico">
-      <Link>Icons\UKFlag.ico</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\Upload-32.png">
-      <Link>Icons\Upload-32.png</Link>
-    </Resource>
-    <Resource Include="..\ConnectionLibrary\Icons\vca3.png">
-      <Link>Icons\vca3.png</Link>
-    </Resource>
-    <Resource Include="Icons\FFFFFF-0.8.png" />
-    <Content Include="Includes\SpeakerLib.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

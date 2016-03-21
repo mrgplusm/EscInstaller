@@ -20,7 +20,7 @@ namespace EscInstaller
     /// </summary>
     public partial class App
     {
-        private static Mutex _m;
+        
         private Timer _saveFileTimer;
 
         private App()
@@ -31,20 +31,12 @@ namespace EscInstaller
                 new FrameworkPropertyMetadata(XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag)));
 
             SaveBackupFileInit();
-            //#if !DEBUG
-            //          if (IsSingleInstance())
-            //        {
+      
             OpenRegKey();
 
 
-            return;
-            //      }
-            MessageBox.Show("The installer/monitor software is already running", "Allready open",
-                MessageBoxButton.OK, MessageBoxImage.Error);
-            Current.Shutdown();
-            //#endif
-
-            //DispatcherHelper.Initialize();
+        
+      
         }
 
         private void SaveBackupFileInit()
@@ -65,24 +57,7 @@ namespace EscInstaller
             SpeakerMethods.SaveSpeakerlib();
         }
 
-        private static bool IsSingleInstance()
-        {
-            try
-            {
-                // Try to open existing mutex.
-                Mutex.OpenExisting("futuramaInstaller");
-            }
-            catch
-            {
-                // If exception occurred, there is no such mutex.
-                _m = new Mutex(true, "futuramaInstaller");
-
-                // Only one instance.
-                return true;
-            }
-            // More than one instance.
-            return false;
-        }
+        
 
         private static void OpenRegKey()
         {

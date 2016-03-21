@@ -22,7 +22,7 @@ namespace EscInstaller.ViewModel.Settings.Peq
         public readonly PeqDataModel PEQDataModel;
 
         public FilterBase(PeqDataModel model)
-        {
+        {            
             PEQDataModel = model;
         }
 

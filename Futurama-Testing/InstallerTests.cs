@@ -65,10 +65,11 @@ namespace Futurama_Testing
         [TestMethod]
         public void RedundancyCheck()
         {
-
-            foreach (var q in TestSpeaker().PEQ)
+            var r = TestSpeaker();
+            foreach (var q in r.PEQ)
             {                
-                var z = new FilterBase(q);
+                var z = new FilterBase(q);                
+
                 var data = z.RedundancyToBytes();
 
                 var conv = new PeqDataModel();
@@ -145,25 +146,7 @@ namespace Futurama_Testing
             demux = DspCoefficients.DemuxSelected(SkipAdress(muz));
             Assert.AreEqual(1, demux);
         }
-
-        [TestMethod]
-        public void TestCompressor2()
-        {
-            var values = new List<double>(Enumerable.Range(0, 33).Select(n => (double)n*3));
-            var lst = new List<SetCompressor>();
-            for (var i = 0; i < 7; i++)
-            {
-                lst.Add(new SetCompressor(502, i, values));
-            }
-
-            foreach (var setCompressor in lst)
-            {
-                Console.WriteLine(setCompressor.ToString());    
-            }
-            
-        }
-         
-
+        
 
         [TestMethod]
         public void SendPresetTest()
@@ -174,17 +157,7 @@ namespace Futurama_Testing
 
             //var z = spdvm.GetPresetData(0);
         }
-
-        [TestMethod]
-        public void SpeakerDataViewModelTest()
-        {
-            //todo: incomplete, untested
-
-            var q = new SpeakerDataModel();
-            //var t = new SpeakerDataViewModel();
-            //t.AddNewParam.Execute(null);
-        }
-
+        
 
         [TestMethod]
         public void RequiredBiquadTest()
@@ -260,7 +233,6 @@ namespace Futurama_Testing
             Assert.AreEqual(3, GenericMethods.GetMainunitIdForFlowId(36));
         }
 
-
         private static PeqDataModel TestPeqParam(FilterType filterType, int freq, int order)
         {
 
@@ -292,17 +264,11 @@ namespace Futurama_Testing
             speakerdata.PEQ.Add(TestPeqParam(FilterType.Peaking, 1000, 4));
             speakerdata.PEQ.Add(TestPeqParam(FilterType.BesselHp, 2000, 4));
 
+            var q = new SpeakerLogic(speakerdata);
+
+            q.UpdateIntegraty();            
 
             return speakerdata;
-        }
-
-
-        [TestMethod]
-        public void SendPresetTemporaryFunction()
-        {
-            var z = new Common.Commodules.GetMessageSelection(0);
-
-            z.ToString();
         }
 
         [TestMethod]

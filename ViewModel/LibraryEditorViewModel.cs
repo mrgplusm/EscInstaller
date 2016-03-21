@@ -12,7 +12,7 @@ using EscInstaller.View;
 using EscInstaller.ViewModel.Connection;
 using EscInstaller.ViewModel.Settings.Peq;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.CommandWpf;
+using GalaSoft.MvvmLight.Command;
 using Microsoft.Win32;
 
 #endregion

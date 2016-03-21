@@ -10,7 +10,7 @@ using Common.Commodules;
 using Common.Model;
 using EscInstaller.View;
 using EscInstaller.ViewModel.Connection;
-using GalaSoft.MvvmLight.CommandWpf;
+using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 
 #endregion

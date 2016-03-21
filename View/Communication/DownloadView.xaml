@@ -11,12 +11,15 @@
         SizeToContent="WidthAndHeight"
         ResizeMode="NoResize"
         Name="DownloadWindow"
+        
         d:DataContext="{d:DesignInstance Type=escCommunication:ReceiveData , IsDesignTimeCreatable=true}">
     <Window.Resources>
         <RoutedUICommand x:Key="Cclose" />
+        <RoutedUICommand x:Key="Download"  />
     </Window.Resources>
     <Window.CommandBindings>
         <CommandBinding Command="{StaticResource Cclose}" Executed="CommandBinding_OnExecuted" />
+        
     </Window.CommandBindings>
     <Window.InputBindings>
         <KeyBinding Key="Enter" Command="{Binding Path=StartDownload}" />

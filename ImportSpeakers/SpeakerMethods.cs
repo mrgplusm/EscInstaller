@@ -45,6 +45,11 @@ namespace EscInstaller.ImportSpeakers
 
         static SpeakerMethods()
         {
+           
+        }
+
+        public static void Initialize()
+        {
             CreateSystemLibrary();
             CreateUserLibrary();
         }

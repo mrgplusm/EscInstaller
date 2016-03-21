@@ -9,7 +9,7 @@ using System.Windows.Input;
 using Common;
 using Common.Model;
 using EscInstaller.View;
-using GalaSoft.MvvmLight.CommandWpf;
+using GalaSoft.MvvmLight.Command;
 
 #endregion
 

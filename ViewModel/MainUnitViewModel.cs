@@ -16,7 +16,7 @@ using EscInstaller.ViewModel.Matrix;
 using EscInstaller.ViewModel.OverView;
 using EscInstaller.ViewModel.Settings;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.CommandWpf;
+using GalaSoft.MvvmLight.Command;
 
 #endregion
 

@@ -11,7 +11,7 @@ using Common;
 using Common.Commodules;
 using EscInstaller.ViewModel.Connection;
 using EscInstaller.ViewModel.OverView;
-using GalaSoft.MvvmLight.CommandWpf;
+using GalaSoft.MvvmLight.Command;
 using Microsoft.Win32;
 
 #endregion
@@ -178,7 +178,7 @@ namespace EscInstaller.ViewModel.Settings
             get
             {
                 bool r;
-                return bool.TryParse(ConfigurationManager.AppSettings["CanUserManipulateInterval"], out r) && r;
+                return bool.TryParse(LibraryData.Settings["CanUserManipulateInterval"], out r) && r;
             }
         }
 

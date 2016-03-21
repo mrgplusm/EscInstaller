@@ -11,7 +11,7 @@ using EscInstaller.View;
 using EscInstaller.ViewModel.EscCommunication.Logic;
 using EscInstaller.ViewModel.SDCard;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.CommandWpf;
+using GalaSoft.MvvmLight.Command;
 
 #endregion
 

@@ -78,7 +78,7 @@ namespace EscInstaller.ViewModel.Settings.Peq
         /// <returns></returns>
         public void UpdateIntegraty()
         {
-            if (CheckBiquadIntegraty()) return;
+            if (!CheckBiquadIntegraty()) return;
 
             AssignBqsToFilters();
         }
@@ -123,7 +123,7 @@ namespace EscInstaller.ViewModel.Settings.Peq
                 //if (peqDataModel.Biquads.Any(Model.AvailableBiquads.Contains))
                 //    return false;
             }
-            return (int) Model.SpeakerPeqType > Model.PEQ.RequiredBiquads();
+            return (int) Model.SpeakerPeqType >= Model.PEQ.RequiredBiquads();
             //return ((int)Model.SpeakerPeqType - Model.PEQ.RequiredBiquads()) == Model.AvailableBiquads.Count;
         }
 
@@ -132,7 +132,7 @@ namespace EscInstaller.ViewModel.Settings.Peq
             Model.PEQ.Clear();
             for (var redundancyPosition = 0; redundancyPosition < (int) Model.SpeakerPeqType; redundancyPosition++)
             {
-                var position = EepromPosition(dspCopy, redundancyPosition);
+                var position = EepromPosition(dspCopy, redundancyPosition);                
                 SetPeqData(position);
             }
         }
@@ -154,18 +154,39 @@ namespace EscInstaller.ViewModel.Settings.Peq
 
         private void SetPeqData(byte[] rawData)
         {
-            if (rawData.All(s => s == 0))
+            if (rawData == null || rawData.All(s => s == 0))               
                 return;
             try
             {
                 var pdm = new PeqDataModel();
                 var fb = new FilterBase(pdm);
                 fb.Parse(rawData);
+
+                if (Model.PEQ.Contains(pdm, new BiquadsEqual()))
+                {
+                    Debug.WriteLine("skip biquad, biquads already in use");
+                    return;
+                }
                 Model.PEQ.Add(pdm);
             }
             catch (ArgumentException a)
             {
                 Debug.WriteLine("Raw eeprom data could not be parsed for peq " + a);
+            }
+        }
+
+        sealed class BiquadsEqual : EqualityComparer<PeqDataModel>
+        {
+            public override bool Equals(PeqDataModel x, PeqDataModel y)
+            {
+                if (x.Biquads == null || y.Biquads == null)
+                    return false;
+                return x.Biquads.SequenceEqual(y.Biquads);
+            }
+
+            public override int GetHashCode(PeqDataModel obj)
+            {
+                return obj?.Biquads?.Sum(s => s) ?? 0;
             }
         }
 

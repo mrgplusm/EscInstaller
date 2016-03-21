@@ -9,7 +9,7 @@ using Common;
 using Common.Commodules;
 using Common.Model;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.CommandWpf;
+using GalaSoft.MvvmLight.Command;
 
 #endregion
 

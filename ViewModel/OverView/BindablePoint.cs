@@ -12,7 +12,7 @@ namespace EscInstaller.ViewModel.OverView
     {
         private Point _value;
         public Action OnValueChanged;
-        private Thickness _thickness;
+        
 
         public virtual double X
         {
@@ -45,8 +45,7 @@ namespace EscInstaller.ViewModel.OverView
 
         public void ValueChanged()
         {
-            if (OnValueChanged != null)
-                OnValueChanged();
+            OnValueChanged?.Invoke();
         }
     }
 }

@@ -5,18 +5,20 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
-using System.Numerics;
 using System.Windows;
+using System.Numerics;
 using System.Windows.Input;
 using System.Windows.Media;
+
 using Common;
+
 using Common.Commodules;
 using Common.Model;
 using EscInstaller.ImportSpeakers;
 using EscInstaller.View;
 using EscInstaller.ViewModel.Connection;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.CommandWpf;
+using GalaSoft.MvvmLight.Command;
 using Microsoft.Research.DynamicDataDisplay;
 using Microsoft.Research.DynamicDataDisplay.DataSources;
 

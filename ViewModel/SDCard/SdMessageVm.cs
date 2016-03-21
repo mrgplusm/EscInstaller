@@ -7,7 +7,7 @@ using System.Windows.Input;
 using Common.Model;
 using EscInstaller.View;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.CommandWpf;
+using GalaSoft.MvvmLight.Command;
 using NAudio.Wave;
 using File = TagLib.File;
 

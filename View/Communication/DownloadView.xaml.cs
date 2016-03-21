@@ -41,6 +41,6 @@ namespace EscInstaller.View.Communication
         private void CommandBinding_OnExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             Close();
-        }
+        }        
     }
 }

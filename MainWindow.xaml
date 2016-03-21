@@ -181,7 +181,7 @@
                     </Button.ToolTip>
                 </Button>
 
-                <Button x:Name="Close" Width="15" Height="15" Background="Red"
+                <Button Width="15" Height="15" Background="Red"
                         Command="{Binding Path=RemoveMainUnitCommand}" ToolTip="Removes slave">
                     <TextBlock Text="x" Foreground="White" Margin="0,-2,0,2" FontWeight="Bold" />
 

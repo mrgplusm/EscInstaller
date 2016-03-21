@@ -9,7 +9,7 @@ using EscInstaller.ImportSpeakers;
 using EscInstaller.View;
 using EscInstaller.ViewModel.Connection;
 using EscInstaller.ViewModel.OverView;
-using GalaSoft.MvvmLight.CommandWpf;
+using GalaSoft.MvvmLight.Command;
 
 #endregion
 
@@ -32,10 +32,7 @@ namespace EscInstaller.ViewModel.Settings.Peq
 
         public abstract SpeakerDataViewModel CurrentSpeaker { get; }
 
-        public ICommand LoadButton
-        {
-            get { return new RelayCommand<SpeakerDataViewModel>(CurrentSpeaker.Load); }
-        }
+        public ICommand LoadButton => new RelayCommand<SpeakerDataViewModel>(CurrentSpeaker.Load);
 
         public ICommand Remove
         {
@@ -56,10 +53,7 @@ namespace EscInstaller.ViewModel.Settings.Peq
             }
         }
 
-        public ICommand Save
-        {
-            get { return new RelayCommand(SavePeq); }
-        }
+        public ICommand Save => new RelayCommand(SavePeq);
 
         /// <summary>
         ///     currently selected speaker

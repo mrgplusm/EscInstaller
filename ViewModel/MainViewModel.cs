@@ -19,15 +19,13 @@ using Common.Commodules;
 using Common.Model;
 using EscInstaller.ImportSpeakers;
 using EscInstaller.UserControls;
-using EscInstaller.View;
 using EscInstaller.View.Communication;
 using EscInstaller.ViewModel.Connection;
 using EscInstaller.ViewModel.EscCommunication;
 using EscInstaller.ViewModel.EscCommunication.Logic;
 using EscInstaller.ViewModel.Matrix;
-using EscInstaller.ViewModel.SDCard;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.CommandWpf;
+using GalaSoft.MvvmLight.Command;
 
 #endregion
 
@@ -50,6 +48,8 @@ namespace EscInstaller.ViewModel
 
         public MainViewModel()
         {
+            SpeakerMethods.Initialize();
+
             if (Application.Current != null)
                 Application.Current.Exit += (sender, args) =>
                 {
@@ -224,9 +224,9 @@ namespace EscInstaller.ViewModel
             {
                 return new RelayCommand(() =>
                 {
-                    var t = new SdLibraryEditorViewModel();
-                    var z = new SdMessageCardView { DataContext = t };
-                    z.Show();
+                    //var t = new SdLibraryEditorViewModel();
+                    //var z = new SdMessageCardView { DataContext = t };
+                    //z.Show();
                 });
             }
         }
@@ -618,8 +618,8 @@ namespace EscInstaller.ViewModel
             var mu = LibraryData.AddEsc(t.Result);
             if (mu == null) return;
             var newunit = new MainUnitViewModel(mu, this);
-
-            TabCollection.Add(newunit);
+            if (!TabCollection.Contains(newunit, new TabComparer()))
+                TabCollection.Add(newunit);
 
         }
 
@@ -630,9 +630,22 @@ namespace EscInstaller.ViewModel
             var esc = LibraryData.AddEsc(id);
             if (esc == null) return;
             var escview = new MainUnitViewModel(esc, this);
-            if (!TabCollection.Contains(escview))
+            if (!TabCollection.Contains(escview, new TabComparer()))
                 TabCollection.Add(escview);
             OnSystemChanged(new SystemChangedEventArgs() { NewMainUnit = escview });
+        }
+
+        class TabComparer : EqualityComparer<ITabControl>
+        {
+            public override bool Equals(ITabControl x, ITabControl y)
+            {
+                return x.Id == y.Id;
+            }
+
+            public override int GetHashCode(ITabControl obj)
+            {
+                return obj?.Id ?? 0;
+            }
         }
 
         public void RemoveUnit(MainUnitViewModel mainUnit)

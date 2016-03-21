@@ -8,7 +8,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Futurama_Testing</RootNamespace>
     <AssemblyName>Futurama-Testing</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -54,9 +54,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Practices.Unity">
-      <HintPath>..\Deps\Microsoft.Practices.Unity.dll</HintPath>
-    </Reference>
     <Reference Include="policy.2.0.taglib-sharp">
       <HintPath>..\packages\taglib.2.1.0.0\lib\policy.2.0.taglib-sharp.dll</HintPath>
     </Reference>
@@ -95,8 +92,8 @@
       <Name>Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\EscInstaller.csproj">
-      <Project>{0f13ab49-2595-472b-a7e0-d86a5c194553}</Project>
-      <Name>EscInstaller</Name>
+      <Project>{995168e3-a921-48a6-aecf-9652bdcccfdd}</Project>
+      <Name>escInstaller2</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

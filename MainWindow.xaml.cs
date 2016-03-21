@@ -24,14 +24,6 @@ namespace EscInstaller
             {
                 MessageBox.Show(ex.Message);
             }
-        }
-
-        protected override void OnClosing(CancelEventArgs e)
-        {
-            var s = DataContext as MainViewModel;
-            if (s == null) return;
-            if (!s.ExitCommand())
-                e.Cancel = true;
-        }
+        }        
     }
 }
