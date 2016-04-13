@@ -62,6 +62,9 @@
   <PropertyGroup>
     <SignManifests>true</SignManifests>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>ESC.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="DynamicDataDisplay">
       <HintPath>Deps\DynamicDataDisplay.dll</HintPath>
@@ -732,6 +735,7 @@
     <EmbeddedResource Include="View\SpeakerLibrary.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>SpeakerLibrary.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="View\ToneControl.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -839,6 +843,9 @@
     <None Include="SpeakerLib.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ESC.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Windows;
@@ -60,7 +61,7 @@ namespace EscInstaller.ViewModel.Settings.Peq
         {
             DataModel = new SpeakerDataModel
             {
-                PEQ = new List<PeqDataModel>() {new PeqDataModel(), new PeqDataModel()}
+                PEQ = new List<PeqDataModel>() { new PeqDataModel(), new PeqDataModel() }
             };
         }
 #endif
@@ -87,7 +88,7 @@ namespace EscInstaller.ViewModel.Settings.Peq
             {
                 return _speakerPeqTypes ??
                        (_speakerPeqTypes =
-                           new ObservableCollection<SpeakerPeqType>(Enum.GetValues(typeof (SpeakerPeqType))
+                           new ObservableCollection<SpeakerPeqType>(Enum.GetValues(typeof(SpeakerPeqType))
                                .Cast<SpeakerPeqType>()));
             }
         }
@@ -125,7 +126,7 @@ namespace EscInstaller.ViewModel.Settings.Peq
             {
                 if (IsInDesignMode) return null;
                 return _addNewParam ?? (_addNewParam =
-                    new RelayCommand(AddParam, () => PeqDataModels.RequiredBiquads() < (int) SpeakerPeqType));
+                    new RelayCommand(AddParam, () => PeqDataModels.RequiredBiquads() < (int)SpeakerPeqType));
             }
         }
 
@@ -248,7 +249,7 @@ namespace EscInstaller.ViewModel.Settings.Peq
 
         public string FilterCountText
         {
-            get { return string.Format("Max {0} second order filters", (int) SpeakerPeqType); }
+            get { return string.Format("Max {0} second order filters", (int)SpeakerPeqType); }
         }
 
         public double DbMagnitude { get; set; }
@@ -259,11 +260,11 @@ namespace EscInstaller.ViewModel.Settings.Peq
         public void Load(SpeakerDataViewModel librarySpeaker)
         {
             if (librarySpeaker.RequiredBiquads >
-                ((int) DataModel.SpeakerPeqType))
+                ((int)DataModel.SpeakerPeqType))
             {
                 MessageBox.Show(string.Format(
                     SpeakerLibrary.NotEnoughSpaceWarning, librarySpeaker.RequiredBiquads,
-                    (int) DataModel.SpeakerPeqType),
+                    (int)DataModel.SpeakerPeqType),
                     SpeakerLibrary.NotEnoughSpaceWarningTitle, MessageBoxButton.OK, MessageBoxImage.Warning,
                     MessageBoxResult.OK);
                 return;
@@ -275,14 +276,20 @@ namespace EscInstaller.ViewModel.Settings.Peq
 
             SendMyName();
             RaisePropertyChanged(() => InLibrary);
+
             //copy the data to the model
             if (_flowId.HasValue)
             {
                 var sl = new SpeakerLogicForFlow(DataModel, _flowId.Value);
                 sl.UpdateIntegraty();
-                foreach (var pd in sl.TotalSpeakerData())
+                try
                 {
-                    CommunicationViewModel.AddData(pd);
+                    var data = sl.TotalSpeakerData().ToArray();
+                    CommunicationViewModel.AddData(data);
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e.Message);
                 }
             }
 
@@ -297,7 +304,7 @@ namespace EscInstaller.ViewModel.Settings.Peq
 
         private void RemovePeqParam(object sender, EventArgs eventArgs)
         {
-            var s = (PeqDataViewModel) sender;
+            var s = (PeqDataViewModel)sender;
             RemoveVm(s);
             OnRemoveParam(s);
             RedrawMasterLine();
@@ -364,7 +371,7 @@ namespace EscInstaller.ViewModel.Settings.Peq
             //There is space left.
             var oldValue = vm.Order;
             vm.SetOrder(bf.RequestOrder);
-            if (DataModel.PEQ.RequiredBiquads() <= (int) DataModel.SpeakerPeqType)
+            if (DataModel.PEQ.RequiredBiquads() <= (int)DataModel.SpeakerPeqType)
             {
                 vm.SetOrder(bf.RequestOrder);
                 vm.UpdateFilterType();
@@ -393,7 +400,7 @@ namespace EscInstaller.ViewModel.Settings.Peq
         {
             if ((vm.FilterType != FilterType.LinkWitzHp && vm.FilterType != FilterType.LinkWitzLp && vm.Order < 3) &&
                 (bf.RequestFilterType == FilterType.LinkWitzHp || bf.RequestFilterType == FilterType.LinkWitzLp) &&
-                (DataModel.PEQ.RequiredBiquads() >= (int) DataModel.SpeakerPeqType))
+                (DataModel.PEQ.RequiredBiquads() >= (int)DataModel.SpeakerPeqType))
             {
                 bf.Cancel = true;
                 vm.ResetType();
@@ -428,7 +435,7 @@ namespace EscInstaller.ViewModel.Settings.Peq
         /// </summary>
         protected virtual void OnChangeBiquads(object sender, BiquadsChangedEventArgs pf)
         {
-            var model1 = (PeqDataViewModel) sender;
+            var model1 = (PeqDataViewModel)sender;
             IsCustom = true;
 
             if (pf.PeqField == PeqField.FilterType &&
@@ -449,7 +456,8 @@ namespace EscInstaller.ViewModel.Settings.Peq
             {
                 if (!model1.HasBandwidth()) return;
                 if (PlotterChildren.Contains(model1.BandWidthPoint) ||
-                    PlotterChildren.Contains(model1.BandwidthArrow)) return;
+                    PlotterChildren.Contains(model1.BandwidthArrow))
+                    return;
 
                 if (model1.BandWidthPoint == null) return;
                 PlotterChildren.Add(model1.BandWidthPoint);
@@ -547,7 +555,7 @@ namespace EscInstaller.ViewModel.Settings.Peq
         public PeqDataViewModel NewParam()
         {
             if (RequiredBiquads <=
-                (int) (DataModel.SpeakerPeqType))
+                (int)(DataModel.SpeakerPeqType))
             {
                 var dm = new PeqDataModel
                 {
@@ -603,7 +611,7 @@ namespace EscInstaller.ViewModel.Settings.Peq
         {
             if (peqdata == null) return;
             if (RequiredBiquads + peqdata.RequiredBiquads() <=
-                (int) DataModel.SpeakerPeqType)
+                (int)DataModel.SpeakerPeqType)
             {
                 var id = PeqDataModels.Count;
                 foreach (var peqDataModel in peqdata)
@@ -636,14 +644,14 @@ namespace EscInstaller.ViewModel.Settings.Peq
         {
             var xs = DspCoefficients.XList;
             return (from d in xs
-                let cfilter = new Complex(1, 0)
-                select data.Where(s => s.IsEnabled).Aggregate(cfilter,
-                    (current, peqData) =>
-                        current*
-                        DspCoefficients.FilterFuncs[peqData.FilterType](d,
-                            peqData))
+                    let cfilter = new Complex(1, 0)
+                    select data.Where(s => s.IsEnabled).Aggregate(cfilter,
+                        (current, peqData) =>
+                            current *
+                            DspCoefficients.FilterFuncs[peqData.FilterType](d,
+                                peqData))
                 into cfilterx
-                select cfilterx.DbMagnitude());
+                    select cfilterx.DbMagnitude());
         }
 
         public void RedrawMasterLine()

@@ -86,25 +86,12 @@ namespace EscInstaller.ViewModel.Settings.Peq
         /// <returns></returns>
         public IEnumerable<IDispatchData> TotalSpeakerData()
         {
-            foreach (var peqParam in DspData())
-            {
-                yield return peqParam;
-            }
-
-            foreach (var setE2PromExt in RedundancyData())
-            {
-                yield return setE2PromExt;
-            }
-
-            foreach (var peqParam in GetEmptyDspData(AvailableBiquads()))
-            {
-                yield return peqParam;
-            }
-
-            foreach (var setE2PromExt in GetEmtptyRedundancyData(AvailableBiquads()))
-            {
-                yield return setE2PromExt;
-            }
+            var ret = new List<IDispatchData>();
+            ret.AddRange(DspData().ToArray());
+            ret.AddRange(RedundancyData().ToArray());        
+            ret.AddRange(GetEmptyDspData(AvailableBiquads()).ToArray());
+            ret.AddRange(GetEmtptyRedundancyData(AvailableBiquads()).ToArray());
+            return ret;
         }
 
         private FilterLogicBase LogicFactory(PeqDataModel model)
