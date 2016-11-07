@@ -34,15 +34,9 @@ namespace EscInstaller.ViewModel.OverView
 
         public FlowModel DataModel { get; }
 
-        public override int Id
-        {
-            get { return DataModel.Id; }
-        }
+        public override int Id => DataModel.Id;
 
-        public override string SettingName
-        {
-            get { return string.Format(SpeakerLibrary.Title, DataModel.Id + 1); }
-        }
+        public override string SettingName => string.Format(SpeakerLibrary.Title, DataModel.Id + 1);
 
         public override string DisplaySetting
         {
@@ -53,10 +47,7 @@ namespace EscInstaller.ViewModel.OverView
             }
         }
 
-        public override Point Size
-        {
-            get { return new Point(Width, UnitHeight); }
-        }
+        public override Point Size => new Point(Width, UnitHeight);
 
         public override SpeakerDataViewModel CurrentSpeaker
         {
@@ -78,10 +69,7 @@ namespace EscInstaller.ViewModel.OverView
             }
         }
 
-        protected override int PresetId
-        {
-            get { return DataModel.Id; }
-        }
+        protected override int PresetId => DataModel.Id;
 
         private void Receiver_PresetNamesUpdated(object sender, EventArgs e)
         {

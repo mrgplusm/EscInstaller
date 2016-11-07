@@ -156,7 +156,7 @@
 
         </GroupBox>
 
-        <GroupBox Header="{x:Static view:Monitoring._monitorDeviation1}" Grid.Row="0" Grid.Column="1" IsEnabled="False">
+        <GroupBox Header="{x:Static view:Monitoring._monitorDeviation1}" Visibility="Collapsed" Grid.Row="0" Grid.Column="1" IsEnabled="False">
             <StackPanel Margin="5">
                 <RadioButton GroupName="dev0"
                              Content="{Binding Path=Loads[2], FallbackValue=5%, Converter={converters1:WattConverter}, ConverterParameter=5}"
@@ -177,7 +177,7 @@
         </GroupBox>
 
 
-        <GroupBox Header="{x:Static view:Monitoring._monitorDeviation1}" Grid.Row="1" Grid.Column="1" IsEnabled="False">
+        <GroupBox Visibility="Collapsed" Header="{x:Static view:Monitoring._monitorDeviation1}" Grid.Row="1" Grid.Column="1" IsEnabled="False">
             <StackPanel Margin="5">
                 <RadioButton GroupName="dev0"
                              Content="{Binding Path=Loads[8], FallbackValue=5%, Converter={converters1:WattConverter}, ConverterParameter=5}"
@@ -197,7 +197,7 @@
             </StackPanel>
         </GroupBox>
         <StackPanel Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" IsEnabled="False">
-            <GroupBox Header="{x:Static view:Monitoring._LowImpedanceMonitoring}" IsEnabled="False">
+            <GroupBox Visibility="Collapsed"  Header="{x:Static view:Monitoring._LowImpedanceMonitoring}" IsEnabled="False">
 
 
                 <StackPanel Margin="5">
@@ -211,7 +211,7 @@
                 </StackPanel>
 
             </GroupBox>
-            <GroupBox Header="{x:Static view:Monitoring.GbPilot}" Grid.Row="1" Grid.Column="2" Grid.RowSpan="2">
+            <GroupBox Visibility="Collapsed"  Header="{x:Static view:Monitoring.GbPilot}" Grid.Row="1" Grid.Column="2" Grid.RowSpan="2">
                 <StackPanel Margin="5" Name="Pilotfreq">
                     <RadioButton Content="{x:Static view:Monitoring.Khz18}"
                                  IsChecked="{Binding Path=PilotFrequency, Mode=TwoWay, 
@@ -242,7 +242,7 @@
 
                 </StackPanel>
             </GroupBox>
-            <GroupBox Header="{x:Static view:Monitoring.DeviationInfoTitle}">
+            <GroupBox Visibility="Collapsed" Header="{x:Static view:Monitoring.DeviationInfoTitle}">
                 <TextBlock Text="{x:Static view:Monitoring.DeviationInfo}" TextWrapping="Wrap" Width="200" />
             </GroupBox>
             <GroupBox Header="{x:Static view:Monitoring.GbCalibrate}" Visibility="Collapsed">

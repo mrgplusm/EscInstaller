@@ -78,7 +78,7 @@ namespace EscInstaller.ViewModel.Settings.Peq
                 {
                     SpeakerMethods.Import(CurrentSpeaker);
                     var t = new SpeakerLogicForFlow(CurrentSpeaker.DataModel, Id);
-
+                    t.UpdateIntegraty();
 
                     CommunicationViewModel.AddData(t.TotalSpeakerData());
                     CommunicationViewModel.AddData(t.PresetNameFactory());

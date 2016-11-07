@@ -277,7 +277,7 @@ namespace EscInstaller.View {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Import .peq or .seq file.
+        ///   Looks up a localized string similar to Import .peq.
         /// </summary>
         public static string ButtonImport {
             get {

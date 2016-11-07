@@ -25,7 +25,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>9</ApplicationRevision>
+    <ApplicationRevision>10</ApplicationRevision>
     <ApplicationVersion>13.3.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -66,6 +66,18 @@
     <ApplicationIcon>ESC.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="bbv.Common, Version=7.1.0.0, Culture=neutral, PublicKeyToken=917bca444d1f2b4c, processorArchitecture=MSIL">
+      <HintPath>packages\bbv.Common.7.1.12149.1635\lib\Net40\bbv.Common.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="bbv.Common.AsyncModule, Version=7.2.0.0, Culture=neutral, PublicKeyToken=917bca444d1f2b4c, processorArchitecture=MSIL">
+      <HintPath>packages\bbv.Common.AsyncModule.7.2.1187.616\lib\.Net 4.0\bbv.Common.AsyncModule.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="bbv.Common.StateMachine, Version=7.4.0.0, Culture=neutral, PublicKeyToken=917bca444d1f2b4c, processorArchitecture=MSIL">
+      <HintPath>packages\bbv.Common.StateMachine.7.4.12149.1635\lib\Net40\bbv.Common.StateMachine.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="DynamicDataDisplay">
       <HintPath>Deps\DynamicDataDisplay.dll</HintPath>
     </Reference>
@@ -257,7 +269,6 @@
     <Compile Include="ViewModel\ErrorLineModel.cs" />
     <Compile Include="ViewModel\ExtensionCardViewModel.cs" />
     <Compile Include="ViewModel\IndependentDictionar.cs" />
-    <Compile Include="ViewModel\LibraryEditorViewModel.cs" />
     <Compile Include="ViewModel\MainUnitViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\Matrix\ButtonRangeSelector.cs" />
@@ -351,9 +362,6 @@
     <Compile Include="View\Communication\DownloadView.xaml.cs">
       <DependentUpon>DownloadView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Communication\SendList.xaml.cs">
-      <DependentUpon>SendList.xaml</DependentUpon>
-    </Compile>
     <Compile Include="View\Delay.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -402,9 +410,6 @@
     </Compile>
     <Compile Include="View\IntervalSettingsView.xaml.cs">
       <DependentUpon>IntervalSettingsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\LibraryEditor.xaml.cs">
-      <DependentUpon>LibraryEditor.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Link.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -581,10 +586,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\Communication\SendList.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="View\DelayView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -606,10 +607,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="View\IntervalSettingsView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="View\LibraryEditor.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

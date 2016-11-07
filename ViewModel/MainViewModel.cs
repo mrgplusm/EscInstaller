@@ -218,27 +218,7 @@ namespace EscInstaller.ViewModel
                 LibraryData.FuturamaSys.CreatedInstallerVersion, LibraryData.FuturamaSys.LastSavedInstallerVersion
             };
 
-        public ICommand OpenSdCardMannager
-        {
-            get
-            {
-                return new RelayCommand(() =>
-                {
-                    //var t = new SdLibraryEditorViewModel();
-                    //var z = new SdMessageCardView { DataContext = t };
-                    //z.Show();
-                });
-            }
-        }
-
-        public ICommand OpenSpeakerLibEditor
-        {
-            get
-            {
-                return new RelayCommand(() => _tabs.Add(new LibraryEditorViewModel()),
-                    () => !_tabs.Any(q => q is LibraryEditorViewModel));
-            }
-        }
+        
 
         public ITabControl SelectedTab
         {
@@ -290,24 +270,19 @@ namespace EscInstaller.ViewModel
         }
 
         private void SendUnitData()
-        {
-            //if (Communication.Connections.All(model => model.ConnectType == ConnectType.None))
-            //{
-            //    MessageBox.Show(Main.MessageBoxUploadText, Main.MessageBoxUploadTitle,
-            //        MessageBoxButton.OK, MessageBoxImage.Question);
-            //    SelectedTab = TabCollection.FirstOrDefault(n => n is CommunicationViewModel);
-            //}
-            //else
-            //{
+        {            
             var nq = new DownloadView
             {
                 Title = "UPLOAD to ESC: GUI => ESC",
-                Background = Brushes.LightCoral
+                Background = Brushes.LightCoral,
+                TextControl = "Upload all to all sources"
             };
+
+            
             var qq = new CommunicationSend(this); //  EscCommunicationBase(this);
             nq.DataContext = qq;
             nq.Show();
-            //}
+            
         }
 
         private async Task<bool> InformUserTimestampAsync(bool isUploadText)
@@ -387,7 +362,8 @@ namespace EscInstaller.ViewModel
             var nq = new DownloadView
             {
                 Title = "Download to PC ESC => GUI",
-                Background = Brushes.LightGreen
+                Background = Brushes.LightGreen,
+                TextControl = "Download all from all sources"
             };
             var qq = new CommunicationReceive(this); //  EscCommunicationBase(this);
             nq.DataContext = qq;

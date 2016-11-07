@@ -82,25 +82,7 @@
                             </Style>
                         </TextBox.Style>
                     </TextBox>
-                    <!--<Grid Grid.Row="2" Grid.ColumnSpan="3" Grid.Column="0">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="40" />
-                        </Grid.RowDefinitions>
-                        <view:SendList SendItems="{Binding Path=ChangeList}" />
-                        <Button Content="{x:Static view:Communication.ClearChangeList}" Command="{Binding Path=ClearChangeList}" 
-                                                            Width="100" HorizontalAlignment="Left" Grid.Row="1" />
-                        <Grid.Style>
-                            <Style TargetType="{x:Type Grid}">
-                                <Setter Property="Visibility" Value="Collapsed"></Setter>
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding ElementName=ChkAdvanced, Path=IsChecked}" Value="True">
-                                        <Setter Property="Visibility" Value="Visible"></Setter>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Grid.Style>
-                    </Grid>-->
+                 
 
                     <TextBlock Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2"
                                Text="{Binding Path=ErrorInfo, Mode=OneWay}" Foreground="Red" Width="400"
@@ -110,11 +92,7 @@
                     <TextBlock Name="txtInstallMode" Grid.Row="1" Grid.Column="1" Margin="3" Width="200" />
                 </Grid>
 
-                <!--<i:Interaction.Triggers>
-                    <i:EventTrigger EventName="DropDownOpened" SourceName="PortCombo">
-                        <ei:CallMethodAction MethodName="RefreshPortList" TargetObject="{Binding}" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>-->
+              
 
             </GroupBox>
             <DataTemplate.Triggers>
@@ -209,20 +187,7 @@
                     </Grid>
 
                 </TabItem>
-                <!--<TabItem Header="{x:Static view:Communication.UnboundData}">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="23" />
-
-                        </Grid.RowDefinitions>
-
-                        <view:SendList SendItems="{Binding Path=NotDispatchedCollection}" Grid.Row="0"/>
-
-                        <Button Content="{x:Static view:Communication.ClearChangeList}" Command="{Binding Path=ClearChangeList}" Width="100" Grid.Row="1" />
-
-                    </Grid>
-                </TabItem>-->
+         
                 <TabControl.Style>
                     <Style TargetType="TabControl">
                         <Style.Triggers>

@@ -222,7 +222,7 @@
     <value>Add new speaker</value>
   </data>
   <data name="ButtonImport" xml:space="preserve">
-    <value>Import .peq or .seq file</value>
+    <value>Import .peq</value>
   </data>
   <data name="MoveThisSpeaker" xml:space="preserve">
     <value>Move this speaker up/down</value>

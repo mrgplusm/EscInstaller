@@ -72,8 +72,8 @@ namespace EscInstaller.ImportSpeakers
         {
             var dlg = new OpenFileDialog
             {
-                Filter = "Peq files (*.peq)|*.peq|Seq files (*.seq)|*.seq",
-                DefaultExt = "Peq files (*.peq)|*.peq|Seq files (*.seq)|*.seq"
+                Filter = "Peq files (*.peq)|*.peq",
+                DefaultExt = "Peq files (*.peq)|*.peq"
             };
 
             if (!string.IsNullOrWhiteSpace(Settings.Default.RecentLocationImport))
@@ -93,12 +93,12 @@ namespace EscInstaller.ImportSpeakers
 
                 switch (ext)
                 {
-                    case "seq":
-                    {
-                        var t = FileManagement.OpenEqFile<Speaker>(dlg.FileName);
-                        sp = ParseParametricEq(t);
-                    }
-                        break;
+                    //case "seq":
+                    //{
+                    //    var t = FileManagement.OpenEqFile<Speaker>(dlg.FileName);
+                    //    sp = ParseParametricEq(t);
+                    //}
+                    //    break;
                     case "peq":
                     {
                         var t = FileManagement.OpenEqFile<ParametricEQ>(dlg.FileName);
@@ -278,7 +278,8 @@ namespace EscInstaller.ImportSpeakers
             }
             catch (Exception e)
             {
-                Debug.WriteLine("Master speaker library access" + e);
+                MessageBox.Show("Could not open speaker library file" + e, "Speaker library", MessageBoxButton.OK, MessageBoxImage.Error);
+                Application.Current.MainWindow.Close();
             }
         }
 

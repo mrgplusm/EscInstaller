@@ -22,6 +22,8 @@ namespace EscInstaller.View.Communication
             InitializeComponent();
         }
 
+        public string TextControl { get; set; }
+
         private static void DownloadView_Closed(object sender, EventArgs e)
         {
             _openwindow = null;

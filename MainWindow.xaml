@@ -140,13 +140,7 @@
                 </MenuItem>
                 <Separator />
 
-                <MenuItem Command="{Binding Path=OpenSdCardMannager}"
-                          Header="{x:Static escInstaller:Main.OpenSdCardMannager}" Name="MmSdCard"
-                          InputGestureText="Ctrl+Shift+S">
-                    <MenuItem.Icon>
-                        <Image Source="Icons\Sd-Card-128.png" Width="15" Height="15" Style="{StaticResource GrOut}" />
-                    </MenuItem.Icon>
-                </MenuItem>
+                
             </MenuItem>
 
 
@@ -251,9 +245,7 @@
                                 <TextBlock Text="{x:Static escInstaller:Main.CommunicationTab}" />
                             </DataTemplate>
 
-                            <DataTemplate DataType="{x:Type viewModel:LibraryEditorViewModel}">
-                                <TextBlock Text="SpeakerlibraryEditor" />
-                            </DataTemplate>
+                         
                         </ContentControl.Resources>
                     </ContentControl>
                 </DataTemplate>
@@ -272,9 +264,7 @@
                     <communication:CommunicationView />
                 </DataTemplate>
 
-                <DataTemplate DataType="{x:Type viewModel:LibraryEditorViewModel}">
-                    <vw:LibraryEditor />
-                </DataTemplate>
+              
             </TabControl.Resources>
         </TabControl>
 

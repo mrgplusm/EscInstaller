@@ -50,21 +50,21 @@ namespace EscInstaller.ViewModel.Settings.Peq
                         throw new ArgumentException("Mic does not have positon" + Model.Id);
                     return
                         (ushort)
-                            (McuDat.MicRedundancy + biquad*FilterBase.PeqRedundancyCount +
-                             (Model.Id - 15)*40);
+                            (McuDat.MicRedundancy + biquad * FilterBase.PeqRedundancyCount +
+                             (Model.Id - 15) * 40);
 
                 case SpeakerPeqType.BiquadsAux:
                     if (biquad > 6)
                         throw new ArgumentException("Aux does not have biquad" + biquad);
                     if (Model.Id > 14 || Model.Id < 12)
                         throw new ArgumentException("Aux does not have positon" + Model.Id);
-                    return (ushort) (McuDat.AuxRedundancy + biquad*FilterBase.PeqRedundancyCount + (Model.Id - 12)*56);
+                    return (ushort)(McuDat.AuxRedundancy + biquad * FilterBase.PeqRedundancyCount + (Model.Id - 12) * 56);
                 case SpeakerPeqType.BiquadsPreset:
                     if (biquad > 13)
                         throw new ArgumentException("Preset does not have biquad" + biquad);
                     if (Model.Id > 11 || Model.Id < 0)
                         throw new ArgumentException("Preset does not have positon" + Model.Id);
-                    return (ushort) (McuDat.PresetRedundancy + biquad*FilterBase.PeqRedundancyCount + Model.Id*112);
+                    return (ushort)(McuDat.PresetRedundancy + biquad * FilterBase.PeqRedundancyCount + Model.Id * 112);
                 default:
                     throw new ArgumentException("SpeakerPeqType does not exist");
             }
@@ -78,36 +78,25 @@ namespace EscInstaller.ViewModel.Settings.Peq
         /// <returns></returns>
         public void UpdateIntegraty()
         {
-            if (!CheckBiquadIntegraty()) return;
+            if (CheckBiquadIntegraty()) return;
 
             AssignBqsToFilters();
         }
 
         private void AssignBqsToFilters()
         {
-            if (Model.PEQ.RequiredBiquads() > (int) Model.SpeakerPeqType)
+            if (Model.PEQ.RequiredBiquads() > (int)Model.SpeakerPeqType)
                 throw new Exception("This configuration uses too many biquads");
-            var bq = GetBiquadStack();
-
+            
             foreach (var peqDataModel in Model.PEQ)
             {
-                var req = new[] {peqDataModel}.RequiredBiquads();
-                peqDataModel.Biquads = new List<int>();
-                for (var i = 0; i < req; i++)
-                {
-                    peqDataModel.Biquads.Add(bq.Pop());
-                }
+                
+                AssignBiquads(peqDataModel);
             }
-        }
-
-        private Stack<int> GetBiquadStack()
-        {
-            return new Stack<int>(Enumerable.Range(0, (int) Model.SpeakerPeqType));
         }
 
         private bool CheckBiquadIntegraty()
         {
-            //_model.AvailableBiquads = GenHashset();
             foreach (var peqDataModel in Model.PEQ)
             {
                 if (peqDataModel.Biquads == null)
@@ -116,23 +105,21 @@ namespace EscInstaller.ViewModel.Settings.Peq
                     return false;
                 }
 
-                var req = new[] {peqDataModel}.RequiredBiquads();
+                var req = new[] { peqDataModel }.RequiredBiquads();
+
                 if (peqDataModel.Biquads.Count != req)
                     return false;
-                //if biquad is in model, it cannot be in another model or available
-                //if (peqDataModel.Biquads.Any(Model.AvailableBiquads.Contains))
-                //    return false;
+             
             }
-            return (int) Model.SpeakerPeqType >= Model.PEQ.RequiredBiquads();
-            //return ((int)Model.SpeakerPeqType - Model.PEQ.RequiredBiquads()) == Model.AvailableBiquads.Count;
+            return (int)Model.SpeakerPeqType >= Model.PEQ.RequiredBiquads();
         }
 
         public void ParseRedundancyData(List<byte> dspCopy)
         {
             Model.PEQ.Clear();
-            for (var redundancyPosition = 0; redundancyPosition < (int) Model.SpeakerPeqType; redundancyPosition++)
+            for (var redundancyPosition = 0; redundancyPosition < (int)Model.SpeakerPeqType; redundancyPosition++)
             {
-                var position = EepromPosition(dspCopy, redundancyPosition);                
+                var position = EepromPosition(dspCopy, redundancyPosition);
                 SetPeqData(position);
             }
         }
@@ -154,7 +141,7 @@ namespace EscInstaller.ViewModel.Settings.Peq
 
         private void SetPeqData(byte[] rawData)
         {
-            if (rawData == null || rawData.All(s => s == 0))               
+            if (rawData == null || rawData.All(s => s == 0))
                 return;
             try
             {
@@ -190,32 +177,26 @@ namespace EscInstaller.ViewModel.Settings.Peq
             }
         }
 
-        //private void ResetAvailableBq()
-        //{
-        //    if (Model.AvailableBiquads == null) Model.AvailableBiquads = new HashSet<int>();
-        //    var all = (Enumerable.Range(0, (int)Model.SpeakerPeqType));
-        //    foreach (var i in all) { Model.AvailableBiquads.Add(i); }
-        //}
-
         public IEnumerable<int> UsedBiquads()
         {
-            return Model.PEQ.SelectMany(n => n.Biquads);
+            return Model.PEQ.Where(s => s.Biquads != null).SelectMany(n => n.Biquads).ToArray();
         }
 
         public Stack<int> AvailableBiquads()
         {
-            return new Stack<int>(Enumerable.Range(0, (int) Model.SpeakerPeqType).Except(UsedBiquads()));
+            return new Stack<int>(Enumerable.Range(0, (int)Model.SpeakerPeqType).Except(UsedBiquads()));
         }
 
         public void AssignBiquads(PeqDataModel dm)
         {
-            var r = new[] {dm}.RequiredBiquads();
+            var r = new[] { dm }.RequiredBiquads();
             var availablebq = AvailableBiquads();
 
-            foreach (var biquad in dm.Biquads)
-            {
-                availablebq.Push(biquad);
-            }
+            if (dm.Biquads != null)
+                foreach (var biquad in dm.Biquads)
+                {
+                    availablebq.Push(biquad);
+                }
 
             dm.Biquads = new List<int>();
 

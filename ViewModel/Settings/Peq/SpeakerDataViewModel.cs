@@ -554,32 +554,29 @@ namespace EscInstaller.ViewModel.Settings.Peq
 
         public PeqDataViewModel NewParam()
         {
-            if (RequiredBiquads <=
-                (int)(DataModel.SpeakerPeqType))
+            if (RequiredBiquads > (int) (DataModel.SpeakerPeqType)) throw new Exception("not enough biquads");
+
+            var dm = new PeqDataModel
             {
-                var dm = new PeqDataModel
-                {
-                    Frequency = 1000,
-                    FilterType = FilterType.Peaking,
-                    IsEnabled = true,
-                    BandWidth = 1,
-                    Boost = 0,
-                    Order = 2,
-                    Id = PeqDataModels.Count
-                };
+                Frequency = 1000,
+                FilterType = FilterType.Peaking,
+                IsEnabled = true,
+                BandWidth = 1,
+                Boost = 0,
+                Order = 2,
+                Id = PeqDataModels.Count
+            };
 
 
-                //vms might not be initiated, add viewmodel before model as initialisation wraps all available models
-                var vm = new PeqDataViewModel(dm);
-                PeqDataViewModels.Add(vm);
+            //vms might not be initiated, add viewmodel before model as initialisation wraps all available models
+            var vm = new PeqDataViewModel(dm);
+            PeqDataViewModels.Add(vm);
 
-                PeqDataModels.Add(dm);
-                var sl = new SpeakerLogic(DataModel);
-                sl.AssignBiquads(dm);
+            PeqDataModels.Add(dm);
+            var sl = new SpeakerLogic(DataModel);
+            sl.AssignBiquads(dm);
 
-                return vm;
-            }
-            throw new Exception("not enough biquads");
+            return vm;
         }
 
         private void AddNew(PeqDataModel data)
