@@ -228,7 +228,6 @@
   <data name="_mainSlave" xml:space="preserve">
     <value>Slave {0}</value>
   </data>
-  
   <data name="_mainTools" xml:space="preserve">
     <value>_Tools</value>
   </data>
@@ -238,7 +237,6 @@
   <data name="_mainToolsCalibrationTotal" xml:space="preserve">
     <value>Run calibration complete system</value>
   </data>
-  
   <data name="_mainToolsOpenConnectionView" xml:space="preserve">
     <value>_Setup connection</value>
   </data>
@@ -264,7 +262,7 @@
     <value>Close all _windows</value>
   </data>
   <data name="_mainWindowTitle" xml:space="preserve">
-    <value>Entero ESC Installer</value>
+    <value>eXentro ECU Installer</value>
   </data>
   <data name="AboutwindowText" xml:space="preserve">
     <value>ECS Emergency controller software</value>
@@ -468,7 +466,7 @@
     <value>Measurement settings</value>
   </data>
   <data name="MessageBoxDownloadText" xml:space="preserve">
-    <value>Do you want to download the configuration from the ESC units, overwriting the configuration in the current open file?</value>
+    <value>Do you want to download the configuration from the ECU units, overwriting the configuration in the current open file?</value>
   </data>
   <data name="MessageBoxDownloadTitle" xml:space="preserve">
     <value>Please confirm download</value>
@@ -480,7 +478,7 @@
     <value>No connections found</value>
   </data>
   <data name="MessageBoxUploadText" xml:space="preserve">
-    <value>Do you want to overwrite the configuration of the Esc with the settings as they are in the installer software?</value>
+    <value>Do you want to overwrite the configuration of the ECU with the settings as they are in the installer software?</value>
   </data>
   <data name="MessageBoxUploadTitle" xml:space="preserve">
     <value>Please confirm upload</value>
@@ -504,7 +502,7 @@
     <value>The data of this unit is of a different .esc file. Would you like to continue downloading? {0} </value>
   </data>
   <data name="TimestampVerifyTitle" xml:space="preserve">
-    <value>Data esc mismatch</value>
+    <value>Data ecu mismatch</value>
   </data>
   <data name="OverwriteAsk" xml:space="preserve">
     <value>Would you like to save the current file</value>

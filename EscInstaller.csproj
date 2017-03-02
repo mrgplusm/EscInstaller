@@ -103,6 +103,18 @@
     <ManifestKeyFile>EscInstaller_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="bbv.Common, Version=7.1.0.0, Culture=neutral, PublicKeyToken=917bca444d1f2b4c, processorArchitecture=MSIL">
+      <HintPath>packages\bbv.Common.7.1.1187.412\lib\.Net 4.0\bbv.Common.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="bbv.Common.AsyncModule, Version=7.2.0.0, Culture=neutral, PublicKeyToken=917bca444d1f2b4c, processorArchitecture=MSIL">
+      <HintPath>packages\bbv.Common.AsyncModule.7.2.1187.616\lib\.Net 4.0\bbv.Common.AsyncModule.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="bbv.Common.StateMachine, Version=7.4.0.0, Culture=neutral, PublicKeyToken=917bca444d1f2b4c, processorArchitecture=MSIL">
+      <HintPath>packages\bbv.Common.StateMachine.7.4.12149.1635\lib\Net40\bbv.Common.StateMachine.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="DynamicDataDisplay">
       <HintPath>Deps\DynamicDataDisplay.dll</HintPath>
     </Reference>

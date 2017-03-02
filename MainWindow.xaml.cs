@@ -29,6 +29,11 @@ namespace EscInstaller
             if (!s.ExitCommand())
                 e.Cancel = true;
         }
+
+        private void TabControl_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+
+        }
     }
 
 

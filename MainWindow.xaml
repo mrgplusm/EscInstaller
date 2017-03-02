@@ -20,7 +20,7 @@
         ResizeMode="CanResizeWithGrip" 
         d:DataContext="{d:DesignInstance viewModel:MainViewModel, IsDesignTimeCreatable=True}"
         
-        Title="{x:Static escInstaller:Main._mainWindowTitle}" >
+        Title="Exentro ECU Installer" >
 
     <Window.Resources>
         <CollectionViewSource Source="{Binding Path=TabCollection}" x:Key="TabCollectionViewSource" >
@@ -218,7 +218,7 @@
 
         <!--behaviors:TabContent.IsCached="True"-->
         <TabControl x:Name="TabControl" ItemsSource="{Binding Source={StaticResource TabCollectionViewSource}}" 
-                    Grid.Row="2" SelectedItem="{Binding Path=SelectedTab, Mode=TwoWay}" >
+                    Grid.Row="2" SelectedItem="{Binding Path=SelectedTab, Mode=TwoWay}" SelectionChanged="TabControl_SelectionChanged" >
             <TabControl.ItemTemplate>
                 <DataTemplate>
                     <ContentControl Content="{Binding}">

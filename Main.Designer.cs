@@ -475,7 +475,7 @@ namespace EscInstaller {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Entero ESC Installer.
+        ///   Looks up a localized string similar to eXentro ECU Installer.
         /// </summary>
         public static string _mainWindowTitle {
             get {
@@ -898,7 +898,7 @@ namespace EscInstaller {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do you want to download the configuration from the ESC units, overwriting the configuration in the current open file?.
+        ///   Looks up a localized string similar to Do you want to download the configuration from the ECU units, overwriting the configuration in the current open file?.
         /// </summary>
         public static string MessageBoxDownloadText {
             get {
@@ -952,7 +952,7 @@ namespace EscInstaller {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do you want to overwrite the configuration of the Esc with the settings as they are in the installer software?.
+        ///   Looks up a localized string similar to Do you want to overwrite the configuration of the ECU with the settings as they are in the installer software?.
         /// </summary>
         public static string MessageBoxUploadText {
             get {
@@ -1168,7 +1168,7 @@ namespace EscInstaller {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Data esc mismatch.
+        ///   Looks up a localized string similar to Data ecu mismatch.
         /// </summary>
         public static string TimestampVerifyTitle {
             get {

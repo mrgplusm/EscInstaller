@@ -136,7 +136,7 @@
     <value>Efficiency: </value>
   </data>
   <data name="EscUnits" xml:space="preserve">
-    <value>Esc units</value>
+    <value>ECU units</value>
   </data>
   <data name="OperatingTimeHours" xml:space="preserve">
     <value>Operating time (h)</value>
