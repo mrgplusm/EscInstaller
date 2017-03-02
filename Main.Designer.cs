@@ -475,11 +475,20 @@ namespace EscInstaller {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Entero ESC Installer.
+        ///   Looks up a localized string similar to eXentro ECU Installer.
         /// </summary>
         public static string _mainWindowTitle {
             get {
                 return ResourceManager.GetString("_mainWindowTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sa_ve as.
+        /// </summary>
+        public static string _SaveAs {
+            get {
+                return ResourceManager.GetString("_SaveAs", resourceCulture);
             }
         }
         

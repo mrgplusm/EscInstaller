@@ -48,6 +48,10 @@ namespace EscInstaller.ViewModel
 
         public MainViewModel()
         {
+            if (base.IsInDesignMode)
+            {
+                return;
+            }
             SpeakerMethods.Initialize();
 
             if (Application.Current != null)

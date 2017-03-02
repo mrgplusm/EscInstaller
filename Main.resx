@@ -228,7 +228,6 @@
   <data name="_mainSlave" xml:space="preserve">
     <value>Slave {0}</value>
   </data>
-  
   <data name="_mainTools" xml:space="preserve">
     <value>_Tools</value>
   </data>
@@ -238,7 +237,6 @@
   <data name="_mainToolsCalibrationTotal" xml:space="preserve">
     <value>Run calibration complete system</value>
   </data>
-  
   <data name="_mainToolsOpenConnectionView" xml:space="preserve">
     <value>_Setup connection</value>
   </data>
@@ -264,7 +262,7 @@
     <value>Close all _windows</value>
   </data>
   <data name="_mainWindowTitle" xml:space="preserve">
-    <value>Entero ESC Installer</value>
+    <value>eXentro ECU Installer</value>
   </data>
   <data name="AboutwindowText" xml:space="preserve">
     <value>ECS Emergency controller software</value>
@@ -517,5 +515,8 @@
   </data>
   <data name="SaveNewSystemTitle" xml:space="preserve">
     <value>Create new file</value>
+  </data>
+  <data name="_SaveAs" xml:space="preserve">
+    <value>Sa_ve as</value>
   </data>
 </root>

@@ -69,7 +69,7 @@
                     </MenuItem.Icon>
 
                 </MenuItem>
-                <MenuItem Command="{Binding Path=SaveAs}" Header="Save As" Name="SaveAs" InputGestureText="Ctrl+S" />
+                <MenuItem Command="{Binding Path=SaveAs}" Header="{x:Static escInstaller:Main._SaveAs}" />
 
                 <Separator />
 
