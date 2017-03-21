@@ -232,7 +232,7 @@ namespace EscInstaller.View.Communication {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If the Entero VA system is calibrated; clear &apos;Slave calibration&apos; on the Master ESC unit to avoid communication interrupts by the Master. .
+        ///   Looks up a localized string similar to If the eXentro VA system is calibrated; clear &apos;Slave calibration&apos; on the Master ESC unit to avoid communication interrupts by the Master. .
         /// </summary>
         public static string ConnectionWarning {
             get {

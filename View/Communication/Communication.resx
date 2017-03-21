@@ -250,7 +250,7 @@
     <value>Entering password</value>
   </data>
   <data name="ConnectionWarning" xml:space="preserve">
-    <value>If the Entero VA system is calibrated; clear 'Slave calibration' on the Master ESC unit to avoid communication interrupts by the Master. </value>
+    <value>If the eXentro VA system is calibrated; clear 'Slave calibration' on the Master ESC unit to avoid communication interrupts by the Master. </value>
   </data>
   <data name="ConnectionWarningLine2" xml:space="preserve">
     <value>Do not forget to re-calibrate the Slaves when configuration is finished.</value>

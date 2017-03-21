@@ -247,7 +247,7 @@ namespace EscInstaller.ViewModel.SDCard
             var startInfo = new ProcessStartInfo
             {
                 FileName = "format.com",
-                Arguments = SystemDrives[Drives.CurrentPosition].Name.Remove(2) + "/fs:fat /v:Entero /q ",
+                Arguments = SystemDrives[Drives.CurrentPosition].Name.Remove(2) + "/fs:fat /v:eXentro /q ",
                 UseShellExecute = false,
                 CreateNoWindow = true,
                 RedirectStandardOutput = true,

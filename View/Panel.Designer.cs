@@ -277,7 +277,7 @@ namespace EscInstaller.View {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select Entero ESC unit to display outputs.
+        ///   Looks up a localized string similar to Select eXentro unit to display outputs.
         /// </summary>
         public static string _matrixScrollSelSystemZone {
             get {

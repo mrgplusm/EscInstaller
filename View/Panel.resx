@@ -262,7 +262,7 @@
     <value>Select: 'Keypad (P1-16)' or 'ABCD buttons' or 'GPO Relay Card'</value>
   </data>
   <data name="_matrixScrollSelSystemZone" xml:space="preserve">
-    <value>Select Entero ESC unit to display outputs</value>
+    <value>Select eXentro unit to display outputs</value>
   </data>
   <data name="MessSel" xml:space="preserve">
     <value>Select the Matrix routing table for each button or select messages which will replace the Alarm/Alert messages used for the zone butons routing matrix.</value>

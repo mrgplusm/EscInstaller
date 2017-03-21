@@ -265,7 +265,6 @@
     <Compile Include="ValidationRules\PortValidationRule.cs" />
     <Compile Include="ValidationRules\RegexValidationRule.cs" />
     <Compile Include="ViewModel\AlarmMessagesViewModel.cs" />
-    <Compile Include="ViewModel\BatteryCalcViewModel.cs" />
     <Compile Include="ViewModel\BroadcastButtonViewModel.cs" />
     <Compile Include="ViewModel\CardBaseViewModel.cs" />
     <Compile Include="ViewModel\CardViewModel.cs" />

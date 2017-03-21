@@ -493,7 +493,7 @@ namespace EscInstaller {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ECS Emergency controller software.
+        ///   Looks up a localized string similar to eXentro ECU controller software.
         /// </summary>
         public static string AboutwindowText {
             get {
