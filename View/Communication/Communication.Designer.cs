@@ -259,6 +259,15 @@ namespace EscInstaller.View.Communication {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No Connection or No Connection established.
+        /// </summary>
+        public static string ErrorConnection {
+            get {
+                return ResourceManager.GetString("ErrorConnection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error Message.
         /// </summary>
         public static string ErrorMessage {

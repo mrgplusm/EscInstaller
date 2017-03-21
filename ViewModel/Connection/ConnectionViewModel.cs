@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Input;
 using Common;
 using Common.Model;
+using EscInstaller.View.Communication;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 
@@ -28,7 +29,7 @@ namespace EscInstaller.ViewModel.Connection
 
             Connection.ErrorOccured += (a, b) => Application.Current.Dispatcher.Invoke(() =>
             {
-                ErrorInfo = b.Exception.Message;
+                ErrorInfo = Communication.ErrorConnection;//  b.Exception.Message;
 
                 RaisePropertyChanged(() => ConnectMode);
             });
@@ -71,23 +72,15 @@ namespace EscInstaller.ViewModel.Connection
             }
         }
 
-        public ObservableCollection<string> Ports
-        {
-            get { return _ports ?? (_ports = new ObservableCollection<string>(PortList.GetList())); }
-        }
+        public ObservableCollection<string> Ports => _ports ?? (_ports = new ObservableCollection<string>(PortList.GetList()));
 
         public string ErrorInfo
         {
             get
             {
 #if DEBUG
-                if (IsInDesignMode)
-                {
-                    return "This is an errorThis is an errorThis is an errorThis is an errorThis is " +
-                           "an errorThis is an errorThis is an errorThis is an errorThis is an error";
-                }
+                return IsInDesignMode ? "No connection could be established" : _errorInfo;
 #endif
-                return _errorInfo;
             }
             private set
             {

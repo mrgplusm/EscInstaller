@@ -264,4 +264,7 @@
   <data name="SelectAll" xml:space="preserve">
     <value>Select all</value>
   </data>
+  <data name="ErrorConnection" xml:space="preserve">
+    <value>No Connection or No Connection established</value>
+  </data>
 </root>

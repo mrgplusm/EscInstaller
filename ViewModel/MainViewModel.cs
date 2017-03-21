@@ -242,7 +242,8 @@ namespace EscInstaller.ViewModel
             try
             {
                 var path = Directory.GetCurrentDirectory();
-                Process.Start(path + "DirMP3.exe");
+                const string folder = "\\DirMp3\\";
+                Process.Start(path + folder + "DIR_MP3.exe");
 
             }
             catch (Exception e)
