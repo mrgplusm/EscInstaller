@@ -40,7 +40,7 @@
         <KeyBinding Command="{Binding Path=CloseFile}" Key="w" Modifiers="Control" />
 
 
-        <KeyBinding Command="{Binding Path=OpenSdCardMannager}" Key="s" Modifiers="Control+Shift" />
+        <KeyBinding Command="{Binding Path=OpenSDCardManager}" Key="s" Modifiers="Control+Shift" />
     </Window.InputBindings>
 
     <Grid Name="GrdInstall">
@@ -116,6 +116,9 @@
                                Style="{StaticResource GrOut}" />
                     </MenuItem.Icon>
                 </MenuItem>
+
+                <MenuItem Header="{x:Static escInstaller:Main.OpenSdCardMannager}"
+                          Command="{Binding Path=OpenSDCardManager}" />
 
                 <MenuItem Header="{x:Static escInstaller:Main._dcOperationMenuEntry}"
                           Command="{Binding Path=EnableDcOperation}" IsCheckable="True" IsEnabled="False" />

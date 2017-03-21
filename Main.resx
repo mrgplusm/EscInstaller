@@ -265,7 +265,7 @@
     <value>eXentro ECU Installer</value>
   </data>
   <data name="AboutwindowText" xml:space="preserve">
-    <value>ECS Emergency controller software</value>
+    <value>eXentro ECU controller software</value>
   </data>
   <data name="AboutWindowTitle" xml:space="preserve">
     <value>About</value>

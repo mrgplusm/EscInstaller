@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -222,7 +223,7 @@ namespace EscInstaller.ViewModel
                 LibraryData.FuturamaSys.CreatedInstallerVersion, LibraryData.FuturamaSys.LastSavedInstallerVersion
             };
 
-        
+
 
         public ITabControl SelectedTab
         {
@@ -231,6 +232,24 @@ namespace EscInstaller.ViewModel
             {
                 _selectedTab = value;
                 RaisePropertyChanged(() => SelectedTab);
+            }
+        }
+
+        public ICommand OpenSDCardManager => new RelayCommand(OpenExternalExecutable);
+
+        private static void OpenExternalExecutable()
+        {
+            try
+            {
+                var path = Directory.GetCurrentDirectory();
+                Process.Start(path + "DirMP3.exe");
+
+            }
+            catch (Exception e)
+            {
+
+                MessageBox.Show(e.Message, "Error starting external application", MessageBoxButton.OK,
+                    MessageBoxImage.Error);
             }
         }
 
@@ -274,7 +293,7 @@ namespace EscInstaller.ViewModel
         }
 
         private void SendUnitData()
-        {            
+        {
             var nq = new DownloadView
             {
                 Title = "UPLOAD to ESC: GUI => ESC",
@@ -282,11 +301,11 @@ namespace EscInstaller.ViewModel
                 TextControl = "Upload all to all sources"
             };
 
-            
+
             var qq = new CommunicationSend(this); //  EscCommunicationBase(this);
             nq.DataContext = qq;
             nq.Show();
-            
+
         }
 
         private async Task<bool> InformUserTimestampAsync(bool isUploadText)
