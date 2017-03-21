@@ -261,4 +261,7 @@
   <data name="GotIt" xml:space="preserve">
     <value>I've read this</value>
   </data>
+  <data name="SelectAll" xml:space="preserve">
+    <value>Select all</value>
+  </data>
 </root>

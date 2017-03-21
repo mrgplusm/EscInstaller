@@ -33,10 +33,6 @@ namespace EscInstaller
             SaveBackupFileInit();
       
             OpenRegKey();
-
-
-        
-      
         }
 
         private void SaveBackupFileInit()

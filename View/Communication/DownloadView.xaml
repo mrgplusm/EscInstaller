@@ -40,7 +40,7 @@
                 </Image.Style>
             </Image>
 
-            <CheckBox Content="Download or upload" IsChecked="{Binding Path=AllFromAllSources}" />
+            <CheckBox Content="{x:Static communication:Communication.SelectAll}" IsChecked="{Binding Path=AllFromAllSources}" />
         </StackPanel>
         <ScrollViewer VerticalScrollBarVisibility="Visible" MaxHeight="400">
             <ItemsControl ItemsSource="{Binding Path=Escs}" Width="300" MinHeight="50"

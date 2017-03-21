@@ -448,6 +448,15 @@ namespace EscInstaller.View.Communication {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select all.
+        /// </summary>
+        public static string SelectAll {
+            get {
+                return ResourceManager.GetString("SelectAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Queued data.
         /// </summary>
         public static string UnboundData {
