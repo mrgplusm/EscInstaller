@@ -5,11 +5,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Common.Model;
 using EscInstaller.ViewModel.Connection;
+using EscInstaller.ViewModel.EscCommunication.Logic;
 using EscInstaller.ViewModel.Settings;
 
 #endregion
 
-namespace EscInstaller.ViewModel.EscCommunication.Logic
+namespace EscInstaller.EscCommunication.Logic
 {
     public class AuxLinker : EscLogic
     {

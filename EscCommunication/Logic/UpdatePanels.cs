@@ -4,10 +4,11 @@ using System.Collections;
 using System.Linq;
 using Common;
 using Common.Model;
+using EscInstaller.ViewModel;
 
 #endregion
 
-namespace EscInstaller.ViewModel.EscCommunication.Logic
+namespace EscInstaller.EscCommunication.Logic
 {
     internal class AttachedPanelUpdater : EepromDataHandler
     {

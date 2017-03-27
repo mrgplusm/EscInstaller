@@ -2,11 +2,12 @@
 
 using System.Threading.Tasks;
 using Common;
+using EscInstaller.ViewModel;
 using EscInstaller.ViewModel.EscCommunication.Logic;
 
 #endregion
 
-namespace EscInstaller.ViewModel.EscCommunication.downloadItems
+namespace EscInstaller.EscCommunication.downloadItems
 {
     public class SpeakerRedundancy : EepromToDownload
     {
@@ -15,20 +16,11 @@ namespace EscInstaller.ViewModel.EscCommunication.downloadItems
         {
         }
 
-        public override string ItemName
-        {
-            get { return "Redundancy Data"; }
-        }
+        public override string ItemName => "Redundancy Data";
 
-        public override Task Function
-        {
-            get { return DownloaderFactory().GetEeprom(ProgressFactory()); }
-        }
+        public override Task Function => DownloaderFactory().GetEeprom(ProgressFactory());
 
-        protected override E2PromArea Area
-        {
-            get { return E2PromArea.SpeakerRedundancy; }
-        }
+        protected override E2PromArea Area => E2PromArea.SpeakerRedundancy;
 
         protected override void Done()
         {

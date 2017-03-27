@@ -7,7 +7,7 @@ using EscInstaller.ViewModel.Connection;
 
 #endregion
 
-namespace EscInstaller.ViewModel.EscCommunication.Logic
+namespace EscInstaller.EscCommunication.Logic
 {
     public class EscLogic
     {
@@ -31,9 +31,8 @@ namespace EscInstaller.ViewModel.EscCommunication.Logic
         public event EventHandler BoseVersionReceived;
 
         protected virtual void OnBoseVersionReceived()
-        {
-            var handler = BoseVersionReceived;
-            if (handler != null) handler(this, EventArgs.Empty);
+        {            
+            BoseVersionReceived?.Invoke(this, EventArgs.Empty);
         }
     }
 }

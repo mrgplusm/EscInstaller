@@ -1,12 +1,12 @@
 #region
 
 using System.Threading.Tasks;
-using EscInstaller.EscCommunication;
+using EscInstaller.ViewModel;
 using EscInstaller.ViewModel.EscCommunication.Logic;
 
 #endregion
 
-namespace EscInstaller.ViewModel.EscCommunication.downloadItems
+namespace EscInstaller.EscCommunication.downloadItems
 {
     public class SdMessages : ItemtoDownload
     {
@@ -15,10 +15,7 @@ namespace EscInstaller.ViewModel.EscCommunication.downloadItems
         {
         }
 
-        public override string ItemName
-        {
-            get { return "Sd messages"; }
-        }
+        public override string ItemName => "Sd messages";
 
         public override Task Function
         {

@@ -9,7 +9,7 @@ using EscInstaller.ViewModel.Connection;
 
 #endregion
 
-namespace EscInstaller.ViewModel.EscCommunication.Logic
+namespace EscInstaller.EscCommunication.Logic
 {
     public class MessageSelector : EscLogic
     {

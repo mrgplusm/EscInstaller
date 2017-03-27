@@ -1,12 +1,12 @@
 #region
 
 using System.Threading.Tasks;
-using EscInstaller.EscCommunication;
-using EscInstaller.ViewModel.EscCommunication.Logic;
+using EscInstaller.EscCommunication.Logic;
+using EscInstaller.ViewModel;
 
 #endregion
 
-namespace EscInstaller.ViewModel.EscCommunication.UploadItem
+namespace EscInstaller.EscCommunication.UploadItem
 {
     internal class PeqData : ItemtoDownload
     {
@@ -14,10 +14,7 @@ namespace EscInstaller.ViewModel.EscCommunication.UploadItem
         {
         }
 
-        public override string ItemName
-        {
-            get { return "Peq Data+ red"; }
-        }
+        public override string ItemName => "Peq Data+ red";
 
         public override Task Function
         {

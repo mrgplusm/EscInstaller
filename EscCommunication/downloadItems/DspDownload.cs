@@ -2,12 +2,12 @@
 
 using System.Threading.Tasks;
 using Common;
-using EscInstaller.ViewModel.EscCommunication.downloadItems;
+using EscInstaller.ViewModel;
 using EscInstaller.ViewModel.EscCommunication.Logic;
 
 #endregion
 
-namespace EscInstaller.ViewModel.EscCommunication
+namespace EscInstaller.EscCommunication.downloadItems
 {
     public class Dsp : EepromToDownload
     {
@@ -16,20 +16,11 @@ namespace EscInstaller.ViewModel.EscCommunication
         {
         }
 
-        public override string ItemName
-        {
-            get { return "DSP Mirror"; }
-        }
+        public override string ItemName => "DSP Mirror";
 
-        public override Task Function
-        {
-            get { return DownloaderFactory().GetEeprom(ProgressFactory()); }
-        }
+        public override Task Function => DownloaderFactory().GetEeprom(ProgressFactory());
 
-        protected override E2PromArea Area
-        {
-            get { return E2PromArea.DspMirror; }
-        }
+        protected override E2PromArea Area => E2PromArea.DspMirror;
 
         protected override void Done()
         {

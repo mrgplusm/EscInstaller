@@ -1,12 +1,12 @@
 #region
 
 using System.Threading.Tasks;
-using EscInstaller.EscCommunication;
-using EscInstaller.ViewModel.EscCommunication.Logic;
+using EscInstaller.EscCommunication.Logic;
+using EscInstaller.ViewModel;
 
 #endregion
 
-namespace EscInstaller.ViewModel.EscCommunication.UploadItem
+namespace EscInstaller.EscCommunication.UploadItem
 {
     internal class Delaysettings : ItemtoDownload
     {
@@ -15,10 +15,7 @@ namespace EscInstaller.ViewModel.EscCommunication.UploadItem
         {
         }
 
-        public override string ItemName
-        {
-            get { return "Delay settings"; }
-        }
+        public override string ItemName => "Delay settings";
 
         public override Task Function
         {

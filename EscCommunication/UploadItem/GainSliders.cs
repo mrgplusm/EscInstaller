@@ -1,12 +1,12 @@
 #region
 
 using System.Threading.Tasks;
-using EscInstaller.EscCommunication;
-using EscInstaller.ViewModel.EscCommunication.Logic;
+using EscInstaller.EscCommunication.Logic;
+using EscInstaller.ViewModel;
 
 #endregion
 
-namespace EscInstaller.ViewModel.EscCommunication.UploadItem
+namespace EscInstaller.EscCommunication.UploadItem
 {
     internal class GainSliders : ItemtoDownload
     {
@@ -15,10 +15,7 @@ namespace EscInstaller.ViewModel.EscCommunication.UploadItem
         {
         }
 
-        public override string ItemName
-        {
-            get { return "Gain Sliders"; }
-        }
+        public override string ItemName => "Gain Sliders";
 
         public override Task Function
         {

@@ -1,12 +1,11 @@
 #region
 
 using Common;
-using EscInstaller.EscCommunication;
-using EscInstaller.EscCommunication.downloadItems;
+using EscInstaller.ViewModel;
 
 #endregion
 
-namespace EscInstaller.ViewModel.EscCommunication.downloadItems
+namespace EscInstaller.EscCommunication.downloadItems
 {
     public abstract class EepromToDownload : ItemtoDownload
     {

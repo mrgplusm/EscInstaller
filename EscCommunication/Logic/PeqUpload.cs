@@ -12,7 +12,7 @@ using EscInstaller.ViewModel.Settings.Peq;
 
 #endregion
 
-namespace EscInstaller.ViewModel.EscCommunication.Logic
+namespace EscInstaller.EscCommunication.Logic
 {
     public class PeqUpload : EscLogic
     {

@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Common;
 using EscInstaller.ViewModel;
-using EscInstaller.ViewModel.EscCommunication;
 
 #endregion
 

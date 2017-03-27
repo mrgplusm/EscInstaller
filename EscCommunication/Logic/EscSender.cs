@@ -8,7 +8,7 @@ using Common.Model;
 
 #endregion
 
-namespace EscInstaller.ViewModel.EscCommunication.Logic
+namespace EscInstaller.EscCommunication.Logic
 {
     public sealed class EscSender
     {

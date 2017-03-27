@@ -2,10 +2,11 @@
 
 using System.Threading.Tasks;
 using Common;
+using EscInstaller.ViewModel;
 
 #endregion
 
-namespace EscInstaller.ViewModel.EscCommunication.downloadItems
+namespace EscInstaller.EscCommunication.downloadItems
 {
     public class CalibrationData : EepromToDownload
     {
