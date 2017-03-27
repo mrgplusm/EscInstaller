@@ -1,12 +1,12 @@
 ﻿#region
 
 using EscInstaller.EscCommunication.downloadItems;
-using EscInstaller.ViewModel.EscCommunication.downloadItems;
+using EscInstaller.ViewModel;
 using EscInstaller.ViewModel.EscCommunication.UploadItem;
 
 #endregion
 
-namespace EscInstaller.ViewModel.EscCommunication
+namespace EscInstaller.EscCommunication
 {
     public class SendData : Downloader
     {

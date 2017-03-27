@@ -19,7 +19,7 @@ namespace EscInstaller.EscCommunication
             ItemstoDownload = new ObservableCollection<ItemtoDownload>();
             for (var i = 0; i < 2; i++)
             {
-                //ItemstoDownload.Add(new DspDownload()); { ItemName = "TEST " + i });
+                ItemstoDownload.Add(new Dsp(Main)); 
             }
         }
 #endif

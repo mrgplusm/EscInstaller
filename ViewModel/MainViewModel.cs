@@ -565,6 +565,7 @@ namespace EscInstaller.ViewModel
      
             master?.UpdateHardware();
             master?.OnPresetNamesUpdated();
+            master?.OnDspMirrorUpdated();
         }
 
         public void AddConnections()
@@ -572,10 +573,10 @@ namespace EscInstaller.ViewModel
             if (!LibraryData.SystemIsOpen) return;
             if (LibraryData.FuturamaSys.Connections == null)
                 LibraryData.FuturamaSys.Connections = new List<ConnectionModel>();
-            foreach (var connection in LibraryData.FuturamaSys.Connections)
+            foreach (var q in LibraryData.FuturamaSys.Connections.Select(connection => new ConnectionViewModel(connection))
+                .Where(q => !CommunicationViewModel.OpenConnections.Contains(q)))
             {
-                var q = new ConnectionViewModel(connection);
-                if (!CommunicationViewModel.OpenConnections.Contains(q)) CommunicationViewModel.OpenConnections.Add(q);
+                CommunicationViewModel.OpenConnections.Add(q);
             }
         }
 

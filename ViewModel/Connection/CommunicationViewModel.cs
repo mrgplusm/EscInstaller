@@ -112,17 +112,13 @@ namespace EscInstaller.ViewModel.Connection
             }
         }
 
-        public int Id
-        {
-            get { return 99; }
-        }
+        public int Id => 99;
 
         public static void AddData(IDispatchData data)
         {
             if (data == null) return;
             var con = OpenConnections.FirstOrDefault(d => d.UnitId == data.DestinationAddress);
-            if (con != null)
-                con.Connection.EnQueue(data);
+            con?.Connection.EnQueue(data);
         }
 
         public static void AddData(IEnumerable<IDispatchData> data)
@@ -167,8 +163,7 @@ namespace EscInstaller.ViewModel.Connection
 
         protected virtual void OnConnectionModeChanged(ConnectionModeChangedEventArgs e)
         {
-            var handler = ConnectionModeChanged;
-            if (handler != null) handler(this, e);
+            ConnectionModeChanged?.Invoke(this, e);
         }
 
         public void SetTriggers()

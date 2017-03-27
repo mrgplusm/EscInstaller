@@ -52,15 +52,9 @@ namespace EscInstaller.ViewModel.Connection
         public Common.Connection Connection { get; }
         public ConnectionModel DataModel { get; }
 
-        public bool IsNetwork
-        {
-            get { return DataModel.IsNetConnect; }
-        }
+        public bool IsNetwork => DataModel.IsNetConnect;
 
-        public ConnectType ConnectType
-        {
-            get { return DataModel.IsNetConnect ? ConnectType.Ethernet : ConnectType.USB; }
-        }
+        public ConnectType ConnectType => DataModel.IsNetConnect ? ConnectType.Ethernet : ConnectType.USB;
 
         public int UnitId
         {
@@ -89,14 +83,8 @@ namespace EscInstaller.ViewModel.Connection
             }
         }
 
-        public ConnectMode ConnectMode
-        {
-            get { return Connection.Mode; }
-        }
+        public ConnectMode ConnectMode => Connection.Mode;
 
-        
-
-        
 
         public bool IsInDetailMode
         {
@@ -121,8 +109,7 @@ namespace EscInstaller.ViewModel.Connection
         public bool Equals(ConnectionViewModel other)
         {
             if (ReferenceEquals(null, other)) return false;
-            if (ReferenceEquals(this, other)) return true;
-            return Equals(DataModel, other.DataModel);
+            return ReferenceEquals(this, other) || Equals(DataModel, other.DataModel);
         }
 
         public void EndConnection()
@@ -140,7 +127,7 @@ namespace EscInstaller.ViewModel.Connection
 
         public override int GetHashCode()
         {
-            return (DataModel != null ? DataModel.GetHashCode() : 0);
+            return DataModel?.GetHashCode() ?? 0;
         }
     }
 }
