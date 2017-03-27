@@ -2,11 +2,13 @@
 
 using System.Threading.Tasks;
 using Common;
-using EscInstaller.ViewModel.EscCommunication.Logic;
+using EscInstaller.EscCommunication.Logic;
+using EscInstaller.ViewModel;
+using EscInstaller.ViewModel.EscCommunication.downloadItems;
 
 #endregion
 
-namespace EscInstaller.ViewModel.EscCommunication.downloadItems
+namespace EscInstaller.EscCommunication.downloadItems
 {
     public class PresetNames : EepromToDownload
     {
@@ -15,20 +17,11 @@ namespace EscInstaller.ViewModel.EscCommunication.downloadItems
         {
         }
 
-        public override string ItemName
-        {
-            get { return "Preset Names"; }
-        }
+        public override string ItemName => "Preset Names";
 
-        public override Task Function
-        {
-            get { return DownloaderFactory().GetEeprom(ProgressFactory()); }
-        }
+        public override Task Function => DownloaderFactory().GetEeprom(ProgressFactory());
 
-        protected override E2PromArea Area
-        {
-            get { return E2PromArea.PresetNames; }
-        }
+        protected override E2PromArea Area => E2PromArea.PresetNames;
 
         protected override void Done()
         {

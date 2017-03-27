@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -50,9 +51,9 @@ namespace EscInstaller.ViewModel
             CardsUpdated += (sender, args) => RaisePropertyChanged(() => CanvasSize);
             CardsUpdated += (sender, args) => AddNewCard.RaiseCanExecuteChanged();
             CardsUpdated += (sender, args) => RemoveLastCard.RaiseCanExecuteChanged();
-            
+
             AddNewCard = new RelayCommand(NewCard, () => DataModel.ExpansionCards < 2);
-            RemoveLastCard = new RelayCommand(RemoveCard, (() => DataModel.ExpansionCards > 0));           
+            RemoveLastCard = new RelayCommand(RemoveCard, (() => DataModel.ExpansionCards > 0));
         }
 
 #if DEBUG
@@ -280,8 +281,7 @@ namespace EscInstaller.ViewModel
         public bool Equals(MainUnitViewModel other)
         {
             if (ReferenceEquals(other, null)) return false;
-            if (ReferenceEquals(this, other)) return true;
-            return Id == other.Id;
+            return ReferenceEquals(this, other) || ReferenceEquals(DataModel, other.DataModel);
         }
 
         public int Id
@@ -327,10 +327,6 @@ namespace EscInstaller.ViewModel
         {
             RaisePropertyChanged(() => Name);
         }
-
-
-
-
 
         public event EventHandler MonitorSliderUpdated;
 

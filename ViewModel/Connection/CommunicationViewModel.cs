@@ -18,6 +18,7 @@ namespace EscInstaller.ViewModel.Connection
     public interface ITabControl
     {
         int Id { get; }
+      
     }
 
     public class CommunicationViewModel : ViewModelBase, ITabControl

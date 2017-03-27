@@ -45,7 +45,6 @@ namespace EscInstaller.ViewModel
     public class MainViewModel : ViewModelBase
     {
         private readonly RecentFilesLogic _recentFilesLogic;
-        private readonly ObservableCollection<ITabControl> _tabs = new ObservableCollection<ITabControl>();
         private ITabControl _selectedTab;
 
         public MainViewModel()
@@ -73,14 +72,15 @@ namespace EscInstaller.ViewModel
             var dispThread = Thread.CurrentThread;
             Dispatcher.FromThread(dispThread);
 
-
-            _tabs.Add(Communication);
+            TabCollection = new ObservableCollection<ITabControl> {Communication};
+           
 
 
 #if DEBUG
             if (IsInDesignMode)
             {
                 LibraryData.CreateEmptySystem();
+                TabCollection.Add(new MainUnitViewModel(LibraryData.EmptyEsc(0), this));
             }
             else
             {
@@ -146,15 +146,7 @@ namespace EscInstaller.ViewModel
 
         public ObservableCollection<ITabControl> TabCollection
         {
-            get
-            {
-                if (IsInDesignMode)
-                {
-                    _tabs.Add(new MainUnitViewModel(LibraryData.EmptyEsc(0), this));
-                }
-
-                return _tabs;
-            }
+            get; 
         }
 
         public ObservableCollection<MenuItem> RecentFiles { get; } = new ObservableCollection<MenuItem>();
@@ -489,12 +481,12 @@ namespace EscInstaller.ViewModel
 
             TabCollection.Clear();
           
-
             foreach (var m in LibraryData.FuturamaSys.MainUnits) TabCollection.Add(MainUnitFactory(m));
             SelectedTab = TabCollection.FirstOrDefault(i => i.Id == 0);
 
             TabCollection.Add(PanelViewFactory);
-            TabCollection.Add(Communication);
+            TabCollection.Add(Communication); 
+
         }
 
         private MainUnitViewModel MainUnitFactory(MainUnitModel m)
@@ -556,13 +548,23 @@ namespace EscInstaller.ViewModel
             FileName = filename;
 
             LibraryData.OpenSystem(t);
+            _recentFilesLogic.AddFile(filename);
+            UpdateGraphics();
+        }
 
+        void UpdateGraphics()
+        {
             Communication.UpdateConnections();
             RaisePropertyChanged(() => InstallerVersion);
-            _recentFilesLogic.AddFile(filename);
+
             AddMainUnitsToTab();
             AddConnections();
-            SelectedTab = TabCollection.FirstOrDefault(i => i.Id == 0);
+             
+            var master = TabCollection.OfType<MainUnitViewModel>().FirstOrDefault(i => i.Id == 0);
+            SelectedTab = master;
+     
+            master?.UpdateHardware();
+            master?.OnPresetNamesUpdated();
         }
 
         public void AddConnections()
