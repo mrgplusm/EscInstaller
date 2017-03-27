@@ -412,7 +412,10 @@ namespace EscInstaller.View {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The choosen speaker requires {0} bands, while there is only space for {1} bands.
+        ///   Looks up a localized string similar to The chosen speaker EQ requires {0} biquads (possibly due to a 4th or higher order filter, requiring 2 biquads).
+        ///
+        ///This EQ has space for {1} biquads; change EQ parameters and save as a custom EQ in the library then select this new EQ to upload.
+        ///    .
         /// </summary>
         public static string NotEnoughSpaceWarning {
             get {

@@ -243,7 +243,10 @@
     <value>Close</value>
   </data>
   <data name="NotEnoughSpaceWarning" xml:space="preserve">
-    <value>The choosen speaker requires {0} bands, while there is only space for {1} bands</value>
+    <value>The chosen speaker EQ requires {0} biquads (possibly due to a 4th or higher order filter, requiring 2 biquads).
+
+This EQ has space for {1} biquads; change EQ parameters and save as a custom EQ in the library then select this new EQ to upload.
+    </value>
   </data>
   <data name="NotEnoughSpaceWarningTitle" xml:space="preserve">
     <value>Not enough dsp biquads</value>
