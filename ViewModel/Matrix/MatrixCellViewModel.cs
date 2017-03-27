@@ -175,7 +175,7 @@ namespace EscInstaller.ViewModel.Matrix
                 return;
             }
 
-            if (e.ColumnSelection || (_broadCastMessage != e.NewValue && e.FlowId == Cell.FlowId && e.ButtonId == Cell.ButtonId))
+            if (e.ColumnSelection && _broadCastMessage != e.NewValue && e.ButtonId == Cell.ButtonId)
             {
                 _broadCastMessage = e.NewValue;
                 RaisePropertyChanged(() => BroadCastMessage);
