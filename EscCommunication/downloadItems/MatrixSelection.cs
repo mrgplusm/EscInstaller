@@ -2,11 +2,14 @@
 
 using System.Threading.Tasks;
 using Common;
+using EscInstaller.EscCommunication.Logic;
+using EscInstaller.ViewModel;
+using EscInstaller.ViewModel.EscCommunication.downloadItems;
 using EscInstaller.ViewModel.EscCommunication.Logic;
 
 #endregion
 
-namespace EscInstaller.ViewModel.EscCommunication.downloadItems
+namespace EscInstaller.EscCommunication.downloadItems
 {
     public class MatrixSelection : EepromToDownload
     {
@@ -15,20 +18,11 @@ namespace EscInstaller.ViewModel.EscCommunication.downloadItems
         {
         }
 
-        public override string ItemName
-        {
-            get { return "Matrix selection"; }
-        }
+        public override string ItemName => "Matrix selection";
 
-        public override Task Function
-        {
-            get { return DownloaderFactory().GetEeprom(ProgressFactory()); }
-        }
+        public override Task Function => DownloaderFactory().GetEeprom(ProgressFactory());
 
-        protected override E2PromArea Area
-        {
-            get { return E2PromArea.RoutingTable; }
-        }
+        protected override E2PromArea Area => E2PromArea.RoutingTable;
 
         protected override void Done()
         {

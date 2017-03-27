@@ -17,7 +17,7 @@ namespace EscInstaller.ViewModel.Connection
 {
     public class ConnectionViewModel : ViewModelBase, IEquatable<ConnectionViewModel>
     {
-        private ObservableCollection<DispatchDataViewModel> _changelist;
+        
         private string _errorInfo;
         private ObservableCollection<string> _ports;
         private int _unitId = -1;
@@ -94,38 +94,9 @@ namespace EscInstaller.ViewModel.Connection
             get { return Connection.Mode; }
         }
 
-        public ICommand ClearChangeList
-        {
-            get
-            {
-                return new RelayCommand(() =>
-                {
-                    foreach (var source in ChangeList.ToList())
-                    {
-                        source.Remove();
-                    }
+        
 
-                    ChangeList.Clear();
-                });
-            }
-        }
-
-        public ObservableCollection<DispatchDataViewModel> ChangeList
-        {
-            get { return _changelist ?? (_changelist = new ObservableCollection<DispatchDataViewModel>()); }
-        }
-
-        public ICommand RemoveData
-        {
-            get
-            {
-                return new RelayCommand<DispatchDataViewModel>(data =>
-                {
-                    data.Remove();
-                    ChangeList.Remove(data);
-                });
-            }
-        }
+        
 
         public bool IsInDetailMode
         {

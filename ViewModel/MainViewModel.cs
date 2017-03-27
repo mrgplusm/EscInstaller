@@ -482,12 +482,12 @@ namespace EscInstaller.ViewModel
         /// <summary>
         ///     Adds al the mainunits and the matrix tab
         /// </summary>
-        private async void AddMainUnitsToTab()
+        private void AddMainUnitsToTab()
         {
             if (!LibraryData.SystemIsOpen) return;
 
             TabCollection.Clear();
-            await Task.Delay(150);
+          
 
             foreach (var m in LibraryData.FuturamaSys.MainUnits) TabCollection.Add(MainUnitFactory(m));
             SelectedTab = TabCollection.FirstOrDefault(i => i.Id == 0);
@@ -583,14 +583,14 @@ namespace EscInstaller.ViewModel
         {
             if (!LibraryData.SystemIsOpen) return true;
 
-#if !DEBUG
+
             if (!IsInDesignMode)
             {
                 var qq = new SystemFileSaveAsk();
                 if (!qq.Save())
                     return false;
             }
-#endif
+
 
             LibraryData.CloseProject();
             TabCollection.RemoveAll(q => q is MainUnitViewModel || q is PanelViewModel);

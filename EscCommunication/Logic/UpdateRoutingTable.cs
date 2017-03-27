@@ -5,10 +5,12 @@ using System.Linq;
 using Common;
 using Common.Commodules;
 using Common.Model;
+using EscInstaller.ViewModel;
+using EscInstaller.ViewModel.EscCommunication.Logic;
 
 #endregion
 
-namespace EscInstaller.ViewModel.EscCommunication.Logic
+namespace EscInstaller.EscCommunication.Logic
 {
     internal class UpdateRoutingTable : EepromDataHandler
     {
@@ -46,8 +48,6 @@ namespace EscInstaller.ViewModel.EscCommunication.Logic
                 }
             }
             Main.OnRoutingTableUpdated();
-        }
-
-        
+        }        
     }
 }

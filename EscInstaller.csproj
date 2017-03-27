@@ -270,7 +270,6 @@
     <Compile Include="ViewModel\CardViewModel.cs" />
     <Compile Include="ViewModel\Connection\CommunicationViewModel.cs" />
     <Compile Include="ViewModel\Connection\ConnectionViewModel.cs" />
-    <Compile Include="ViewModel\Connection\DispatchDataViewModel.cs" />
     <Compile Include="ViewModel\ErrorLineModel.cs" />
     <Compile Include="ViewModel\ExtensionCardViewModel.cs" />
     <Compile Include="ViewModel\IndependentDictionar.cs" />

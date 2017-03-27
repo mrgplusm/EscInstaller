@@ -1,5 +1,6 @@
 ﻿#region
 
+using EscInstaller.EscCommunication.downloadItems;
 using EscInstaller.ViewModel.EscCommunication.downloadItems;
 using EscInstaller.ViewModel.EscCommunication.UploadItem;
 

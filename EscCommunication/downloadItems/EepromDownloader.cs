@@ -11,7 +11,7 @@ using EscInstaller.ViewModel.EscCommunication.Logic;
 
 #endregion
 
-namespace EscInstaller.ViewModel.EscCommunication.downloadItems
+namespace EscInstaller.EscCommunication.downloadItems
 {
     public class EepromDownloader
     {
