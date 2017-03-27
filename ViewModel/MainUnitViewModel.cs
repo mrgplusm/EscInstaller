@@ -34,8 +34,7 @@ namespace EscInstaller.ViewModel
         private DiagramData _selectedObject;
         public Action DelayChanged;
         public Action ExtinputUpdate;
-        private IntervalSettingsViewModel v;
-        private double _canvasSize;
+        private IntervalSettingsViewModel _v;
 
         public MainUnitViewModel(MainUnitModel mainUnit, MainViewModel main)
         {
@@ -43,13 +42,17 @@ namespace EscInstaller.ViewModel
             DataModel = mainUnit;
             _main = main;
             main.SystemChanged += UpdateName;
-
             VuMeter = new VuMeter(this);
             AlarmMessages = new AlarmMessagesViewModel(this);
 
             UpdateConnectionMode();
             UpdateLineLinks();
             CardsUpdated += (sender, args) => RaisePropertyChanged(() => CanvasSize);
+            CardsUpdated += (sender, args) => AddNewCard.RaiseCanExecuteChanged();
+            CardsUpdated += (sender, args) => RemoveLastCard.RaiseCanExecuteChanged();
+            
+            AddNewCard = new RelayCommand(NewCard, () => DataModel.ExpansionCards < 2);
+            RemoveLastCard = new RelayCommand(RemoveCard, (() => DataModel.ExpansionCards > 0));           
         }
 
 #if DEBUG
@@ -131,15 +134,9 @@ namespace EscInstaller.ViewModel
             }
         }
 
-        public List<SpeakerDataModel> SpeakerDataModels
-        {
-            get { return DataModel.SpeakerDataModels; }
-        }
+        public List<SpeakerDataModel> SpeakerDataModels => DataModel.SpeakerDataModels;
 
-        public List<byte> DspCopy
-        {
-            get { return DataModel.DspCopy; }
-        }
+        public List<byte> DspCopy => DataModel.DspCopy;
 
         public bool E2PromUpdateVisible
         {
@@ -150,112 +147,105 @@ namespace EscInstaller.ViewModel
             }
         }
 
-        public ICommand AddNewCard
+
+
+        public RelayCommand AddNewCard { get; }
+
+        private void NewCard()
         {
-            get
+            if (DataModel.ExpansionCards > 1)
+                return;
+            DataModel.ExpansionCards++;
+
+            NewCardUnits();
+
+            OnCardsUpdated(new MainUnitUpdatedEventArgs() { MainUnit = DataModel });
+        }
+
+        private void NewCardUnits()
+        {
+            DiagramObjects.OfType<BlLink>().First().Cards(DataModel.ExpansionCards);
+
+            foreach (var n in DiagramObjects.OfType<BlExtInput>())
             {
-                return new RelayCommand(
-                    () =>
-                    {
-                        if (DataModel.ExpansionCards > 1)
-                            return;
-                        DataModel.ExpansionCards++;
-
-                        DiagramObjects.OfType<BlLink>().First().Cards(DataModel.ExpansionCards);
-
-                        foreach (var n in DiagramObjects.OfType<BlExtInput>())
-                        {
-                            n.SetYLocation();
-                        }
-                        foreach (var n in DiagramObjects.OfType<BlInputPeq>())
-                        {
-                            n.SetYLocation();
-                        }
+                n.SetYLocation();
+            }
+            foreach (var n in DiagramObjects.OfType<BlInputPeq>())
+            {
+                n.SetYLocation();
+            }
 
 
-                        DiagramObjects.OfType<BlEmergency>().First().SetYLocation();
+            DiagramObjects.OfType<BlEmergency>().First().SetYLocation();
 
-                        var lst =
-                            GenDiagramObjects(DataModel.Cards.First(i => i.Id == DataModel.ExpansionCards)).ToArray();
-                        foreach (var n in lst)
-                        {
-                            DiagramObjects.Add(n);
-                        }
-                        OnCardsUpdated(new MainUnitUpdatedEventArgs() { MainUnit = DataModel });
-                    },
-                    () => DataModel.ExpansionCards < 2);
+            var lst =
+                GenDiagramObjects(DataModel.Cards.First(i => i.Id == DataModel.ExpansionCards)).ToArray();
+            foreach (var n in lst)
+            {
+                DiagramObjects.Add(n);
             }
         }
 
-
-
-        public ICommand RemoveLastCard
+        private void RemoveCardUnits()
         {
-            get
+            DiagramObjects.OfType<BlLink>().First().Cards(DataModel.ExpansionCards);
+
+            foreach (var n in DiagramObjects.OfType<BlExtInput>())
             {
-                return new RelayCommand(() =>
-                {
-                    DataModel.ExpansionCards--;
-                    DiagramObjects.OfType<BlLink>().First().Cards(DataModel.ExpansionCards);
+                n.SetYLocation();
+            }
+            foreach (var n in DiagramObjects.OfType<BlInputPeq>())
+            {
+                n.SetYLocation();
+            }
 
-                    foreach (var n in DiagramObjects.OfType<BlExtInput>())
-                    {
-                        n.SetYLocation();
-                    }
-                    foreach (var n in DiagramObjects.OfType<BlInputPeq>())
-                    {
-                        n.SetYLocation();
-                    }
+            DiagramObjects.OfType<BlEmergency>().First().SetYLocation();
 
-                    DiagramObjects.OfType<BlEmergency>().First().SetYLocation();
+            var removelist = new List<DiagramData>();
+            removelist.AddRange(
+                DiagramObjects.OfType<BlInputName>().Where(s => s.Id % 12 / 4 > DataModel.ExpansionCards));
+            removelist.AddRange(
+                DiagramObjects.OfType<BlSpeakerPeq>().Where(s => s.Id % 12 / 4 > DataModel.ExpansionCards));
+            removelist.AddRange(
+                DiagramObjects.OfType<BlMonitor>().Where(s => s.Id % 12 / 4 > DataModel.ExpansionCards));
+            removelist.AddRange(
+                DiagramObjects.OfType<BlOutput>().Where(s => s.Id % 12 / 4 > DataModel.ExpansionCards));
+            removelist.AddRange(
+                DiagramObjects.OfType<BlSpeaker>().Where(s => s.Id % 12 / 4 > DataModel.ExpansionCards));
+            removelist.AddRange(
+                DiagramObjects.OfType<BlAmplifier>().Where(s => s.Id % 12 / 4 > DataModel.ExpansionCards));
 
-                    var removelist = new List<DiagramData>();
-                    removelist.AddRange(
-                        DiagramObjects.OfType<BlInputName>().Where(s => s.Id % 12 / 4 > DataModel.ExpansionCards));
-                    removelist.AddRange(
-                        DiagramObjects.OfType<BlSpeakerPeq>().Where(s => s.Id % 12 / 4 > DataModel.ExpansionCards));
-                    removelist.AddRange(
-                        DiagramObjects.OfType<BlMonitor>().Where(s => s.Id % 12 / 4 > DataModel.ExpansionCards));
-                    removelist.AddRange(
-                        DiagramObjects.OfType<BlOutput>().Where(s => s.Id % 12 / 4 > DataModel.ExpansionCards));
-                    removelist.AddRange(
-                        DiagramObjects.OfType<BlSpeaker>().Where(s => s.Id % 12 / 4 > DataModel.ExpansionCards));
-                    removelist.AddRange(
-                        DiagramObjects.OfType<BlAmplifier>().Where(s => s.Id % 12 / 4 > DataModel.ExpansionCards));
-
-                    removelist.AddRange(
-                        DiagramObjects.OfType<BlAuxSpeakerPeq>().Where(s => s.Id > DataModel.ExpansionCards));
-                    removelist.AddRange(DiagramObjects.OfType<BlAuxiliary>().Where(s => s.Id > DataModel.ExpansionCards));
-                    removelist.AddRange(DiagramObjects.OfType<BlBackupAmp>().Where(s => s.Id > DataModel.ExpansionCards));
-                    removelist.AddRange(DiagramObjects.OfType<BlSpMatrix>().Where(s => s.Id > DataModel.ExpansionCards));
+            removelist.AddRange(
+                DiagramObjects.OfType<BlAuxSpeakerPeq>().Where(s => s.Id > DataModel.ExpansionCards));
+            removelist.AddRange(DiagramObjects.OfType<BlAuxiliary>().Where(s => s.Id > DataModel.ExpansionCards));
+            removelist.AddRange(DiagramObjects.OfType<BlBackupAmp>().Where(s => s.Id > DataModel.ExpansionCards));
+            removelist.AddRange(DiagramObjects.OfType<BlSpMatrix>().Where(s => s.Id > DataModel.ExpansionCards));
 
 
-                    foreach (var d in removelist.OfType<SnapDiagramData>())
-                    {
-                        d.RemoveChildren();
-                    }
+            foreach (var d in removelist.OfType<SnapDiagramData>())
+            {
+                d.RemoveChildren();
+            }
 
-                    foreach (var diagramData in removelist)
-                    {
-                        DiagramObjects.Remove(diagramData);
-                    }
-                    OnCardsUpdated(new MainUnitUpdatedEventArgs() { MainUnit = DataModel });
-                }, (() => DataModel.ExpansionCards > 0));
+            foreach (var diagramData in removelist)
+            {
+                DiagramObjects.Remove(diagramData);
             }
         }
 
-        public string DisplayValue
+        private void RemoveCard()
         {
-            get { return (Id < 1) ? Main._mainMaster : string.Format(Main._mainSlave, Id); }
+            DataModel.ExpansionCards--;
+            RemoveCardUnits();
+            OnCardsUpdated(new MainUnitUpdatedEventArgs() { MainUnit = DataModel });
+
         }
 
-        public ObservableCollection<DiagramData> DiagramObjects
-        {
-            get
-            {
-                return _diagramObjects ?? (_diagramObjects = new ObservableCollection<DiagramData>(GenDiagramObjects()));
-            }
-        }
+        public RelayCommand RemoveLastCard { get; }
+
+        public string DisplayValue => (Id < 1) ? Main._mainMaster : string.Format(Main._mainSlave, Id);
+
+        public ObservableCollection<DiagramData> DiagramObjects => _diagramObjects ?? (_diagramObjects = new ObservableCollection<DiagramData>(GenDiagramObjects()));
 
         public ICommand ButtonFinished
         {
@@ -346,13 +336,12 @@ namespace EscInstaller.ViewModel
 
         private void OnMonitorSliderUpdated()
         {
-            var handler = MonitorSliderUpdated;
-            if (handler != null) handler(this, EventArgs.Empty);
+            MonitorSliderUpdated?.Invoke(this, EventArgs.Empty);
         }
 
         public void OpenMeasurementSettings()
         {
-            SelectedObject = (v ?? (v = new IntervalSettingsViewModel(this)));
+            SelectedObject = (_v ?? (_v = new IntervalSettingsViewModel(this)));
         }
 
         public override bool Equals(object obj)
@@ -408,7 +397,7 @@ namespace EscInstaller.ViewModel
                 DataModel.Cards.Take(DataModel.ExpansionCards + 1)
                     .Concat(DataModel.Cards.OfType<ExtensionCardModel>());
 
-            ret.AddRange(cards.SelectMany(model => GenDiagramObjects(model)));
+            ret.AddRange(cards.SelectMany(GenDiagramObjects));
 
             return ret;
         }
@@ -669,24 +658,21 @@ namespace EscInstaller.ViewModel
 
         private void OnCardsUpdated(MainUnitUpdatedEventArgs e)
         {
-            var handler = CardsUpdated;
-            if (handler != null) handler(this, e);
+            CardsUpdated?.Invoke(this, e);
         }
 
         public event EventHandler SdCardMessagesReceived;
 
         public void OnSdCardMessagesReceived()
         {
-            var handler = SdCardMessagesReceived;
-            if (handler != null) handler(this, EventArgs.Empty);
+            SdCardMessagesReceived?.Invoke(this, EventArgs.Empty);
         }
 
         public event EventHandler SdCardPositionsReceived;
 
         public void OnSdCardPositionsReceived()
         {
-            var handler = SdCardPositionsReceived;
-            if (handler != null) handler(this, EventArgs.Empty);
+            SdCardPositionsReceived?.Invoke(this, EventArgs.Empty);
         }
 
         public event EventHandler KreisUpdated;
@@ -700,32 +686,28 @@ namespace EscInstaller.ViewModel
 
         public void OnRedundancyUpdated()
         {
-            var handler = RedundancyUpdated;
-            if (handler != null) handler(this, EventArgs.Empty);
+            RedundancyUpdated?.Invoke(this, EventArgs.Empty);
         }
 
         public event EventHandler RoutingTableUpdated;
 
         public void OnRoutingTableUpdated()
         {
-            var handler = RoutingTableUpdated;
-            if (handler != null) handler(this, EventArgs.Empty);
+            RoutingTableUpdated?.Invoke(this, EventArgs.Empty);
         }
 
         public event EventHandler PresetNamesUpdated;
 
         public void OnPresetNamesUpdated()
         {
-            var handler = PresetNamesUpdated;
-            if (handler != null) handler(this, EventArgs.Empty);
+            PresetNamesUpdated?.Invoke(this, EventArgs.Empty);
         }
 
         public event EventHandler DspMirrorUpdated;
 
         public void OnDspMirrorUpdated()
         {
-            var handler = DspMirrorUpdated;
-            if (handler != null) handler(this, EventArgs.Empty);
+            DspMirrorUpdated?.Invoke(this, EventArgs.Empty);
         }
     }
 

@@ -6,7 +6,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModel="clr-namespace:EscInstaller.ViewModel"
              xmlns:escCommunication="clr-namespace:EscInstaller.ViewModel.EscCommunication"
-             d:DataContext="{d:DesignInstance Type=escCommunication:ReceiveData , IsDesignTimeCreatable=true}">
+             xmlns:escCommunication1="clr-namespace:EscInstaller.EscCommunication"
+             d:DataContext="{d:DesignInstance Type=escCommunication1:ReceiveData , IsDesignTimeCreatable=true}">
     <UserControl.Resources>
 
         <Style TargetType="DataGridRow">

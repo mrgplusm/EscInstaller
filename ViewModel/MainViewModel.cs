@@ -18,6 +18,7 @@ using System.Windows.Threading;
 using Common;
 using Common.Commodules;
 using Common.Model;
+using EscInstaller.EscCommunication;
 using EscInstaller.ImportSpeakers;
 using EscInstaller.UserControls;
 using EscInstaller.View.Communication;

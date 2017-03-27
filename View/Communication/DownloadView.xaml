@@ -8,11 +8,12 @@
         xmlns:view="clr-namespace:EscInstaller.View"
         xmlns:escCommunication="clr-namespace:EscInstaller.ViewModel.EscCommunication"
         xmlns:communication="clr-namespace:EscInstaller.View.Communication"
+        xmlns:escCommunication1="clr-namespace:EscInstaller.EscCommunication"
         SizeToContent="WidthAndHeight"
         ResizeMode="NoResize"
         Name="DownloadWindow"
         
-        d:DataContext="{d:DesignInstance Type=escCommunication:ReceiveData , IsDesignTimeCreatable=true}">
+        d:DataContext="{d:DesignInstance Type=escCommunication1:ReceiveData , IsDesignTimeCreatable=true}">
     <Window.Resources>
         <RoutedUICommand x:Key="Cclose" />
         <RoutedUICommand x:Key="Download"  />

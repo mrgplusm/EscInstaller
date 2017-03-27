@@ -2,11 +2,13 @@
 
 using System.Collections.ObjectModel;
 using EscInstaller.EscCommunication.downloadItems;
+using EscInstaller.ViewModel;
+using EscInstaller.ViewModel.EscCommunication;
 using EscInstaller.ViewModel.EscCommunication.downloadItems;
 
 #endregion
 
-namespace EscInstaller.ViewModel.EscCommunication
+namespace EscInstaller.EscCommunication
 {
     public class ReceiveData : Downloader
     {
