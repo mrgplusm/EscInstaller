@@ -3,10 +3,12 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using Common;
+using EscInstaller.ViewModel;
+using EscInstaller.ViewModel.EscCommunication;
 
 #endregion
 
-namespace EscInstaller.ViewModel.EscCommunication
+namespace EscInstaller.EscCommunication
 {
     public class CommunicationSend : CommunicationBase
     {

@@ -1,6 +1,7 @@
 #region
 
 using System.Threading.Tasks;
+using EscInstaller.EscCommunication;
 using EscInstaller.ViewModel.EscCommunication.Logic;
 
 #endregion

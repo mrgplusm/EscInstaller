@@ -2,12 +2,13 @@
 
 using System;
 using System.Threading.Tasks;
+using EscInstaller.ViewModel;
 using EscInstaller.ViewModel.EscCommunication.Logic;
 using GalaSoft.MvvmLight;
 
 #endregion
 
-namespace EscInstaller.ViewModel.EscCommunication
+namespace EscInstaller.EscCommunication
 {
     public abstract class ItemtoDownload : ViewModelBase, IProgress<DownloadProgress>
     {
