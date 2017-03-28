@@ -1,52 +1,43 @@
 #region
 
+using System;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using EscInstaller.EscCommunication.downloadItems;
+using EscInstaller.EscCommunication.Logic;
 using EscInstaller.ViewModel;
 
 #endregion
 
 namespace EscInstaller.EscCommunication
 {
-    public class ReceiveData : Downloader
+    public class DownloadData : DownloadNode
     {
+        private string _value1;
+        protected MainUnitViewModel Main { get;  }
 #if DEBUG
-        public ReceiveData()
-            : base(new MainUnitViewModel())
+        public DownloadData()
+            : base()
         {
-            DataChilds = new ObservableCollection<IDownloadableItem>();
+            DataChilds = new ObservableCollection<IDownloadNode>();
             for (var i = 0; i < 2; i++)
             {
-                DataChilds.Add(new Dsp(Main)); 
+                DataChilds.Add(new Dsp(new MainUnitViewModel())); 
             }
         }
 #endif
 
-        public ReceiveData(MainUnitViewModel main)
-            : base(main)
+        public DownloadData(MainUnitViewModel main)
         {
-            PopulateItems();
-            foreach (var itemtoDownload in DataChilds)
-            {
-                AttachHandler((ItemtoDownload)itemtoDownload);
-            }
+            Main = main;         
+            _value1 = main.DisplayValue;
         }
 
-        protected void PopulateItems()
+        public override string Value
         {
-            DataChilds.Add(new Dsp(Main));
-            DataChilds.Add(new SpeakerRedundancy(Main));
+            get { return _value1; }
+            set { _value1 = value; }
+        }        
 
-            DataChilds.Add(new InstalledPanels(Main));
-            DataChilds.Add(new CalibrationData(Main));
-            DataChilds.Add(new PresetNames(Main));
-            DataChilds.Add(new MatrixSelection(Main));
-            DataChilds.Add(new Sensitivity(Main));
-            DataChilds.Add(new Hardware(Main));
-
-            if (Main.Id != 0) return;
-            DataChilds.Add(new SdMessages(Main));
-            DataChilds.Add(new SdSelection(Main));
-        }
     }
 }

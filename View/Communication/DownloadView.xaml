@@ -14,14 +14,14 @@
         d:DataContext="{d:DesignInstance Type=escCommunication1:Communication, IsDesignTimeCreatable=true}">
     <Window.Resources>
         <RoutedUICommand x:Key="Cclose" />
-        <RoutedUICommand x:Key="Download"  />
+        <RoutedUICommand x:Key="DownloadCommand"   />
     </Window.Resources>
     <Window.CommandBindings>
         <CommandBinding Command="{StaticResource Cclose}" Executed="CommandBinding_OnExecuted" />
         
     </Window.CommandBindings>
     <Window.InputBindings>
-        <KeyBinding Key="Enter" Command="{Binding Path=StartDownload}" />
+        <KeyBinding Key="Enter" Command="{StaticResource DownloadCommand}" />
         <KeyBinding Key="Escape" Command="{StaticResource Cclose}" />
     </Window.InputBindings>
     <StackPanel Background="{Binding Background}">
@@ -29,30 +29,21 @@
 
         <TreeView ItemsSource="{Binding DataChilds}" Background="{Binding Path=Background}">
             <TreeView.ItemTemplate>
-                <HierarchicalDataTemplate ItemsSource="{Binding DataChilds}" DataType="{x:Type escCommunication1:IDownloadableItem}" >
+                <HierarchicalDataTemplate ItemsSource="{Binding DataChilds}" DataType="{x:Type escCommunication1:IDownloadNode}" >
                     <StackPanel Orientation="Horizontal" >
                         <Image Source="../../Icons/check.png" Width="15" Height="15">
                             <Image.Style>
                                 <Style TargetType="{x:Type Image}">
                                     <Setter Property="Visibility" Value="Hidden" />
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding Path=Completed}" Value="True">
+                                        <DataTrigger Binding="{Binding Path=IsCompleted}" Value="True">
                                             <Setter Property="Visibility" Value="Visible" />
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
                             </Image.Style>
                         </Image>
-                        <CheckBox Content="{Binding Path=Value}" Width="140" IsChecked="{Binding Path=Checked}"
-                                  Margin="1" >
-                            <CheckBox.Style>
-                                <Style TargetType="{x:Type CheckBox}">
-                                    <Setter Property="Foreground" Value="Black"/>
-                                    <Setter Property="Visibility" Value="Visible"/>
-
-                                </Style>
-                            </CheckBox.Style>
-                        </CheckBox>
+                        <CheckBox Content="{Binding Path=Value}" Width="140" IsChecked="{Binding Path=IsChecked}" Margin="1" />
                         <ProgressBar Minimum="0" Maximum="100" Value="{Binding Path=ProgressBar, Mode=OneWay}"
                                      Width="70" Margin="3,0,0,0" />
                     </StackPanel>
@@ -62,7 +53,7 @@
         </TreeView>
 
         <StackPanel Orientation="Horizontal">
-            <Button Content="Start" Width="90" Command="{Binding Path=StartDownload}" />
+            <Button Content="Start" Width="90" Command="{Binding Path=DownloadCommand}" />
             <Button Content="Close" Width="90" Command="{StaticResource Cclose}" />
         </StackPanel>
 

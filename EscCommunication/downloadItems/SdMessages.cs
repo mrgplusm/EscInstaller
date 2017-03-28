@@ -8,7 +8,7 @@ using EscInstaller.ViewModel;
 
 namespace EscInstaller.EscCommunication.downloadItems
 {
-    public class SdMessages : ItemtoDownload
+    public class SdMessages : DownloadData
     {
         public SdMessages(MainUnitViewModel main)
             : base(main)

@@ -8,7 +8,7 @@ using EscInstaller.ViewModel;
 
 namespace EscInstaller.EscCommunication.UploadItem
 {
-    internal class ToneControl : ItemtoDownload
+    internal class ToneControl : DownloadData
     {
         public ToneControl(MainUnitViewModel main)
             : base(main)

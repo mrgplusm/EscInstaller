@@ -1,5 +1,6 @@
 ﻿#region
 
+using System.Threading.Tasks;
 using EscInstaller.EscCommunication.downloadItems;
 using EscInstaller.EscCommunication.UploadItem;
 using EscInstaller.ViewModel;
@@ -8,33 +9,22 @@ using EscInstaller.ViewModel;
 
 namespace EscInstaller.EscCommunication
 {
-    public class SendData : Downloader
+    public class Upload : DownloadNode
     {
-        public SendData(MainUnitViewModel main) : base(main)
+        private readonly MainUnitViewModel _main;
+        private string _value1;
+
+        public Upload(MainUnitViewModel main)
         {
-            PopulateItems();
-            foreach (var itemtoDownload in DataChilds)
-            {
-                AttachHandler((ItemtoDownload)
-                    itemtoDownload);
-            }
+            _main = main;
+            
+            _value1 = main.DisplayValue;
         }
 
-        protected void PopulateItems()
+        public override string Value
         {
-            DataChilds.Add(new Auxlinks(Main));
-            DataChilds.Add(new Delaysettings(Main));
-            DataChilds.Add(new InputSensitivity(Main));
-            DataChilds.Add(new Linelinks(Main));
-
-            DataChilds.Add(new MatrixSelection(Main));
-            DataChilds.Add(new Messageselection(Main));
-            DataChilds.Add(new Peqpresetnames(Main));
-            DataChilds.Add(new InOutNames(Main));
-
-            DataChilds.Add(new PeqData(Main));
-            DataChilds.Add(new GainSliders(Main));
-            DataChilds.Add(new ToneControl(Main));
-        }
+            get { return _value1; }
+            set { _value1 = value; }
+        }             
     }
 }

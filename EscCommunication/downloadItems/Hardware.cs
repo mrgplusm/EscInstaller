@@ -8,7 +8,7 @@ using EscInstaller.ViewModel;
 
 namespace EscInstaller.EscCommunication.downloadItems
 {
-    public class Hardware : ItemtoDownload
+    public class Hardware : DownloadData
     {
         public Hardware(MainUnitViewModel main)
             : base(main)

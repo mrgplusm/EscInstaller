@@ -8,7 +8,7 @@ using EscInstaller.ViewModel;
 
 namespace EscInstaller.EscCommunication.UploadItem
 {
-    internal class Messageselection : ItemtoDownload
+    internal class Messageselection : DownloadData
     {
         public Messageselection(MainUnitViewModel main)
             : base(main)

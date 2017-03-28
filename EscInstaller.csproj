@@ -164,8 +164,9 @@
     <Compile Include="Converters\IsMainUnitConverter.cs" />
     <Compile Include="Converters\LinkClrCnvrt.cs" />
     <Compile Include="Converters\PointsCnvtr.cs" />
+    <Compile Include="EscCommunication\NodeUpdatedEventArgs.cs" />
     <Compile Include="EscCommunication\Communication.cs" />
-    <Compile Include="EscCommunication\Downloader.cs" />
+    <Compile Include="EscCommunication\DownloadNode.cs" />
     <Compile Include="EscCommunication\downloadItems\CalibrationData.cs" />
     <Compile Include="EscCommunication\downloadItems\DspDownload.cs" />
     <Compile Include="EscCommunication\downloadItems\EepromDownloader.cs" />
@@ -178,8 +179,7 @@
     <Compile Include="EscCommunication\downloadItems\SdSelection.cs" />
     <Compile Include="EscCommunication\downloadItems\Sensitivity.cs" />
     <Compile Include="EscCommunication\downloadItems\SpeakerRedundancy.cs" />
-    <Compile Include="EscCommunication\IDownloadableItem.cs" />
-    <Compile Include="EscCommunication\ItemtoDownload.cs" />
+    <Compile Include="EscCommunication\IDownloadNode.cs" />
     <Compile Include="EscCommunication\Logic\AuxLinker.cs" />
     <Compile Include="EscCommunication\Logic\DelayUpdater.cs" />
     <Compile Include="EscCommunication\Logic\DeviationUpdater.cs" />

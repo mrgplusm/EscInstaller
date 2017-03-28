@@ -8,7 +8,7 @@ using EscInstaller.ViewModel;
 
 namespace EscInstaller.EscCommunication.UploadItem
 {
-    internal class PeqData : ItemtoDownload
+    internal class PeqData : DownloadData
     {
         public PeqData(MainUnitViewModel main) : base(main)
         {

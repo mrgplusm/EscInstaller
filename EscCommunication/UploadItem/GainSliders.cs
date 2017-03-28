@@ -8,7 +8,7 @@ using EscInstaller.ViewModel;
 
 namespace EscInstaller.EscCommunication.UploadItem
 {
-    internal class GainSliders : ItemtoDownload
+    internal class GainSliders : DownloadData
     {
         public GainSliders(MainUnitViewModel main)
             : base(main)

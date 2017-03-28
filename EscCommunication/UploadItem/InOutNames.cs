@@ -8,7 +8,7 @@ using EscInstaller.ViewModel;
 
 namespace EscInstaller.EscCommunication.UploadItem
 {
-    public class InOutNames : ItemtoDownload
+    public class InOutNames : DownloadData
     {
         public InOutNames(MainUnitViewModel main)
             : base(main)

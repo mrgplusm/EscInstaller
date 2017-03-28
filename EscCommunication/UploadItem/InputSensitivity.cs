@@ -8,7 +8,7 @@ using EscInstaller.ViewModel;
 
 namespace EscInstaller.EscCommunication.UploadItem
 {
-    internal class InputSensitivity : ItemtoDownload
+    internal class InputSensitivity : DownloadData
     {
         public InputSensitivity(MainUnitViewModel main)
             : base(main)

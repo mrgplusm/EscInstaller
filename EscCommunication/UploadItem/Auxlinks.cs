@@ -8,7 +8,7 @@ using EscInstaller.ViewModel;
 
 namespace EscInstaller.EscCommunication.UploadItem
 {
-    internal class Auxlinks : ItemtoDownload
+    internal class Auxlinks : DownloadData
     {
         public Auxlinks(MainUnitViewModel main)
             : base(main)

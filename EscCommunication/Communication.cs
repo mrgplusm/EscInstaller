@@ -1,78 +1,40 @@
 #region
 
-using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Input;
 using System.Windows.Media;
 using Common;
+using EscInstaller.EscCommunication.downloadItems;
+using EscInstaller.EscCommunication.UploadItem;
 using EscInstaller.ViewModel;
-
-using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 
 #endregion
 
 namespace EscInstaller.EscCommunication
 {
-    public class Communication : ViewModelBase, IDownloadableItem
+    public class Communication : DownloadNode
     {
-        private bool _allFromAllSources = true;
-        private bool _downloadFinished;
-
-        private bool IsDownloading
-        {
-            get { return _isDownloading; }
-            set
-            {
-                _isDownloading = value;
-                StartDownload.RaiseCanExecuteChanged();
-            }
-        }
-
-        private string _value;
-        private bool _direction;
-        private Brush _background;
-        private bool _isDownloading;
-
-        public string Value
-        {
-            get { return _value; }
-            set
-            {
-                _value = value;
-                RaisePropertyChanged(() => Value);
-            }
-        }
+        private bool _downloading;
 
         public Communication()
-        {        
-            DataChilds = new ObservableCollection<IDownloadableItem>();
+        {
             SetSend();
+
+            DownloadCommand = new RelayCommand(() =>
+            {
+                StartDownload(DataChilds);
+                _downloading = true;
+                DownloadCommand.RaiseCanExecuteChanged();
+            }, () => !_downloading);
+
+            Completed += CompletedEvent;
         }
 
-        
-        public bool Checked
+        private void CompletedEvent(object sender, NodeUpdatedEventArgs e)
         {
-            get { return _allFromAllSources; }
-            set
-            {
-                _allFromAllSources = value;
-                foreach (var s in DataChilds) s.Checked = value;
-                RaisePropertyChanged(() => Checked);
-            }
-        }
-
-        public bool Completed
-        {
-            get { return _downloadFinished; }
-            set
-            {
-                _downloadFinished = value;
-                if (value)
-                    IsDownloading = false;
-                RaisePropertyChanged(() => Completed);
-            }
+            _downloading = false;
+            DownloadCommand.RaiseCanExecuteChanged();
         }
 
         public bool Direction
@@ -85,41 +47,8 @@ namespace EscInstaller.EscCommunication
                 RaisePropertyChanged(() => Direction);
             }
         }
-
-        private void SetReceive()
-        {
-            Value = "Download";
-            Background = Brushes.Green;
-            foreach (var downloadableItem in DataChilds)
-            {
-                RemoveHandlers((Downloader)downloadableItem);
-            }
-            DataChilds.Clear();
-            ViewModelLocator.Main.PrepaireDesign();
-            foreach (var q in ViewModelLocator.Main.TabCollection.OfType<MainUnitViewModel>()
-                    .Where(d => d.ConnectType != ConnectType.None).Select(esc => new ReceiveData(esc)))
-            {
-                AttachHandlers(q);
-                DataChilds.Add(q);
-            }
-        }
-
-        private void SetSend()
-        {
-            Value = "Upload";
-            Background = Brushes.LightCoral;
-            foreach (var downloadableItem in DataChilds)
-            {
-                RemoveHandlers((Downloader)downloadableItem);
-            }
-            DataChilds.Clear();
-            foreach (var q in ViewModelLocator.Main.TabCollection.OfType<MainUnitViewModel>().ToList()
-                    .Where(d => d.ConnectType != ConnectType.None).Select(esc => new SendData(esc)))
-            {
-                AttachHandlers(q);
-                DataChilds.Add(q);
-            }
-        }
+        private bool _direction;
+        private Brush _background;
 
         public Brush Background
         {
@@ -131,47 +60,89 @@ namespace EscInstaller.EscCommunication
             }
         }
 
-        public ObservableCollection<IDownloadableItem> DataChilds { get; }
-
-        public RelayCommand StartDownload
+        private void SetReceive()
         {
-            get
+            Value = "Download";
+            Background = Brushes.Green;
+
+            ClearChilds();
+            ViewModelLocator.Main.PrepaireDesign();
+
+            foreach (var mu in ConnectedUnits)
             {
-                return new RelayCommand(() =>
+                var node = new DownloadData(mu);
+                foreach (var downloadNode in DownloadNodes(mu))
                 {
-                    foreach (var downloadViewModel in DataChilds.Where(s => s.Checked))
-                    {
-                        ((Downloader)downloadViewModel).StartDownload();
-                    }
-                    IsDownloading = true;
-                    
-                }, () => !IsDownloading);
+                    node.AddChild(downloadNode);
+                }
+                AddChild(node);
             }
         }
 
-        protected void AttachHandlers(Downloader esc)
+        private void SetSend()
         {
-            esc.DownloadItemStateChanged += n_SelectedItemsFinished;
-            esc.AllItemsChecked += NOnDownloadItemStateChanged;
+            Value = "Upload";
+            Background = Brushes.LightCoral;
+
+            ClearChilds();
+
+            foreach (var mu in ConnectedUnits)
+            {
+                var node = new Upload(mu);
+                foreach (var uploadNode in UploadNodes(mu))
+                {
+                    node.AddChild(uploadNode);
+                }
+                AddChild(node);
+            }
         }
 
-        protected void RemoveHandlers(Downloader esc)
+        private static IEnumerable<MainUnitViewModel> ConnectedUnits
         {
-            esc.DownloadItemStateChanged -= n_SelectedItemsFinished;
-            esc.AllItemsChecked -= NOnDownloadItemStateChanged;
-
+            get
+            {
+                return ViewModelLocator.Main.TabCollection.OfType<MainUnitViewModel>().ToList()
+                    .Where(d => d.ConnectType != ConnectType.None);
+            }
         }
 
-        private void NOnDownloadItemStateChanged(object sender, EventArgs eventArgs)
+        public RelayCommand DownloadCommand { get; }
+
+
+        private static IEnumerable<DownloadNode> DownloadNodes(MainUnitViewModel main)
         {
-            _allFromAllSources = DataChilds.All(n => n.Checked);
-            RaisePropertyChanged(() => Checked);
+            yield return new Dsp(main);
+            yield return new SpeakerRedundancy(main);
+
+            yield return new InstalledPanels(main);
+            yield return new CalibrationData(main);
+            yield return new PresetNames(main);
+            yield return new MatrixSelection(main);
+            yield return new Sensitivity(main);
+            yield return new Hardware(main);
+
+            if (main.Id != 0) yield break;
+            yield return new SdMessages(main);
+            yield return new SdSelection(main);
         }
 
-        private void n_SelectedItemsFinished(object sender, EventArgs e)
+        private static IEnumerable<DownloadNode> UploadNodes(MainUnitViewModel main)
         {
-            Completed = (DataChilds.All(s => s.Completed));
-            IsDownloading = false;
+            yield return new Auxlinks(main);
+            yield return new Delaysettings(main);
+            yield return new InputSensitivity(main);
+            yield return new Linelinks(main);
+
+            yield return new MatrixSelection(main);
+            yield return new Messageselection(main);
+            yield return new Peqpresetnames(main);
+            yield return new InOutNames(main);
+
+            yield return new PeqData(main);
+            yield return new GainSliders(main);
+            yield return new ToneControl(main);
         }
-    }
+    };
+
+
 }

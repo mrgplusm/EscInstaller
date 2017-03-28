@@ -8,7 +8,7 @@ using EscInstaller.ViewModel;
 
 namespace EscInstaller.EscCommunication.UploadItem
 {
-    internal class Delaysettings : ItemtoDownload
+    internal class Delaysettings : DownloadData
     {
         public Delaysettings(MainUnitViewModel main)
             : base(main)

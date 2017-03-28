@@ -8,7 +8,7 @@ using EscInstaller.ViewModel;
 
 namespace EscInstaller.EscCommunication.UploadItem
 {
-    internal class Matrixselection : ItemtoDownload
+    internal class Matrixselection : DownloadData
     {
         public Matrixselection(MainUnitViewModel main)
             : base(main)

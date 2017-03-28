@@ -7,7 +7,7 @@ using EscInstaller.ViewModel;
 
 namespace EscInstaller.EscCommunication.downloadItems
 {
-    public abstract class EepromToDownload : ItemtoDownload
+    public abstract class EepromToDownload : DownloadData
     {
         protected EepromToDownload(MainUnitViewModel main) : base(main)
         {
