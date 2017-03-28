@@ -183,12 +183,13 @@
     <Compile Include="EscCommunication\Logic\AuxLinker.cs" />
     <Compile Include="EscCommunication\Logic\DelayUpdater.cs" />
     <Compile Include="EscCommunication\Logic\DeviationUpdater.cs" />
+    <Compile Include="EscCommunication\Logic\DownloadProgress.cs" />
     <Compile Include="EscCommunication\Logic\DspDataUpdater.cs" />
     <Compile Include="EscCommunication\Logic\EepromDataHandler.cs" />
     <Compile Include="EscCommunication\Logic\EepromRedundancyData.cs" />
     <Compile Include="EscCommunication\Logic\EmergencySliders.cs" />
-    <Compile Include="EscCommunication\Logic\EscReceiver.cs" />
-    <Compile Include="EscCommunication\Logic\EscSender.cs" />
+    <Compile Include="EscCommunication\Logic\EscLogic.cs" />
+    <Compile Include="EscCommunication\Logic\DownloadEeprom.cs" />
     <Compile Include="EscCommunication\Logic\HardwareReceive.cs" />
     <Compile Include="EscCommunication\Logic\InputSensitivityUpdater.cs" />
     <Compile Include="EscCommunication\Logic\MatrixSender.cs" />

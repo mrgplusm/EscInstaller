@@ -124,6 +124,8 @@ namespace EscInstaller.EscCommunication
             }
         }
 
+        public event EventHandler HasCompleted;
+
         public void Report(DownloadProgress e)
         {
             if (e.Progress >= e.Total - .01)
@@ -131,11 +133,18 @@ namespace EscInstaller.EscCommunication
                 Completed = true;
 
                 ProgressBar = 100;
+
+                OnHasCompleted();
             }
             else
             {
                 ProgressBar = (double)e.Progress / e.Total * 100;
             }
+        }
+
+        protected virtual void OnHasCompleted()
+        {
+            HasCompleted?.Invoke(this, EventArgs.Empty);
         }
     }
 }
