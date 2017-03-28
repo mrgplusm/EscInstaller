@@ -1,8 +1,8 @@
 #region
 
 using System.Threading.Tasks;
+using EscInstaller.EscCommunication.Logic;
 using EscInstaller.ViewModel;
-using EscInstaller.ViewModel.EscCommunication.Logic;
 
 #endregion
 
@@ -15,7 +15,7 @@ namespace EscInstaller.EscCommunication.downloadItems
         {
         }
 
-        public override string ItemName => "Sd messages";
+        public override string Value => "Sd messages";
 
         public override Task Function
         {

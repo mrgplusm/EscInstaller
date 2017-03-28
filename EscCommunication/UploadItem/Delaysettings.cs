@@ -15,7 +15,7 @@ namespace EscInstaller.EscCommunication.UploadItem
         {
         }
 
-        public override string ItemName => "Delay settings";
+        public override string Value => "Delay settings";
 
         public override Task Function
         {

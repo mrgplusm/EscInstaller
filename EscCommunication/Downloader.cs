@@ -3,15 +3,17 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
+using EscInstaller.EscCommunication.Logic;
 using EscInstaller.ViewModel;
-using EscInstaller.ViewModel.EscCommunication;
+
 using GalaSoft.MvvmLight;
 
 #endregion
 
 namespace EscInstaller.EscCommunication
 {
-    public abstract class Downloader : ViewModelBase
+    public abstract class Downloader : ViewModelBase, IProgress<DownloadProgress>, IDownloadableItem
     {
         protected readonly MainUnitViewModel Main;
         private bool _allChecked = true;
@@ -20,15 +22,15 @@ namespace EscInstaller.EscCommunication
         protected Downloader(MainUnitViewModel main)
         {
             Main = main;
-            ItemstoDownload = new ObservableCollection<ItemtoDownload>();
+            DataChilds = new ObservableCollection<IDownloadableItem>();
         }
 
-        public string DisplayValue => Main.DisplayValue;
+        public string Value => Main.DisplayValue;
 
         /// <summary>
         ///     Download all items of this esc
         /// </summary>
-        public bool AllChecked
+        public bool Checked
         {
             get { return _allChecked; }
             set
@@ -37,21 +39,21 @@ namespace EscInstaller.EscCommunication
                 _allChecked = value;
                 OnAllItemsChecked();
                 CheckAllDownloadItems(value);
-                RaisePropertyChanged(() => AllChecked);
+                RaisePropertyChanged(() => Checked);
             }
         }
 
-        public bool EscDownloadCompleted
+        public bool Completed
         {
             get { return _escDownloadCompleted; }
             set
             {
                 _escDownloadCompleted = value;
-                RaisePropertyChanged(() => EscDownloadCompleted);
+                RaisePropertyChanged(() => Completed);
             }
         }
 
-        public ObservableCollection<ItemtoDownload> ItemstoDownload { get; protected set; }
+        public ObservableCollection<IDownloadableItem> DataChilds { get; protected set; }
 
         protected void AttachHandler(ItemtoDownload itemtoDownload)
         {
@@ -61,9 +63,9 @@ namespace EscInstaller.EscCommunication
 
         private void SubItemChecked(object sender, EventArgs eventArgs)
         {
-            _allChecked = ItemstoDownload.All(d => d.DoDownload);
+            _allChecked = DataChilds.All(d => d.Checked);
             OnAllItemsChecked();
-            RaisePropertyChanged(() => AllChecked);
+            RaisePropertyChanged(() => Checked);
         }
 
         /// <summary>
@@ -79,7 +81,7 @@ namespace EscInstaller.EscCommunication
 
         private void CheckAllDownloadItems(bool value)
         {
-            foreach (var itemtoDownload in ItemstoDownload) itemtoDownload.SelectDownload(value);
+            foreach (var itemtoDownload in DataChilds)((ItemtoDownload)itemtoDownload).SelectDownload(value);          
         }
         
 
@@ -97,13 +99,42 @@ namespace EscInstaller.EscCommunication
 
         public async void StartDownload()
         {
-            foreach (var source in ItemstoDownload.Where(n => n.DoDownload))
+            foreach (var source in DataChilds.Where(n => n.Checked))
             {
-                source.Reset();
+                ((ItemtoDownload)source).Reset();
             }
-            foreach (var itemtoDownload in ItemstoDownload.Where(n => n.DoDownload))
+            foreach (var itemtoDownload in DataChilds.Where(n => n.Checked))
             {
-                await itemtoDownload.Function;
+                await ((ItemtoDownload)itemtoDownload).Function;
+            }
+        }
+
+        private double _progressBar;
+
+        /// <summary>
+        ///     Indicates progress from 0 - 100;
+        /// </summary>
+        public double ProgressBar
+        {
+            get { return _progressBar; }
+            private set
+            {
+                _progressBar = value;
+                RaisePropertyChanged(() => ProgressBar);
+            }
+        }
+
+        public void Report(DownloadProgress e)
+        {
+            if (e.Progress >= e.Total - .01)
+            {
+                Completed = true;
+
+                ProgressBar = 100;
+            }
+            else
+            {
+                ProgressBar = (double)e.Progress / e.Total * 100;
             }
         }
     }

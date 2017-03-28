@@ -1,8 +1,8 @@
 ﻿#region
 
 using EscInstaller.EscCommunication.downloadItems;
+using EscInstaller.EscCommunication.UploadItem;
 using EscInstaller.ViewModel;
-using EscInstaller.ViewModel.EscCommunication.UploadItem;
 
 #endregion
 
@@ -13,27 +13,28 @@ namespace EscInstaller.EscCommunication
         public SendData(MainUnitViewModel main) : base(main)
         {
             PopulateItems();
-            foreach (var itemtoDownload in ItemstoDownload)
+            foreach (var itemtoDownload in DataChilds)
             {
-                AttachHandler(itemtoDownload);
+                AttachHandler((ItemtoDownload)
+                    itemtoDownload);
             }
         }
 
         protected void PopulateItems()
         {
-            ItemstoDownload.Add(new Auxlinks(Main));
-            ItemstoDownload.Add(new Delaysettings(Main));
-            ItemstoDownload.Add(new InputSensitivity(Main));
-            ItemstoDownload.Add(new Linelinks(Main));
+            DataChilds.Add(new Auxlinks(Main));
+            DataChilds.Add(new Delaysettings(Main));
+            DataChilds.Add(new InputSensitivity(Main));
+            DataChilds.Add(new Linelinks(Main));
 
-            ItemstoDownload.Add(new MatrixSelection(Main));
-            ItemstoDownload.Add(new Messageselection(Main));
-            ItemstoDownload.Add(new Peqpresetnames(Main));
-            ItemstoDownload.Add(new InOutNames(Main));
+            DataChilds.Add(new MatrixSelection(Main));
+            DataChilds.Add(new Messageselection(Main));
+            DataChilds.Add(new Peqpresetnames(Main));
+            DataChilds.Add(new InOutNames(Main));
 
-            ItemstoDownload.Add(new PeqData(Main));
-            ItemstoDownload.Add(new GainSliders(Main));
-            ItemstoDownload.Add(new ToneControl(Main));
+            DataChilds.Add(new PeqData(Main));
+            DataChilds.Add(new GainSliders(Main));
+            DataChilds.Add(new ToneControl(Main));
         }
     }
 }

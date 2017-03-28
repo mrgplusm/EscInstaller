@@ -1,8 +1,8 @@
 #region
 
 using System.Threading.Tasks;
+using EscInstaller.EscCommunication.Logic;
 using EscInstaller.ViewModel;
-using EscInstaller.ViewModel.EscCommunication.Logic;
 
 #endregion
 
@@ -14,7 +14,7 @@ namespace EscInstaller.EscCommunication.downloadItems
         {
         }
 
-        public override string ItemName => "Sensitivity values";
+        public override string Value => "Sensitivity values";
 
         public override Task Function
         {

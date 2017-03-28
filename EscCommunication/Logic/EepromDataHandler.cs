@@ -1,4 +1,6 @@
-namespace EscInstaller.ViewModel.EscCommunication.Logic
+using EscInstaller.ViewModel;
+
+namespace EscInstaller.EscCommunication.Logic
 {
     /// <summary>
     ///     Class is used to apply all eeprom values to currently open designfile

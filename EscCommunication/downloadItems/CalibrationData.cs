@@ -15,7 +15,7 @@ namespace EscInstaller.EscCommunication.downloadItems
         {
         }
 
-        public override string ItemName => "Calibration Data";
+        public override string Value => "Calibration Data";
 
         public override Task Function => DownloaderFactory().GetEeprom(ProgressFactory());
 

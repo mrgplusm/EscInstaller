@@ -1,16 +1,17 @@
 #region
 
 using System;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using EscInstaller.EscCommunication.Logic;
 using EscInstaller.ViewModel;
-using EscInstaller.ViewModel.EscCommunication.Logic;
 using GalaSoft.MvvmLight;
 
 #endregion
 
 namespace EscInstaller.EscCommunication
 {
-    public abstract class ItemtoDownload : ViewModelBase, IProgress<DownloadProgress>
+    public abstract class ItemtoDownload : ViewModelBase, IProgress<DownloadProgress>, IDownloadableItem
     {
         protected readonly MainUnitViewModel Main;
         private bool _doDownload;
@@ -20,34 +21,37 @@ namespace EscInstaller.EscCommunication
         protected ItemtoDownload(MainUnitViewModel main)
         {
             Main = main;
+            DataChilds = new ObservableCollection<IDownloadableItem>();
         }
 
-        public bool DoDownload
+        public bool Checked
         {
             get { return _doDownload; }
             set
             {
                 _doDownload = value;
                 OnDownloadClicked();
-                RaisePropertyChanged(() => DoDownload);
+                RaisePropertyChanged(() => Checked);
             }
         }
 
-        public abstract string ItemName { get; }
+        public ObservableCollection<IDownloadableItem> DataChilds { get; }
+
+        public abstract string Value { get; }
 
         /// <summary>
         ///     to execute when this item is selected
         /// </summary>
         public abstract Task Function { get; }
 
-        public bool ReceiveCompleted
+        public bool Completed
         {
             get { return _receiveCompleted; }
             set
             {
                 Done();
                 _receiveCompleted = value;
-                RaisePropertyChanged(() => ReceiveCompleted);
+                RaisePropertyChanged(() => Completed);
             }
         }
 
@@ -64,12 +68,14 @@ namespace EscInstaller.EscCommunication
             }
         }
 
+        public event EventHandler HasCompleted;
+
         public void Report(DownloadProgress e)
         {
             if (e.Progress >= e.Total - .01)
             {
-                ReceiveCompleted = true;
-
+                Completed = true;
+                OnHasCompleted();
                 ProgressBar = 100;
             }
             else
@@ -88,7 +94,7 @@ namespace EscInstaller.EscCommunication
         public void SelectDownload(bool value)
         {
             _doDownload = value;
-            RaisePropertyChanged(() => DoDownload);
+            RaisePropertyChanged(() => Checked);
         }
 
         protected Progress<DownloadProgress> ProgressFactory()
@@ -102,7 +108,12 @@ namespace EscInstaller.EscCommunication
         {
             ProgressBar = 0;
             _receiveCompleted = false;
-            RaisePropertyChanged(() => ReceiveCompleted);
+            RaisePropertyChanged(() => Completed);
+        }
+
+        protected virtual void OnHasCompleted()
+        {
+            HasCompleted?.Invoke(this, EventArgs.Empty);
         }
     }
 }

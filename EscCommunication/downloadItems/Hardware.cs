@@ -1,8 +1,8 @@
 #region
 
 using System.Threading.Tasks;
+using EscInstaller.EscCommunication.Logic;
 using EscInstaller.ViewModel;
-using EscInstaller.ViewModel.EscCommunication.Logic;
 
 #endregion
 
@@ -15,7 +15,7 @@ namespace EscInstaller.EscCommunication.downloadItems
         {
         }
 
-        public override string ItemName => "Hardware";
+        public override string Value => "Hardware";
 
         public override Task Function
         {

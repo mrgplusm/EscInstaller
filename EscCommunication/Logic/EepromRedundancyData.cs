@@ -1,11 +1,12 @@
 #region
 
 using System.Linq;
+using EscInstaller.ViewModel;
 using EscInstaller.ViewModel.Settings.Peq;
 
 #endregion
 
-namespace EscInstaller.ViewModel.EscCommunication.Logic
+namespace EscInstaller.EscCommunication.Logic
 {
     internal class EepromRedundancyData : EepromDataHandler
     {

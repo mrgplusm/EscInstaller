@@ -6,7 +6,6 @@ using System.Text;
 using Common.Commodules;
 using Common.Model;
 using EscInstaller.ViewModel;
-using EscInstaller.ViewModel.EscCommunication.Logic;
 
 #endregion
 

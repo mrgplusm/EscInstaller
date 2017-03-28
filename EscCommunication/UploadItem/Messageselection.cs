@@ -15,7 +15,7 @@ namespace EscInstaller.EscCommunication.UploadItem
         {
         }
 
-        public override string ItemName => "Message selection";
+        public override string Value => "Message selection";
 
         public override Task Function
         {

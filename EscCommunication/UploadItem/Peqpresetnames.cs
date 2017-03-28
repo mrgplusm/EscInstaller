@@ -15,7 +15,7 @@ namespace EscInstaller.EscCommunication.UploadItem
         {
         }
 
-        public override string ItemName => "Peq preset names";
+        public override string Value => "Peq preset names";
 
         public override Task Function
         {

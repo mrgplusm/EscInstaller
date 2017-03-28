@@ -3,8 +3,6 @@
 using System.Collections.ObjectModel;
 using EscInstaller.EscCommunication.downloadItems;
 using EscInstaller.ViewModel;
-using EscInstaller.ViewModel.EscCommunication;
-using EscInstaller.ViewModel.EscCommunication.downloadItems;
 
 #endregion
 
@@ -16,10 +14,10 @@ namespace EscInstaller.EscCommunication
         public ReceiveData()
             : base(new MainUnitViewModel())
         {
-            ItemstoDownload = new ObservableCollection<ItemtoDownload>();
+            DataChilds = new ObservableCollection<IDownloadableItem>();
             for (var i = 0; i < 2; i++)
             {
-                ItemstoDownload.Add(new Dsp(Main)); 
+                DataChilds.Add(new Dsp(Main)); 
             }
         }
 #endif
@@ -28,27 +26,27 @@ namespace EscInstaller.EscCommunication
             : base(main)
         {
             PopulateItems();
-            foreach (var itemtoDownload in ItemstoDownload)
+            foreach (var itemtoDownload in DataChilds)
             {
-                AttachHandler(itemtoDownload);
+                AttachHandler((ItemtoDownload)itemtoDownload);
             }
         }
 
         protected void PopulateItems()
         {
-            ItemstoDownload.Add(new Dsp(Main));
-            ItemstoDownload.Add(new SpeakerRedundancy(Main));
+            DataChilds.Add(new Dsp(Main));
+            DataChilds.Add(new SpeakerRedundancy(Main));
 
-            ItemstoDownload.Add(new InstalledPanels(Main));
-            ItemstoDownload.Add(new CalibrationData(Main));
-            ItemstoDownload.Add(new PresetNames(Main));
-            ItemstoDownload.Add(new MatrixSelection(Main));
-            ItemstoDownload.Add(new Sensitivity(Main));
-            ItemstoDownload.Add(new Hardware(Main));
+            DataChilds.Add(new InstalledPanels(Main));
+            DataChilds.Add(new CalibrationData(Main));
+            DataChilds.Add(new PresetNames(Main));
+            DataChilds.Add(new MatrixSelection(Main));
+            DataChilds.Add(new Sensitivity(Main));
+            DataChilds.Add(new Hardware(Main));
 
             if (Main.Id != 0) return;
-            ItemstoDownload.Add(new SdMessages(Main));
-            ItemstoDownload.Add(new SdSelection(Main));
+            DataChilds.Add(new SdMessages(Main));
+            DataChilds.Add(new SdSelection(Main));
         }
     }
 }

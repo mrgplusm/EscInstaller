@@ -19,12 +19,11 @@ using Common;
 using Common.Commodules;
 using Common.Model;
 using EscInstaller.EscCommunication;
+using EscInstaller.EscCommunication.Logic;
 using EscInstaller.ImportSpeakers;
 using EscInstaller.UserControls;
 using EscInstaller.View.Communication;
 using EscInstaller.ViewModel.Connection;
-using EscInstaller.ViewModel.EscCommunication;
-using EscInstaller.ViewModel.EscCommunication.Logic;
 using EscInstaller.ViewModel.Matrix;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
@@ -72,8 +71,8 @@ namespace EscInstaller.ViewModel
             var dispThread = Thread.CurrentThread;
             Dispatcher.FromThread(dispThread);
 
-            TabCollection = new ObservableCollection<ITabControl> {Communication};
-           
+            TabCollection = new ObservableCollection<ITabControl> { Communication };
+
 
 
 #if DEBUG
@@ -146,7 +145,7 @@ namespace EscInstaller.ViewModel
 
         public ObservableCollection<ITabControl> TabCollection
         {
-            get; 
+            get;
         }
 
         public ObservableCollection<MenuItem> RecentFiles { get; } = new ObservableCollection<MenuItem>();
@@ -286,20 +285,10 @@ namespace EscInstaller.ViewModel
             SendUnitData();
         }
 
-        private void SendUnitData()
+        private static void SendUnitData()
         {
-            var nq = new DownloadView
-            {
-                Title = "UPLOAD to ESC: GUI => ESC",
-                Background = Brushes.LightCoral,
-                TextControl = "Upload all to all sources"
-            };
-
-
-            var qq = new CommunicationSend(this); //  EscCommunicationBase(this);
-            nq.DataContext = qq;
+            var nq = new DownloadView();
             nq.Show();
-
         }
 
         private async Task<bool> InformUserTimestampAsync(bool isUploadText)
@@ -365,25 +354,23 @@ namespace EscInstaller.ViewModel
             return list;
         }
 
-        private void GetSystem()
+        public void PrepaireDesign()
         {
             foreach (
-                var s in
-                    CommunicationViewModel.OpenConnections.Where(s => s.ConnectMode == ConnectMode.Install)
-                        .Select(n => n.UnitId)
-                        .Except(TabCollection.OfType<MainUnitViewModel>().Select(u => u.Id)))
+    var s in
+        CommunicationViewModel.OpenConnections.Where(s => s.ConnectMode == ConnectMode.Install)
+            .Select(n => n.UnitId)
+            .Except(TabCollection.OfType<MainUnitViewModel>().Select(u => u.Id)))
             {
                 AddMainUnit(s);
             }
 
-            var nq = new DownloadView
-            {
-                Title = "Download to PC ESC => GUI",
-                Background = Brushes.LightGreen,
-                TextControl = "Download all from all sources"
-            };
-            var qq = new CommunicationReceive(this); //  EscCommunicationBase(this);
-            nq.DataContext = qq;
+        }
+
+        private static void GetSystem()
+        {
+            var nq = new DownloadView();
+
             nq.Show();
         }
 
@@ -480,12 +467,12 @@ namespace EscInstaller.ViewModel
             if (!LibraryData.SystemIsOpen) return;
 
             TabCollection.Clear();
-          
+
             foreach (var m in LibraryData.FuturamaSys.MainUnits) TabCollection.Add(MainUnitFactory(m));
             SelectedTab = TabCollection.FirstOrDefault(i => i.Id == 0);
 
             TabCollection.Add(PanelViewFactory);
-            TabCollection.Add(Communication); 
+            TabCollection.Add(Communication);
 
         }
 
@@ -559,10 +546,10 @@ namespace EscInstaller.ViewModel
 
             AddMainUnitsToTab();
             AddConnections();
-             
+
             var master = TabCollection.OfType<MainUnitViewModel>().FirstOrDefault(i => i.Id == 0);
             SelectedTab = master;
-     
+
             master?.UpdateHardware();
             master?.OnPresetNamesUpdated();
             master?.OnDspMirrorUpdated();

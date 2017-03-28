@@ -15,7 +15,7 @@ namespace EscInstaller.EscCommunication.UploadItem
         {
         }
 
-        public override string ItemName => "Matrix selection";
+        public override string Value => "Matrix selection";
 
         public override Task Function
         {

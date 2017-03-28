@@ -14,7 +14,7 @@ namespace EscInstaller.EscCommunication.UploadItem
         {
         }
 
-        public override string ItemName => "Peq Data+ red";
+        public override string Value => "Peq Data+ red";
 
         public override Task Function
         {

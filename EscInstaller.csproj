@@ -164,9 +164,7 @@
     <Compile Include="Converters\IsMainUnitConverter.cs" />
     <Compile Include="Converters\LinkClrCnvrt.cs" />
     <Compile Include="Converters\PointsCnvtr.cs" />
-    <Compile Include="EscCommunication\CommunicationBase.cs" />
-    <Compile Include="EscCommunication\CommunicationReceive.cs" />
-    <Compile Include="EscCommunication\CommunicationSend.cs" />
+    <Compile Include="EscCommunication\Communication.cs" />
     <Compile Include="EscCommunication\Downloader.cs" />
     <Compile Include="EscCommunication\downloadItems\CalibrationData.cs" />
     <Compile Include="EscCommunication\downloadItems\DspDownload.cs" />
@@ -180,6 +178,7 @@
     <Compile Include="EscCommunication\downloadItems\SdSelection.cs" />
     <Compile Include="EscCommunication\downloadItems\Sensitivity.cs" />
     <Compile Include="EscCommunication\downloadItems\SpeakerRedundancy.cs" />
+    <Compile Include="EscCommunication\IDownloadableItem.cs" />
     <Compile Include="EscCommunication\ItemtoDownload.cs" />
     <Compile Include="EscCommunication\Logic\AuxLinker.cs" />
     <Compile Include="EscCommunication\Logic\DelayUpdater.cs" />
@@ -360,9 +359,6 @@
     </Compile>
     <Compile Include="View\Communication\CommunicationView.xaml.cs">
       <DependentUpon>CommunicationView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\Communication\Download.xaml.cs">
-      <DependentUpon>Download.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Communication\DownloadView.xaml.cs">
       <DependentUpon>DownloadView.xaml</DependentUpon>
@@ -583,10 +579,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\Communication\Download.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="View\Communication\DownloadView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -673,6 +665,7 @@
     <EmbeddedResource Include="Main.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Main.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

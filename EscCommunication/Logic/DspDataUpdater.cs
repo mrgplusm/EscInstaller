@@ -5,10 +5,11 @@ using Common;
 using Common.Commodules;
 using Common.Converters;
 using Common.Model;
+using EscInstaller.ViewModel;
 
 #endregion
 
-namespace EscInstaller.ViewModel.EscCommunication.Logic
+namespace EscInstaller.EscCommunication.Logic
 {
     internal class DspDataUpdater : EepromDataHandler
     {

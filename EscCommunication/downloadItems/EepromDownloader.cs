@@ -6,8 +6,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Common;
 using Common.Commodules;
+using EscInstaller.EscCommunication.Logic;
 using EscInstaller.ViewModel.Connection;
-using EscInstaller.ViewModel.EscCommunication.Logic;
 
 #endregion
 

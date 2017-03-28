@@ -4,8 +4,6 @@ using System.Threading.Tasks;
 using Common;
 using EscInstaller.EscCommunication.Logic;
 using EscInstaller.ViewModel;
-using EscInstaller.ViewModel.EscCommunication.downloadItems;
-using EscInstaller.ViewModel.EscCommunication.Logic;
 
 #endregion
 
@@ -18,7 +16,7 @@ namespace EscInstaller.EscCommunication.downloadItems
         {
         }
 
-        public override string ItemName => "Matrix selection";
+        public override string Value => "Matrix selection";
 
         public override Task Function => DownloaderFactory().GetEeprom(ProgressFactory());
 

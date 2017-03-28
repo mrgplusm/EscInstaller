@@ -4,7 +4,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Common;
-using EscInstaller.ViewModel.EscCommunication.Logic;
+using EscInstaller.EscCommunication.Logic;
 using EscInstaller.ViewModel.Matrix;
 using EscInstaller.ViewModel.SDCard;
 using GalaSoft.MvvmLight;

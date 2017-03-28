@@ -2,8 +2,8 @@
 
 using System.Threading.Tasks;
 using Common;
+using EscInstaller.EscCommunication.Logic;
 using EscInstaller.ViewModel;
-using EscInstaller.ViewModel.EscCommunication.Logic;
 
 #endregion
 
@@ -16,7 +16,7 @@ namespace EscInstaller.EscCommunication.downloadItems
         {
         }
 
-        public override string ItemName => "Redundancy Data";
+        public override string Value => "Redundancy Data";
 
         public override Task Function => DownloaderFactory().GetEeprom(ProgressFactory());
 

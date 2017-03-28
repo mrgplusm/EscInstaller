@@ -15,7 +15,7 @@ namespace EscInstaller.EscCommunication.UploadItem
         {
         }
 
-        public override string ItemName => "Gain Sliders";
+        public override string Value => "Gain Sliders";
 
         public override Task Function
         {

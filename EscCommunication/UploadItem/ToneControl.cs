@@ -15,7 +15,7 @@ namespace EscInstaller.EscCommunication.UploadItem
         {
         }
 
-        public override string ItemName => "Tone Control";
+        public override string Value => "Tone Control";
 
         public override Task Function
         {

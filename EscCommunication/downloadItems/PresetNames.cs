@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Common;
 using EscInstaller.EscCommunication.Logic;
 using EscInstaller.ViewModel;
-using EscInstaller.ViewModel.EscCommunication.downloadItems;
 
 #endregion
 
@@ -17,7 +16,7 @@ namespace EscInstaller.EscCommunication.downloadItems
         {
         }
 
-        public override string ItemName => "Preset Names";
+        public override string Value => "Preset Names";
 
         public override Task Function => DownloaderFactory().GetEeprom(ProgressFactory());
 

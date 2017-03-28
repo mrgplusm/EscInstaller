@@ -15,7 +15,7 @@ namespace EscInstaller.EscCommunication.UploadItem
         {
         }
 
-        public override string ItemName => "Line links";
+        public override string Value => "Line links";
 
         public override Task Function
         {
