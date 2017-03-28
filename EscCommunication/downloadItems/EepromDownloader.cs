@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Common;
 using Common.Commodules;
@@ -37,18 +38,18 @@ namespace EscInstaller.EscCommunication.downloadItems
             }
         }
 
-        public async Task GetEeprom(IProgress<DownloadProgress> iProgress)
+        public async Task GetEeprom(IProgress<DownloadProgress> iProgress, CancellationToken token)
         {
             _eepromReceivePackages[_area] = 0;
             var ar = McuDat.EepromAreaFactory(_area);
 
             var count = ar.Size/McuDat.BufferSize + 1;
-
+           
             for (var i = ar.Location; i < ar.Location + ar.Size + McuDat.BufferSize; i += McuDat.BufferSize)
             {
                 var s = new GetE2PromExt(_mcuid, McuDat.BufferSize, i);
                 CommunicationViewModel.AddData(s);
-
+                if (token.IsCancellationRequested) return;
                 await s.WaitAsync();
 
                 UpdateEepromData(s);

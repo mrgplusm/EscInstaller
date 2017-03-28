@@ -21,7 +21,7 @@ namespace EscInstaller.EscCommunication.UploadItem
             get
             {
                 var p = new PeqUpload(Main.DataModel);
-                return p.SetSpeakerPresetData(ProgressFactory());
+                return p.SetSpeakerPresetData(ProgressFactory(), Cancellation.Token);
             }
         }
     }

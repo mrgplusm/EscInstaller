@@ -53,7 +53,7 @@
         </TreeView>
 
         <StackPanel Orientation="Horizontal">
-            <Button Content="Start" Width="90" Command="{Binding Path=DownloadCommand}" />
+            <Button Content="{Binding Path=ButtonName}" Width="90" Command="{Binding Path=DownloadCommand}" />
             <Button Content="Close" Width="90" Command="{StaticResource Cclose}" />
         </StackPanel>
 

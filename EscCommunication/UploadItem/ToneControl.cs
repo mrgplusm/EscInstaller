@@ -22,7 +22,7 @@ namespace EscInstaller.EscCommunication.UploadItem
             get
             {
                 var p = new ToneControlUpdater(Main.DataModel);
-                return p.SetToneControls(ProgressFactory());
+                return p.SetToneControls(ProgressFactory(), Cancellation.Token);
             }
         }
     }

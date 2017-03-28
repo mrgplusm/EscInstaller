@@ -22,7 +22,7 @@ namespace EscInstaller.EscCommunication.UploadItem
             get
             {
                 var s = new NameUpdater(Main.DataModel);
-                return s.SetInAndOutputNames(ProgressFactory());
+                return s.SetInAndOutputNames(ProgressFactory(), Cancellation.Token);
             }
         }
     }

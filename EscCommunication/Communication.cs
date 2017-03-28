@@ -3,6 +3,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Media;
+using bbv.Common.StateMachine;
+using bbv.Common.StateMachine.Internals;
 using Common;
 using EscInstaller.EscCommunication.downloadItems;
 using EscInstaller.EscCommunication.UploadItem;
@@ -13,28 +15,83 @@ using GalaSoft.MvvmLight.Command;
 
 namespace EscInstaller.EscCommunication
 {
+    enum BtSt
+    {
+        Ready,
+        Working,
+        Finished,
+    }
+
+    enum BtActions
+    {
+        Press,
+        Finished,
+    }
+
     public class Communication : DownloadNode
     {
-        private bool _downloading;
+
+
+        private readonly PassiveStateMachine<BtSt, BtActions> _stButton = new PassiveStateMachine<BtSt, BtActions>();
+
 
         public Communication()
         {
             SetSend();
-
+            _buttonName = "Start";
             DownloadCommand = new RelayCommand(() =>
             {
-                StartDownload(DataChilds);
-                _downloading = true;
-                DownloadCommand.RaiseCanExecuteChanged();
-            }, () => !_downloading);
+                _stButton.Fire(BtActions.Press);
+            });
 
             Completed += CompletedEvent;
+
+            _stButton.Initialize(BtSt.Ready);
+            _stButton.In(BtSt.Ready).On(BtActions.Press).Goto(BtSt.Working).Execute(Start);
+            _stButton.In(BtSt.Working).On(BtActions.Press).Goto(BtSt.Finished).Execute(StopDownload);
+            _stButton.In(BtSt.Working).On(BtActions.Finished).Goto(BtSt.Finished).Execute(Finished);
+            _stButton.In(BtSt.Finished).On(BtActions.Press).Goto(BtSt.Ready).Execute(ResetStatus);
+            _stButton.Start();
         }
+
+        public string ButtonName
+        {
+            get { return _buttonName; }
+            set
+            {
+                _buttonName = value;
+                RaisePropertyChanged(() => ButtonName);
+            }
+        }
+
+        private void ResetStatus()
+        {
+            Reset();
+            ButtonName = "Start";
+        }
+
+        private void Start()
+        {
+            StartDownload(DataChilds);
+            ButtonName = "Cancel";
+        }
+
+        private void StopDownload()
+        {
+            StopDownload(DataChilds);
+            Finished();
+        }
+
+        private void Finished()
+        {
+            ButtonName = "Reset";
+        }
+
 
         private void CompletedEvent(object sender, NodeUpdatedEventArgs e)
         {
-            _downloading = false;
-            DownloadCommand.RaiseCanExecuteChanged();
+            if (DataChilds.All(s => s.IsCompleted))
+                _stButton.Fire(BtActions.Finished);
         }
 
         public bool Direction
@@ -49,6 +106,7 @@ namespace EscInstaller.EscCommunication
         }
         private bool _direction;
         private Brush _background;
+        private string _buttonName;
 
         public Brush Background
         {
@@ -63,7 +121,7 @@ namespace EscInstaller.EscCommunication
         private void SetReceive()
         {
             Value = "Download";
-            Background = Brushes.Green;
+            Background = Brushes.LightCyan;
 
             ClearChilds();
             ViewModelLocator.Main.PrepaireDesign();
@@ -82,7 +140,7 @@ namespace EscInstaller.EscCommunication
         private void SetSend()
         {
             Value = "Upload";
-            Background = Brushes.LightCoral;
+            Background = Brushes.LightPink;
 
             ClearChilds();
 

@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Common;
 using Common.Commodules;
@@ -37,7 +38,7 @@ namespace EscInstaller.EscCommunication.Logic
             }
         }
 
-        public async Task SetSliders(IProgress<DownloadProgress> iProgress)
+        public async Task SetSliders(IProgress<DownloadProgress> iProgress, CancellationToken token)
         {
             _emergencySliderPackages = 0;
             var r = Main.Cards.OfType<ExtensionCardModel>().First()
@@ -51,6 +52,7 @@ namespace EscInstaller.EscCommunication.Logic
             foreach (var setGainSlider in r)
             {
                 await setGainSlider.WaitAsync();
+                if (token.IsCancellationRequested) return;
                 iProgress.Report(new DownloadProgress() {Progress = ++_emergencySliderPackages, Total = total});
             }
         }

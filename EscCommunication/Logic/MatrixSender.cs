@@ -19,7 +19,7 @@ namespace EscInstaller.EscCommunication.Logic
         {
         }
 
-        public async Task SetMatrixSelections(IProgress<DownloadProgress> iProgress)
+        public async Task SetMatrixSelections(IProgress<DownloadProgress> iProgress, CancellationToken token)
         {
             var matrixBlocks = 0;
 
@@ -31,6 +31,7 @@ namespace EscInstaller.EscCommunication.Logic
 
             foreach (var table in list)
             {
+                if (token.IsCancellationRequested) return;
                 await table.WaitAsync();
 
                 Interlocked.Increment(ref matrixBlocks);

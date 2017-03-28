@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Common.Commodules;
 using Common.Model;
@@ -27,7 +28,7 @@ namespace EscInstaller.EscCommunication.Logic
         ///     List of in and output names
         /// </summary>
         /// <returns></returns>
-        public async Task SetInAndOutputNames(IProgress<DownloadProgress> iProgress)
+        public async Task SetInAndOutputNames(IProgress<DownloadProgress> iProgress, CancellationToken token)
         {
             _inOutputNamesPackages = 0;
 
@@ -42,6 +43,7 @@ namespace EscInstaller.EscCommunication.Logic
 
             foreach (var update in list)
             {
+                if (token.IsCancellationRequested) return;
                 await update.WaitAsync();
                 iProgress.Report(new DownloadProgress()
                 {
@@ -51,7 +53,7 @@ namespace EscInstaller.EscCommunication.Logic
             }
         }
 
-        public async Task SetPeqNames(IProgress<DownloadProgress> iProgress)
+        public async Task SetPeqNames(IProgress<DownloadProgress> iProgress, CancellationToken token)
         {
             var list = Main.SpeakerDataModels.Where(t => t.SpeakerPeqType != SpeakerPeqType.BiquadsMic)
                 .Select(n => new PresetNameUpdate(Main.Id, n.SpeakerName, n.Id)).ToList();
@@ -60,6 +62,7 @@ namespace EscInstaller.EscCommunication.Logic
 
             foreach (var nameUpdate in list)
             {
+                if (token.IsCancellationRequested) return;
                 await nameUpdate.WaitAsync();
                 iProgress.Report(new DownloadProgress() {Progress = ++_peqNamesCount, Total = 15});
             }

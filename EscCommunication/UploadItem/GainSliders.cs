@@ -22,7 +22,7 @@ namespace EscInstaller.EscCommunication.UploadItem
             get
             {
                 var p = new SliderUpdater(Main.DataModel);
-                return p.SetSliders(ProgressFactory());
+                return p.SetSliders(ProgressFactory(), Cancellation.Token);
             }
         }
     }

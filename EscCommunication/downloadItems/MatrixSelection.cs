@@ -1,5 +1,6 @@
 #region
 
+using System.Threading;
 using System.Threading.Tasks;
 using Common;
 using EscInstaller.EscCommunication.Logic;
@@ -18,7 +19,7 @@ namespace EscInstaller.EscCommunication.downloadItems
 
         public override string Value => "Matrix selection";
 
-        public override Task Function => DownloaderFactory().GetEeprom(ProgressFactory());
+        public override Task Function => DownloaderFactory().GetEeprom(ProgressFactory(), Cancellation.Token);
 
         protected override E2PromArea Area => E2PromArea.RoutingTable;
 

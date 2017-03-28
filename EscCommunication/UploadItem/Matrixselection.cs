@@ -22,7 +22,7 @@ namespace EscInstaller.EscCommunication.UploadItem
             get
             {
                 var p = new MatrixSender(Main.DataModel);
-                return p.SetMatrixSelections(ProgressFactory());
+                return p.SetMatrixSelections(ProgressFactory(), Cancellation.Token);
             }
         }
     }

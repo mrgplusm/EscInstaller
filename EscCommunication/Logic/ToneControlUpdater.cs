@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Common;
 using Common.Commodules;
@@ -25,7 +26,7 @@ namespace EscInstaller.EscCommunication.Logic
         ///     tonecontrol blocks (flow 0-4, card 0)
         /// </summary>
         /// <returns>packages for sending tone control</returns>
-        public async Task SetToneControls(IProgress<DownloadProgress> iProgress)
+        public async Task SetToneControls(IProgress<DownloadProgress> iProgress, CancellationToken token)
         {
             _toneControlPackages = 0;
             var list = new List<SetToneControl>(
@@ -36,6 +37,7 @@ namespace EscInstaller.EscCommunication.Logic
 
             foreach (var setToneControl in list)
             {
+                if (token.IsCancellationRequested) return;
                 await setToneControl.WaitAsync();
                 iProgress.Report(new DownloadProgress()
                 {

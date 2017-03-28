@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Common;
 using Common.Commodules;
@@ -47,12 +48,13 @@ namespace EscInstaller.EscCommunication.Logic
                 .SelectMany(sp => sp.TotalSpeakerData());
         }
 
-        public async Task SetSpeakerPresetData(IProgress<DownloadProgress> iProgress)
+        public async Task SetSpeakerPresetData(IProgress<DownloadProgress> iProgress, CancellationToken token)
         {
             var dataToSend = GetTotalPresetData().ToArray();
             var total = dataToSend.Length;
             foreach (var data in dataToSend)
             {
+                if (token.IsCancellationRequested) return;
                 CommunicationViewModel.AddData(data);
                 await data.WaitAsync();
                 iProgress.Report(new DownloadProgress()

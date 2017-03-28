@@ -18,7 +18,7 @@ namespace EscInstaller.EscCommunication.downloadItems
 
         public override string Value => "Redundancy Data";
 
-        public override Task Function => DownloaderFactory().GetEeprom(ProgressFactory());
+        public override Task Function => DownloaderFactory().GetEeprom(ProgressFactory(), Cancellation.Token);
 
         protected override E2PromArea Area => E2PromArea.SpeakerRedundancy;
 
