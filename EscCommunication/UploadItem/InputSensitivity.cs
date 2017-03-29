@@ -17,7 +17,7 @@ namespace EscInstaller.EscCommunication.UploadItem
 
         public override string Value => "Input Sensitivity";
 
-        public override Task Function
+        protected override Task Function
         {
             get
             {

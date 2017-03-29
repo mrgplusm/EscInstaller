@@ -13,31 +13,16 @@ namespace EscInstaller.View.Communication
     /// </summary>
     public partial class DownloadView : Window
     {
-        private static DownloadView _openwindow;
-
         public DownloadView()
         {
-            Loaded += DownloadView_Loaded;
-            Closed += DownloadView_Closed;
+            Closed += CloseWindow;
             InitializeComponent();
         }
 
-        public string TextControl { get; set; }
-
-        private static void DownloadView_Closed(object sender, EventArgs e)
+        private void CloseWindow(object sender, EventArgs e)
         {
-            _openwindow = null;
-        }
-
-        private void DownloadView_Loaded(object sender, RoutedEventArgs e)
-        {
-            if (_openwindow != null)
-            {
-                _openwindow.Activate();
-                Close();
-            }
-
-            _openwindow = this;
+            var d = (EscCommunication.Communication) DataContext;
+            d.CloseWindow();
         }
 
         private void CommandBinding_OnExecuted(object sender, ExecutedRoutedEventArgs e)

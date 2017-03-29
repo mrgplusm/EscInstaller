@@ -1,5 +1,6 @@
 using System;
 using System.Collections.ObjectModel;
+using EscInstaller.EscCommunication.Logic;
 
 namespace EscInstaller.EscCommunication
 {
@@ -11,6 +12,6 @@ namespace EscInstaller.EscCommunication
         bool IsChecked { get; set; }
         event EventHandler<NodeUpdatedEventArgs> Checked;        
         ObservableCollection<IDownloadNode> DataChilds { get; } 
-        double ProgressBar { get; }
+        double ProgressBar { get; }        
     }
 }

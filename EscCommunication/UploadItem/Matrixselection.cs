@@ -17,12 +17,12 @@ namespace EscInstaller.EscCommunication.UploadItem
 
         public override string Value => "Matrix selection";
 
-        public override Task Function
+        protected override Task Function
         {
             get
             {
                 var p = new MatrixSender(Main.DataModel);
-                return p.SetMatrixSelections(ProgressFactory(), Cancellation.Token);
+                return p.SetMatrixSelections(Reporting, Cancellation.Token);
             }
         }
     }

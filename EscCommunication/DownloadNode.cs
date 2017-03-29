@@ -89,32 +89,32 @@ namespace EscInstaller.EscCommunication
             if (nodes == null || nodes.Count == 0) return;
             foreach (var node in nodes.Cast<DownloadNode>())
             {
-                node.Cancellation.Cancel();
+                node.Reset();
                 ResetNodes(node.DataChilds);
             }
         }
 
-        protected void StopDownload(IList<IDownloadNode> nodes)
+        protected void Cancel(IList<IDownloadNode> nodes)
         {
             if (nodes == null || nodes.Count == 0) return;
-            foreach (var node in nodes.Where(n => n.IsChecked).Cast<DownloadNode>())
+            foreach (var node in nodes.Cast<DownloadNode>())
             {
                 node.Cancellation.Cancel();
                 node.Cancellation.Dispose();
                 node.Cancellation = new CancellationTokenSource();
-                StopDownload(node.DataChilds);
+                Cancel(node.DataChilds);
             }
         }
 
         protected async void StartDownload(IList<IDownloadNode> nodes)
         {
             if (nodes == null || nodes.Count == 0) return;
-            foreach (var node in nodes.Where(n => n.IsChecked).Cast<DownloadNode>())
+            foreach (var node in nodes.Cast<DownloadNode>())
             {
-                await Task.Run(() => node.Function, Cancellation.Token);
+                if (node.IsChecked)
+                    await node.Function;
                 StartDownload(node.DataChilds);
-            }
-            Report(new DownloadProgress() { Progress = 1, Total = 1 });
+            }            
         }
 
         private double _progressBar;
@@ -133,6 +133,12 @@ namespace EscInstaller.EscCommunication
             }
         }
 
+        protected static bool TraverseCompleted(IList<IDownloadNode> childs)
+        {
+            if (childs == null || !childs.Any()) return true;
+            return childs.All(n => (!n.IsChecked || n.IsCompleted) && TraverseCompleted(n.DataChilds));
+        }
+
         public event EventHandler<NodeUpdatedEventArgs> Completed;
         public event EventHandler<NodeUpdatedEventArgs> Checked;
 
@@ -148,15 +154,14 @@ namespace EscInstaller.EscCommunication
             {
                 ProgressBar = (double)e.Progress / e.Total * 100;
             }
-        }
-
+        }                       
 
         /// <summary>
         ///     to execute when this item is selected
         /// </summary>
-        public virtual Task Function { get { return Task.Run(() => { }); } }
+        protected virtual Task Function { get { return Task.Run(() => { }); } }
 
-        public CancellationTokenSource Cancellation = new CancellationTokenSource();
+        protected CancellationTokenSource Cancellation = new CancellationTokenSource();
 
         protected Progress<DownloadProgress> ProgressFactory()
         {
@@ -171,25 +176,37 @@ namespace EscInstaller.EscCommunication
             IsCompleted = false;
         }
 
-        protected void AttachHandlers(IDownloadNode esc)
+        public virtual Progress<DownloadProgress> Reporting => ProgressFactory();
+
+        protected void AttachHandlers(IDownloadNode node)
         {
-            esc.Completed += CompletedEventReceived;
-            esc.Checked += CheckedEventReceived;
+            node.Completed += CompletedEventReceived;
+            node.Checked += CheckedEventReceived;
+            ((DownloadNode)node).Reporting.ProgressChanged += ChildProgressChanged;
         }
 
-        protected void RemoveHandlers(IDownloadNode esc)
+        private void ChildProgressChanged(object sender, DownloadProgress downloadProgress)
         {
-            esc.Completed -= CompletedEventReceived;
-            esc.Checked -= CheckedEventReceived;
+            var total = 100*DataChilds.Count;
+            var progress = (int)DataChilds.Sum(s => s.ProgressBar);
+            ((IProgress<DownloadProgress>)Reporting).Report(new DownloadProgress() {Progress = progress,Total = total});
+        }
+
+        protected void RemoveHandlers(IDownloadNode node)
+        {
+            node.Completed -= CompletedEventReceived;
+            node.Checked -= CheckedEventReceived;
+            //node.Reporting.ProgressChanged -= ChildProgressChanged;
         }
 
         private void CompletedEventReceived(object sender, NodeUpdatedEventArgs eventArgs)
         {
-            var newValue = DataChilds.All(n => n.IsCompleted);
+            var newValue = DataChilds.All(n => !n.IsChecked || n.IsCompleted);
 
             if (IsCompleted == newValue) return;
             IsCompleted = newValue;
             if (eventArgs.Node == this) return;
+            //todo: propagate event to button communication window .
             OnCompleted(new NodeUpdatedEventArgs() { NewValue = IsCompleted, Node = eventArgs.Node });
         }
 

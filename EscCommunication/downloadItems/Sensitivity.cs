@@ -16,7 +16,7 @@ namespace EscInstaller.EscCommunication.downloadItems
 
         public override string Value => "Sensitivity values";
 
-        public override Task Function
+        protected override Task Function
         {
             get
             {

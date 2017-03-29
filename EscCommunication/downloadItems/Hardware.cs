@@ -17,7 +17,7 @@ namespace EscInstaller.EscCommunication.downloadItems
 
         public override string Value => "Hardware";
 
-        public override Task Function
+        protected override Task Function
         {
             get
             {

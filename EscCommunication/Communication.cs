@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Media;
 using bbv.Common.StateMachine;
-using bbv.Common.StateMachine.Internals;
 using Common;
 using EscInstaller.EscCommunication.downloadItems;
 using EscInstaller.EscCommunication.UploadItem;
@@ -24,21 +23,24 @@ namespace EscInstaller.EscCommunication
 
     enum BtActions
     {
+        SwitchMode,
+        CloseWindow,
         Press,
         Finished,
     }
 
     public class Communication : DownloadNode
     {
-
-
         private readonly PassiveStateMachine<BtSt, BtActions> _stButton = new PassiveStateMachine<BtSt, BtActions>();
-
+        private bool _direction;
+        private Brush _background;
+        private string _buttonName;
 
         public Communication()
         {
             SetSend();
-            _buttonName = "Start";
+            _buttonName = "Start";            
+        
             DownloadCommand = new RelayCommand(() =>
             {
                 _stButton.Fire(BtActions.Press);
@@ -48,10 +50,18 @@ namespace EscInstaller.EscCommunication
 
             _stButton.Initialize(BtSt.Ready);
             _stButton.In(BtSt.Ready).On(BtActions.Press).Goto(BtSt.Working).Execute(Start);
-            _stButton.In(BtSt.Working).On(BtActions.Press).Goto(BtSt.Finished).Execute(StopDownload);
+            _stButton.In(BtSt.Working).On(BtActions.Press).Goto(BtSt.Finished).Execute(Cancel);
             _stButton.In(BtSt.Working).On(BtActions.Finished).Goto(BtSt.Finished).Execute(Finished);
+            _stButton.In(BtSt.Working).On(BtActions.CloseWindow).Goto(BtSt.Finished).Execute(CancelAndReset);
+            _stButton.In(BtSt.Working).On(BtActions.SwitchMode).Goto(BtSt.Finished).Execute(CancelAndReset);
             _stButton.In(BtSt.Finished).On(BtActions.Press).Goto(BtSt.Ready).Execute(ResetStatus);
             _stButton.Start();
+        }
+
+        private void CancelAndReset()
+        {
+            Cancel();
+            ResetStatus();
         }
 
         public string ButtonName
@@ -66,31 +76,37 @@ namespace EscInstaller.EscCommunication
 
         private void ResetStatus()
         {
-            Reset();
+            ResetNodes(DataChilds);
             ButtonName = "Start";
         }
 
         private void Start()
         {
             StartDownload(DataChilds);
+        
             ButtonName = "Cancel";
         }
 
-        private void StopDownload()
+        private void Cancel()
         {
-            StopDownload(DataChilds);
-            Finished();
+            Cancel(DataChilds);
+            Finished();            
         }
 
         private void Finished()
         {
-            ButtonName = "Reset";
+            ButtonName = "Reset";        
         }
 
+        public void CloseWindow()
+        {
+            _stButton.Fire(BtActions.CloseWindow);
+        }
+        
 
         private void CompletedEvent(object sender, NodeUpdatedEventArgs e)
         {
-            if (DataChilds.All(s => s.IsCompleted))
+            if (TraverseCompleted(DataChilds))
                 _stButton.Fire(BtActions.Finished);
         }
 
@@ -104,9 +120,7 @@ namespace EscInstaller.EscCommunication
                 RaisePropertyChanged(() => Direction);
             }
         }
-        private bool _direction;
-        private Brush _background;
-        private string _buttonName;
+              
 
         public Brush Background
         {
@@ -200,6 +214,8 @@ namespace EscInstaller.EscCommunication
             yield return new GainSliders(main);
             yield return new ToneControl(main);
         }
+
+        
     };
 
 

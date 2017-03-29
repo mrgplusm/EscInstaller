@@ -17,7 +17,7 @@ namespace EscInstaller.EscCommunication.UploadItem
 
         public override string Value => "Auxlinks";
 
-        public override Task Function
+        protected override Task Function
         {
             get
             {

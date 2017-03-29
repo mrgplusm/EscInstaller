@@ -17,7 +17,7 @@ namespace EscInstaller.EscCommunication.UploadItem
 
         public override string Value => "Send in- output names";
 
-        public override Task Function
+        protected override Task Function
         {
             get
             {

@@ -17,12 +17,12 @@ namespace EscInstaller.EscCommunication.downloadItems
 
         public override string Value => "Sd messages";
 
-        public override Task Function
+        protected override Task Function
         {
             get
             {
                 var s = new SdMessageReceive(Main.DataModel);
-                return s.GetSdCardMessages(ProgressFactory());
+                return s.GetSdCardMessages(ProgressFactory(), Cancellation.Token);
             }
         }
 

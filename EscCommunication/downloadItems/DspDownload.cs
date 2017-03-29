@@ -19,7 +19,7 @@ namespace EscInstaller.EscCommunication.downloadItems
 
         public override string Value => "DSP Mirror";
 
-        public override Task Function => DownloaderFactory().GetEeprom(ProgressFactory(), Cancellation.Token);
+        protected override Task Function => DownloaderFactory().GetEeprom(ProgressFactory(), Cancellation.Token);
 
         protected override E2PromArea Area => E2PromArea.DspMirror;
 

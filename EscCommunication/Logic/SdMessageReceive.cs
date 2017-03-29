@@ -2,6 +2,7 @@
 
 using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Common;
 using Common.Commodules;
@@ -54,7 +55,7 @@ namespace EscInstaller.EscCommunication.Logic
             return new[] {q.CountA, q.CountB};
         }
 
-        public async Task GetSdCardMessages(IProgress<DownloadProgress> iProgress)
+        public async Task GetSdCardMessages(IProgress<DownloadProgress> iProgress, CancellationToken token)
         {
             ClearMessages();
             var lists = await GetSdMessageCount();
@@ -63,6 +64,7 @@ namespace EscInstaller.EscCommunication.Logic
             {
                 for (var i = SdFirstMessageToDownload; i < list.count; i++)
                 {
+                    if (token.IsCancellationRequested) return;
                     var s = new SdMessageNameLoader(list.n, i);
                     await s.GetMessageName();
                     iProgress.Report(new DownloadProgress() {Progress = ++_sdMessagePackages, Total = _messageCount});
