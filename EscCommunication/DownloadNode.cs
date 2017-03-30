@@ -15,16 +15,16 @@ namespace EscInstaller.EscCommunication
 {
     public class DownloadNode : ViewModelBase, IProgress<DownloadProgress>, IDownloadNode
     {
-        //protected readonly MainUnitViewModel Main;
         private bool _isChecked = true;
-        private bool _escDownloadIsCompleted;
+        private bool _isCompleted;
 
         protected DownloadNode()
         {
-            //  Main = main;
             DataChilds = new ObservableCollection<IDownloadNode>();
-            //_value = Main.DisplayValue;
+            _cancellation = new CancellationTokenSource();
         }
+
+        
 
         public virtual string Value
         {
@@ -54,10 +54,10 @@ namespace EscInstaller.EscCommunication
 
         public bool IsCompleted
         {
-            get { return _escDownloadIsCompleted; }
+            get { return _isCompleted; }
             set
             {
-                _escDownloadIsCompleted = value;
+                _isCompleted = value;
                 RaisePropertyChanged(() => IsCompleted);
             }
         }
@@ -100,8 +100,6 @@ namespace EscInstaller.EscCommunication
             foreach (var node in nodes.Cast<DownloadNode>())
             {
                 node.Cancellation.Cancel();
-                node.Cancellation.Dispose();
-                node.Cancellation = new CancellationTokenSource();
                 Cancel(node.DataChilds);
             }
         }
@@ -111,14 +109,20 @@ namespace EscInstaller.EscCommunication
             if (nodes == null || nodes.Count == 0) return;
             foreach (var node in nodes.Cast<DownloadNode>())
             {
-                if (node.IsChecked)
+                node.Cancellation.Dispose();
+                node._cancellation = new CancellationTokenSource();
+            }
+            foreach (var node in nodes.Cast<DownloadNode>())
+            {
+                if(node.IsChecked)
                     await node.Function;
                 StartDownload(node.DataChilds);
-            }            
+            }
         }
 
         private double _progressBar;
         private string _value = string.Empty;
+        private CancellationTokenSource _cancellation;
 
         /// <summary>
         ///     Indicates progress from 0 - 100;
@@ -154,14 +158,18 @@ namespace EscInstaller.EscCommunication
             {
                 ProgressBar = (double)e.Progress / e.Total * 100;
             }
-        }                       
+        }
 
         /// <summary>
         ///     to execute when this item is selected
         /// </summary>
         protected virtual Task Function { get { return Task.Run(() => { }); } }
 
-        protected CancellationTokenSource Cancellation = new CancellationTokenSource();
+        protected CancellationTokenSource Cancellation
+        {
+            get { return _cancellation; }
+            set { _cancellation = value; }
+        }
 
         protected Progress<DownloadProgress> ProgressFactory()
         {
@@ -187,9 +195,9 @@ namespace EscInstaller.EscCommunication
 
         private void ChildProgressChanged(object sender, DownloadProgress downloadProgress)
         {
-            var total = 100*DataChilds.Count;
+            var total = 100 * DataChilds.Count;
             var progress = (int)DataChilds.Sum(s => s.ProgressBar);
-            ((IProgress<DownloadProgress>)Reporting).Report(new DownloadProgress() {Progress = progress,Total = total});
+            ((IProgress<DownloadProgress>)Reporting).Report(new DownloadProgress() { Progress = progress, Total = total });
         }
 
         protected void RemoveHandlers(IDownloadNode node)
@@ -203,11 +211,13 @@ namespace EscInstaller.EscCommunication
         {
             var newValue = DataChilds.All(n => !n.IsChecked || n.IsCompleted);
 
-            if (IsCompleted == newValue) return;
-            IsCompleted = newValue;
+       
             if (eventArgs.Node == this) return;
             //todo: propagate event to button communication window .
             OnCompleted(new NodeUpdatedEventArgs() { NewValue = IsCompleted, Node = eventArgs.Node });
+
+            if (IsCompleted == newValue) return;
+            IsCompleted = newValue;
         }
 
         private void CheckedEventReceived(object sender, NodeUpdatedEventArgs eventArgs)

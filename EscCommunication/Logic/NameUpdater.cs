@@ -38,8 +38,11 @@ namespace EscInstaller.EscCommunication.Logic
                     new NameUpdate(result.Id, result.NameOfInput, NameType.Input),
                     new NameUpdate(result.Id, result.NameOfOutput, NameType.Output)
                 }).SelectMany(io => io));
-
-            CommunicationViewModel.AddData(list);
+            foreach (var nameUpdate in list)
+            {
+                if (token.IsCancellationRequested) return;
+                CommunicationViewModel.AddData(nameUpdate);
+            }            
 
             foreach (var update in list)
             {
@@ -57,12 +60,12 @@ namespace EscInstaller.EscCommunication.Logic
         {
             var list = Main.SpeakerDataModels.Where(t => t.SpeakerPeqType != SpeakerPeqType.BiquadsMic)
                 .Select(n => new PresetNameUpdate(Main.Id, n.SpeakerName, n.Id)).ToList();
-
-            CommunicationViewModel.AddData(list);
+                       
 
             foreach (var nameUpdate in list)
             {
                 if (token.IsCancellationRequested) return;
+                CommunicationViewModel.AddData(nameUpdate);
                 await nameUpdate.WaitAsync();
                 iProgress.Report(new DownloadProgress() {Progress = ++_peqNamesCount, Total = 15});
             }

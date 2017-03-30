@@ -327,7 +327,11 @@ namespace EscInstaller.ViewModel
                 if (mainUnitViewModel.Timestamp == 0)
                 {
                     var d = new TimeStampUpdater(mainUnitViewModel.DataModel);
-                    CommunicationViewModel.AddData(d.TimeStamp());
+                    foreach (var dispatchData in d.TimeStamp())
+                    {
+                        CommunicationViewModel.AddData(dispatchData);
+                    }
+                    
                 }
                 else
                     mainUnitViewModel.DataModel.TimeStampWrittenToEsc = mainUnitViewModel.Timestamp;

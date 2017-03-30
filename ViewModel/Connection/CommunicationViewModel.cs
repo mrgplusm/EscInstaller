@@ -119,15 +119,7 @@ namespace EscInstaller.ViewModel.Connection
             if (data == null) return;
             var con = OpenConnections.FirstOrDefault(d => d.UnitId == data.DestinationAddress);
             con?.Connection.EnQueue(data);
-        }
-
-        public static void AddData(IEnumerable<IDispatchData> data)
-        {
-            foreach (var dispatchData in data)
-            {
-                AddData(dispatchData);
-            }
-        }
+        }        
 
         public void UpdateConnections()
         {

@@ -1,5 +1,8 @@
 #region
 
+using System;
+using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 using EscInstaller.EscCommunication.Logic;
 using EscInstaller.ViewModel;
@@ -9,10 +12,11 @@ using EscInstaller.ViewModel;
 namespace EscInstaller.EscCommunication.UploadItem
 {
     internal class GainSliders : DownloadData
-    {
+    {        
         public GainSliders(MainUnitViewModel main)
             : base(main)
         {
+                        
         }
 
         public override string Value => "Gain Sliders";
@@ -20,9 +24,9 @@ namespace EscInstaller.EscCommunication.UploadItem
         protected override Task Function
         {
             get
-            {
+            {                
                 var p = new SliderUpdater(Main.DataModel);
-                return p.SetSliders(ProgressFactory(), Cancellation.Token);
+                return p.SetSliders(ProgressFactory(), Cancellation.Token);                
             }
         }
     }

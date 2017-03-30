@@ -25,13 +25,12 @@ namespace EscInstaller.EscCommunication.Logic
 
             var list = Enumerable.Range(0, 18).Select(i =>
                 new RoutingTable(Enumerable.Range(i*12, 12).ToArray(), Main.Id,
-                    LibraryData.FuturamaSys.Selection)).ToArray();
-
-            CommunicationViewModel.AddData(list);
+                    LibraryData.FuturamaSys.Selection)).ToArray();            
 
             foreach (var table in list)
             {
                 if (token.IsCancellationRequested) return;
+                CommunicationViewModel.AddData(table);                
                 await table.WaitAsync();
 
                 Interlocked.Increment(ref matrixBlocks);

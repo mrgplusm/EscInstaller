@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Common.Commodules;
 using Common.Model;
@@ -23,16 +24,22 @@ namespace EscInstaller.EscCommunication.Logic
             _flows = Main.Cards.OfType<CardModel>().SelectMany(o => o.Flows).ToList();
         }
 
-        public async Task SetLinkDemuxers(IProgress<DownloadProgress> iProgress)
+        public async Task SetLinkDemuxers(IProgress<DownloadProgress> iProgress, CancellationToken token)
         {
             _linkDemuxPackages = 0;
             var q = _flows.Skip(1).Select(result => new SetLinkDemux(result.Id, result.Path)).ToArray();
-            CommunicationViewModel.AddData(q);
 
             foreach (var setLinkDemux in q)
             {
-                await setLinkDemux.WaitAsync();
+                if (token.IsCancellationRequested) return;
+                CommunicationViewModel.AddData(setLinkDemux);
+            }
+            
 
+            foreach (var setLinkDemux in q)
+            {
+                if (token.IsCancellationRequested) return;
+                await setLinkDemux.WaitAsync();
                 iProgress.Report(new DownloadProgress()
                 {
                     Progress = ++_linkDemuxPackages,

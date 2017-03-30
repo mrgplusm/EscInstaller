@@ -22,7 +22,7 @@ namespace EscInstaller.EscCommunication.UploadItem
             get
             {
                 var p = new DelayUpdater(Main.DataModel);
-                return p.SetDelaySettings(ProgressFactory());
+                return p.SetDelaySettings(ProgressFactory(), Cancellation.Token);
             }
         }
     }

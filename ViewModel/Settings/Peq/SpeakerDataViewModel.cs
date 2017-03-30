@@ -285,7 +285,12 @@ namespace EscInstaller.ViewModel.Settings.Peq
                 try
                 {
                     var data = sl.TotalSpeakerData().ToArray();
-                    CommunicationViewModel.AddData(data);
+                    foreach (var dispatchData in data)
+                    {
+                        CommunicationViewModel.AddData(dispatchData);
+                    }
+
+                    
                 }
                 catch (Exception e)
                 {
@@ -314,8 +319,16 @@ namespace EscInstaller.ViewModel.Settings.Peq
             var emptyDspdata = sl.GetEmptyDspData(s.PeqDataModel.Biquads);
             var emptyRedundancy = sl.GetEmtptyRedundancyData(s.PeqDataModel.Biquads);
 
-            CommunicationViewModel.AddData(emptyDspdata);
-            CommunicationViewModel.AddData(emptyRedundancy);
+            foreach (var peqParam in emptyDspdata)
+            {
+                CommunicationViewModel.AddData(peqParam);
+            }
+
+            foreach (var setE2PromExt in emptyRedundancy)
+            {
+                CommunicationViewModel.AddData(setE2PromExt);
+            }
+            
         }
 
         public void RefreshBiquads()
@@ -353,8 +366,15 @@ namespace EscInstaller.ViewModel.Settings.Peq
                 var data = sl.DspData(dm);
                 var redundancy = sl.RedundancyData();
 
-                CommunicationViewModel.AddData(redundancy);
-                CommunicationViewModel.AddData(data);
+                foreach (var setE2PromExt in redundancy)
+                {
+                    CommunicationViewModel.AddData(setE2PromExt);
+                }
+                foreach (var peqParam in data)
+                {
+                    CommunicationViewModel.AddData(peqParam);
+                }                
+                
             }
             catch (Exception e)
             {
@@ -392,8 +412,16 @@ namespace EscInstaller.ViewModel.Settings.Peq
             var sl = new SpeakerLogicForFlow(DataModel, _flowId.Value);
             sl.AssignBiquads(vm.PeqDataModel);
             var toClear = usedBiquads.Except(vm.PeqDataModel.Biquads).ToArray();
-            CommunicationViewModel.AddData(sl.GetEmptyDspData(toClear));
-            CommunicationViewModel.AddData(sl.GetEmtptyRedundancyData(toClear));
+
+            foreach (var peqParam in sl.GetEmptyDspData(toClear))
+            {
+                CommunicationViewModel.AddData(peqParam);
+            }
+
+            foreach (var e2PromExt in sl.GetEmtptyRedundancyData(toClear))
+            {
+                CommunicationViewModel.AddData(e2PromExt);
+            }                       
         }
 
         private void TypeChanged(BiquadsChangedEventArgs bf, PeqDataViewModel vm)

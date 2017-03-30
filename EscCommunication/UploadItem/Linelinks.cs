@@ -22,7 +22,7 @@ namespace EscInstaller.EscCommunication.UploadItem
             get
             {
                 var p = new LineLinkUpdater(Main.DataModel);
-                return p.SetLinkDemuxers(ProgressFactory());
+                return p.SetLinkDemuxers(ProgressFactory(), Cancellation.Token);
             }
         }
     }

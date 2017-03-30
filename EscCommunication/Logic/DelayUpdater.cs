@@ -1,6 +1,7 @@
 #region
 
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Common.Commodules;
 using Common.Model;
@@ -18,7 +19,7 @@ namespace EscInstaller.EscCommunication.Logic
         {
         }
 
-        public async Task SetDelaySettings(IProgress<DownloadProgress> iProgress)
+        public async Task SetDelaySettings(IProgress<DownloadProgress> iProgress, CancellationToken token)
         {
             _delayPackages = 0;
             var q = new[]
@@ -26,16 +27,15 @@ namespace EscInstaller.EscCommunication.Logic
                 new SetDelay(1, Main.DelayMilliseconds1, Main.Id),
                 new SetDelay(2, Main.DelayMilliseconds2, Main.Id)
             };
-
-            CommunicationViewModel.AddData(q);
-
-            foreach (var dispatchData in q)
+            
+            foreach (var setDelay in q)
             {
-                await dispatchData.WaitAsync();
+                if (token.IsCancellationRequested) return;
+                CommunicationViewModel.AddData(setDelay);
+                await setDelay.WaitAsync();
 
                 iProgress.Report(new DownloadProgress {Total = 2, Progress = ++_delayPackages});
-            }
-            //todo: chain delays
+            }            
         }
     }
 }

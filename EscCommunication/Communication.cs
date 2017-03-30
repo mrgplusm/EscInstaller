@@ -54,7 +54,7 @@ namespace EscInstaller.EscCommunication
             _stButton.In(BtSt.Working).On(BtActions.Finished).Goto(BtSt.Finished).Execute(Finished);
             _stButton.In(BtSt.Working).On(BtActions.CloseWindow).Goto(BtSt.Finished).Execute(CancelAndReset);
             _stButton.In(BtSt.Working).On(BtActions.SwitchMode).Goto(BtSt.Finished).Execute(CancelAndReset);
-            _stButton.In(BtSt.Finished).On(BtActions.Press).Goto(BtSt.Ready).Execute(ResetStatus);
+            _stButton.In(BtSt.Finished).On(BtActions.Press).Goto(BtSt.Ready).Execute(ResetStatus);            
             _stButton.Start();
         }
 
@@ -118,6 +118,7 @@ namespace EscInstaller.EscCommunication
                 _direction = value;
                 if (_direction) SetReceive(); else SetSend();
                 RaisePropertyChanged(() => Direction);
+                _stButton.Fire(BtActions.SwitchMode);
             }
         }
               

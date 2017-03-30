@@ -2,6 +2,7 @@
 
 using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Common;
 using Common.Commodules;
@@ -20,7 +21,7 @@ namespace EscInstaller.EscCommunication.Logic
         {
         }
 
-        public async Task SetInputSensitivity(IProgress<DownloadProgress> iProgress)
+        public async Task SetInputSensitivity(IProgress<DownloadProgress> iProgress, CancellationToken token)
         {
             //sensitivity
             _inputSensitivityPackages = 0;
@@ -31,10 +32,15 @@ namespace EscInstaller.EscCommunication.Logic
             var lst =
                 Main.InputSensitivity.Select((x, y) => new SetInputSensitivity(Main.Id*12 + y, x)).ToArray();
 
-            CommunicationViewModel.AddData(lst);
+            foreach (var setInputSensitivity in lst)
+            {
+                if (token.IsCancellationRequested) return;
+                CommunicationViewModel.AddData(setInputSensitivity);
+            }            
 
             foreach (var sensitivity in lst)
             {
+                if (token.IsCancellationRequested) return;
                 await sensitivity.WaitAsync();
                 iProgress.Report(new DownloadProgress
                 {

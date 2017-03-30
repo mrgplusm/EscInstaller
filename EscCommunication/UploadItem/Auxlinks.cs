@@ -22,7 +22,7 @@ namespace EscInstaller.EscCommunication.UploadItem
             get
             {
                 var p = new AuxLinker(Main.DataModel);
-                return p.SetAuxLink(ProgressFactory());
+                return p.SetAuxLink(ProgressFactory(), Cancellation.Token);
             }
         }
     }

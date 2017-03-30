@@ -22,7 +22,7 @@ namespace EscInstaller.EscCommunication.UploadItem
             get
             {
                 var p = new InputSensitivityUpdater(Main.DataModel);
-                return p.SetInputSensitivity(ProgressFactory());
+                return p.SetInputSensitivity(ProgressFactory(), Cancellation.Token);
             }
         }
     }

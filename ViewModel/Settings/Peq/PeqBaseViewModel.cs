@@ -80,7 +80,11 @@ namespace EscInstaller.ViewModel.Settings.Peq
                     var t = new SpeakerLogicForFlow(CurrentSpeaker.DataModel, Id);
                     t.UpdateIntegraty();
 
-                    CommunicationViewModel.AddData(t.TotalSpeakerData());
+                    foreach (var dispatchData in t.TotalSpeakerData())
+                    {
+                        CommunicationViewModel.AddData(dispatchData);
+                    }
+                    
                     CommunicationViewModel.AddData(t.PresetNameFactory());
                 });
             }

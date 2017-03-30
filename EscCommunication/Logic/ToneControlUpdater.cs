@@ -33,7 +33,12 @@ namespace EscInstaller.EscCommunication.Logic
                 Main.Cards.First().Flows
                     .Select(flow => new SetToneControl(DspCoefficients.GetToneControl(flow.Bass, flow.Treble), flow.Id)));
 
-            CommunicationViewModel.AddData(list);
+            foreach (var setToneControl in list)
+            {
+                if (token.IsCancellationRequested) return;
+                CommunicationViewModel.AddData(setToneControl);
+            }
+            
 
             foreach (var setToneControl in list)
             {

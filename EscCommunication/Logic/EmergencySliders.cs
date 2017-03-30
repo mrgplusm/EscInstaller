@@ -45,14 +45,15 @@ namespace EscInstaller.EscCommunication.Logic
                 .Flows.Select(flow => new SetGainSlider(flow.Id, (int) flow.InputSlider, SliderType.Input))
                 .Concat(GainSliders())
                 .ToArray();
-            CommunicationViewModel.AddData(r);
+            
 
             var total = r.Length;
 
             foreach (var setGainSlider in r)
             {
-                await setGainSlider.WaitAsync();
+                CommunicationViewModel.AddData(setGainSlider);
                 if (token.IsCancellationRequested) return;
+                await setGainSlider.WaitAsync();            
                 iProgress.Report(new DownloadProgress() {Progress = ++_emergencySliderPackages, Total = total});
             }
         }
