@@ -13,12 +13,10 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Threading;
 using Common;
 using Common.Commodules;
 using Common.Model;
-using EscInstaller.EscCommunication;
 using EscInstaller.EscCommunication.Logic;
 using EscInstaller.ImportSpeakers;
 using EscInstaller.UserControls;
@@ -71,8 +69,7 @@ namespace EscInstaller.ViewModel
             var dispThread = Thread.CurrentThread;
             Dispatcher.FromThread(dispThread);
 
-            TabCollection = new ObservableCollection<ITabControl> { Communication };
-
+            TabCollection = new ObservableCollection<ITabControl> { Communication };         
 
 
 #if DEBUG
@@ -150,7 +147,7 @@ namespace EscInstaller.ViewModel
 
         public ObservableCollection<MenuItem> RecentFiles { get; } = new ObservableCollection<MenuItem>();
         //Remove main unit
-        public ICommand RemoveMainUnitCommand => new RelayCommand<MainUnitViewModel>(RemoveMainUnit, q => q?.Id > 0);
+        public ICommand RemoveMainUnitCommand => new RelayCommand<MainUnitViewModel>(RemoveMainUnit);
 
         public ICommand OpenMeasureMentSettings
             => new RelayCommand<MainUnitViewModel>(m => m.OpenMeasurementSettings(), q => q?.Id > -1);
@@ -615,7 +612,7 @@ namespace EscInstaller.ViewModel
             var newunit = new MainUnitViewModel(mu, this);
             if (!TabCollection.Contains(newunit, new TabComparer()))
                 TabCollection.Add(newunit);
-
+            OnSystemChanged(new SystemChangedEventArgs() { NewMainUnit = newunit });
         }
 
         private void AddMainUnit(int id)
