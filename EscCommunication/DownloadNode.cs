@@ -24,7 +24,7 @@ namespace EscInstaller.EscCommunication
             _cancellation = new CancellationTokenSource();
         }
 
-        
+
 
         public virtual string Value
         {
@@ -106,7 +106,7 @@ namespace EscInstaller.EscCommunication
 
         protected async void StartDownload(IList<IDownloadNode> nodes)
         {
-            if (nodes == null || nodes.Count == 0) return;
+            if (nodes == null || nodes.Count == 0) return;            
             foreach (var node in nodes.Cast<DownloadNode>())
             {
                 node.Cancellation.Dispose();
@@ -114,7 +114,7 @@ namespace EscInstaller.EscCommunication
             }
             foreach (var node in nodes.Cast<DownloadNode>())
             {
-                if(node.IsChecked)
+                if (node.IsChecked)
                     await node.Function;
                 StartDownload(node.DataChilds);
             }
@@ -123,6 +123,7 @@ namespace EscInstaller.EscCommunication
         private double _progressBar;
         private string _value = string.Empty;
         private CancellationTokenSource _cancellation;
+        private IProgress<DownloadProgress> _thisProgress;
 
         /// <summary>
         ///     Indicates progress from 0 - 100;
@@ -165,6 +166,25 @@ namespace EscInstaller.EscCommunication
         ///     to execute when this item is selected
         /// </summary>
         protected virtual Task Function { get { return Task.Run(() => { }); } }
+
+        private IProgress<DownloadProgress> ThisProgress => _thisProgress ?? (_thisProgress = ProgressFactory());
+
+        private void NodeStatus()
+        {
+            if(DataChilds.Count < 1) return;
+            
+            foreach (var downloadNode in DataChilds)
+            {
+                downloadNode.Completed += (sender, args) =>
+                {
+                    ThisProgress.Report(new DownloadProgress()
+                    {
+                        Progress = DataChilds.Count(i => i.IsCompleted),
+                        Total = DataChilds.Count
+                    });
+                };
+            }
+        }
 
         protected CancellationTokenSource Cancellation
         {
@@ -211,10 +231,8 @@ namespace EscInstaller.EscCommunication
         private void CompletedEventReceived(object sender, NodeUpdatedEventArgs eventArgs)
         {
             var newValue = DataChilds.All(n => !n.IsChecked || n.IsCompleted);
-
-       
             if (eventArgs.Node == this) return;
-            //todo: propagate event to button communication window .
+            NodeStatus();
             OnCompleted(new NodeUpdatedEventArgs() { NewValue = IsCompleted, Node = eventArgs.Node });
 
             if (IsCompleted == newValue) return;

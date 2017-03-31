@@ -81,7 +81,7 @@ namespace EscInstaller.EscCommunication
         }
 
         private void Start()
-        {
+        {           
             StartDownload(DataChilds);
         
             ButtonName = "Cancel";
