@@ -1,5 +1,5 @@
 ﻿<Window x:Class="EscInstaller.View.Communication.DownloadView"
-        Title="Select what to download"
+        Title="Select items to Up or Download"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         mc:Ignorable="d"
