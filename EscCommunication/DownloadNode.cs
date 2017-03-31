@@ -171,7 +171,7 @@ namespace EscInstaller.EscCommunication
 
         private void NodeStatus()
         {
-            if(DataChilds.Count < 1) return;
+            if(DataChilds.Count < 2) return;
             
             foreach (var downloadNode in DataChilds)
             {
@@ -180,7 +180,7 @@ namespace EscInstaller.EscCommunication
                     ThisProgress.Report(new DownloadProgress()
                     {
                         Progress = DataChilds.Count(i => i.IsCompleted),
-                        Total = DataChilds.Count
+                        Total = DataChilds.Count(i => i.IsChecked)
                     });
                 };
             }
