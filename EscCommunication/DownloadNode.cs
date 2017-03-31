@@ -152,6 +152,7 @@ namespace EscInstaller.EscCommunication
             {
                 IsCompleted = true;
                 ProgressBar = 100;
+                Done();
                 OnCompleted(new NodeUpdatedEventArgs() { NewValue = true, Node = this });
             }
             else
