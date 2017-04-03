@@ -300,12 +300,11 @@ namespace EscInstaller.ViewModel
                 str.AppendLine(" - " + mainUnitViewModel.DisplayValue);
             }
 
-            var ret = MessageBox.Show(
-                string.Format(isUploadText ? Main.TimestampVerifyUpload : Main.TimestampVerifyDownload, str),
-                Main.TimestampVerifyTitle,
-                MessageBoxButton.OKCancel, MessageBoxImage.Exclamation) != MessageBoxResult.Cancel;
-            if (!ret) return false;
-            //update timestamp in datamodel if user confirms to do so
+            //if(MessageBox.Show(
+            //    string.Format(isUploadText ? Main.TimestampVerifyUpload : Main.TimestampVerifyDownload, str),
+            //    Main.TimestampVerifyTitle,
+            //    MessageBoxButton.OKCancel, MessageBoxImage.Exclamation) == MessageBoxResult.Cancel) return false;
+
             UpdateTimestampConnectedUnits(affectedMainUnits);
 
             return true;

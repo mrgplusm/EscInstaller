@@ -107,7 +107,7 @@ namespace EscInstaller.ImportSpeakers
                         break;
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
 #if !DEBUG
                 MessageBox.Show(e.Message, "Could not open file", MessageBoxButton.OK, MessageBoxImage.Error);
