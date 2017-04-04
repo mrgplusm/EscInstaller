@@ -176,10 +176,22 @@ namespace EscInstaller.EscCommunication
         {
             ThisProgress.Report(new DownloadProgress()
             {
-                Progress = DataChilds.Count(i => i.IsCompleted),
-                Total = DataChilds.Count(i => i.IsChecked)
+                Progress = TreeProgress(DataChilds),
+                Total = SelectedAmount(DataChilds)
             });
+        }
 
+        private int SelectedAmount(IList<IDownloadNode> nodes)
+        {
+            if ((nodes == null) || (nodes.Count < 1)) return 0;
+            return nodes.Count(s => s.IsChecked) + nodes.Sum(q => SelectedAmount(q.DataChilds));
+        }
+
+        private int TreeProgress(IList<IDownloadNode> nodes)
+        {
+            if ((nodes == null) || (nodes.Count < 1)) return 0;
+
+            return nodes.Count(s => s.IsCompleted) + nodes.Sum(q => TreeProgress(q.DataChilds));
         }
 
         protected CancellationTokenSource Cancellation { get; set; }

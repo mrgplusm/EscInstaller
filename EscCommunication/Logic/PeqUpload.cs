@@ -41,9 +41,9 @@ namespace EscInstaller.EscCommunication.Logic
             return Main.SpeakerDataModels.Where(sq => sq.SpeakerPeqType == type);
         }
 
-        public IEnumerable<IDispatchData> DspData(SpeakerDataModel model)
+        public IEnumerable<IDispatchData> DspData(SpeakerDataModel model, int flow)
         {
-            return new SpeakerLogicForFlow(model, model.Id + PresetOffset[model.SpeakerPeqType]).TotalSpeakerData();
+            return new SpeakerLogicForFlow(model, flow + PresetOffset[model.SpeakerPeqType]).TotalSpeakerData();
         }
 
         //public IEnumerable<IDispatchData> RedundancyData(SpeakerDataModel model)

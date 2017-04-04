@@ -61,7 +61,7 @@ namespace EscInstaller.EscCommunication.UploadItem
             get
             {
                 var p = new PeqUpload(Main.DataModel);
-                return p.SetData(ProgressFactory(), Cancellation.Token, p.DspData(_model).ToArray());
+                return p.SetData(ProgressFactory(), Cancellation.Token, p.DspData(_model, _flowId).ToArray());
             }
         }
     }
