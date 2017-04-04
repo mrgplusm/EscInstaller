@@ -81,7 +81,13 @@ namespace EscInstaller.EscCommunication
         }
 
         private void Start()
-        {           
+        {
+            if (TraverseCompleted(DataChilds))
+            {
+                _stButton.Fire(BtActions.Finished);
+                return;
+            }
+            
             StartDownload(DataChilds);
         
             ButtonName = "Cancel";

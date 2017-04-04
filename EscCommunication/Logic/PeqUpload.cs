@@ -21,38 +21,41 @@ namespace EscInstaller.EscCommunication.Logic
 
         public PeqUpload(MainUnitModel main) : base(main)
         {
-        }
-
-        /// <summary>
-        ///     //aux &&
-        ///     redundancy data &&
-        ///     peq data &&
-        ///     EQpreset names
-        /// </summary>
-        private IEnumerable<IDispatchData> GetTotalPresetData()
-        {
-            var flowOffsets = new Dictionary<SpeakerPeqType, int>
+            PresetOffset = new Dictionary<SpeakerPeqType, int>()
             {
                 {SpeakerPeqType.BiquadsPreset, Main.Id*12},
                 {SpeakerPeqType.BiquadsAux, Main.Id*12},
                 {SpeakerPeqType.BiquadsMic, 2 + Main.Id*5 + GenericMethods.StartCountFrom}
             };
+        }                
+        
+        public Dictionary<SpeakerPeqType, int> PresetOffset;
 
-            return flowOffsets.SelectMany(offset => GetPresetData(offset.Value, offset.Key));
+        /// <summary>
+        /// list of list of speakerdata + redundancy
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public IEnumerable<SpeakerDataModel> PresetModels(SpeakerPeqType type)
+        {            
+            return Main.SpeakerDataModels.Where(sq => sq.SpeakerPeqType == type);
         }
 
-        private IEnumerable<IDispatchData> GetPresetData(int flowOffset, SpeakerPeqType type)
+        public IEnumerable<IDispatchData> DspData(SpeakerDataModel model)
         {
-            return Main.SpeakerDataModels.Where(s => s.SpeakerPeqType == type)
-                .Select((speakerDataModel, flow) => new SpeakerLogicForFlow(speakerDataModel, flow + flowOffset))
-                .SelectMany(sp => sp.TotalSpeakerData());
+            return new SpeakerLogicForFlow(model, model.Id + PresetOffset[model.SpeakerPeqType]).TotalSpeakerData();
         }
 
-        public async Task SetSpeakerPresetData(IProgress<DownloadProgress> iProgress, CancellationToken token)
+        //public IEnumerable<IDispatchData> RedundancyData(SpeakerDataModel model)
+        //{
+        //    return new SpeakerLogicForFlow(model, model.Id + PresetOffset[model.SpeakerPeqType]).RedundancyData();
+        //}
+
+        public async Task SetData(IProgress<DownloadProgress> iProgress, CancellationToken token, IList<IDispatchData> packages)
         {
-            var dataToSend = GetTotalPresetData().ToArray();
-            var total = dataToSend.Length;
-            foreach (var data in dataToSend)
+            
+            var total = packages.Count;
+            foreach (var data in packages)
             {
                 if (token.IsCancellationRequested) return;
                 CommunicationViewModel.AddData(data);

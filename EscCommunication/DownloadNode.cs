@@ -21,7 +21,7 @@ namespace EscInstaller.EscCommunication
         protected DownloadNode()
         {
             DataChilds = new ObservableCollection<IDownloadNode>();
-            _cancellation = new CancellationTokenSource();
+            Cancellation = new CancellationTokenSource();
         }
 
 
@@ -106,11 +106,12 @@ namespace EscInstaller.EscCommunication
 
         protected async void StartDownload(IList<IDownloadNode> nodes)
         {
-            if (nodes == null || nodes.Count == 0) return;            
+
+            if (nodes == null || nodes.Count == 0) return;
             foreach (var node in nodes.Cast<DownloadNode>())
             {
                 node.Cancellation.Dispose();
-                node._cancellation = new CancellationTokenSource();
+                node.Cancellation = new CancellationTokenSource();
             }
             foreach (var node in nodes.Cast<DownloadNode>())
             {
@@ -122,7 +123,6 @@ namespace EscInstaller.EscCommunication
 
         private double _progressBar;
         private string _value = string.Empty;
-        private CancellationTokenSource _cancellation;
         private IProgress<DownloadProgress> _thisProgress;
 
         /// <summary>
@@ -169,28 +169,20 @@ namespace EscInstaller.EscCommunication
 
         private IProgress<DownloadProgress> ThisProgress => _thisProgress ?? (_thisProgress = ProgressFactory());
 
-        private void NodeStatus()
+        /// <summary>
+        /// When node has childs
+        /// </summary>        
+        private void ReportParentProgress(object sender, NodeUpdatedEventArgs nodeUpdatedEventArgs)
         {
-            if(DataChilds.Count < 2) return;
-            
-            foreach (var downloadNode in DataChilds)
+            ThisProgress.Report(new DownloadProgress()
             {
-                downloadNode.Completed += (sender, args) =>
-                {
-                    ThisProgress.Report(new DownloadProgress()
-                    {
-                        Progress = DataChilds.Count(i => i.IsCompleted),
-                        Total = DataChilds.Count(i => i.IsChecked)
-                    });
-                };
-            }
+                Progress = DataChilds.Count(i => i.IsCompleted),
+                Total = DataChilds.Count(i => i.IsChecked)
+            });
+
         }
 
-        protected CancellationTokenSource Cancellation
-        {
-            get { return _cancellation; }
-            set { _cancellation = value; }
-        }
+        protected CancellationTokenSource Cancellation { get; set; }
 
         protected Progress<DownloadProgress> ProgressFactory()
         {
@@ -211,28 +203,21 @@ namespace EscInstaller.EscCommunication
         {
             node.Completed += CompletedEventReceived;
             node.Checked += CheckedEventReceived;
-            ((DownloadNode)node).Reporting.ProgressChanged += ChildProgressChanged;
+            node.Completed += ReportParentProgress;
         }
-
-        private void ChildProgressChanged(object sender, DownloadProgress downloadProgress)
-        {
-            var total = 100 * DataChilds.Count;
-            var progress = (int)DataChilds.Sum(s => s.ProgressBar);
-            ((IProgress<DownloadProgress>)Reporting).Report(new DownloadProgress() { Progress = progress, Total = total });
-        }
-
+        
         protected void RemoveHandlers(IDownloadNode node)
         {
             node.Completed -= CompletedEventReceived;
             node.Checked -= CheckedEventReceived;
-            //node.Reporting.ProgressChanged -= ChildProgressChanged;
+            node.Completed -= ReportParentProgress;
         }
 
         private void CompletedEventReceived(object sender, NodeUpdatedEventArgs eventArgs)
         {
             var newValue = DataChilds.All(n => !n.IsChecked || n.IsCompleted);
             if (eventArgs.Node == this) return;
-            NodeStatus();
+
             OnCompleted(new NodeUpdatedEventArgs() { NewValue = IsCompleted, Node = eventArgs.Node });
 
             if (IsCompleted == newValue) return;
