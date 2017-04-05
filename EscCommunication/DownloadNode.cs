@@ -174,20 +174,24 @@ namespace EscInstaller.EscCommunication
         /// </summary>        
         private void ReportParentProgress(object sender, NodeUpdatedEventArgs nodeUpdatedEventArgs)
         {
+            var progress = TreeProgress(DataChilds);
+            var total = SelectedAmount(DataChilds);
+
             ThisProgress.Report(new DownloadProgress()
             {
-                Progress = TreeProgress(DataChilds),
-                Total = SelectedAmount(DataChilds)
+                Progress = progress,
+                Total = total
             });
+            if(total <= progress) SetCompleted();
         }
 
-        private int SelectedAmount(IList<IDownloadNode> nodes)
+        private static int SelectedAmount(ICollection<IDownloadNode> nodes)
         {
             if ((nodes == null) || (nodes.Count < 1)) return 0;
             return nodes.Count(s => s.IsChecked) + nodes.Sum(q => SelectedAmount(q.DataChilds));
         }
 
-        private int TreeProgress(IList<IDownloadNode> nodes)
+        private static int TreeProgress(ICollection<IDownloadNode> nodes)
         {
             if ((nodes == null) || (nodes.Count < 1)) return 0;
 
@@ -213,27 +217,20 @@ namespace EscInstaller.EscCommunication
 
         protected void AttachHandlers(IDownloadNode node)
         {
-            node.Completed += CompletedEventReceived;
             node.Checked += CheckedEventReceived;
             node.Completed += ReportParentProgress;
         }
         
         protected void RemoveHandlers(IDownloadNode node)
         {
-            node.Completed -= CompletedEventReceived;
             node.Checked -= CheckedEventReceived;
             node.Completed -= ReportParentProgress;
         }
 
-        private void CompletedEventReceived(object sender, NodeUpdatedEventArgs eventArgs)
+        private void SetCompleted()
         {
-            var newValue = DataChilds.All(n => !n.IsChecked || n.IsCompleted);
-            if (eventArgs.Node == this) return;
-
-            OnCompleted(new NodeUpdatedEventArgs() { NewValue = IsCompleted, Node = eventArgs.Node });
-
-            if (IsCompleted == newValue) return;
-            IsCompleted = newValue;
+            IsCompleted = true;
+            OnCompleted(new NodeUpdatedEventArgs() { NewValue = IsCompleted, Node = this});
         }
 
         private void CheckedEventReceived(object sender, NodeUpdatedEventArgs eventArgs)
