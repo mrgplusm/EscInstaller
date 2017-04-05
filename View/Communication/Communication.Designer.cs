@@ -259,7 +259,7 @@ namespace EscInstaller.View.Communication {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No Connection or No Connection established.
+        ///   Looks up a localized string similar to No cable connection or no serial connection established.
         /// </summary>
         public static string ErrorConnection {
             get {

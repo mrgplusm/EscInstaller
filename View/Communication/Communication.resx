@@ -265,6 +265,6 @@
     <value>Select all</value>
   </data>
   <data name="ErrorConnection" xml:space="preserve">
-    <value>No Connection or No Connection established</value>
+    <value>No cable connection or no serial connection established</value>
   </data>
 </root>
