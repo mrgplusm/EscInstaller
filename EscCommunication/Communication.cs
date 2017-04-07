@@ -32,13 +32,11 @@ namespace EscInstaller.EscCommunication
     public class Communication : DownloadNode
     {
         private readonly PassiveStateMachine<BtSt, BtActions> _stButton = new PassiveStateMachine<BtSt, BtActions>();
-        private bool _direction;
         private Brush _background;
         private string _buttonName;
 
         public Communication()
         {
-            SetSend();
             _buttonName = "Start";
 
             DownloadCommand = new RelayCommand(() =>
@@ -116,19 +114,6 @@ namespace EscInstaller.EscCommunication
                 _stButton.Fire(BtActions.Finished);
         }
 
-        public bool Direction
-        {
-            get { return _direction; }
-            set
-            {
-                _direction = value;
-                if (_direction) SetReceive(); else SetSend();
-                RaisePropertyChanged(() => Direction);
-                _stButton.Fire(BtActions.SwitchMode);
-            }
-        }
-
-
         public Brush Background
         {
             get { return _background; }
@@ -139,8 +124,9 @@ namespace EscInstaller.EscCommunication
             }
         }
 
-        private void SetReceive()
+        public void SetReceive()
         {
+            _stButton.Fire(BtActions.SwitchMode);
             Value = "Download";
             Background = Brushes.LightCyan;
 
@@ -158,8 +144,9 @@ namespace EscInstaller.EscCommunication
             }
         }
 
-        private void SetSend()
+        public void SetSend()
         {
+            _stButton.Fire(BtActions.SwitchMode);
             Value = "Upload";
             Background = Brushes.LightPink;
 

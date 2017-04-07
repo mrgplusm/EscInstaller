@@ -25,8 +25,7 @@
         <KeyBinding Key="Escape" Command="{StaticResource Cclose}" />
     </Window.InputBindings>
     <StackPanel Background="{Binding Background}">
-        <ToggleButton Content="{Binding Value}" IsChecked="{Binding Direction}"  />
-
+        
         <TreeView ItemsSource="{Binding DataChilds}" Background="{Binding Path=Background}">
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding DataChilds}" DataType="{x:Type escCommunication1:IDownloadNode}" >

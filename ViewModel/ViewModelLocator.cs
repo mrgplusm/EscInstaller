@@ -13,7 +13,7 @@ namespace EscInstaller.ViewModel
         private static MainViewModel _main;
         private static Communication _communication;
 
-        public static SdLibraryEditorViewModel SdLibraryEditor
+        public static SdLibraryEditorViewModel SdLibraryEdior
         {
             get { return new SdLibraryEditorViewModel(); }
         }

@@ -46,7 +46,7 @@ namespace EscInstaller.ViewModel
 
         public MainViewModel()
         {
-            if (base.IsInDesignMode)
+            if (IsInDesignMode)
             {
                 return;
             }
@@ -69,7 +69,7 @@ namespace EscInstaller.ViewModel
             var dispThread = Thread.CurrentThread;
             Dispatcher.FromThread(dispThread);
 
-            TabCollection = new ObservableCollection<ITabControl> { Communication };         
+            TabCollection = new ObservableCollection<ITabControl> { Communication };
 
 
 #if DEBUG
@@ -284,8 +284,8 @@ namespace EscInstaller.ViewModel
 
         private static void SendUnitData()
         {
-            var nq = new DownloadView();
-            nq.Show();
+            ViewModelLocator.Communication.SetSend();
+            DownloadView.DownloadViewFactory().Show();
         }
 
         private async Task<bool> InformUserTimestampAsync(bool isUploadText)
@@ -327,7 +327,7 @@ namespace EscInstaller.ViewModel
                     {
                         CommunicationViewModel.AddData(dispatchData);
                     }
-                    
+
                 }
                 else
                     mainUnitViewModel.DataModel.TimeStampWrittenToEsc = mainUnitViewModel.Timestamp;
@@ -369,9 +369,8 @@ namespace EscInstaller.ViewModel
 
         private static void GetSystem()
         {
-            var nq = new DownloadView();
-
-            nq.Show();
+            ViewModelLocator.Communication.SetReceive();
+            DownloadView.DownloadViewFactory().Show();
         }
 
         private bool SystemIsOpen()
