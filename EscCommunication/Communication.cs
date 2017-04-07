@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Media;
 using bbv.Common.StateMachine;
 using Common;
@@ -34,6 +35,7 @@ namespace EscInstaller.EscCommunication
         private readonly PassiveStateMachine<BtSt, BtActions> _stButton = new PassiveStateMachine<BtSt, BtActions>();
         private Brush _background;
         private string _buttonName;
+        private bool _busyWait;
 
         public Communication()
         {
@@ -42,23 +44,36 @@ namespace EscInstaller.EscCommunication
             DownloadCommand = new RelayCommand(() =>
             {
                 _stButton.Fire(BtActions.Press);
-            });
+            }, ()=> !BusyWait);
 
             Completed += CompletedEvent;
 
             _stButton.Initialize(BtSt.Ready);
             _stButton.In(BtSt.Ready).On(BtActions.Press).Goto(BtSt.Working).Execute(Start);
-            _stButton.In(BtSt.Working).On(BtActions.Press).Goto(BtSt.Finished).Execute(Cancel);
+            _stButton.In(BtSt.Working).On(BtActions.Press).Goto(BtSt.Ready).Execute(CancelAndReset);
             _stButton.In(BtSt.Working).On(BtActions.Finished).Goto(BtSt.Finished).Execute(Finished);
-            _stButton.In(BtSt.Working).On(BtActions.CloseWindow).Goto(BtSt.Finished).Execute(CancelAndReset);
-            _stButton.In(BtSt.Working).On(BtActions.SwitchMode).Goto(BtSt.Finished).Execute(CancelAndReset);
+            _stButton.In(BtSt.Working).On(BtActions.CloseWindow).Goto(BtSt.Ready).Execute(CancelAndReset);
+            _stButton.In(BtSt.Working).On(BtActions.SwitchMode).Goto(BtSt.Ready).Execute(CancelAndReset);
             _stButton.In(BtSt.Finished).On(BtActions.Press).Goto(BtSt.Ready).Execute(ResetStatus);
             _stButton.Start();
         }
 
-        private void CancelAndReset()
+        private bool BusyWait
+        {
+            get { return _busyWait; }
+            set
+            {
+                _busyWait = value;
+                DownloadCommand.RaiseCanExecuteChanged();
+            }
+        }
+
+        private async void CancelAndReset()
         {
             Cancel();
+            BusyWait = true;
+            await Task.Delay(1000);
+            BusyWait = false;
             ResetStatus();
         }
 
@@ -88,13 +103,12 @@ namespace EscInstaller.EscCommunication
 
             StartDownload(DataChilds);
 
-            ButtonName = "Cancel";
+            ButtonName = "Reset";
         }
 
         private void Cancel()
         {
-            Cancel(DataChilds);
-            Finished();
+            Cancel(DataChilds);        
         }
 
         private void Finished()
