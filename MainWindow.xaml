@@ -121,7 +121,7 @@
                           Command="{Binding Path=OpenSDCardManager}" />
 
                 <MenuItem Header="{x:Static escInstaller:Main._dcOperationMenuEntry}"
-                          Command="{Binding Path=EnableDcOperation}" IsCheckable="True" IsEnabled="False" />
+                          Command="{Binding Path=EnableDcOperation}" IsCheckable="True" />
 
                 <MenuItem Header="{x:Static escInstaller:Main.OpenMeasurementSettingsMenuEntry}"
                           Command="{Binding Path=OpenMeasureMentSettings}" IsEnabled="{Binding Path=MeasurementSettingsEnabled}">

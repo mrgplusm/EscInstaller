@@ -127,6 +127,7 @@ namespace EscInstaller.ViewModel
                              MessageBoxResult.Yes)
                         LibraryData.FuturamaSys.IsInDcOperation = false;
                     RaisePropertyChanged(() => IsInDcOperation);
+                    AddData(new SetDcOperation(LibraryData.FuturamaSys.IsInDcOperation));
                 }, () => LibraryData.SystemIsOpen);
             }
         }
