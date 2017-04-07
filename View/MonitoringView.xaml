@@ -156,7 +156,7 @@
 
         </GroupBox>
 
-        <GroupBox Header="{x:Static view:Monitoring._monitorDeviation1}" Grid.Row="0" Grid.Column="1" IsEnabled="False">
+        <GroupBox Header="{x:Static view:Monitoring._monitorDeviation1}" Grid.Row="0" Grid.Column="1">
             <StackPanel Margin="5">
                 <RadioButton GroupName="dev0"
                              Content="{Binding Path=Loads[2], FallbackValue=5%, Converter={converters1:WattConverter}, ConverterParameter=5}"
@@ -177,7 +177,7 @@
         </GroupBox>
 
 
-        <GroupBox Header="{x:Static view:Monitoring._monitorDeviation1}" Grid.Row="1" Grid.Column="1" IsEnabled="False">
+        <GroupBox Header="{x:Static view:Monitoring._monitorDeviation1}" Grid.Row="1" Grid.Column="1">
             <StackPanel Margin="5">
                 <RadioButton GroupName="dev0"
                              Content="{Binding Path=Loads[8], FallbackValue=5%, Converter={converters1:WattConverter}, ConverterParameter=5}"
