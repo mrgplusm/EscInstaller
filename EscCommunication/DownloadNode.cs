@@ -106,7 +106,6 @@ namespace EscInstaller.EscCommunication
 
         protected async void StartDownload(IList<IDownloadNode> nodes)
         {
-
             if (nodes == null || nodes.Count == 0) return;
             foreach (var node in nodes.Cast<DownloadNode>())
             {
@@ -124,6 +123,7 @@ namespace EscInstaller.EscCommunication
         private double _progressBar;
         private string _value = string.Empty;
         private IProgress<DownloadProgress> _thisProgress;
+        private bool _isExpanded = true;
 
         /// <summary>
         ///     Indicates progress from 0 - 100;
@@ -182,7 +182,17 @@ namespace EscInstaller.EscCommunication
                 Progress = progress,
                 Total = total
             });
-            if(total <= progress) SetCompleted();
+            if (total <= progress) SetCompleted();
+        }
+
+        public virtual bool IsExpanded
+        {
+            get { return _isExpanded; }
+            set
+            {
+                _isExpanded = value;
+                RaisePropertyChanged(() => IsExpanded);
+            }
         }
 
         private static int SelectedAmount(ICollection<IDownloadNode> nodes)
@@ -220,7 +230,7 @@ namespace EscInstaller.EscCommunication
             node.Checked += CheckedEventReceived;
             node.Completed += ReportParentProgress;
         }
-        
+
         protected void RemoveHandlers(IDownloadNode node)
         {
             node.Checked -= CheckedEventReceived;
@@ -230,7 +240,7 @@ namespace EscInstaller.EscCommunication
         private void SetCompleted()
         {
             IsCompleted = true;
-            OnCompleted(new NodeUpdatedEventArgs() { NewValue = IsCompleted, Node = this});
+            OnCompleted(new NodeUpdatedEventArgs() { NewValue = IsCompleted, Node = this });
         }
 
         private void CheckedEventReceived(object sender, NodeUpdatedEventArgs eventArgs)

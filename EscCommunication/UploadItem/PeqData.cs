@@ -23,10 +23,12 @@ namespace EscInstaller.EscCommunication.UploadItem
                 AddChild(new PresetSpeakers(main, key));
             }                       
         }
-        
+
+        public override bool IsExpanded { get; set; }
+
         public override string Value => "Peq Data";        
     }
-    
+
     internal class PresetSpeakers : DownloadData
     {
         private readonly SpeakerPeqType _type;
