@@ -39,8 +39,8 @@ namespace EscInstaller.EscCommunication
         public Communication()
         {
             SetSend();
-            _buttonName = "Start";            
-        
+            _buttonName = "Start";
+
             DownloadCommand = new RelayCommand(() =>
             {
                 _stButton.Fire(BtActions.Press);
@@ -54,7 +54,7 @@ namespace EscInstaller.EscCommunication
             _stButton.In(BtSt.Working).On(BtActions.Finished).Goto(BtSt.Finished).Execute(Finished);
             _stButton.In(BtSt.Working).On(BtActions.CloseWindow).Goto(BtSt.Finished).Execute(CancelAndReset);
             _stButton.In(BtSt.Working).On(BtActions.SwitchMode).Goto(BtSt.Finished).Execute(CancelAndReset);
-            _stButton.In(BtSt.Finished).On(BtActions.Press).Goto(BtSt.Ready).Execute(ResetStatus);            
+            _stButton.In(BtSt.Finished).On(BtActions.Press).Goto(BtSt.Ready).Execute(ResetStatus);
             _stButton.Start();
         }
 
@@ -87,28 +87,28 @@ namespace EscInstaller.EscCommunication
                 _stButton.Fire(BtActions.Finished);
                 return;
             }
-            
+
             StartDownload(DataChilds);
-        
+
             ButtonName = "Cancel";
         }
 
         private void Cancel()
         {
             Cancel(DataChilds);
-            Finished();            
+            Finished();
         }
 
         private void Finished()
         {
-            ButtonName = "Reset";        
+            ButtonName = "Reset";
         }
 
         public void CloseWindow()
         {
             _stButton.Fire(BtActions.CloseWindow);
         }
-        
+
 
         private void CompletedEvent(object sender, NodeUpdatedEventArgs e)
         {
@@ -127,7 +127,7 @@ namespace EscInstaller.EscCommunication
                 _stButton.Fire(BtActions.SwitchMode);
             }
         }
-              
+
 
         public Brush Background
         {
@@ -149,7 +149,7 @@ namespace EscInstaller.EscCommunication
 
             foreach (var mu in ConnectedUnits)
             {
-                var node = new DownloadData(mu);
+                var node = new DownloadData(mu) { IsExpanded = mu.Id <= 0 };
                 foreach (var downloadNode in DownloadNodes(mu))
                 {
                     node.AddChild(downloadNode);
@@ -167,7 +167,7 @@ namespace EscInstaller.EscCommunication
 
             foreach (var mu in ConnectedUnits)
             {
-                var node = new Upload(mu);
+                var node = new Upload(mu) { IsExpanded = mu.Id <= 0 };
                 foreach (var uploadNode in UploadNodes(mu))
                 {
                     node.AddChild(uploadNode);
@@ -222,7 +222,7 @@ namespace EscInstaller.EscCommunication
             yield return new ToneControl(main);
         }
 
-        
+
     };
 
 
