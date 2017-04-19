@@ -82,16 +82,10 @@ namespace EscInstaller.ViewModel.Settings.Peq
             get { return DataModel.SpeakerPeqType; }
         }
 
-        public ObservableCollection<SpeakerPeqType> SpeakerPeqTypes
-        {
-            get
-            {
-                return _speakerPeqTypes ??
-                       (_speakerPeqTypes =
-                           new ObservableCollection<SpeakerPeqType>(Enum.GetValues(typeof(SpeakerPeqType))
-                               .Cast<SpeakerPeqType>()));
-            }
-        }
+        public ObservableCollection<SpeakerPeqType> SpeakerPeqTypes => _speakerPeqTypes ??
+                                                                       (_speakerPeqTypes =
+                                                                           new ObservableCollection<SpeakerPeqType>(Enum.GetValues(typeof(SpeakerPeqType))
+                                                                               .Cast<SpeakerPeqType>()));
 
         public SpeakerDataModel DataModel { get; }
 
@@ -115,10 +109,7 @@ namespace EscInstaller.ViewModel.Settings.Peq
         /// <summary>
         ///     prevents the user from editing a speaker with the same name. Only when a flowId is specified
         /// </summary>
-        public bool InLibrary
-        {
-            get { return _flowId.HasValue && IsLibraryDuplicate(SpeakerName); }
-        }
+        public bool InLibrary => _flowId.HasValue && IsLibraryDuplicate(SpeakerName);
 
         public ICommand AddNewParam
         {
@@ -153,11 +144,9 @@ namespace EscInstaller.ViewModel.Settings.Peq
                 {
                     return new ObservableCollection<IPlotterElement>();
                 }
-                if (_plotter == null)
-                {
-                    _plotter = new ObservableCollection<IPlotterElement>();
-                    AttachGraphHandlers();
-                }
+                if (_plotter != null) return _plotter;
+                _plotter = new ObservableCollection<IPlotterElement>();
+                AttachGraphHandlers();
                 return _plotter;
             }
         }
@@ -166,33 +155,25 @@ namespace EscInstaller.ViewModel.Settings.Peq
         {
             get
             {
-                if (_peqDataViewModels == null)
+                if (_peqDataViewModels != null) return _peqDataViewModels;
+                _peqDataViewModels = new ObservableCollection<PeqDataViewModel>();
+
+                foreach (var z in PeqDataModels.Select(n => new PeqDataViewModel(n)))
                 {
-                    _peqDataViewModels = new ObservableCollection<PeqDataViewModel>();
-
-                    foreach (var z in PeqDataModels.Select(n => new PeqDataViewModel(n)))
-                    {
-                        _peqDataViewModels.Add(z);
-                    }
-
-                    _peqDataViewModels.CollectionChanged += (sender, args) => RaisePropertyChanged(() => Biquads);
-                    AttachRemoveDelegate();
-
-                    ReorderIds(_peqDataViewModels);
+                    _peqDataViewModels.Add(z);
                 }
+
+                _peqDataViewModels.CollectionChanged += (sender, args) => RaisePropertyChanged(() => Biquads);
+                AttachRemoveDelegate();
+
+                ReorderIds(_peqDataViewModels);
                 return _peqDataViewModels;
             }
         }
 
-        public int RequiredBiquads
-        {
-            get { return PeqDataModels.RequiredBiquads(); }
-        }
+        public int RequiredBiquads => PeqDataModels.RequiredBiquads();
 
-        public List<PeqDataModel> PeqDataModels
-        {
-            get { return DataModel.PEQ ?? (DataModel.PEQ = new List<PeqDataModel>()); }
-        }
+        public List<PeqDataModel> PeqDataModels => DataModel.PEQ ?? (DataModel.PEQ = new List<PeqDataModel>());
 
         public bool IsCustom
         {
@@ -206,10 +187,7 @@ namespace EscInstaller.ViewModel.Settings.Peq
             set { SetSpeakerName(value); }
         }
 
-        public string DisplayId
-        {
-            get { return (Id + 1).ToString(CultureInfo.InvariantCulture); }
-        }
+        public string DisplayId => (Id + 1).ToString(CultureInfo.InvariantCulture);
 
         public int Id
         {
@@ -234,10 +212,7 @@ namespace EscInstaller.ViewModel.Settings.Peq
             }
         }
 
-        public Brush Color
-        {
-            get { return DataModel.IsCustom ? Brushes.Brown : Brushes.Black; }
-        }
+        public Brush Color => DataModel.IsCustom ? Brushes.Brown : Brushes.Black;
 
         /// <summary>
         ///     Amount of biquads used by this speaker
@@ -247,10 +222,7 @@ namespace EscInstaller.ViewModel.Settings.Peq
             get { return PeqDataModels.Sum(p => (p.Order + 1) >> 1); }
         }
 
-        public string FilterCountText
-        {
-            get { return string.Format("Max {0} second order filters", (int)SpeakerPeqType); }
-        }
+        public string FilterCountText => $"Max {(int) SpeakerPeqType} second order filters";
 
         public double DbMagnitude { get; set; }
 
@@ -554,8 +526,7 @@ namespace EscInstaller.ViewModel.Settings.Peq
 
         protected virtual void OnSpeakerNameChanged()
         {
-            var handler = SpeakerNameChanged;
-            if (handler != null) handler(this, EventArgs.Empty);
+            SpeakerNameChanged?.Invoke(this, EventArgs.Empty);
         }
 
         public void UpdateSpeakerName()
@@ -689,8 +660,7 @@ namespace EscInstaller.ViewModel.Settings.Peq
 
         public static string DisplayValue(SpeakerDataModel model, bool isPreset = false)
         {
-            if (string.IsNullOrWhiteSpace(model.SpeakerName)) return string.Empty;
-            return model.SpeakerName.Truncate(13);
+            return string.IsNullOrWhiteSpace(model.SpeakerName) ? string.Empty : model.SpeakerName.Truncate(13);
         }
 
         public void CopySpeakerName(string speakername)

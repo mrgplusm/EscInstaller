@@ -273,7 +273,9 @@
     <Compile Include="ViewModel\Connection\ConnectionViewModel.cs" />
     <Compile Include="ViewModel\ErrorLineModel.cs" />
     <Compile Include="ViewModel\ExtensionCardViewModel.cs" />
+    <Compile Include="ViewModel\FormatLayout.cs" />
     <Compile Include="ViewModel\IndependentDictionar.cs" />
+    <Compile Include="ViewModel\MainUnitUpdatedEventArgs.cs" />
     <Compile Include="ViewModel\MainUnitViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\Matrix\ButtonRangeSelector.cs" />

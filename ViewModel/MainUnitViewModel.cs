@@ -429,7 +429,8 @@ namespace EscInstaller.ViewModel
                 }
 
                 lst.AddRange(l);
-                LinesCardModel(lst, _link);
+                var lines = new FormatLayout(lst, _link);
+                lines.DoFormat();
             }
             else
             {
@@ -471,108 +472,6 @@ namespace EscInstaller.ViewModel
             objects.AddRange(objects.OfType<BlInputPeq>().Select(n => new LineViewModel(n, emergency)).ToArray());
         }
 
-        /// <summary>
-        ///     add lines to diagram
-        /// </summary>
-        /// <param name="objects"></param>
-        /// <param name="link"></param>
-        private static void LinesCardModel(List<DiagramData> objects, BlLink link)
-        {
-            var t = objects.OfType<BlInputName>().Join(objects.OfType<BlToneControl>(), s => s.Id, q => q.Id, (b, c) =>
-                new LineViewModel(b, c) { LineType = LineType.PublicAddress }).ToArray();
-
-            objects.AddRange(t);
-
-            var tone = objects.OfType<BlToneControl>().OrderBy(n => n.Id).ToArray();
-            var delay = objects.OfType<BlDelay>().OrderBy(i => i.Id).ToArray();
-
-            if (link != null)
-            {
-                if (tone.Length > 0)
-                    objects.AddRange(
-                        tone.Select(q => new LineViewModel(q, link) { Id = q.Id }).OrderBy(n => n.Id).ToArray());
-                objects.AddRange(
-                    delay
-                        .Select(q => new LinkLineVm(link, q, link, q.Id))
-                        .ToArray());
-                objects.AddRange(objects.OfType<BlSpeakerPeq>()
-                    .Where(i => i.Id % 12 == 1 || i.Id % 12 == 2)
-                    .OrderBy(i => i.Id)
-                    .ToArray()
-                    .Join(delay, peq => peq.Id, blDelay => blDelay.Id, (peq, blDelay) =>
-                        new LineViewModel(peq, blDelay) { LineType = LineType.Emergency, Id = blDelay.Id }));
-            }
-
-            var input = objects.OfType<BlInputName>().OrderBy(n => n.Id).Where(i => i.Id % 12 > 3).ToArray();
-            if (input.Length > 0 && link != null)
-                objects.AddRange(input.Select(q => new LineViewModel(q, link) { LineType = LineType.PublicAddress }));
-
-            var outputs = objects.OfType<BlAmplifier>()
-                .Join(objects.OfType<BlOutput>(), s => s.Id, q => q.Id,
-                    (amplifier, blOutput) => new LineViewModel(amplifier, blOutput)).ToArray();
-
-            objects.AddRange(outputs);
-
-            objects.AddRange(
-                objects.OfType<BlMonitor>()
-                    .Join(objects.OfType<BlSpeakerPeq>(), s => s.Id, q => q.Id, (b, c) => new LineViewModel(b, c))
-                    .ToArray());
-
-            var speakerMatix = objects.OfType<BlAmplifier>()
-                .Join(objects.OfType<BlSpMatrix>(), s => s.Id % 12 / 4, q => q.Id, (b, c) => new LineViewModel(b, c))
-                .ToArray();
-            objects.AddRange(speakerMatix);
-
-            if (link != null)
-                objects.AddRange(
-                    objects.OfType<BlAuxSpeakerPeq>()
-                        .OrderBy(q => q.Id)
-                        .Select(n => new LineViewModel(n, link) { Id = n.Id })
-                        .ToArray());
-
-            objects.AddRange(
-                objects.OfType<BlAuxSpeakerPeq>().OrderBy(n => n.Id)
-                    .Join(objects.OfType<BlAuxiliary>(), peq => peq.Id, auxiliary => auxiliary.Id,
-                        (peq, auxiliary) => new LineViewModel(peq, auxiliary))
-                    .ToArray());
-
-            objects.AddRange(
-                objects.OfType<BlMonitor>()
-                    .Join(objects.OfType<BlOutput>(), s => s.Id, q => q.Id, (b, c) => new LineViewModel(b, c))
-                    .ToArray());
-
-            var spMatrix = objects.OfType<BlSpMatrix>().OrderBy(q => q.Id).ToArray();
-
-            var speakers = new List<BlSpeaker>[3];
-
-            speakers[0] = objects.OfType<BlSpeaker>().Where(i => i.Id % 12 < 4).ToList();
-            speakers[1] = objects.OfType<BlSpeaker>().Where(i => i.Id % 12 > 3 && i.Id % 12 < 8).ToList();
-            speakers[2] = objects.OfType<BlSpeaker>().Where(i => i.Id % 12 > 7).ToList();
-
-            var backup = objects.OfType<BlBackupAmp>().FirstOrDefault();
-
-            if (backup != null)
-            {
-                BlAmplifier prevamp = null;
-                foreach (var amp in objects.OfType<BlAmplifier>().ToArray())
-                {
-                    if (prevamp != null)
-                        objects.Add(new LineViewModel(prevamp, amp));
-                    prevamp = amp;
-                }
-                objects.Add(new LineViewModel(prevamp, backup));
-            }
-
-            if (spMatrix.Length > 0)
-                for (var i = 0; i < 3; i++)
-                {
-                    if (speakers[i].Count > 0)
-                        objects.AddRange(speakers[i].Select(n => new LineViewModel(n, spMatrix[0])));
-                }
-
-            objects.AddRange(objects.OfType<BlSpeakerPeq>().Where(q => q.Id % 12 != 1 && q.Id % 12 != 2)
-                .Select(sp => new LinkLineVm(link, sp, link, sp.Id)).ToArray());
-        }
 
         public void UpdateLineLinks()
         {
@@ -705,10 +604,5 @@ namespace EscInstaller.ViewModel
         {
             DspMirrorUpdated?.Invoke(this, EventArgs.Empty);
         }
-    }
-
-    public class MainUnitUpdatedEventArgs : EventArgs
-    {
-        public MainUnitModel MainUnit { get; set; }
     }
 }
