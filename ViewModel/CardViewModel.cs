@@ -17,31 +17,10 @@ namespace EscInstaller.ViewModel
             : base(card)
         {
             MainUnitViewModel = mainUnitViewModel;
-            _card = (CardModel) card;            
+            _card = (CardModel)card;
         }
 
-        public int LinkedChannel
-        {
-            get { return _card.LinkedChannel; }
-        }
-
-        public bool HasBackup
-        {
-            get
-            {
-                if (AttachedBackupAmps.Count < 3) return false;
-                //either card has its own backup, or first card has backup.                
-                return false; //todo: fix this
-
-                //return AttachedBackupAmps[Id] || ((CardViewModel) MainUnitViewModel.Cards[0]).AttachedBackupAmps[Id];
-            }
-        }
-
-        public BitArray AttachedBackupAmps
-        {
-            get { return _card.AttachedBackupAmps ?? (_card.AttachedBackupAmps = new BitArray(6)); }
-            set { _card.AttachedBackupAmps = value; }
-        }
+        public int LinkedChannel => _card.LinkedChannel;
 
         public bool EightOhms
         {
@@ -53,13 +32,6 @@ namespace EscInstaller.ViewModel
         {
             get { return _card.AuxSpeaker; }
             set { _card.AuxSpeaker = value; }
-        }
-
-        private static SortedSet<FlowModel> GenFlows(MainUnitModel model, int cardId)
-        {
-            return
-                new SortedSet<FlowModel>(
-                    Enumerable.Range(model.Id*12 + cardId*4, 4).Select(n => new FlowModel {Id = n}));
         }
     }
 }

@@ -36,6 +36,7 @@ namespace EscInstaller.ViewModel
         public Action DelayChanged;
         public Action ExtinputUpdate;
         private IntervalSettingsViewModel _v;
+        private BackupModules _backupModules;
 
         public MainUnitViewModel(MainUnitModel mainUnit, MainViewModel main)
         {
@@ -54,6 +55,7 @@ namespace EscInstaller.ViewModel
 
             AddNewCard = new RelayCommand(NewCard, () => DataModel.ExpansionCards < 2);
             RemoveLastCard = new RelayCommand(RemoveCard, (() => DataModel.ExpansionCards > 0));
+            _backupModules = new BackupModules(this);
         }
 
 #if DEBUG
@@ -65,12 +67,53 @@ namespace EscInstaller.ViewModel
             LibraryData.CreateEmptySystem();
             DataModel = LibraryData.GetMainUnit(0);
             _main = new MainViewModel();
+
         }
 #endif
         internal EepromDataHandler EepromHandler { get; private set; }
         internal VuMeter VuMeter { get; private set; }
         public AlarmMessagesViewModel AlarmMessages { get; private set; }
 
+        public event EventHandler BackupConfigChanged;
+
+        public void OnBackupConfigChanged()
+        {
+            BackupConfigChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        public List<bool> BackupAmp => DataModel.BackupAmp ?? (DataModel.BackupAmp = new List<bool>() { false, false, false });
+
+#if DEBUG        
+        public bool testBackup1
+        {
+            get { return BackupAmp[0]; }
+            set
+            {
+                BackupAmp[0] = value;
+                OnBackupConfigChanged();
+            }
+        }
+
+        public bool testBackup2
+        {
+            get { return BackupAmp[1]; }
+            set
+            {
+                BackupAmp[1] = value;
+                OnBackupConfigChanged();
+            }
+        }
+
+        public bool testBackup3
+        {
+            get { return BackupAmp[2]; }
+            set
+            {
+                BackupAmp[2] = value;
+                OnBackupConfigChanged();
+            }
+        }
+#endif
 
         public double CanvasSize => 400d + DataModel.ExpansionCards * 200d;
 
@@ -409,24 +452,24 @@ namespace EscInstaller.ViewModel
 
             if (card.GetType() == typeof(CardModel))
             {
+
+
+
+
                 var l = new List<SnapDiagramData>
                 {
-
                     new BlAuxiliary(this, (CardModel) card),
                     new BlSpMatrix(this, (CardModel) card),
-                    new BlAuxSpeakerPeq(this, (CardModel) card)
-                };
-
-                var cardModel = ((CardModel)card);
-                if (cardModel.AttachedBackupAmps != null && cardModel.AttachedBackupAmps.Cast<bool>().Contains(true))
-                {
-                    l.Add(new BlBackupAmp(this, (CardModel)card));
-                }
+                    new BlAuxSpeakerPeq(this, (CardModel) card),
+                new BlBackupAmp(this, (CardModel) card)
+            };
 
                 foreach (var snapDiagramData in l)
                 {
                     snapDiagramData.SetYLocation();
                 }
+
+
 
                 lst.AddRange(l);
                 var lines = new FormatLayout(lst, _link);
@@ -604,5 +647,7 @@ namespace EscInstaller.ViewModel
         {
             DspMirrorUpdated?.Invoke(this, EventArgs.Empty);
         }
+
+
     }
 }

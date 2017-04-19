@@ -369,8 +369,8 @@ namespace EscInstaller.ViewModel.Settings.Peq
 
         private void OnRemoveThisParam()
         {
-            var handler = RemoveThisParam;
-            if (handler != null) handler(this, EventArgs.Empty);
+           
+            RemoveThisParam?.Invoke(this, EventArgs.Empty);
         }
 
         private void UpdateGraphics()

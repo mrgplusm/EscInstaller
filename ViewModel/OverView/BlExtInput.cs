@@ -165,8 +165,7 @@ namespace EscInstaller.ViewModel.OverView
 
         public void OnValueUpdate()
         {
-            if (Unit.ExtinputUpdate != null)
-                Unit.ExtinputUpdate();
+            Unit.ExtinputUpdate?.Invoke();
         }
     }
 }

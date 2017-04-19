@@ -29,6 +29,7 @@ namespace EscInstaller.EscCommunication.downloadItems
         protected override void Done()
         {
             Main.UpdateHardware();
+            Main.OnBackupConfigChanged();
         }
     }
 }

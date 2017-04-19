@@ -369,7 +369,7 @@
 
         <DataTemplate DataType="{x:Type overView:BlBackupAmp}">
             <Border Width="{Binding Size.X}" Height="{Binding Size.Y}" Style="{StaticResource ResourceKey=BrdInactive}"
-                    Focusable="False">
+                    Focusable="False" Visibility="{Binding Path=Visibility}">
                 <StackPanel>
                     <TextBlock Style="{StaticResource ResourceKey=txtH}">
                         <TextBlock.Text>
@@ -508,73 +508,74 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <ScrollViewer Grid.Row="0" Grid.Column="0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-        <ListBox 
+            <ListBox 
                  ItemsSource="{Binding Path=DiagramObjects, NotifyOnTargetUpdated=True}"
                  ScrollViewer.VerticalScrollBarVisibility="Hidden" Height="{Binding Path=CanvasSize}" Width="1000"
                   SelectedItem="{Binding Path=SelectedObject}"
                  MouseDown="UIElement_OnMouseDown" Name="Box">
 
-            <ListBox.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <Canvas IsItemsHost="True" Background="#01FFFFFF" />
-                </ItemsPanelTemplate>
-            </ListBox.ItemsPanel>
-            <ListBox.ItemContainerStyle>
-                <Style TargetType="{x:Type ListBoxItem}">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas IsItemsHost="True" Background="#01FFFFFF" />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListBoxItem}">
 
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="ListBoxItem">
-                                <ContentPresenter x:Name="Content" />
-                                <ControlTemplate.Resources>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListBoxItem">
+                                    <ContentPresenter x:Name="Content" />
+                                    <ControlTemplate.Resources>
 
 
-                                </ControlTemplate.Resources>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                    
-                    <Setter Property="Canvas.Top" Value="{Binding Location.Y}" />
-                    <Setter Property="Canvas.Left" Value="{Binding Location.X}" />
-                    <Setter Property="Canvas.ZIndex" Value="{Binding Path=ZIndex}" />
-                    
-                    <Setter Property="RenderTransformOrigin" Value="0.5,0.5" />
+                                    </ControlTemplate.Resources>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
 
-                    <Setter Property="RenderTransform">
-                        <Setter.Value>
-                            <ScaleTransform x:Name="Transform" />
-                        </Setter.Value>
-                    </Setter>
+                        <Setter Property="Canvas.Top" Value="{Binding Location.Y}" />
+                        <Setter Property="Canvas.Left" Value="{Binding Location.X}" />
+                        <Setter Property="Canvas.ZIndex" Value="{Binding Path=ZIndex}" />
 
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding Path=IsEnabled}" Value="False">
-                            <Setter Property="Focusable" Value="False" />
-                        </DataTrigger>
-                    </Style.Triggers>
+                        <Setter Property="RenderTransformOrigin" Value="0.5,0.5" />
 
-                </Style>
-            </ListBox.ItemContainerStyle>
-            <ListBox.Style>
-                <Style TargetType="{x:Type ListBox}">
-                    <Setter Property="Background" Value="White" />
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding Path=ConnectType}"
+                        <Setter Property="RenderTransform">
+                            <Setter.Value>
+                                <ScaleTransform x:Name="Transform" />
+                            </Setter.Value>
+                        </Setter>
+
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=IsEnabled}" Value="False">
+                                <Setter Property="Focusable" Value="False" />
+                            </DataTrigger>
+                        </Style.Triggers>
+
+                    </Style>
+                </ListBox.ItemContainerStyle>
+                <ListBox.Style>
+                    <Style TargetType="{x:Type ListBox}">
+                        <Setter Property="Background" Value="White" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=ConnectType}"
                                      Value="{x:Static common1:ConnectType.Ethernet}">
-                            <Setter Property="Background" Value="#BFDFFD" />
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding Path=ConnectType}" Value="{x:Static common1:ConnectType.USB}">
-                            <Setter Property="Background" Value="#BFFFDF" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
+                                <Setter Property="Background" Value="#BFDFFD" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Path=ConnectType}" Value="{x:Static common1:ConnectType.USB}">
+                                <Setter Property="Background" Value="#BFFFDF" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
 
-            </ListBox.Style>
+                </ListBox.Style>
 
 
-        </ListBox>
+            </ListBox>
         </ScrollViewer>
 
 
@@ -633,6 +634,11 @@
                     HorizontalAlignment="Left">
             <Button Command="{Binding Path=AddNewCard}" Content="{x:Static escInstaller:Main._mainAddNewCard}" />
             <Button Command="{Binding Path=RemoveLastCard}" Content="{x:Static escInstaller:Main._mainRemoveCard}" />
+        </StackPanel>
+        <StackPanel Grid.Row="3">
+            <CheckBox Content="back1" IsChecked="{Binding Path=testBackup1}" ></CheckBox>
+            <CheckBox Content="back2" IsChecked="{Binding Path=testBackup2}" ></CheckBox>
+            <CheckBox Content="back3" IsChecked="{Binding Path=testBackup3}" ></CheckBox>
         </StackPanel>
     </Grid>
 </UserControl>

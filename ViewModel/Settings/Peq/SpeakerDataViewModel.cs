@@ -222,7 +222,7 @@ namespace EscInstaller.ViewModel.Settings.Peq
             get { return PeqDataModels.Sum(p => (p.Order + 1) >> 1); }
         }
 
-        public string FilterCountText => $"Max {(int) SpeakerPeqType} second order filters";
+        public string FilterCountText => $"Max {(int)SpeakerPeqType} second order filters";
 
         public double DbMagnitude { get; set; }
 
@@ -241,11 +241,19 @@ namespace EscInstaller.ViewModel.Settings.Peq
                     MessageBoxResult.OK);
                 return;
             }
-            Clear();
+            PerformChanges(librarySpeaker);
+        }
 
+        private void PerformChanges(SpeakerDataViewModel librarySpeaker)
+        {
+            Clear();
             AddRange(librarySpeaker.DataModel.PEQ.ToArray());
             CopySpeakerName(librarySpeaker.SpeakerName);
+            LoadProperties();
+        }
 
+        private void LoadProperties()
+        {
             SendMyName();
             RaisePropertyChanged(() => InLibrary);
 
@@ -261,8 +269,6 @@ namespace EscInstaller.ViewModel.Settings.Peq
                     {
                         CommunicationViewModel.AddData(dispatchData);
                     }
-
-                    
                 }
                 catch (Exception e)
                 {
@@ -300,7 +306,6 @@ namespace EscInstaller.ViewModel.Settings.Peq
             {
                 CommunicationViewModel.AddData(setE2PromExt);
             }
-            
         }
 
         public void RefreshBiquads()
@@ -345,8 +350,8 @@ namespace EscInstaller.ViewModel.Settings.Peq
                 foreach (var peqParam in data)
                 {
                     CommunicationViewModel.AddData(peqParam);
-                }                
-                
+                }
+
             }
             catch (Exception e)
             {
@@ -393,7 +398,7 @@ namespace EscInstaller.ViewModel.Settings.Peq
             foreach (var e2PromExt in sl.GetEmtptyRedundancyData(toClear))
             {
                 CommunicationViewModel.AddData(e2PromExt);
-            }                       
+            }
         }
 
         private void TypeChanged(BiquadsChangedEventArgs bf, PeqDataViewModel vm)
@@ -553,7 +558,7 @@ namespace EscInstaller.ViewModel.Settings.Peq
 
         public PeqDataViewModel NewParam()
         {
-            if (RequiredBiquads > (int) (DataModel.SpeakerPeqType)) throw new Exception("not enough biquads");
+            if (RequiredBiquads > (int)(DataModel.SpeakerPeqType)) throw new Exception("not enough biquads");
 
             var dm = new PeqDataModel
             {

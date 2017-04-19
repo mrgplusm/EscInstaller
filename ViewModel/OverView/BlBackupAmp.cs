@@ -13,45 +13,48 @@ namespace EscInstaller.ViewModel.OverView
         public const int Width = 85;
         public const int XLocation = BlOutput.Width + Distance + BlOutput.XLocation;
         private readonly CardModel _card;
-        private readonly MainUnitViewModel _main;
         private List<SnapShot> _snapShots;
 
         public BlBackupAmp(MainUnitViewModel main, CardModel card)
         {
             Location.X = XLocation;
-            _main = main;
             _card = card;
+            main.BackupConfigChanged += (sender, args) =>
+            {
+                Visibility = main.BackupAmp[card.Id] ? Visibility.Visible : Visibility.Collapsed;
+            };
         }
 
-        public override bool IsEnabled
+        public override bool IsEnabled => false;
+
+        public override int Id => _card.Id;
+
+        public override string SettingName => "backupAmp";
+
+        public string DisplaySetting => "backup";
+
+        private Visibility _visibility = Visibility.Collapsed;
+
+        public void ChangeVisibility(Visibility visibility)
         {
-            get { return false; }
+            _visibility = visibility;
+            RaisePropertyChanged(() => Visibility);
         }
 
-        public override int Id
+        public Visibility Visibility
         {
-            get { return _card.Id; }
+            get { return _visibility; }
+            set
+            {
+                _visibility = value;
+                RaisePropertyChanged(() => Visibility);
+            }
         }
 
-        public override string SettingName
-        {
-            get { return "backupAmp"; }
-        }
 
-        public string DisplaySetting
-        {
-            get { return "backup"; }
-        }
+        public string DisplayId => (_card.Id + 1).ToString("N0");
 
-        public string DisplayId
-        {
-            get { return (_card.Id + 1).ToString("N0"); }
-        }
-
-        public override Point Size
-        {
-            get { return new Point(Width, UnitHeight); }
-        }
+        public override Point Size => new Point(Width, UnitHeight);
 
         public override List<SnapShot> Snapshots
         {
@@ -73,7 +76,7 @@ namespace EscInstaller.ViewModel.OverView
 
         public override void SetYLocation()
         {
-            Location.Y = (InnerSpace + RowHeight*5)*_card.Id + RowHeight*4;
+            Location.Y = (InnerSpace + RowHeight * 5) * _card.Id + RowHeight * 4;
         }
     }
 }

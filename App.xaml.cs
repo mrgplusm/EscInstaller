@@ -53,8 +53,7 @@ namespace EscInstaller
             SpeakerMethods.SaveSpeakerlib();
         }
 
-        
-
+       
         private static void OpenRegKey()
         {
             var z = Registry.CurrentUser.OpenSubKey("Software", true);

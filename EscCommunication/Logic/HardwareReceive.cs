@@ -29,22 +29,21 @@ namespace EscInstaller.EscCommunication.Logic
 
             await data.WaitAsync();
 
-            var sq = data.GetBackupConfig().ToList();
-            var sp = data.GetChannels().ToList();
-
             //set amount of expension cards            
             Main.ExpansionCards = Main.InputSensitivity.Skip(4)
                 .TakeWhile(sense => sense == InputSens.High || sense == InputSens.Low || sense == InputSens.None)
                 .Count() >> 2;
 
-            //set backupamps
-            var n = 0;
-            foreach (var cardBaseModel in Main.Cards.OfType<CardModel>().OrderBy(z => z.Id))
-            {
-                cardBaseModel.AttachedBackupAmps =
-                    new BitArray(new[] {sq[n].Item1, sq[n].Item2, sq[n].Item3, sq[n].Item4, sq[n].Item5, sq[n].Item6});
-                n++;
-            }
+            SetBackupConfig(data);
+
+            SetChannels(data);
+
+            iProgress.Report(new DownloadProgress() { Progress = 1, Total = 1 });
+        }
+
+        private void SetChannels(GetInstallTree data)
+        {
+            var sp = data.GetChannels().ToList();
 
             //loop through cards and channels;
             var id = 0;
@@ -52,10 +51,18 @@ namespace EscInstaller.EscCommunication.Logic
             {
                 result.HasAmplifier = sp[id].Item1 || sp[id].Item2 || sp[id].Item3 || sp[id].Item4;
                 result.AmplifierOperationMode = result.HasAmplifier ? sp[id].Item6 : AmplifierOperationMode.Unknown;
-                result.AttachedChannels = new[] {sp[id].Item1, sp[id].Item2, sp[id].Item3, sp[id].Item4};
+                result.AttachedChannels = new[] { sp[id].Item1, sp[id].Item2, sp[id].Item3, sp[id].Item4 };
                 id++;
             }
-            iProgress.Report(new DownloadProgress() {Progress = 1, Total = 1});
+        }
+
+        private void SetBackupConfig(GetInstallTree data)
+        {
+            //set backupamps
+            Main.BackupAmp = data.GetBackupConfig().ToList();
+          
         }
     }
+
+
 }

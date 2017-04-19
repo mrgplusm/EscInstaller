@@ -23,64 +23,37 @@ namespace EscInstaller.ViewModel.OverView
             Location.X = XLocation;
         }
 
-        public override int Id
-        {
-            get { return _flow.Id; }
-        }
+        public override int Id => _flow.Id;
 
-        public override bool IsEnabled
-        {
-            get { return false; }
-        }
+        public override bool IsEnabled => false;
 
-        public AmplifierOperationMode OperationMode
-        {
-            get { return _flow.AmplifierOperationMode; }
-        }
+        public AmplifierOperationMode OperationMode => _flow.AmplifierOperationMode;
 
-        public override string SettingName
-        {
-            get { return "Amplifier"; }
-        }
+        public override string SettingName => "Amplifier";
 
-        public string DisplaySetting
-        {
-            get { return "Ampliefier"; }
-        }
+        public string DisplaySetting => "Ampliefier";
 
-        public string DisplayId
-        {
-            get { return (_flow.Id + 1).ToString(CultureInfo.InvariantCulture); }
-        }
+        public string DisplayId => (_flow.Id + 1).ToString(CultureInfo.InvariantCulture);
 
-        public override Point Size
+        public override Point Size => new Point(Width, UnitHeight);
+       
+        public override List<SnapShot> Snapshots => _snapShots ?? (_snapShots = new List<SnapShot>
         {
-            get { return new Point(Width, UnitHeight); }
-        }
-
-        public override List<SnapShot> Snapshots
-        {
-            get
-            {
-                return _snapShots ?? (_snapShots = new List<SnapShot>
-                {
-                    //top
-                    new SnapShot(this) {Offset = {X = SnapshotWidth, Y = 0}},
-                    //left
-                    new SnapShot(this) {Offset = {X = 0, Y = SnapshotHeight}},
-                    //right
-                    new SnapShot(this) {Offset = {X = Size.X, Y = SnapshotHeight}},
-                    //add bottom point
-                    new SnapShot(this) {Offset = {X = SnapshotWidth, Y = Size.Y}}
-                });
-            }
-        }
+            //top
+            new SnapShot(this) {Offset = {X = SnapshotWidth, Y = 0}},
+            //left
+            new SnapShot(this) {Offset = {X = 0, Y = SnapshotHeight}},
+            //right
+            new SnapShot(this) {Offset = {X = Size.X, Y = SnapshotHeight}},
+            //add bottom point
+            new SnapShot(this) {Offset = {X = SnapshotWidth, Y = Size.Y}}
+        });
 
         public override void SetYLocation()
         {
-            var row = Id%12;
-            var yspace = row > 3 ? (InnerSpace + RowHeight)*(row > 7 ? 2 : 1) : 0;
-            Location.Y = RowHeight*row + yspace;
+            var row = Id % 12;
+            var yspace = row > 3 ? (InnerSpace + RowHeight) * (row > 7 ? 2 : 1) : 0;
+            Location.Y = RowHeight * row + yspace;
         }
     }
 }
