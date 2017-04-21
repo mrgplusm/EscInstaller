@@ -39,7 +39,7 @@ namespace EscInstaller.EscCommunication.Logic
 
                 for (var zone = 0; zone < 12; zone++)
                 {
-                    var q = new MatrixCell(button, zone + (Main.Id*12));
+                    var q = new MatrixCell(zone + (Main.Id*12), button);
                     
                     LibraryData.FuturamaSys.Selection[q] = alarm1[zone]
                         ? BroadCastMessage.Alarm1
