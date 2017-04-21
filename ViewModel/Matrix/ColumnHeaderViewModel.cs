@@ -240,8 +240,8 @@ namespace EscInstaller.ViewModel.Matrix
 
         private void SendData()
         {
-            CommunicationViewModel.AddData(new RoutingTable(new[] { ButtonId }, MainUnit.Id,
-                LibraryData.FuturamaSys.Selection));
+            //CommunicationViewModel.AddData(new RoutingTable(new[] { ButtonId }, MainUnit.Id,
+            //    LibraryData.FuturamaSys.Selection));
         }
 
         /// <summary>

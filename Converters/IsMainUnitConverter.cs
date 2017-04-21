@@ -71,7 +71,8 @@ namespace EscInstaller.Converters
         public object Convert(object value, Type targetType,
                               object parameter, CultureInfo culture)
         {
-            return ((MatrixCell)value).ButtonId > 203;
+            var matrixCell = (MatrixCell)value;
+            return matrixCell != null && matrixCell.ButtonId > 203;
         }
 
         public object ConvertBack(object value, Type targetType,

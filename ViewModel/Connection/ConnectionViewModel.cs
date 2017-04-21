@@ -72,9 +72,7 @@ namespace EscInstaller.ViewModel.Connection
         {
             get
             {
-#if DEBUG
                 return IsInDesignMode ? "No connection could be established" : _errorInfo;
-#endif
             }
             private set
             {

@@ -7,6 +7,7 @@ using System.Windows.Media;
 using bbv.Common.StateMachine;
 using Common;
 using EscInstaller.EscCommunication.downloadItems;
+using EscInstaller.EscCommunication.Logic;
 using EscInstaller.EscCommunication.UploadItem;
 using EscInstaller.ViewModel;
 using GalaSoft.MvvmLight.Command;
@@ -197,7 +198,7 @@ namespace EscInstaller.EscCommunication
             yield return new InstalledPanels(main);
             yield return new CalibrationData(main);
             yield return new PresetNames(main);
-            yield return new MatrixSelection(main);
+            yield return new GetMatrix(main);
             yield return new Sensitivity(main);
             yield return new Hardware(main);
 
@@ -213,7 +214,7 @@ namespace EscInstaller.EscCommunication
             yield return new InputSensitivity(main);
             yield return new Linelinks(main);
 
-            yield return new MatrixSelection(main);
+            yield return new SetMatrix(main);
             yield return new Messageselection(main);
             yield return new Peqpresetnames(main);
             yield return new InOutNames(main);

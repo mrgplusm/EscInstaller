@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -13,7 +12,6 @@ using Common.Commodules;
 using Common.Model;
 using EscInstaller.EscCommunication.Logic;
 using EscInstaller.ViewModel.Connection;
-using EscInstaller.ViewModel.Matrix;
 using EscInstaller.ViewModel.OverView;
 using EscInstaller.ViewModel.Settings;
 using GalaSoft.MvvmLight;
@@ -82,38 +80,6 @@ namespace EscInstaller.ViewModel
         }
 
         public List<bool> BackupAmp => DataModel.BackupAmp ?? (DataModel.BackupAmp = new List<bool>() { false, false, false });
-
-#if DEBUG        
-        public bool testBackup1
-        {
-            get { return BackupAmp[0]; }
-            set
-            {
-                BackupAmp[0] = value;
-                OnBackupConfigChanged();
-            }
-        }
-
-        public bool testBackup2
-        {
-            get { return BackupAmp[1]; }
-            set
-            {
-                BackupAmp[1] = value;
-                OnBackupConfigChanged();
-            }
-        }
-
-        public bool testBackup3
-        {
-            get { return BackupAmp[2]; }
-            set
-            {
-                BackupAmp[2] = value;
-                OnBackupConfigChanged();
-            }
-        }
-#endif
 
         public double CanvasSize => 400d + DataModel.ExpansionCards * 200d;
 

@@ -8,14 +8,14 @@ using EscInstaller.ViewModel;
 
 namespace EscInstaller.EscCommunication.UploadItem
 {
-    internal class Matrixselection : DownloadData
+    internal class SetMatrix : DownloadData
     {
-        public Matrixselection(MainUnitViewModel main)
+        public SetMatrix(MainUnitViewModel main)
             : base(main)
         {
         }
 
-        public override string Value => "Matrix selection";
+        public override string Value => "Set matrix selection";
 
         protected override Task Function
         {

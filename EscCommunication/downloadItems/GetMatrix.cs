@@ -10,14 +10,14 @@ using EscInstaller.ViewModel;
 
 namespace EscInstaller.EscCommunication.downloadItems
 {
-    public class MatrixSelection : EepromToDownload
+    public class GetMatrix : EepromToDownload
     {
-        public MatrixSelection(MainUnitViewModel main)
+        public GetMatrix(MainUnitViewModel main)
             : base(main)
         {
         }
 
-        public override string Value => "Matrix selection";
+        public override string Value => "Get Matrix";
 
         protected override Task Function => DownloaderFactory().GetEeprom(ProgressFactory(), Cancellation.Token);
 

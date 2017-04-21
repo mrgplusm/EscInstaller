@@ -12,16 +12,18 @@ namespace EscInstaller.ViewModel.OverView
     {
         public const int Width = 85;
         public const int XLocation = BlOutput.Width + Distance + BlOutput.XLocation;
+        private readonly MainUnitViewModel _main;
         private readonly CardModel _card;
         private List<SnapShot> _snapShots;
 
         public BlBackupAmp(MainUnitViewModel main, CardModel card)
         {
             Location.X = XLocation;
+            _main = main;
             _card = card;
             main.BackupConfigChanged += (sender, args) =>
             {
-                Visibility = main.BackupAmp[card.Id] ? Visibility.Visible : Visibility.Collapsed;
+                RaisePropertyChanged(() => Visibility);
             };
         }
 
@@ -33,24 +35,7 @@ namespace EscInstaller.ViewModel.OverView
 
         public string DisplaySetting => "backup";
 
-        private Visibility _visibility = Visibility.Collapsed;
-
-        public void ChangeVisibility(Visibility visibility)
-        {
-            _visibility = visibility;
-            RaisePropertyChanged(() => Visibility);
-        }
-
-        public Visibility Visibility
-        {
-            get { return _visibility; }
-            set
-            {
-                _visibility = value;
-                RaisePropertyChanged(() => Visibility);
-            }
-        }
-
+        public Visibility Visibility => _main.BackupAmp[_card.Id] ? Visibility.Visible : Visibility.Collapsed;
 
         public string DisplayId => (_card.Id + 1).ToString("N0");
 

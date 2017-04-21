@@ -1,4 +1,9 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Runtime.Remoting.Messaging;
+using System.Windows;
 using EscInstaller.ViewModel.OverView;
 
 namespace EscInstaller.ViewModel
@@ -16,7 +21,7 @@ namespace EscInstaller.ViewModel
         private void UpdateBackupLines()
         {
             RemoveBackupAmplifierLines();
-            AddBackupAmplifierLines();
+            AddLines();
         }
 
         private void RemoveBackupAmplifierLines()
@@ -26,28 +31,57 @@ namespace EscInstaller.ViewModel
                 var g = s as LineViewModel;
                 if (g == null) return false;
 
-                if (g.First is BlAmplifier) return true;
-                if (g.Second is BlAmplifier) return true;
-                if (g.Second is BlBackupAmp) return true;
-                return false;
+                if (g.First is BlAmplifier && g.Second is BlAmplifier) return true;
+                return g.First is BlAmplifier && g.Second is BlBackupAmp;
             });
         }
 
-        private void AddBackupAmplifierLines()
+
+        private void AddLines()
         {
-            var backup = _main.DiagramObjects.OfType<BlBackupAmp>().FirstOrDefault();
+            var backup = _main.DiagramObjects.OfType<BlBackupAmp>().OrderBy(i => i.Id).ToArray();
+            if (backup.Count(s => s.Visibility == Visibility.Visible) < 1) return;
 
-            if (backup == null) return;
+            var amps = _main.DiagramObjects.OfType<BlAmplifier>().OrderBy(i => i.Id).ToArray();
 
+            AddAmplifierLines(amps);
+            AddBackupAmpLines(amps, backup);
+        }
+
+        void AddBackupAmpLines(IReadOnlyList<BlAmplifier> amps, IReadOnlyList<BlBackupAmp> backup)
+        {
+            //3 seperate backups
+            if (backup[0].Visibility == Visibility.Visible)
+            {
+                _main.DiagramObjects.Add(new LineViewModel(amps[3], backup[0]));
+            }
+            else
+            {
+                _main.DiagramObjects.Add(new LineViewModel(amps[3], amps[4]));
+                if (backup[1].Visibility == Visibility.Visible)
+                {
+                    _main.DiagramObjects.Add(new LineViewModel(amps[7], backup[1]));
+                }
+                else
+                {
+                    _main.DiagramObjects.Add(new LineViewModel(amps[7], amps[8]));
+                }
+            }
+            _main.DiagramObjects.Add(new LineViewModel(amps[11], backup[2]));
+        }
+
+        void AddAmplifierLines(IEnumerable<BlAmplifier> amps)
+        {
             BlAmplifier prevamp = null;
-
-            foreach (var amp in _main.DiagramObjects.OfType<BlAmplifier>().ToArray())
+            foreach (var amp in amps)
             {
                 if (prevamp != null)
-                    _main.DiagramObjects.Add(new LineViewModel(prevamp, amp));
+                {
+                    if (amp.Id % 4 != 0)
+                        _main.DiagramObjects.Add(new LineViewModel(amp, prevamp));
+                }
                 prevamp = amp;
             }
-            _main.DiagramObjects.Add(new LineViewModel(prevamp, backup));
         }
     }
 }

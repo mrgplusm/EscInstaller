@@ -508,7 +508,7 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
+         
         </Grid.RowDefinitions>
 
         <ScrollViewer Grid.Row="0" Grid.Column="0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
@@ -634,11 +634,6 @@
                     HorizontalAlignment="Left">
             <Button Command="{Binding Path=AddNewCard}" Content="{x:Static escInstaller:Main._mainAddNewCard}" />
             <Button Command="{Binding Path=RemoveLastCard}" Content="{x:Static escInstaller:Main._mainRemoveCard}" />
-        </StackPanel>
-        <StackPanel Grid.Row="3">
-            <CheckBox Content="back1" IsChecked="{Binding Path=testBackup1}" ></CheckBox>
-            <CheckBox Content="back2" IsChecked="{Binding Path=testBackup2}" ></CheckBox>
-            <CheckBox Content="back3" IsChecked="{Binding Path=testBackup3}" ></CheckBox>
         </StackPanel>
     </Grid>
 </UserControl>

@@ -173,7 +173,7 @@
     <Compile Include="EscCommunication\downloadItems\EepromToDownload.cs" />
     <Compile Include="EscCommunication\downloadItems\Hardware.cs" />
     <Compile Include="EscCommunication\downloadItems\InstalledPanels.cs" />
-    <Compile Include="EscCommunication\downloadItems\MatrixSelection.cs" />
+    <Compile Include="EscCommunication\downloadItems\GetMatrix.cs" />
     <Compile Include="EscCommunication\downloadItems\PresetNames.cs" />
     <Compile Include="EscCommunication\downloadItems\SdMessages.cs" />
     <Compile Include="EscCommunication\downloadItems\SdSelection.cs" />

@@ -59,8 +59,7 @@ namespace EscInstaller.EscCommunication.Logic
         private void SetBackupConfig(GetInstallTree data)
         {
             //set backupamps
-            Main.BackupAmp = data.GetBackupConfig().ToList();
-          
+            Main.BackupAmp = data.BackupConfig.ToList();            
         }
     }
 
